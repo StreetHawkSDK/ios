@@ -1,38 +1,36 @@
 PODS:
   - MBProgressHUD (0.9.1)
-  - PLCrashReporter (1.2.0)
   - Reachability (3.2)
-  - streethawk (1.6.6):
-    - streethawk/Beacons (= 1.6.6)
-    - streethawk/Core (= 1.6.6)
-    - streethawk/Crash (= 1.6.6)
-    - streethawk/Feed (= 1.6.6)
-    - streethawk/Geofence (= 1.6.6)
-    - streethawk/Growth (= 1.6.6)
-    - streethawk/Locations (= 1.6.6)
-    - streethawk/no-arc (= 1.6.6)
-    - streethawk/Push (= 1.6.6)
-  - streethawk/Beacons (1.6.6):
+  - streethawk (1.7.0):
+    - streethawk/Beacons (= 1.7.0)
+    - streethawk/Core (= 1.7.0)
+    - streethawk/Crash (= 1.7.0)
+    - streethawk/Feed (= 1.7.0)
+    - streethawk/Geofence (= 1.7.0)
+    - streethawk/Growth (= 1.7.0)
+    - streethawk/Locations (= 1.7.0)
+    - streethawk/Push (= 1.7.0)
+  - streethawk/Beacons (1.7.0):
     - Reachability
     - streethawk/Core
-  - streethawk/Core (1.6.6):
+  - streethawk/Core (1.7.0):
     - MBProgressHUD
-    - streethawk/no-arc
-  - streethawk/Crash (1.6.6):
-    - PLCrashReporter (~> 1.2)
+    - streethawk/Core/no-arc (= 1.7.0)
+  - streethawk/Core/no-arc (1.7.0):
+    - MBProgressHUD
+  - streethawk/Crash (1.7.0):
     - streethawk/Core
-  - streethawk/Feed (1.6.6):
+  - streethawk/Feed (1.7.0):
     - streethawk/Core
-  - streethawk/Geofence (1.6.6):
+  - streethawk/Geofence (1.7.0):
     - Reachability
     - streethawk/Core
-  - streethawk/Growth (1.6.6):
+  - streethawk/Growth (1.7.0):
     - streethawk/Core
-  - streethawk/Locations (1.6.6):
+  - streethawk/Locations (1.7.0):
     - Reachability
     - streethawk/Core
-  - streethawk/no-arc (1.6.6)
-  - streethawk/Push (1.6.6):
+  - streethawk/Push (1.7.0):
     - streethawk/Core
 
 DEPENDENCIES:
@@ -44,8 +42,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
-  PLCrashReporter: 16927d86a093d0b9cf110545dacb77cb0ed0f243
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  streethawk: 09434da296eace11b35ea866c4bc3188101d031e
+  streethawk: 2ab50d4e3096406779daf3d14f814eb21f189951
 
 COCOAPODS: 0.38.2
