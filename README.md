@@ -27,6 +27,12 @@ Above add whole StreetHawk iOS SDK. It's flexible to use part of StreetHawk iOS 
     pod "streethawk/Crash"  #submit crash report.
     pod "streethawk/Feed"  # handle feed.
 
+## StreetHawk web console
+
+Register App on [StreetHawk web console](https://console.streethawk.com). 
+
+More documents on [StreetHawk freshdesk](https://streethawk.freshdesk.com/helpdesk). 
+
 ## Author
 
 StreetHawk, support@streethawk.com
