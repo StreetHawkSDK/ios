@@ -16,6 +16,17 @@ The StreetHawk iOS SDK is available through [CocoaPods](http://cocoapods.org). T
 
     pod "streethawk"
 
+Above add whole StreetHawk iOS SDK. It's flexible to use part of StreetHawk iOS SDK as sub-module too. Available sub-module includes:
+
+    pod "streethawk/Core"  #core component for register install, sending logs, tag, trace App status. Other sub-module depends on Core, it's automatically included in other sub-module, no need to specifically add. For example, use pod "streethawk/Growth" is enough, it will automatically sync pod "streethawk/Core".
+    pod "streethawk/Growth"  #growth sharing.
+    pod "streethawk/Push"  #push notification.
+    pod "streethawk/Locations"  #trace latitude/longitude location.
+    pod "streethawk/Geofence"  #trace user location by geofence, usually work together with push notification.
+    pod "streethawk/Beacons"  #trace user location by enter iBeacon region, usually work together with push notification.
+    pod "streethawk/Crash"  #submit crash report.
+    pod "streethawk/Feed"  # handle feed.
+
 ## Author
 
 StreetHawk, support@streethawk.com
