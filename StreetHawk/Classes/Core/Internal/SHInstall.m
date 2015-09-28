@@ -106,8 +106,10 @@ NSString * const SHInstallNotification_kError = @"Error";
         screenHeight = screenWidth;
         screenWidth = temp;
     }
-    [params addObject:@"resolution"];
-    [params addObject:[NSString stringWithFormat:@"%.0f * %.0f", screenWidth, screenHeight]];
+    [params addObject:@"width"];
+    [params addObject:@(screenWidth)];
+    [params addObject:@"height"];
+    [params addObject:@(screenHeight)];
     NSString *developmentPlatform = shDevelopmentPlatformString();
     if (developmentPlatform != nil && developmentPlatform.length > 0 && [developmentPlatform compare:@"unknown" options:NSCaseInsensitiveSearch] != NSOrderedSame)
     {
