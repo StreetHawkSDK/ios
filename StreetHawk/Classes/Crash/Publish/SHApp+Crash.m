@@ -60,7 +60,7 @@
             [self.crashHandler enableCrashReporter];
         }
     }
-    objc_setAssociatedObject(self, @selector(isEnableCrashReport), [NSNumber numberWithBool:isEnableCrashReport], OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(isEnableCrashReport), [NSNumber numberWithBool:isEnableCrashReport], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)isEnableCrashReport
@@ -87,7 +87,7 @@
 
 - (void)setIsSendingCrashReport:(BOOL)isSendingCrashReport
 {
-    objc_setAssociatedObject(self, @selector(isSendingCrashReport), [NSNumber numberWithBool:isSendingCrashReport], OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(isSendingCrashReport), [NSNumber numberWithBool:isSendingCrashReport], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark - private functions

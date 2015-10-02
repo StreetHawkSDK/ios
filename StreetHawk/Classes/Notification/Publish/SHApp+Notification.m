@@ -59,7 +59,7 @@
 
 - (void)setIsDefaultNotificationEnabled:(BOOL)isDefaultNotificationEnabled
 {
-    objc_setAssociatedObject(self, @selector(isDefaultNotificationEnabled), [NSNumber numberWithBool:isDefaultNotificationEnabled], OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(isDefaultNotificationEnabled), [NSNumber numberWithBool:isDefaultNotificationEnabled], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)isNotificationEnabled
@@ -93,7 +93,7 @@
 
 - (void)setNotificationTypes:(NSUInteger)notificationTypes
 {
-    objc_setAssociatedObject(self, @selector(notificationTypes), [NSNumber numberWithUnsignedInteger:notificationTypes], OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(notificationTypes), [NSNumber numberWithUnsignedInteger:notificationTypes], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (NSSet *)notificationCategories
