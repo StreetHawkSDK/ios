@@ -69,7 +69,7 @@ NSString * const SHLMNotification_kAuthStatus = @"AuthStatus";
 
 - (void)setIsDefaultLocationServiceEnabled:(BOOL)isDefaultLocationServiceEnabled
 {
-    objc_setAssociatedObject(self, @selector(isDefaultLocationServiceEnabled), [NSNumber numberWithBool:isDefaultLocationServiceEnabled], OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(isDefaultLocationServiceEnabled), [NSNumber numberWithBool:isDefaultLocationServiceEnabled], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)isLocationServiceEnabled
