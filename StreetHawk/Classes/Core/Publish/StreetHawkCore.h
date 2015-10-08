@@ -23,6 +23,8 @@
 #import "SHApp.h"
 #import "SHBaseViewController.h"
 #import "SHFriendlyNameObject.h"
+#import "SHInstall.h"
+#import "SHObject.h"
 #import "SHTypes.h"
 
 //Crash
