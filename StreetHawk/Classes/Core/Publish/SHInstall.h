@@ -16,7 +16,6 @@
  */
 
 #import "SHObject.h"
-#import "SHApp.h" //for extension SHApp
 
 #define APNS_DISABLE_TIMESTAMP              @"APNS_DISABLE_TIMESTAMP"
 #define APNS_SENT_DISABLE_TIMESTAMP         @"APNS_SENT_DISABLE_TIMESTAMP"
@@ -57,20 +56,17 @@ extern NSString * const SHInstallNotification_kError;  //string @"Error", get NS
  */
 @interface SHInstall : SHObject
 
+/** @name General properties */
+
 /**
- The client application ID that this log message is associated with. It's same as StreetHawk.hostAppId, which should match server's database.
- */
+Customer developer register app_key in streethawk server. It's same as `StreetHawk.appKey`.
+*/
 @property (nonatomic, strong) NSString *appKey;
 
 /**
- Descriptive text for the device model. You should get this from either the android or iphone libraries so a consistent description is logged. i.e if the client is an android the model string must start with android.
+ Your unique identifier for this Client. Tagged by API `[StreetHawk tagString:<unique_value> forKey:@"sh_cuid"];`
  */
-@property (nonatomic, strong) NSString *model;
-
-/**
- For iPhone: ‘prod’ or ‘dev’. For Android: ‘c2dm’ only. This is used for push notification services, and log lines.
- */
-@property (nonatomic, strong) NSString *mode;
+@property (nonatomic, strong) NSString *sh_cuid;
 
 /**
  The version of the client application.
@@ -83,19 +79,120 @@ extern NSString * const SHInstallNotification_kError;  //string @"Error", get NS
 @property (nonatomic, strong) NSString *shVersion;
 
 /**
- The actual access data required to message the device.
+ Operating system in lower case. Examples: “android”, “ios”, “windows”. Because this is iOS SDK, it's hard coded as "ios".
  */
-@property (nonatomic, strong) NSString *pushNotificationToken;
+@property (nonatomic, strong) NSString *operatingSystem;
 
 /**
- The UTC time this install was created in %Y-%m-%d %H:%M:%S format
+ The version of the operating system. Example: “7.0”.
+ */
+@property (nonatomic, strong) NSString *osVersion;
+
+/**
+ If this App is AppStore or Enterprise provisioning profile, it's true; otherwise it's false.
+ */
+@property (nonatomic) BOOL live;
+
+/**
+ Development platform, hardcoded in StreetHawk SDK.
+ */
+@property (nonatomic, strong) NSString *developmentPlatform;
+
+/**
+ The UTC time this install was created in year-month-day hour:minute:second format.
  */
 @property (nonatomic, strong) NSDate *created;
 
 /**
- The UTC time this install was created in %Y-%m-%d %H:%M:%S format
+ The UTC time this install was modified in year-month-day hour:minute:second format.
  */
 @property (nonatomic, strong) NSDate *modified;
+
+/**
+ If current App deleted and re-install again, install id changes. This property is the Install this Install has been replaced by.
+ */
+@property (nonatomic, strong) NSString *replaced;
+
+/**
+ An estimated timestamp (UTC) when the Install has been uninstalled, nil otherwise.
+ */
+@property (nonatomic, strong) NSDate *uninstalled;
+
+/** @name Capability properties */
+
+/**
+ Customer developer uses location related SDK functions, technically when his pod include `streethawk/Locations` or `streethawk/Geofence` or `streethawk/Beacons` and set `StreetHawk.isLocationServiceEnabled = YES` this is true; otherwise this is false.
+ */
+@property (nonatomic) BOOL featureLocation;
+
+/**
+ Customer developer uses notification related SDK functions, technically when his pod include `streethawk/Push` and set `StreetHawk.isNotificationEnabled = YES` this is true; otherwise this is false.
+ */
+@property (nonatomic) BOOL featurePush;
+
+/**
+ Customer developer uses iBeacon related SDK functions, technically when his pod include `streethawk/Beacons` this is true; otherwise this is false.
+ */
+@property (nonatomic) BOOL featureiBeacons;
+
+/**
+ When `featureiBeacons == YES` and end user's device supports iBeacon (iOS version >= 7.0, location service enabled and bluetooth enabled), it's true.
+ */
+@property (nonatomic) BOOL supportiBeacons;
+
+/** @name Notification properties */
+
+/**
+ If iOS App use development provisioning, it's `dev`; if use simulator, it's `simulator`; if use ad-hoc or AppStore or Enterprise distribution provisioning, it's `prod`.
+ */
+@property (nonatomic, strong) NSString *mode;
+
+/**
+ The access data for remote notification.
+ */
+@property (nonatomic, strong) NSString *pushNotificationToken;
+
+/**
+ It set to time stamp once get error from Apple's push notification server. If empty means Apple not reply error.
+ */
+@property (nonatomic, strong) NSString *negativeFeedback;
+
+/**
+ Timestamp when end user refuse to receive notification. If notification is approved it's empty.
+ */
+@property (nonatomic, strong) NSString *revoked;
+
+/**
+ Whether use "smart push".
+ */
+@property (nonatomic) BOOL smart;
+
+/**
+ Timestamp for feed. If not nil and local fetch time is older than this, SDK will fetch feed.
+ */
+@property (nonatomic, strong) NSString *feed;
+
+/** @name Device properties */
+
+/**
+ Device's latitude. It's nil if not get latitude. StreetHawk server try to guess location by ip even when device disable location, thus it may not be nil even device disable location.
+ */
+@property (nonatomic, strong) NSNumber *latitude;
+
+/**
+ Device's longitude. It's nil if not get longitude. StreetHawk server try to guess location by ip even when device disable location, thus it may not be nil even device disable location.
+ */
+@property (nonatomic, strong) NSNumber *longitude;
+
+/**
+ UTC offset in minutes.
+ */
+@property (nonatomic) NSInteger utcOffset;
+
+/**
+ Descriptive text for the device model, e.g. `iPhone 6`. You should get this from either the android or iphone libraries so a consistent description is logged. i.e if the client is an android the model string must start with android.
+ */
+@property (nonatomic, strong) NSString *model;
 
 /**
  Ip address of current device. It's known by server, not sent from client.
@@ -103,7 +200,7 @@ extern NSString * const SHInstallNotification_kError;  //string @"Error", get NS
 @property (nonatomic, strong) NSString *ipAddress;
 
 /**
- Mac address sent to server by client. 
+ Mac address sent to server by client. It's not available since iOS 7 device, which always returns 02:00:00:00:00:00.
  */
 @property (nonatomic, strong) NSString *macAddress;
 
@@ -113,14 +210,9 @@ extern NSString * const SHInstallNotification_kError;  //string @"Error", get NS
 @property (nonatomic, strong) NSString *identifierForVendor;
 
 /**
- Negative feedback got from server. It set to time stamp once get error from Apple's push notification server.
+ If customer developer pass in advertise identifier, submit to StreetHawk server. It requires App to approve IDFA when submitting to AppStore, thus StreetHawk SDK cannot positively read this property. Set up by `StreetHawk.advertisingIdentifier = ...`.
  */
-@property (nonatomic, strong) NSString *negativeFeedback;
-
-/**
- The date when register push message but don't successfully got token. If got token this is set to empty.
- */
-@property (nonatomic, strong) NSString *revoked;
+@property (nonatomic, strong) NSString *advertisingIdentifier;
 
 /**
  Carrier of current device. It's sent from client to server.
@@ -131,38 +223,5 @@ extern NSString * const SHInstallNotification_kError;  //string @"Error", get NS
  Screen resolution of current device. It's sent from client to server.
  */
 @property (nonatomic, strong) NSString *resolution;
-
-/**
- Operating system in lower case. Examples: “android”, “ios”, “windows”. Because this is iOS SDK, it's hard coded as "ios".
- */
-@property (nonatomic, strong) NSString *operatingSystem;
-
-/**
- The version of the operating system. Example: “7.0”.
- */
-@property (nonatomic, strong) NSString *osVersion;
-
-@end
-
-/**
- **Extension for install register or update:**
- 
- Call `registerOrUpdateInstallWithHandler:` to register or update install attributes.
- */
-@interface SHApp (InstallExt)
-
-/** @name Install */
-
-/**
- Update the current install or create a new one if one does not exist.
- @param save_handler Callback for result.
- */
-- (void)registerOrUpdateInstallWithHandler:(SHCallbackHandler)handler;
-
-/**
- Some attribute maybe changed when re-launch this App, check them with pre-sent install when App launch. They include: app_key, client_version, sh_version, mode, carrier_name, os_version.
- @return If any of above attributes changes compared with previous install/register or install/update return YES; If not sent before or nothing change, return NO.
- */
-- (BOOL)checkInstallChangeForLaunch;
 
 @end

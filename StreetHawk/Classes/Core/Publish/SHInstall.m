@@ -17,6 +17,7 @@
 
 #import "SHInstall.h"
 //header from StreetHawk
+#import "SHApp.h" //for StreetHawk
 #import "SHLogger.h" //for sending logline
 #import "SHRequest.h" //for sending register request
 #import "SHUtils.h" //for shParseDate
@@ -59,24 +60,39 @@ NSString * const SHInstallNotification_kError = @"Error";
 
 - (void)loadFromDictionary:(NSDictionary *)dict
 {
-    self.created = shParseDate(dict[@"created"], 0);
-    self.modified = shParseDate(dict[@"modified"], 0);
-    self.appKey = dict[@"app_key"];
-    NSAssert(self.appKey != nil && self.appKey.length > 0, @"App key cannot be empty. Return json: %@.", dict);
-    self.model = dict[@"model"];
-    self.mode = dict[@"mode"];
-    self.clientVersion = dict[@"client_version"];
-    self.shVersion = dict[@"sh_version"];
-    self.pushNotificationToken = dict[@"access_data"];
-    self.ipAddress = dict[@"ipaddress"];
-    self.macAddress = dict[@"macaddress"];
-    self.negativeFeedback = dict[@"negative_feedback"];
-    self.revoked = dict[@"revoked"];
-    self.carrierName = dict[@"carrier_name"];
-    self.resolution = dict[@"resolution"];
-    self.operatingSystem = dict[@"operating_system"];
-    self.osVersion = dict[@"os_version"];
-    self.identifierForVendor = dict[@"identifier_for_vendor"];
+    self.appKey = NONULL(dict[@"app_key"]);
+    NSAssert(!shStrIsEmpty(self.appKey), @"App key cannot be empty. Return json: %@.", dict);
+    self.sh_cuid = NONULL(dict[@"sh_cuid"]);
+    self.clientVersion = NONULL(dict[@"client_version"]);
+    self.shVersion = NONULL(dict[@"sh_version"]);
+    self.operatingSystem = NONULL(dict[@"operating_system"]);
+    self.osVersion = NONULL(dict[@"os_version"]);
+    self.live = [NONULL(dict[@"live"]) boolValue];
+    self.developmentPlatform = NONULL(dict[@"development_platform"]);
+    self.created = shParseDate(NONULL(dict[@"created"]), 0);
+    self.modified = shParseDate(NONULL(dict[@"modified"]), 0);
+    self.replaced = NONULL(dict[@"replaced"]);
+    self.uninstalled = shParseDate(NONULL(dict[@"uninstalled"]), 0);
+    self.featureLocation = [NONULL(dict[@"feature_locations"]) boolValue];
+    self.featurePush = [NONULL(dict[@"feature_push"]) boolValue];
+    self.featureiBeacons = [NONULL(dict[@"feature_ibeacons"]) boolValue];
+    self.supportiBeacons = [NONULL(dict[@"ibeacons"]) boolValue];
+    self.mode = NONULL(dict[@"mode"]);
+    self.pushNotificationToken = NONULL(dict[@"access_data"]);
+    self.negativeFeedback = NONULL(dict[@"negative_feedback"]);
+    self.revoked = NONULL(dict[@"revoked"]);
+    self.smart = [NONULL(dict[@"smart"]) boolValue];
+    self.feed = NONULL(dict[@"feed"]);
+    self.latitude = NONULL(dict[@"latitude"]);
+    self.longitude = NONULL(dict[@"longitude"]);
+    self.utcOffset = [NONULL(dict[@"utc_offset"]) integerValue];
+    self.model = NONULL(dict[@"model"]);
+    self.ipAddress = NONULL(dict[@"ipaddress"]);
+    self.macAddress = NONULL(dict[@"macaddress"]);
+    self.identifierForVendor = NONULL(dict[@"identifier_for_vendor"]);
+    self.advertisingIdentifier = NONULL(dict[@"advertising_identifier"]);
+    self.carrierName = NONULL(dict[@"carrier_name"]);
+    self.resolution = NONULL(dict[@"resolution"]);
 }
 
 - (NSString *)serverSaveURL
@@ -86,7 +102,6 @@ NSString * const SHInstallNotification_kError = @"Error";
 
 - (NSObject *)saveBody
 {
-    //The default post parameters when do /install/register or /install/update. It contains "app_key", "client_version", "model", "mode", "user", "access_data", "carrier_name", "resolution", "revoked", "macaddress".
     UIDevice *uiDevice = [UIDevice currentDevice];
     SHUIDevice *shDevice = [[SHUIDevice alloc] init];
     NSMutableArray *params = [NSMutableArray arrayWithObjects:
@@ -111,7 +126,7 @@ NSString * const SHInstallNotification_kError = @"Error";
     [params addObject:@"height"];
     [params addObject:@(screenHeight)];
     NSString *developmentPlatform = shDevelopmentPlatformString();
-    if (developmentPlatform != nil && developmentPlatform.length > 0 && [developmentPlatform compare:@"unknown" options:NSCaseInsensitiveSearch] != NSOrderedSame)
+    if (!shStrIsEmpty(developmentPlatform) && [developmentPlatform compare:@"unknown" options:NSCaseInsensitiveSearch] != NSOrderedSame)
     {
         [params addObject:@"development_platform"];
         [params addObject:developmentPlatform];
@@ -245,186 +260,6 @@ NSString * const SHInstallNotification_kError = @"Error";
     [params addObject:@"false"];
 #endif
     return params;
-}
-
-@end
-
-@interface SHApp (private)//This category private interface declaration must have "private" to avoid warning: category is implementing a method which will also be implemented by its primary class
-
-//Registers a new installation.
-- (void)registerInstallWithHandler:(SHCallbackHandler)handler;
-
-@end
-
-@implementation SHApp (InstallExt)
-
-#pragma mark - public functions
-
--(void)registerOrUpdateInstallWithHandler:(SHCallbackHandler)handler
-{
-    if (!streetHawkIsEnabled())
-    {
-        if (handler)
-        {
-            handler(nil, nil);
-        }
-        return;
-    }
-    handler = [handler copy];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^
-    {
-        NSAssert(![NSThread isMainThread], @"registerOrUpdateInstallWithHandler wait in main thread.");
-        if (![NSThread isMainThread])
-        {
-            dispatch_semaphore_wait(self.install_semaphore, DISPATCH_TIME_FOREVER);
-            // This is the global one stop shop for registering or updating info about the current installation to the server.  The first time the app is installed, no installation object is created, so a "nil" request is sent to the server to register a new installation. Once this is done, the installation ID is stored in user defaults and is loaded everytime the app is restarted.  After this each time, this method is called, the stored installation ID is used and only "update" requests are sent to the server (ie when APNS tokens have changed or "modes" have changed etc).    
-            SHCallbackHandler handlerCopy = [handler copy];
-            if (self.currentInstall)  // install exists so save the params
-            {
-                return [self.currentInstall saveToServer:^(NSObject *result, NSError *error)
-                {
-                    if (error == nil)
-                    {
-                        self.currentInstall = (SHInstall *)result;
-                        dispatch_semaphore_signal(self.install_semaphore); //make sure currentInstall is set to latest.
-                        //check client version upgrade, must do it before update local cache.
-                        NSString *sentClientVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_ClientVersion];
-                        if (sentClientVersion != nil && sentClientVersion.length > 0 && ![sentClientVersion isEqualToString:StreetHawk.clientVersion])
-                        {
-                            [StreetHawk sendLogForCode:LOG_CODE_CLIENTUPGRADE withComment:sentClientVersion];
-                        }
-                        //save sent install parameters for later compare, because install does not have local cache, and avoid query install/details/ from server. Only save it after successfully install/update.
-                        [[NSUserDefaults standardUserDefaults] setObject:NONULL(StreetHawk.appKey) forKey:SentInstall_AppKey];
-                        [[NSUserDefaults standardUserDefaults] setObject:StreetHawk.clientVersion forKey:SentInstall_ClientVersion];
-                        [[NSUserDefaults standardUserDefaults] setObject:StreetHawk.version forKey:SentInstall_ShVersion];
-                        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:shAppMode()] forKey:SentInstall_Mode];
-                        [[NSUserDefaults standardUserDefaults] setObject:shGetCarrierName() forKey:SentInstall_Carrier];
-                        [[NSUserDefaults standardUserDefaults] setObject:[UIDevice currentDevice].systemVersion forKey:SentInstall_OSVersion];
-#ifdef SH_FEATURE_IBEACON
-                        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:StreetHawk.locationManager.iBeaconSupportState] forKey:SentInstall_IBeacon];
-#endif
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                        NSDictionary *userInfo = @{SHInstallNotification_kInstall: self.currentInstall};
-                        [[NSNotificationCenter defaultCenter] postNotificationName:SHInstallUpdateSuccessNotification object:self userInfo:userInfo];
-                    }
-                    else
-                    {
-                        dispatch_semaphore_signal(self.install_semaphore);
-                        NSDictionary *userInfo = @{SHInstallNotification_kInstall: self.currentInstall, SHInstallNotification_kError: error};
-                        [[NSNotificationCenter defaultCenter] postNotificationName:SHInstallUpdateFailureNotification object:self userInfo:userInfo];
-                    }
-                    if (handlerCopy)
-                    {
-                        handlerCopy(self.currentInstall, error);
-                    }
-                }];
-            }
-            else    //install does not exist and we have no prior install id so create one
-            {
-                return [self registerInstallWithHandler:^(NSObject *result, NSError *error)
-                {
-                    if (error == nil)
-                    {
-                        self.currentInstall = (SHInstall *)result;
-                        dispatch_semaphore_signal(self.install_semaphore); //make sure currentInstall is set to latest.
-                        //save sent install parameters for later compare, because install does not have local cache, and avoid query install/details/ from server. Only save it after successfully install/register. 
-                        [[NSUserDefaults standardUserDefaults] setObject:NONULL(StreetHawk.appKey) forKey:SentInstall_AppKey];
-                        [[NSUserDefaults standardUserDefaults] setObject:StreetHawk.clientVersion forKey:SentInstall_ClientVersion];
-                        [[NSUserDefaults standardUserDefaults] setObject:StreetHawk.version forKey:SentInstall_ShVersion];
-                        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:shAppMode()] forKey:SentInstall_Mode];
-                        [[NSUserDefaults standardUserDefaults] setObject:shGetCarrierName() forKey:SentInstall_Carrier];
-                        [[NSUserDefaults standardUserDefaults] setObject:[UIDevice currentDevice].systemVersion forKey:SentInstall_OSVersion];
-#ifdef SH_FEATURE_IBEACON
-                        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:StreetHawk.locationManager.iBeaconSupportState] forKey:SentInstall_IBeacon];
-#endif
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                        NSDictionary *userInfo = @{SHInstallNotification_kInstall: self.currentInstall};
-                        [[NSNotificationCenter defaultCenter] postNotificationName:SHInstallRegistrationSuccessNotification object:self userInfo:userInfo];
-                    }
-                    else
-                    {
-                        dispatch_semaphore_signal(self.install_semaphore);
-                        NSDictionary *userInfo = @{SHInstallNotification_kError: error};
-                        [[NSNotificationCenter defaultCenter] postNotificationName:SHRegistrationFailureNotification object:self userInfo:userInfo];
-                    }
-                    if (handlerCopy)
-                    {
-                        handlerCopy(self.currentInstall, error);
-                    }
-                }];
-            }
-        }
-    });
-}
-
-NSString *SentInstall_AppKey = @"SentInstall_AppKey";
-NSString *SentInstall_ClientVersion = @"SentInstall_ClientVersion";
-NSString *SentInstall_ShVersion = @"SentInstall_ShVersion";
-NSString *SentInstall_Mode = @"SentInstall_Mode";
-NSString *SentInstall_Carrier = @"SentInstall_Carrier";
-NSString *SentInstall_OSVersion = @"SentInstall_OSVersion";
-#ifdef SH_FEATURE_IBEACON
-NSString *SentInstall_IBeacon = @"SentInstall_IBeacon";
-#endif
-
--(BOOL)checkInstallChangeForLaunch
-{
-    NSString *sentAppKey = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_AppKey];
-    NSString *sentClientVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_ClientVersion];
-    NSString *sentShVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_ShVersion];
-    NSString *sentCarrier = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_Carrier];
-    NSString *sentOsVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_OSVersion];
-#ifdef SH_FEATURE_IBEACON
-    SHiBeaconState sentiBeacon = [[[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_IBeacon] intValue];
-    SHiBeaconState currentiBeacon = StreetHawk.locationManager.iBeaconSupportState;
-    return ((sentAppKey != nil && sentAppKey.length > 0 && ![sentAppKey isEqualToString:StreetHawk.appKey])
-            || (sentClientVersion != nil && sentClientVersion.length > 0 && ![sentClientVersion isEqualToString:StreetHawk.clientVersion])
-            || (sentShVersion != nil && sentShVersion.length > 0 && ![sentShVersion isEqualToString:StreetHawk.version])
-            || (sentCarrier != nil && sentCarrier.length > 0 && ![sentCarrier isEqualToString:shGetCarrierName()])
-            || (sentOsVersion != nil && sentOsVersion.length > 0 && ![sentOsVersion isEqualToString:[UIDevice currentDevice].systemVersion])
-            || (sentiBeacon == SHiBeaconState_Unknown)/*sent is unknown, update install and refresh sent again*/ || (currentiBeacon != SHiBeaconState_Unknown && sentiBeacon != currentiBeacon/*current change*/));
-#else
-    return ((sentAppKey != nil && sentAppKey.length > 0 && ![sentAppKey isEqualToString:StreetHawk.appKey])
-            || (sentClientVersion != nil && sentClientVersion.length > 0 && ![sentClientVersion isEqualToString:StreetHawk.clientVersion])
-            || (sentShVersion != nil && sentShVersion.length > 0 && ![sentShVersion isEqualToString:StreetHawk.version])
-            || (sentCarrier != nil && sentCarrier.length > 0 && ![sentCarrier isEqualToString:shGetCarrierName()])
-            || (sentOsVersion != nil && sentOsVersion.length > 0 && ![sentOsVersion isEqualToString:[UIDevice currentDevice].systemVersion]));
-#endif
-}
-
-#pragma mark - private functions
-
--(void)registerInstallWithHandler:(SHCallbackHandler)handler
-{
-    //create a fake SHInstall to get save body
-    SHInstall *fakeInstall = [[SHInstall alloc] initWithSuid:@"fake_install"];
-    handler = [handler copy];
-    NSAssert(StreetHawk.currentInstall == nil, @"Install should not exist when call installs/register/.");
-    SHRequest *request = [SHRequest requestWithPath:@"installs/register/" withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:[fakeInstall saveBody]];
-    request.requestHandler = ^(SHRequest *registerRequest)
-    {
-        SHInstall *new_install = nil;
-        NSError *error = registerRequest.error;
-        if (registerRequest.error == nil)
-        {
-            NSAssert(registerRequest.resultValue != nil && [registerRequest.resultValue isKindOfClass:[NSDictionary class]], @"Register install return wrong json: %@.", registerRequest.resultValue);
-            if (registerRequest.resultValue != nil && [registerRequest.resultValue isKindOfClass:[NSDictionary class]])
-            {
-                NSDictionary *dict = (NSDictionary *)registerRequest.resultValue;
-                new_install = [[SHInstall alloc] initWithSuid:dict[@"installid"]];
-                [new_install loadFromDictionary:dict];
-            }
-            else
-            {
-                error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Register install return wrong json: %@.", registerRequest.resultValue]}];
-            }
-        }
-        if (handler)
-        {
-            handler(new_install, error);
-        }
-    };
-    [request startAsynchronously];
 }
 
 @end

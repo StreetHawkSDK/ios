@@ -19,7 +19,6 @@
 //header from StreetHawk
 #import "SHCrashHandler.h" //for create instance
 #import "SHUtils.h" //for SHLog
-#import "SHInstall.h" //for currentInstall.suid
 #import "SHRequest.h" //for sending request
 //header from System
 #import <objc/runtime.h> //for associate object

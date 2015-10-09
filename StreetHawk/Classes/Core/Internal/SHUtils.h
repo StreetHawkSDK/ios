@@ -42,6 +42,13 @@ extern NSString *shCstringToNSString(const char *input);
 extern NSString *shDataToHexString(NSData *data);
 
 /**
+ Convert a bool to string. 
+ @param boolVal Boolean value.
+ @return String value "true" or "false".
+ */
+extern NSString *shBoolToString(BOOL boolVal);
+
+/**
  Get a new instance of NSDateFormatter for the supported date format, timezone and locale. It's auto-release, caller should not release it again.
  @param dateFormat The format string of date, by default (nil) it's yyyy-MM-dd HH:mm:ss, this is also the recognizable date format of server.
  @param timeZone The time zone of format, by default (nil) it's UTC.

@@ -18,7 +18,6 @@
 #import "SHApp+Location.h"
 //header from StreetHawk
 #import "SHLocationManager.h"
-#import "SHInstall.h" //for registerOrUpdateInstallWithHandler
 //header from System
 #import <objc/runtime.h> //for associate object
 

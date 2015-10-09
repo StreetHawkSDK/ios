@@ -58,6 +58,11 @@ NSString *shDataToHexString(NSData *data)
     return str;
 }
 
+NSString *shBoolToString(BOOL boolVal)
+{
+    return boolVal ? @"true" : @"false";
+}
+
 NSDateFormatter *shGetDateFormatter(NSString *dateFormat, NSTimeZone *timeZone, NSLocale *locale)
 {
     //Not use singleton because NSDateFormatter is not thread-safe, ticket https://bitbucket.org/shawk/streethawk/issue/319/asku-date-formatting-crashes
@@ -94,7 +99,7 @@ NSDate *shParseDate(NSString *input, int offsetSeconds)
         formatter_semaphore = dispatch_semaphore_create(1);
     });
     NSDate *out = nil;
-    if (input && input != (id)[NSNull null])
+    if ([input isKindOfClass:[NSString class]] && !shStrIsEmpty(input) && input != (id)[NSNull null])
     {
         dispatch_semaphore_wait(formatter_semaphore, DISPATCH_TIME_FOREVER);
         NSDateFormatter *dateFormatter = shGetDateFormatter(nil, nil, nil);

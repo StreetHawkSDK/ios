@@ -18,8 +18,8 @@
 #import <UIKit/UIKit.h>
 #import "SHTypes.h" //for enum SHDevelopmentPlatform
 #import "PushDataForApplication.h" //for SHResult
+#import "SHInstall.h" //for using StreetHawk.currentInstall
 
-@class SHInstall;
 @class SHLogger;
 
 /**
@@ -375,5 +375,28 @@ The application version and build version of current Application, formatted as @
  @return If tag to server return YES; if fail to send to server return NO.
  */
 - (BOOL)incrementTag:(NSString *)key;
+
+@end
+
+/**
+ **Extension for install register or update:**
+ 
+ Call `registerOrUpdateInstallWithHandler:` to register or update install attributes.
+ */
+@interface SHApp (InstallExt)
+
+/** @name Install */
+
+/**
+ Update the current install or create a new one if one does not exist.
+ @param save_handler Callback for result.
+ */
+- (void)registerOrUpdateInstallWithHandler:(SHCallbackHandler)handler;
+
+/**
+ Some attribute maybe changed when re-launch this App, check them with pre-sent install when App launch. They include: app_key, client_version, sh_version, mode, carrier_name, os_version.
+ @return If any of above attributes changes compared with previous install/register or install/update return YES; If not sent before or nothing change, return NO.
+ */
+- (BOOL)checkInstallChangeForLaunch;
 
 @end

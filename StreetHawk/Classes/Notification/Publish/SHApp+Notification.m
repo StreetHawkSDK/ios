@@ -21,7 +21,6 @@
 #import "SHFriendlyNameObject.h"
 #import "SHInstallHandler.h" //for registerForNotificationAndNotifyServer
 #import "SHUtils.h"  //for SHLog
-#import "SHInstall.h" //for currentInstall.suid
 #import "SHRequest.h" //for sending request
 #import "SHAppStatus.h" //for appStatusChange
 //header from System

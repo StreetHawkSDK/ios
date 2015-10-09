@@ -21,7 +21,7 @@
 #if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
 #import "SHLocationManager.h" //for get lat/lng
 #endif
-#import "SHInstall.h" //for register install
+#import "SHApp.h" //for register install
 #import "SHUtils.h" //for streetHawkIsEnabled
 
 #define tableName @"table_log" //not change table name, if need upgrade db schema, change to another file.
