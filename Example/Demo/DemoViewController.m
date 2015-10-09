@@ -16,6 +16,7 @@
  */
 
 #import "DemoViewController.h"
+#import "InstallViewController.h"
 #import "TagViewController.h"
 #import "LocationViewController.h"
 #import "NotificationViewController.h"
@@ -31,8 +32,8 @@
     self = [super initWithStyle:style];
     if (self)
     {
-        self.arraySampleCasesTitle = [NSMutableArray arrayWithArray:@[@"Tag Sample", @"Location Sample", @"Push Notification Sample", @"Growth", @"Swift"]];
-        self.arraySampleCasesVC = [NSMutableArray arrayWithArray:@[@"TagViewController", @"LocationViewController", @"NotificationViewController", @"GrowthViewController", @"_TtC14StreetHawkDemo19SwiftViewController"/*Swift vc class name*/]];
+        self.arraySampleCasesTitle = [NSMutableArray arrayWithArray:@[@"Current Install", @"Tag Sample", @"Location Sample", @"Push Notification Sample", @"Growth", @"Swift"]];
+        self.arraySampleCasesVC = [NSMutableArray arrayWithArray:@[@"InstallViewController", @"TagViewController", @"LocationViewController", @"NotificationViewController", @"GrowthViewController", @"_TtC14StreetHawkDemo19SwiftViewController"/*Swift vc class name*/]];
     }
     return self;
 }

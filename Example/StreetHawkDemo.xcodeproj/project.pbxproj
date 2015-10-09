@@ -10,8 +10,6 @@
 		B25B912AAEB3A5FE2D66AB57 /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 026B684C32422F2534B81DF7 /* libPods-StreetHawkDemo.a */; };
 		CB25A5B31B788D6800FBEF0E /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25A5B11B788D6800FBEF0E /* LocationViewController.m */; };
 		CB25A5B41B788D6800FBEF0E /* LocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB25A5B21B788D6800FBEF0E /* LocationViewController.xib */; };
-		CB25A5CF1B78A42F00FBEF0E /* TagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25A5CD1B78A42F00FBEF0E /* TagViewController.m */; };
-		CB25A5D01B78A42F00FBEF0E /* TagViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB25A5CE1B78A42F00FBEF0E /* TagViewController.xib */; };
 		CB42AC911B84895800171998 /* SwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB42AC8F1B84895800171998 /* SwiftViewController.swift */; };
 		CB42AC921B84895800171998 /* SwiftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB42AC901B84895800171998 /* SwiftViewController.xib */; };
 		CB5962D81B749BEC0086CC7D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5962CD1B749BEC0086CC7D /* AppDelegate.m */; };
@@ -22,6 +20,9 @@
 		CB5962DE1B749BEC0086CC7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB5962D71B749BEC0086CC7D /* Main.storyboard */; };
 		CB5962E41B749DAE0086CC7D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5962E31B749DAE0086CC7D /* Default-568h@2x.png */; };
 		CBA7EA021BABC2FF002C3F51 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBA7EA011BABC2FF002C3F51 /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
+		CBD6BA4A1BC79C650037CF1F /* InstallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD6BA491BC79C650037CF1F /* InstallViewController.m */; settings = {ASSET_TAGS = (); }; };
+		CBD6BA4E1BC7B4770037CF1F /* TagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD6BA4C1BC7B4770037CF1F /* TagViewController.m */; settings = {ASSET_TAGS = (); }; };
+		CBD6BA4F1BC7B4770037CF1F /* TagViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBD6BA4D1BC7B4770037CF1F /* TagViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		CBEEC8511B78AAAE006BC283 /* DeepLinkingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEEC84C1B78AAAE006BC283 /* DeepLinkingViewController.m */; };
 		CBEEC8521B78AAAE006BC283 /* DeepLinkingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBEEC84D1B78AAAE006BC283 /* DeepLinkingViewController.xib */; };
 		CBEEC8531B78AAAE006BC283 /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEEC84F1B78AAAE006BC283 /* NotificationViewController.m */; };
@@ -41,9 +42,6 @@
 		CB25A5B01B788D6800FBEF0E /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
 		CB25A5B11B788D6800FBEF0E /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
 		CB25A5B21B788D6800FBEF0E /* LocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationViewController.xib; sourceTree = "<group>"; };
-		CB25A5CC1B78A42F00FBEF0E /* TagViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagViewController.h; sourceTree = "<group>"; };
-		CB25A5CD1B78A42F00FBEF0E /* TagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagViewController.m; sourceTree = "<group>"; };
-		CB25A5CE1B78A42F00FBEF0E /* TagViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagViewController.xib; sourceTree = "<group>"; };
 		CB42AC8E1B84895700171998 /* StreetHawkDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreetHawkDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		CB42AC8F1B84895800171998 /* SwiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftViewController.swift; sourceTree = "<group>"; };
 		CB42AC901B84895800171998 /* SwiftViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwiftViewController.xib; sourceTree = "<group>"; };
@@ -60,6 +58,11 @@
 		CB5962D71B749BEC0086CC7D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		CB5962E31B749DAE0086CC7D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		CBA7EA011BABC2FF002C3F51 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		CBD6BA481BC79C650037CF1F /* InstallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstallViewController.h; sourceTree = "<group>"; };
+		CBD6BA491BC79C650037CF1F /* InstallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallViewController.m; sourceTree = "<group>"; };
+		CBD6BA4B1BC7B4770037CF1F /* TagViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagViewController.h; sourceTree = "<group>"; };
+		CBD6BA4C1BC7B4770037CF1F /* TagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagViewController.m; sourceTree = "<group>"; };
+		CBD6BA4D1BC7B4770037CF1F /* TagViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagViewController.xib; sourceTree = "<group>"; };
 		CBEEC84B1B78AAAE006BC283 /* DeepLinkingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeepLinkingViewController.h; sourceTree = "<group>"; };
 		CBEEC84C1B78AAAE006BC283 /* DeepLinkingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeepLinkingViewController.m; sourceTree = "<group>"; };
 		CBEEC84D1B78AAAE006BC283 /* DeepLinkingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeepLinkingViewController.xib; sourceTree = "<group>"; };
@@ -144,16 +147,6 @@
 			path = Notification;
 			sourceTree = "<group>";
 		};
-		CB25A5AF1B788D3300FBEF0E /* Tag */ = {
-			isa = PBXGroup;
-			children = (
-				CB25A5CC1B78A42F00FBEF0E /* TagViewController.h */,
-				CB25A5CD1B78A42F00FBEF0E /* TagViewController.m */,
-				CB25A5CE1B78A42F00FBEF0E /* TagViewController.xib */,
-			);
-			path = Tag;
-			sourceTree = "<group>";
-		};
 		CB42AC8D1B84891A00171998 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,11 +182,11 @@
 				CB5962CD1B749BEC0086CC7D /* AppDelegate.m */,
 				CB5962CE1B749BEC0086CC7D /* DemoViewController.h */,
 				CB5962CF1B749BEC0086CC7D /* DemoViewController.m */,
+				CBD6BA471BC79C650037CF1F /* Core */,
 				CB25A5AC1B788D3300FBEF0E /* Growth */,
 				CB25A5AD1B788D3300FBEF0E /* Location */,
 				CB25A5AE1B788D3300FBEF0E /* Notification */,
 				CB42AC8D1B84891A00171998 /* Swift */,
-				CB25A5AF1B788D3300FBEF0E /* Tag */,
 				CBEEC85B1B7AEEA8006BC283 /* Resources */,
 				CB5962D01B749BEC0086CC7D /* Supporting Files */,
 			);
@@ -213,6 +206,18 @@
 				CBA7EA011BABC2FF002C3F51 /* Launch Screen.storyboard */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CBD6BA471BC79C650037CF1F /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				CBD6BA481BC79C650037CF1F /* InstallViewController.h */,
+				CBD6BA491BC79C650037CF1F /* InstallViewController.m */,
+				CBD6BA4B1BC7B4770037CF1F /* TagViewController.h */,
+				CBD6BA4C1BC7B4770037CF1F /* TagViewController.m */,
+				CBD6BA4D1BC7B4770037CF1F /* TagViewController.xib */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		CBEEC85B1B7AEEA8006BC283 /* Resources */ = {
@@ -290,7 +295,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB5962DC1B749BEC0086CC7D /* Images.xcassets in Resources */,
-				CB25A5D01B78A42F00FBEF0E /* TagViewController.xib in Resources */,
 				CB5962E41B749DAE0086CC7D /* Default-568h@2x.png in Resources */,
 				CB5962DB1B749BEC0086CC7D /* InfoPlist.strings in Resources */,
 				CBA7EA021BABC2FF002C3F51 /* Launch Screen.storyboard in Resources */,
@@ -302,6 +306,7 @@
 				CBEEC8541B78AAAE006BC283 /* NotificationViewController.xib in Resources */,
 				CB5962DE1B749BEC0086CC7D /* Main.storyboard in Resources */,
 				CBEEC8521B78AAAE006BC283 /* DeepLinkingViewController.xib in Resources */,
+				CBD6BA4F1BC7B4770037CF1F /* TagViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,14 +351,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBEEC8531B78AAAE006BC283 /* NotificationViewController.m in Sources */,
-				CB25A5CF1B78A42F00FBEF0E /* TagViewController.m in Sources */,
 				CB42AC911B84895800171998 /* SwiftViewController.swift in Sources */,
 				CBEEC8661B7B2656006BC283 /* ChannelShareViewController.m in Sources */,
+				CBD6BA4A1BC79C650037CF1F /* InstallViewController.m in Sources */,
 				CBEEC86A1B7B2656006BC283 /* GrowthViewController.m in Sources */,
 				CBEEC8511B78AAAE006BC283 /* DeepLinkingViewController.m in Sources */,
 				CBEEC8681B7B2656006BC283 /* GenericShareViewController.m in Sources */,
 				CB5962D81B749BEC0086CC7D /* AppDelegate.m in Sources */,
 				CB5962DD1B749BEC0086CC7D /* main.m in Sources */,
+				CBD6BA4E1BC7B4770037CF1F /* TagViewController.m in Sources */,
 				CB5962D91B749BEC0086CC7D /* DemoViewController.m in Sources */,
 				CB25A5B31B788D6800FBEF0E /* LocationViewController.m in Sources */,
 			);

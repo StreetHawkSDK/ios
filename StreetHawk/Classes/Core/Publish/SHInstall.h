@@ -33,7 +33,7 @@ extern NSString * const SHInstallRegistrationSuccessNotification;
  System Notification for the device failed register install.
  The userInfo dictionary format is: {SHInstallNotification_kError, [the NSError object]}.
  */
-extern NSString * const SHRegistrationFailureNotification;
+extern NSString * const SHInstallRegistrationFailureNotification;
 
 /**
  System Notification for the device update existing intall successfully.

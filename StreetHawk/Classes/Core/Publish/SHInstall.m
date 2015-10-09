@@ -34,7 +34,7 @@
 #import "SHUIDevice-Hardware.h"
 
 NSString * const SHInstallRegistrationSuccessNotification = @"SHInstallRegistrationSuccessNotification";
-NSString * const SHRegistrationFailureNotification = @"SHRegistrationFailureNotification";
+NSString * const SHInstallRegistrationFailureNotification = @"SHInstallRegistrationFailureNotification";
 NSString * const SHInstallUpdateSuccessNotification = @"SHInstallUpdateSuccessNotification";
 NSString * const SHInstallUpdateFailureNotification = @"SHInstallUpdateFailureNotification";
 

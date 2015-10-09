@@ -1466,7 +1466,7 @@
                                {
                                    dispatch_semaphore_signal(self.install_semaphore);
                                    NSDictionary *userInfo = @{SHInstallNotification_kError: error};
-                                   [[NSNotificationCenter defaultCenter] postNotificationName:SHRegistrationFailureNotification object:self userInfo:userInfo];
+                                   [[NSNotificationCenter defaultCenter] postNotificationName:SHInstallRegistrationFailureNotification object:self userInfo:userInfo];
                                }
                                if (handlerCopy)
                                {

@@ -30,7 +30,7 @@
     if ((self = [super init]))
     {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegistrationSucceeded:) name:SHInstallRegistrationSuccessNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegistrationFailure:) name:SHRegistrationFailureNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegistrationFailure:) name:SHInstallRegistrationFailureNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installUpdateSucceeded:) name:SHInstallUpdateSuccessNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installUpdateFailure:) name:SHInstallUpdateFailureNotification object:nil];
     }
