@@ -216,6 +216,9 @@ NSString * const SHInstallNotification_kError = @"Error";
         }
             break;
     }
+#else
+    [params addObject:@"ibeacons"]; //if remove streetHawk/Beacons module, refresh otherwise server still treat as it supports iBeacons.
+    [params addObject:@"false"];
 #endif
     switch (shAppMode())
     {
