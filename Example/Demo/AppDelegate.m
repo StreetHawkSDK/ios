@@ -42,7 +42,7 @@
     //StreetHawk.isDefaultLocationServiceEnabled = NO; //Not enable location by default. Later use `StreetHawk.isLocationServiceEnabled = YES;` to enable.
     
     //Register install to StreetHawk server.
-    [StreetHawk registerInstallForApp:@"SHSample" withDebugMode:YES];
+    [StreetHawk registerInstallForApp:@"MyFirstApp" withDebugMode:YES];
     
     //Define friendly names
     SHFriendlyNameObject *name1 = [[SHFriendlyNameObject alloc] init];
