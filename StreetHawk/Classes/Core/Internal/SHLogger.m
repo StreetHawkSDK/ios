@@ -196,7 +196,14 @@ enum
         //session_id must be set for: install_session, install_view, install_enter_exit_view, install_fg_bg; for other log lines it can be null.
         BOOL requireSession = (code == LOG_CODE_APP_LAUNCH) || (code == LOG_CODE_APP_VISIBLE) || (code == LOG_CODE_APP_INVISIBLE) || (code == LOG_CODE_APP_COMPLETE) || (code == LOG_CODE_VIEW_ENTER) || (code == LOG_CODE_VIEW_EXIT) || (code == LOG_CODE_VIEW_COMPLETE);
         NSInteger session = (isAppBG && !requireSession) ? 0/*App in BG and not forcely require session id, use 0, later change to NULL*/ : (self.fgbgSession > 0 ? self.fgbgSession : 1/*Phonegap first launch "app did finish launch" delay 2 second, make fgbgSession=0, but enter view called and log null for session_id.*/);
-        NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, 0, %ld, '%ld'", (long)session, shFormatStreetHawkDate(created), (long)code, [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"], StreetHawk.locationManager.currentGeoLocation.latitude, StreetHawk.locationManager.currentGeoLocation.longitude, (long)assocId, (long)result];
+#ifdef SH_FEATURE_LATLNG
+        double lat_deprecate = StreetHawk.locationManager.currentGeoLocation.latitude;
+        double lng_deprecate = StreetHawk.locationManager.currentGeoLocation.longitude;
+#else
+        double lat_deprecate = 0;
+        double lng_deprecate = 0;
+#endif
+        NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, 0, %ld, '%ld'", (long)session, shFormatStreetHawkDate(created), (long)code, [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"], lat_deprecate, lng_deprecate, (long)assocId, (long)result];
         NSString *sql_str = [NSString stringWithFormat:@"INSERT OR REPLACE INTO '%@' (%@) VALUES (%@)", tableName, columns, values];
         @synchronized(self)
         {
