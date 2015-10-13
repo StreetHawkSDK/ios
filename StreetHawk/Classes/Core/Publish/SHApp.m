@@ -546,7 +546,8 @@
     else if (needHeartbeatLog && needLocationLog)  //send both
     {
 #ifdef SH_FEATURE_LATLNG
-        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_MORE withComment:@"Regular location."];
+        NSDictionary *dictLoc = @{@"lat": @(StreetHawk.locationManager.currentGeoLocation.latitude), @"lng": @(StreetHawk.locationManager.currentGeoLocation.longitude)};
+        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_MORE withComment:shSerializeObjToJson(dictLoc)];
 #endif
         [StreetHawk sendLogForCode:LOG_CODE_HEARTBEAT withComment:@"Heart beat." forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
          {
@@ -573,7 +574,8 @@
     else  //only send more location
     {
 #ifdef SH_FEATURE_LATLNG
-        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_MORE withComment:@"Regular location." forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
+        NSDictionary *dictLoc = @{@"lat": @(StreetHawk.locationManager.currentGeoLocation.latitude), @"lng": @(StreetHawk.locationManager.currentGeoLocation.longitude)};
+        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_MORE withComment:shSerializeObjToJson(dictLoc) forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
          {
              if (needComplete && completionHandler != nil)
              {
@@ -707,7 +709,14 @@
     
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground)/*avoid send visible log when App wake up in background. Here cannot use Active, its status is InActive for normal launch, Background for location launch.*/
     {
-        [StreetHawk sendLogForCode:LOG_CODE_APP_VISIBLE withComment:@"App launch from not running."];
+        NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
+        [dictComment setObject:@"App launch from not running." forKey:@"action"];
+        if (StreetHawk.locationManager.currentGeoLocation.latitude != 0 && StreetHawk.locationManager.currentGeoLocation.longitude != 0)
+        {
+            [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.latitude) forKey:@"lat"];
+            [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.longitude) forKey:@"lng"];
+        }
+        [StreetHawk sendLogForCode:LOG_CODE_APP_VISIBLE withComment:shSerializeObjToJson(dictComment)];
     }
 
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(setMinimumBackgroundFetchInterval:)]) //available since 7.0
@@ -775,7 +784,14 @@
     {
         if (!op.isCancelled)
         {
-            [StreetHawk sendLogForCode:LOG_CODE_APP_INVISIBLE withComment:@"App to BG." forAssocId:0 withResult:100/*ignore*/ withHandler:^(id result, NSError *error)
+            NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
+            [dictComment setObject:@"App to BG." forKey:@"action"];
+            if (StreetHawk.locationManager.currentGeoLocation.latitude != 0 && StreetHawk.locationManager.currentGeoLocation.longitude != 0)
+            {
+                [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.latitude) forKey:@"lat"];
+                [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.longitude) forKey:@"lng"];
+            }
+            [StreetHawk sendLogForCode:LOG_CODE_APP_INVISIBLE withComment:shSerializeObjToJson(dictComment) forAssocId:0 withResult:100/*ignore*/ withHandler:^(id result, NSError *error)
             {
                 //Once start not cancel the install/log request, there are 10 minutes so make sure it can finish. Call endBackgroundTask after it's done.
                 [self endBackgroundTask:backgroundTask];
@@ -804,7 +820,14 @@
     SHLog(@"Application will enter foreground with info: %@", notification.userInfo);
     
     //Log here instead of applicationDidBecomeActive when interrupt by phone or permission dialog or control center or notification center, this is not called.
-    [StreetHawk sendLogForCode:LOG_CODE_APP_VISIBLE withComment:@"App opened from BG."];
+    NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
+    [dictComment setObject:@"App opened from BG." forKey:@"action"];
+    if (StreetHawk.locationManager.currentGeoLocation.latitude != 0 && StreetHawk.locationManager.currentGeoLocation.longitude != 0)
+    {
+        [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.latitude) forKey:@"lat"];
+        [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.longitude) forKey:@"lng"];
+    }
+    [StreetHawk sendLogForCode:LOG_CODE_APP_VISIBLE withComment:shSerializeObjToJson(dictComment)];
     [StreetHawk shNotifyPageEnter:nil/*not know previoius page, but can get from history*/ sendEnter:YES sendExit:NO/*Not send exit for App go to FG*/];
 }
 

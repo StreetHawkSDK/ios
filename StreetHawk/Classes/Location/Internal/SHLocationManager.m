@@ -543,10 +543,12 @@
     if ((self.sentGeoLocationValue.latitude == 0 || self.sentGeoLocationValue.longitude == 0) //if not send before, do it anyway
         || ((timeDelta >= minTimeBWEvents) && (distanceDelta >= minDistanceBWEvents)))  //not push location change notification in certain time or in certain distance
     {
+        NSDictionary *dictLoc = @{@"lat": @(self.currentGeoLocation.latitude), @"lng": @(self.currentGeoLocation.longitude)};
         NSString *lmLog = [NSString stringWithFormat:@"LocationManager Delegate: FG (%@), new location (%f, %f), old location (%f, %f), distance (%f >= %f), last time (%@), time delta (%f >= %f).", (isFG ? @"Yes" : @"No"), self.currentGeoLocation.latitude, self.currentGeoLocation.longitude, self.sentGeoLocationValue.latitude, self.sentGeoLocationValue.longitude, distanceDelta, minDistanceBWEvents, [NSDate dateWithTimeIntervalSince1970:self.sentGeoLocationTime], timeDelta, minTimeBWEvents];
+        SHLog(lmLog);
         self.sentGeoLocationValue = self.currentGeoLocation; //do it early
         self.sentGeoLocationTime = [[NSDate date] timeIntervalSince1970];
-        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_GEO withComment:lmLog];
+        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_GEO withComment:shSerializeObjToJson(dictLoc)];
     }
 }
 

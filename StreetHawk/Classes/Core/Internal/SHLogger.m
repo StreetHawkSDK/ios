@@ -38,12 +38,12 @@ enum
     LOG_COL_SESSIONID,
     LOG_COL_CREATED,
     LOG_COL_STATUS,
-    LOG_COL_DOMAIN,
+    LOG_COL_DOMAIN, //deprecated
     LOG_COL_CODE,
     LOG_COL_COMMENT,
-    LOG_COL_LAT,
-    LOG_COL_LNG,
-    LOG_COL_MLOC,
+    LOG_COL_LAT, //deprecated
+    LOG_COL_LNG, //deprecated
+    LOG_COL_MLOC, //deprecated
     LOG_COL_MSGID,
     LOG_COL_PUSHRESULT,
 };
@@ -60,8 +60,8 @@ enum
 @property (nonatomic) int numLogsWritten;  //current local record number
 @property (nonatomic) NSInteger fgbgSession;  //When App start or go to FG, session+1; when App go to BG session ends.
 
-//Log the information into local sqlite database. Normal events are uploaded after enough number and. Special events (location) are logged and uploaded immediately. This function has the flexibility, however for convenience [StreetHawk sendLogForCode:withComment:] is recommended.
-- (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSInteger)assocId withResult:(NSInteger)result withManualLocation:(BOOL)isManualLoc withManualLat:(double)manualLat withManualLng:(double)manualLng withHandler:(SHCallbackHandler)handler;
+//Log the information into local sqlite database. Normal events are uploaded after enough number. Special events are logged and uploaded immediately. This function has the flexibility, however for convenience [StreetHawk sendLogForCode:withComment:] is recommended.
+- (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSInteger)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler;
 //Uploads local sqlite's log records to the server. This is automatically called if system determine needs to upload, or user can manually call it to trigger an upload.
 - (void)uploadLogsToServer:(NSInteger)numRecords withHandler:(SHCallbackHandler)handler;
 
@@ -120,7 +120,7 @@ enum
 
 #pragma mark - log and upload functions
 
-- (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSInteger)assocId withResult:(NSInteger)result withManualLocation:(BOOL)isManualLoc withManualLat:(double)manualLat withManualLng:(double)manualLng withHandler:(SHCallbackHandler)handler
+- (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSInteger)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler
 {
     if (!streetHawkIsEnabled())
     {
@@ -188,23 +188,15 @@ enum
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     handler = [handler copy];
-    dispatch_async(self.logger_queue, ^(void) {
+    dispatch_async(self.logger_queue, ^(void)
+    {
         //first save to database
         NSString *columns = @"'status', 'sessionid', 'created', 'code', 'comment', 'lat', 'lng', 'mloc', 'msgid', 'pushresult'";
-        NSString *sql_safe_comment = [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-#ifdef SH_FEATURE_LATLNG
-        SHLocationManager *locMan = StreetHawk.locationManager;
-        double lat = isManualLoc ? manualLat : locMan.currentGeoLocation.latitude;
-        double lng = isManualLoc ? manualLng : locMan.currentGeoLocation.longitude;
-#else
-        double lat = 0;
-        double lng = 0;
-#endif
         BOOL isAppBG = ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground);
         //session_id must be set for: install_session, install_view, install_enter_exit_view, install_fg_bg; for other log lines it can be null.
         BOOL requireSession = (code == LOG_CODE_APP_LAUNCH) || (code == LOG_CODE_APP_VISIBLE) || (code == LOG_CODE_APP_INVISIBLE) || (code == LOG_CODE_APP_COMPLETE) || (code == LOG_CODE_VIEW_ENTER) || (code == LOG_CODE_VIEW_EXIT) || (code == LOG_CODE_VIEW_COMPLETE);
         NSInteger session = (isAppBG && !requireSession) ? 0/*App in BG and not forcely require session id, use 0, later change to NULL*/ : (self.fgbgSession > 0 ? self.fgbgSession : 1/*Phonegap first launch "app did finish launch" delay 2 second, make fgbgSession=0, but enter view called and log null for session_id.*/);
-        NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, %d, %ld, '%ld'", (long)session, shFormatStreetHawkDate(created), (long)code, sql_safe_comment, lat, lng, isManualLoc?1:0, (long)assocId, (long)result];
+        NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, 0, %ld, '%ld'", (long)session, shFormatStreetHawkDate(created), (long)code, [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"], StreetHawk.locationManager.currentGeoLocation.latitude, StreetHawk.locationManager.currentGeoLocation.longitude, (long)assocId, (long)result];
         NSString *sql_str = [NSString stringWithFormat:@"INSERT OR REPLACE INTO '%@' (%@) VALUES (%@)", tableName, columns, values];
         @synchronized(self)
         {
@@ -469,9 +461,8 @@ enum
             const char *created = (const char *)sqlite3_column_text(select_sql, LOG_COL_CREATED);
             int code = sqlite3_column_int(select_sql, LOG_COL_CODE);
             const char *comment = (const char *)sqlite3_column_text(select_sql, LOG_COL_COMMENT);
-            double lat = sqlite3_column_double(select_sql, LOG_COL_LAT);
-            double lng = sqlite3_column_double(select_sql, LOG_COL_LNG);
-            int mloc = sqlite3_column_int(select_sql, LOG_COL_MLOC);
+            double lat_deprecate = sqlite3_column_double(select_sql, LOG_COL_LAT);
+            double lng_deprecate = sqlite3_column_double(select_sql, LOG_COL_LNG);
             int assocId = sqlite3_column_int(select_sql, LOG_COL_MSGID);
             int result = sqlite3_column_int(select_sql, LOG_COL_PUSHRESULT);
             //mandatory parameters for each logline
@@ -487,15 +478,22 @@ enum
             //Codes: 19, 20. Locations
             else if (code == LOG_CODE_LOCATION_MORE || code == LOG_CODE_LOCATION_GEO)
             {
-                NSAssert(mloc == 0 && lat != 0 && lng != 0, @"Only support geo location now.");
-                if (mloc == 1/*manual location allow 0*/ || lat != 0/*automatical location not allow 0 as it means not detected*/)
+                NSDictionary *dictLoc = shParseObjectToDict(shCstringToNSString(comment));
+                NSAssert(dictLoc != nil, @"Fail to parse code 19 and 20 lat/lng json.");
+                NSAssert(dictLoc.allKeys.count == 2 && [dictLoc.allKeys containsObject:@"lat"] && [dictLoc.allKeys containsObject:@"lng"], @"Wrong format for 19 and 20 json.");
+                double lat = [dictLoc[@"lat"] doubleValue];
+                if (lat == 0)
                 {
-                    logRecord[@"latitude"] = @(lat);
+                    lat = lat_deprecate; //location is passed by comment so it record right the moment, not affected by dispatch to queue. to keep compatible with old version whose comment not update to location json, still consider deprecated lat/lng.
                 }
-                if (mloc == 1 || lng != 0)
+                double lng = [dictLoc[@"lng"] doubleValue];
+                if (lng == 0)
                 {
-                    logRecord[@"longitude"] = @(lng);
+                    lng = lng_deprecate;
                 }
+                NSAssert(lat != 0 && lng != 0, @"Assert fail try to send 19 or 20 with location 0.");
+                logRecord[@"latitude"] = @(lat);
+                logRecord[@"longitude"] = @(lng);
                 NSDate *recordDate = shParseDate(shCstringToNSString(created), 0);
                 NSAssert(recordDate != nil, @"Fail to parse record date.");
                 NSDateFormatter *localDateFormatter = shGetDateFormatter(nil, [NSTimeZone localTimeZone], nil);
@@ -532,6 +530,26 @@ enum
             //Codes: 8103, 8104. App FG and BG
             else if (code == LOG_CODE_APP_VISIBLE || code == LOG_CODE_APP_INVISIBLE)
             {
+                NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
+                NSAssert(dictComment != nil, @"Fail to parse App visible/invisible comment.");
+                double lat = 0;
+                if ([dictComment.allKeys containsObject:@"lat"])
+                {
+                    lat = [dictComment[@"lat"] doubleValue];
+                }
+                if (lat == 0)
+                {
+                    lat = lat_deprecate;
+                }
+                double lng = 0;
+                if ([dictComment.allKeys containsObject:@"lng"])
+                {
+                    lng = [dictComment[@"lng"] doubleValue];
+                }
+                if (lng == 0)
+                {
+                    lng = lng_deprecate;
+                }
                 if (lat != 0/*automatical location not allow 0 as it means not detected*/)
                 {
                     logRecord[@"latitude"] = @(lat);
@@ -628,7 +646,7 @@ enum
             {
                 NSAssert(NO, @"Unsupported code %d.", code);
             }
-            [logRecords addObject:logRecord];
+            [logRecords addObject:logRecord]; //even above data may not match assert format, still sends to server. server will return success and delete them.
             select_step_result = sqlite3_step(select_sql);
         }
         if (select_step_result != SQLITE_DONE)
@@ -846,7 +864,7 @@ enum
         NSAssert(assocId == 0, @"Try to do none push or feed related log (%@) with assoc id (%ld).", comment, (long)assocId);
     }
     NSAssert(self.logger != nil, @"Lose logline due to logger is not ready.");
-    [self.logger logComment:comment atTime:[NSDate date] forCode:code forAssocId:assocId withResult:result withManualLocation:NO withManualLat:0 withManualLng:0 withHandler:handler];
+    [self.logger logComment:comment atTime:[NSDate date] forCode:code forAssocId:assocId withResult:result withHandler:handler];
 }
 
 - (void)sendLogForTag:(NSDictionary *)dict withCode:(NSInteger)code
