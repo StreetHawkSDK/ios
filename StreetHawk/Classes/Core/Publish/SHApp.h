@@ -324,6 +324,16 @@ The application version and build version of current Application, formatted as @
 @interface SHApp (LoggerExt)
 
 /**
+ Internally call
+ 
+ `[StreetHawk tagString:uniqueId forKey:@"sh_cuid"];`
+ 
+ @param uniqueId The unique user id from customer's App.
+ @return If tag to server return YES; if fail to send to server return NO.
+ */
+- (BOOL)tagCuid:(NSString *)uniqueId;
+
+/**
  Send log with code=8999. It's used for tagging a string value for user. For example, you can tag user's email as by:
  
  `[StreetHawk tagString:@"a@a.com" forKey:@"sh_email"];`

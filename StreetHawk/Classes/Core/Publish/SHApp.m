@@ -1289,6 +1289,11 @@
 
 #pragma mark - public functions
 
+- (BOOL)tagCuid:(NSString *)uniqueId
+{
+    return [self tagString:uniqueId forKey:@"sh_cuid"];
+}
+
 - (BOOL)tagString:(NSObject *)value forKey:(NSString *)key
 {
     if (value != nil && key != nil && key.length > 0)
