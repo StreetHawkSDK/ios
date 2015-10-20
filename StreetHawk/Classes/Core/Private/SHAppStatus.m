@@ -34,6 +34,8 @@
 #define APPSTATUS_SUBMIT_FRIENDLYNAME       @"APPSTATUS_SUBMIT_FRIENDLYNAME"  //whether server allow submit friendly name
 #define APPSTATUS_IBEACON_FETCH_TIME        @"APPSTATUS_IBEACON_FETCH_TIME"  //last successfully fetch iBeacon list time
 #define APPSTATUS_IBEACON_FETCH_LIST        @"APPSTATUS_IBEACON_FETCH_LIST"  //iBeacon list fetched from server, it contains array for object: UUID, major, minor, id. This is used as iBeacon monitor region.
+#define APPSTATUS_GEOFENCE_FETCH_TIME       @"APPSTATUS_GEOFENCE_FETCH_TIME"  //last successfully fetch geofence list time
+#define APPSTATUS_GEOFENCE_FETCH_LIST       @"APPSTATUS_GEOFENCE_FETCH_LIST"  //geofence list fetched from server, it contains parent geofence with child node. This is used as geofence monitor region.
 #define APPSTATUS_REREGISTER                @"APPSTATUS_REREGISTER" //a flag set to notice next launch must re-register install
 #define APPSTATUS_APPSTOREID                @"APPSTATUS_APPSTOREID" //server push itunes id to client side
 
@@ -97,6 +99,89 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 #endif
 
+#ifdef SH_FEATURE_GEOFENCE
+
+/**
+ An object to represend server fetch geofence region. It's two levels: parent fence and child fence.
+ */
+@interface SHServerGeofence : NSObject
+
+/**
+ Id from server for this fence. It will be used as `identifier` in `CLCircularRegion` so it must be not duplicated.
+ */
+@property (nonatomic, strong) NSString *serverId;
+
+/**
+ Latitude of this fence.
+ */
+@property (nonatomic) double latitude;
+
+/**
+ Longitude of this fence.
+ */
+@property (nonatomic) double longitude;
+
+/**
+ Radius of this fence. It will be adjust to not exceed `maximumRegionMonitoringDistance`.
+ */
+@property (nonatomic) double radius;
+
+/**
+ Whether device is inside this geofence.
+ */
+@property (nonatomic) BOOL isInside;
+
+/**
+ A weak reference to its parent fence.
+ */
+@property (nonatomic, weak) SHServerGeofence *parentFence;
+
+/**
+ Child nodes for parent fence. For child fence it's definity nil; for parent fence it would be nil.
+ */
+@property (nonatomic, strong) NSMutableArray *arrayNodes;
+
+/**
+ Whether this is actual geofence. Only actual geofence should send logline to server. Inner nodes's `id` starts with "_", actual geofence's `id` is "<id>-<distance>".
+ */
+@property (nonatomic, readonly) BOOL isLeaves;
+
+/**
+ Use this geofence data to create monitoring region.
+ */
+- (CLCircularRegion *)getGeoRegion;
+
+/**
+ Serialize self into a dictionary. Vice verse against `+ (SHServerGeofence *)parseGeofenceFromDict:(NSDictionary *)dict;`.
+ */
+- (NSDictionary *)serializeGeofeneToDict;
+
+/**
+ Compare function.
+ */
+- (BOOL)isEqualToCircleRegion:(CLCircularRegion *)geoRegion;
+
+/**
+ Parse an object from dictionary. If parse fail return nil.
+ @param dict The dictionary information.
+ @return If successfully parse return the object; otherwise return nil.
+ */
++ (SHServerGeofence *)parseGeofenceFromDict:(NSDictionary *)dict;
+
+/**
+ Make this object array to string array for store to NSUserDefaults.
+ */
++ (NSArray *)serializeToArrayDict:(NSArray *)parentFences;
+
+/**
+ When read from NSUserDefaults, parse back to object array.
+ */
++ (NSArray *)deserializeToArrayObj:(NSArray *)arrayDict;
+
+@end
+
+#endif
+
 @interface SHAppStatus ()
 
 @property (nonatomic, strong) NSString *aliveHostInner; //inner memory variable
@@ -111,12 +196,22 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 - (void)recordCheckTime; //Save this check time to avoid frequent check. No matter any property changed or not, record the time.
 
 #ifdef SH_FEATURE_IBEACON
-//iBeacon update
 @property (strong, nonatomic) NSMutableArray *arrayiBeaconFetchList;  //Server controls client to monitor a certain iBeacon list by request "/ibeacons", this list is cached locally and returned by this property. It's array of `SHServeriBeacon`. "app_status"'s "ibeacon" timestamp controls when to fetch this list again.
 - (void)sendLogForiBeacons:(NSArray *)arrayServeriBeacons isInside:(BOOL)isInside; //Send install/log for enter or exit(stop monitor) server iBeacons. If enter region, distance = ranged first distance or 1; if exit region, distance = `null`. If not enter or exit but only distance change, not send this install/log. code=21, comment formatted as {serverid: distance}.
 - (NSArray *)findServeriBeaconsInsideRegion:(CLBeaconRegion *)region onlyWithDistance:(BOOL)requireDistance needSetOutside:(BOOL)setOutside;  //get SHServeriBeacon list, subset of self.arrayiBeaconFetchList, which match this region. If `requireDistance` means get those with distance, otherwise get all SHServeriBeacon inside this region.
-- (void)regionStateChangeNotificationHandler:(NSNotification *)notification; //monitor when a region state change.
 - (void)regionRangeNotificationHandler:(NSNotification *)notification; //when range a region to know exact iBeacons.
+#endif
+
+#ifdef SH_FEATURE_GEOFENCE
+@property (strong, nonatomic) NSMutableArray *arrayGeofenceFetchList; //simiar as above but for geofence fetch list.
+- (void)sendLogForGeoFence:(SHServerGeofence *)geoFence isInside:(BOOL)isInside; //Send install/log for enter/exit server geofence.
+- (SHServerGeofence *)findServerGeofenceForRegion:(CLRegion *)region;  //get SHServerGeofence list, subset of self.arrayGeofenceFetchList, which match this region. It searches both parent and child list.
+- (void)stopMonitorPreviousGeofencesOnlyForOutside:(BOOL)onlyForOutside parentCanKeepChild:(BOOL)parentKeep;  //Geofence monitor region need to change, stop previous monitor for server's geofence. If `onlyForOutside`=YES, only stop monitor those outside; otherwise stop all regardless inside or outside. `parentKeep`=YES take effect when `onlyForOutside`=YES, if it's parent fence is inside, child fence not stop although it's outside.
+- (void)startMonitorGeofences:(NSArray *)arrayGeofences;  //Give an array of SHServerGeofence and convert to be monitored. It doesn't create region for child nodes.
+#endif
+
+#if defined(SH_FEATURE_IBEACON) || defined(SH_FEATURE_GEOFENCE)
+- (void)regionStateChangeNotificationHandler:(NSNotification *)notification; //monitor when a region state change.
 #endif
 
 @end
@@ -125,6 +220,10 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 #ifdef SH_FEATURE_IBEACON
 @synthesize arrayiBeaconFetchList = _arrayiBeaconFetchList;
+#endif
+
+#ifdef SH_FEATURE_GEOFENCE
+@synthesize arrayGeofenceFetchList = _arrayGeofenceFetchList;
 #endif
 
 #pragma mark - life cycle
@@ -164,8 +263,10 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
         self.semaphore_uploadLocationChange = dispatch_semaphore_create(1);
         self.semaphore_allowSubmitFriendlyNames = dispatch_semaphore_create(1);
         self.semaphore_appstoreId = dispatch_semaphore_create(1);
-#ifdef SH_FEATURE_IBEACON
+#if defined(SH_FEATURE_IBEACON) || defined(SH_FEATURE_GEOFENCE)
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(regionStateChangeNotificationHandler:) name:SHLMRegionStateChangeNotification object:nil];
+#endif
+#ifdef SH_FEATURE_IBEACON
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(regionRangeNotificationHandler:) name:SHLMRangeiBeaconChangedNotification object:nil];
 #endif
     }
@@ -427,7 +528,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
                                     }
                                 }
                             }
-                            //compare current memory's `arrayiBeaconFetchList` (same as cached APPSTATUS_IBEACON_FETCH_LIST), if not in new list, stop monitor; if find new, add monitor. Note: start/stop iBeacon region uses wild-match, that is ONLY uuid is used to create the region, major and minor not provided. This is because same identifier causes previous region removed, so must create unique identifier, the less region the better. CLLocationManager only supports 50 region including iBeacon and Geofence. When find match, use major and minor to match to server id.
+                            //compare current memory's `arrayiBeaconFetchList` (same as cached APPSTATUS_IBEACON_FETCH_LIST), if not in new list, stop monitor; if find new, add monitor. Note: start/stop iBeacon region uses wild-match, that is ONLY uuid is used to create the region, major and minor not provided. This is because same identifier causes previous region removed, so must create unique identifier, the less region the better. CLLocationManager only supports 19 iBeacon regions. When find match, use major and minor to match to server id.
                             NSMutableArray *serverUUids = [[NSMutableArray alloc] init];
                             NSMutableArray *localUUids = [[NSMutableArray alloc] init];
                             for (SHServeriBeacon *ibeacon in arrayList)
@@ -507,6 +608,100 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     [self sendLogForiBeacons:self.arrayiBeaconFetchList isInside:NO]; //set all to be distance=null in server, need this because "stop monitor" not trigger any delegate.
     self.arrayiBeaconFetchList = [NSMutableArray array]; //cannot set to nil, as nil will read from NSUserDefaults again.
     [[NSUserDefaults standardUserDefaults] setObject:[NSArray array] forKey:APPSTATUS_IBEACON_FETCH_LIST];  //clear local cache, not start when kill and launch App.
+    [[NSUserDefaults standardUserDefaults] synchronize];
+#endif
+}
+
+- (NSString *)geofenceTimeStamp
+{
+    NSAssert(NO, @"Should not call geofenceTimeStamp.");
+    return nil;
+}
+
+- (void)setGeofenceTimeStamp:(NSString *)geofenceTimeStamp
+{
+#ifdef SH_FEATURE_GEOFENCE
+    if (StreetHawk.currentInstall == nil)
+    {
+        return; //not register yet, wait for next time.
+    }
+    if (!streetHawkIsEnabled())
+    {
+        return;
+    }
+    //If current device not support monitor geofence, no need to continue
+    if (![SHLocationManager locationServiceEnabledForApp:NO] || ![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]])
+    {
+        return;
+    }
+    if (geofenceTimeStamp != nil && [geofenceTimeStamp isKindOfClass:[NSString class]])
+    {
+        NSDate *serverTime = shParseDate(geofenceTimeStamp, 0);
+        if (serverTime != nil)
+        {
+            BOOL needFetch = NO;
+            NSObject *localTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_GEOFENCE_FETCH_TIME];
+            if (localTimeVal == nil || ![localTimeVal isKindOfClass:[NSNumber class]])
+            {
+                needFetch = YES;  //local never fetched, do fetch.
+            }
+            else
+            {
+                NSDate *localTime = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSNumber *)localTimeVal doubleValue]];
+                if ([localTime compare:serverTime] == NSOrderedAscending)
+                {
+                    needFetch = YES;  //local fetched, but too old, do fetch.
+                }
+            }
+            if (needFetch)
+            {
+                //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setGeofenceTimeStamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
+                [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:APPSTATUS_GEOFENCE_FETCH_TIME];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                SHRequest *fetchRequest = [SHRequest requestWithPath:@"/geofences/tree/"];
+                fetchRequest.requestHandler = ^(SHRequest *request)
+                {
+                    if (request.error == nil)
+                    {
+                        //successfully fetch server's geofence list. local cache time is already updated, store fetch list and active monitor.
+                        SHLog(@"Fetch server geofence list: %@.", request.resultValue);
+                        NSAssert([request.resultValue isKindOfClass:[NSArray class]], @"Server return should be array.");
+                        if ([request.resultValue isKindOfClass:[NSArray class]])
+                        {
+                            //Geofence would monitor parent or child, and it's possible `id` not change but latitude/longitude/radius change. When timestamp change, stop monitor existing geofences and start to monitor from new list totally.
+                            [self stopMonitorPreviousGeofencesOnlyForOutside:NO parentCanKeepChild:NO]; //server's geofence change, stop monitor all.
+                            NSMutableArray *arrayList = [NSMutableArray array];
+                            for (NSDictionary *dictParent in (NSArray *)request.resultValue)
+                            {
+                                SHServerGeofence *geofence = [SHServerGeofence parseGeofenceFromDict:dictParent];
+                                NSAssert(geofence != nil, @"Fail to parse geofence from %@.", dictParent);
+                                if (geofence != nil)
+                                {
+                                    [arrayList addObject:geofence];
+                                }
+                            }
+                            //Update local cache and memory, start monitor parent.
+                            self.arrayGeofenceFetchList = arrayList;
+                            [[NSUserDefaults standardUserDefaults] setObject:[SHServerGeofence serializeToArrayDict:arrayList] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];
+                            [[NSUserDefaults standardUserDefaults] synchronize];
+                            [self startMonitorGeofences:arrayList];
+                        }
+                    }
+                    else
+                    {
+                        [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_GEOFENCE_FETCH_TIME]; //make next fetch happen as this time fail.
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                };
+                [fetchRequest startAsynchronously];
+            }
+            return;
+        }
+    }
+    //when meet this, means server return nil or invalid timestamp. Clear local fetch list and stop monitor.
+    [self stopMonitorPreviousGeofencesOnlyForOutside:NO parentCanKeepChild:NO];
+    self.arrayGeofenceFetchList = [NSMutableArray array]; //cannot set to nil, as nil will read from NSUserDefaults again.
+    [[NSUserDefaults standardUserDefaults] setObject:[NSArray array] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];  //clear local cache, not start when kill and launch App.
     [[NSUserDefaults standardUserDefaults] synchronize];
 #endif
 }
@@ -673,7 +868,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             [dictDistance setObject:[NSNumber numberWithDouble:distance] forKey:[NSString stringWithFormat:@"%d", iBeacon.serverId]/*must use string for key, cannot use NSNumber*/];
         }
         NSString *distanceStr = shSerializeObjToJson(dictDistance);
-        if (distanceStr != nil && distanceStr.length > 0)
+        if (!shStrIsEmpty(distanceStr))
         {
             [StreetHawk sendLogForCode:LOG_CODE_LOCATION_IBEACON withComment:distanceStr];
         }
@@ -698,31 +893,6 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
         }
     }
     return arrayMatchServeriBeacons;
-}
-
-- (void)regionStateChangeNotificationHandler:(NSNotification *)notification
-{
-    //use state change instead of didEnterRegion/didExitRegion because when startMonitorRegion, state change delegate is called, didEnter/ExitRegion delegate not called until next enter/exit.
-    CLBeaconRegion *region = notification.userInfo[SHLMNotification_kRegion];
-    CLRegionState regionState = [notification.userInfo[SHLMNotification_kRegionState] intValue];
-    if (regionState == CLRegionStateInside)
-    {
-        //inside an iBeacon region, need to range to find what exactly iBeacons are meet.
-        [StreetHawk.locationManager startRangeiBeaconRegion:region];
-    }
-    else if (regionState == CLRegionStateOutside)
-    {
-        [StreetHawk.locationManager stopRangeiBeaconRegion:region];   //exit one region so stop ranging it, after each one iBeacon outside, it may range for a while and trigger exit region state.
-        NSArray *arrayServeriBeacons = [self findServeriBeaconsInsideRegion:region onlyWithDistance:YES needSetOutside:YES]; //this updates distance already
-        [self sendLogForiBeacons:arrayServeriBeacons isInside:NO];
-        if (arrayServeriBeacons.count > 0)
-        {
-            //distance should be serialize to disk, in case re-launch and exit region, should find match server ibeacon from disk with distance.
-            [[NSUserDefaults standardUserDefaults] setObject:[SHServeriBeacon serializeToStringArray:self.arrayiBeaconFetchList] forKey:APPSTATUS_IBEACON_FETCH_LIST];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-    //do nothing for state=unknown.
 }
 
 - (void)regionRangeNotificationHandler:(NSNotification *)notification
@@ -793,6 +963,187 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 #endif
 
+#ifdef SH_FEATURE_GEOFENCE
+
+- (NSMutableArray *)arrayGeofenceFetchList
+{
+    if (_arrayGeofenceFetchList == nil) //never initialized
+    {
+        _arrayGeofenceFetchList = [NSMutableArray arrayWithArray:[SHServerGeofence deserializeToArrayObj:[[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_GEOFENCE_FETCH_LIST]]]; //it will not get nil even empty
+    }
+    return _arrayGeofenceFetchList;
+}
+
+- (void)sendLogForGeoFence:(SHServerGeofence *)geoFence isInside:(BOOL)isInside
+{
+    NSInteger index = [geoFence.serverId rangeOfString:@"-"].location;
+    NSAssert(index != NSNotFound, @"Server id for %@ is not valid.", geoFence.serverId);
+    if (index > 0 && index < geoFence.serverId.length)
+    {
+        NSString *serverId = [geoFence.serverId substringToIndex:index - 1];
+        NSString *distance = [geoFence.serverId substringFromIndex:index + 1];
+        NSDictionary *dictDistance = @{serverId : @(isInside ? [distance doubleValue] : -1)};
+        NSString *distanceStr = shSerializeObjToJson(dictDistance);
+        if (!shStrIsEmpty(distanceStr))
+        {
+            [StreetHawk sendLogForCode:LOG_CODE_LOCATION_GEOFENCE withComment:distanceStr];
+        }
+    }
+}
+
+- (SHServerGeofence *)findServerGeofenceForRegion:(CLRegion *)region
+{
+    if (![region isKindOfClass:[CLCircularRegion class]])
+    {
+        return nil;
+    }
+    CLCircularRegion *geoRegion = (CLCircularRegion *)region;
+    for (SHServerGeofence *geofence in self.arrayGeofenceFetchList)
+    {
+        if ([geofence isEqualToCircleRegion:geoRegion])
+        {
+            return geofence;
+        }
+        for (SHServerGeofence *childGeoFence in geofence.arrayNodes)
+        {
+            if ([childGeoFence isEqualToCircleRegion:geoRegion])
+            {
+                return childGeoFence;
+            }
+        }
+    }
+    return nil;
+}
+
+- (void)stopMonitorPreviousGeofencesOnlyForOutside:(BOOL)onlyForOutside parentCanKeepChild:(BOOL)parentKeep
+{
+    for (CLRegion *monitorRegion in StreetHawk.locationManager.monitoredRegions)
+    {
+        //only stop if this region is previous geofence, should not affect if it's iBeacon or from other source monitor.
+        SHServerGeofence *matchGeofence = [self findServerGeofenceForRegion:monitorRegion];
+        if (matchGeofence != nil) //stop monitor this as it's previous geofence
+        {
+            BOOL shouldStop = YES;
+            if (onlyForOutside) //otherwise for both inside and outside, means stop all
+            {
+                if (matchGeofence.isInside)  //this one is inside, cannot stop
+                {
+                    shouldStop = NO;
+                }
+                else
+                {
+                    if (parentKeep && matchGeofence.parentFence != nil && matchGeofence.parentFence.isInside) //although this one is outside, but its parent is inside and can keep it.
+                    {
+                        shouldStop = NO;
+                    }
+                }
+            }
+            if (shouldStop)
+            {
+                [StreetHawk.locationManager stopMonitorRegion:monitorRegion];
+            }
+        }
+    }
+}
+
+- (void)startMonitorGeofences:(NSArray *)arrayGeofences
+{
+    for (SHServerGeofence *geofence in arrayGeofences)
+    {
+        [StreetHawk.locationManager startMonitorRegion:[geofence getGeoRegion]];
+    }
+}
+
+#endif
+
+#if defined(SH_FEATURE_IBEACON) || defined(SH_FEATURE_GEOFENCE)
+
+- (void)regionStateChangeNotificationHandler:(NSNotification *)notification
+{
+    //use state change instead of didEnterRegion/didExitRegion because when startMonitorRegion, state change delegate is called, didEnter/ExitRegion delegate not called until next enter/exit.
+    CLRegion *region = notification.userInfo[SHLMNotification_kRegion];
+    CLRegionState regionState = [notification.userInfo[SHLMNotification_kRegionState] intValue];
+    if (regionState == CLRegionStateInside)
+    {
+        if ([region isKindOfClass:[CLBeaconRegion class]])
+        {
+#ifdef SH_FEATURE_IBEACON
+        //inside an iBeacon region, need to range to find what exactly iBeacons are meet.
+        [StreetHawk.locationManager startRangeiBeaconRegion:(CLBeaconRegion *)region];
+#endif
+        }
+        else if ([region isKindOfClass:[CLCircularRegion class]])
+        {
+#ifdef SH_FEATURE_GEOFENCE
+            SHServerGeofence *geofence = [self findServerGeofenceForRegion:region];
+            if (geofence != nil && !geofence.isInside/*only take action if change*/)
+            {
+                geofence.isInside = YES;
+                [[NSUserDefaults standardUserDefaults] setObject:[SHServerGeofence serializeToArrayDict:self.arrayGeofenceFetchList] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                if (geofence.isLeaves) //if this is actual geofence, send enter logline and it's done
+                {
+                    [self sendLogForGeoFence:geofence isInside:YES];
+                }
+                else //if this is parent geofence, stop monitor other outside parent geofence and add self's child node.
+                {
+                    [self stopMonitorPreviousGeofencesOnlyForOutside:YES parentCanKeepChild:YES]; //This is a tricky: parent fence may overlap. Case 1: simple case, if parent fence not overlap, enter this one means all others are outside, so stop all other parent fences and add this one's child. Case 2: if parent fence P1 overlap with parent fence P2, P1 is already inside, now enter P2. This check will keep P1 and P1's child fence in monitoring, while later add P2 and its child.
+                    [self startMonitorGeofences:geofence.arrayNodes]; //geofence itself is already monitor
+                }
+            }
+#endif
+        }
+    }
+    else if (regionState == CLRegionStateOutside)
+    {
+        if ([region isKindOfClass:[CLBeaconRegion class]])
+        {
+#ifdef SH_FEATURE_IBEACON
+            [StreetHawk.locationManager stopRangeiBeaconRegion:(CLBeaconRegion *)region];   //exit one region so stop ranging it, after each one iBeacon outside, it may range for a while and trigger exit region state.
+            NSArray *arrayServeriBeacons = [self findServeriBeaconsInsideRegion:(CLBeaconRegion *)region onlyWithDistance:YES needSetOutside:YES]; //this updates distance already
+            [self sendLogForiBeacons:arrayServeriBeacons isInside:NO];
+            if (arrayServeriBeacons.count > 0)
+            {
+                //distance should be serialize to disk, in case re-launch and exit region, should find match server ibeacon from disk with distance.
+                [[NSUserDefaults standardUserDefaults] setObject:[SHServeriBeacon serializeToStringArray:self.arrayiBeaconFetchList] forKey:APPSTATUS_IBEACON_FETCH_LIST];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+#endif
+        }
+        else if ([region isKindOfClass:[CLCircularRegion class]])
+        {
+#ifdef SH_FEATURE_GEOFENCE
+            SHServerGeofence *geofence = [self findServerGeofenceForRegion:region];
+            if (geofence != nil && geofence.isInside/*only take action if change*/)
+            {
+                geofence.isInside = NO;
+                if (!geofence.isLeaves) //if parent geofence out, make all child geofence outside too
+                {
+                    for (SHServerGeofence *childGeofence in geofence.arrayNodes)
+                    {
+                        childGeofence.isInside = NO;
+                    }
+                }
+                [[NSUserDefaults standardUserDefaults] setObject:[SHServerGeofence serializeToArrayDict:self.arrayGeofenceFetchList] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                if (geofence.isLeaves) //if this is child geofence, send exit logline and it's done
+                {
+                    [self sendLogForGeoFence:geofence isInside:NO];
+                }
+                else //if this is parent geofence, stop monitor its child geofence, add other parent geofence.
+                {
+                    [self stopMonitorPreviousGeofencesOnlyForOutside:YES parentCanKeepChild:YES]; //in case overlap and in another parent geofence, this will keep it un-affected.
+                    [self startMonitorGeofences:self.arrayGeofenceFetchList]; //monitor all parenet geofences.
+                }
+            }
+#endif
+        }
+    }
+    //do nothing for state=unknown.
+}
+
+#endif
+
 @end
 
 #ifdef SH_FEATURE_IBEACON
@@ -802,6 +1153,8 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 @synthesize uuid = _uuid;
 @synthesize major = _major;
 @synthesize minor = _minor;
+
+#pragma mark - life cycle
 
 - (id)init
 {
@@ -816,7 +1169,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 - (void)setUuid:(NSString *)uuid
 {
-    NSAssert(uuid != nil && uuid.length > 0, @"Invalid UUID: %@.", uuid);
+    NSAssert(!shStrIsEmpty(uuid), @"Invalid UUID: %@.", uuid);
     _uuid = uuid;
 }
 
@@ -936,6 +1289,187 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
         [objArray addObject:obj];
     }
     return objArray;
+}
+
+@end
+
+#endif
+
+#ifdef SH_FEATURE_GEOFENCE
+
+@implementation SHServerGeofence
+
+@synthesize serverId = _serverId;
+@synthesize latitude = _latitude;
+@synthesize longitude = _longitude;
+@synthesize radius = _radius;
+@synthesize isLeaves = _isLeaves;
+
+#pragma mark - life cycle
+
+- (id)init
+{
+    if (self = [super init])
+    {
+        self.parentFence = nil;
+        self.arrayNodes = [NSMutableArray array];
+        self.isInside = NO;
+    }
+    return self;
+}
+
+#pragma mark - properties
+
+- (void)setServerId:(NSString *)serverId
+{
+    NSAssert(!strIsEmpty(serverId), @"Invalid geofence server Id.");
+    _serverId = serverId;
+    _isLeaves = [_serverId hasPrefix:@"_"];
+}
+
+- (void)setLatitude:(double)latitude
+{
+    NSAssert(latitude >= -90 && latitude <= 90, @"Invalid geofence latitude: %.f.", latitude);
+    _latitude = latitude;
+}
+
+- (void)setLongitude:(double)longitude
+{
+    NSAssert(longitude >= -180 && longitude <= 180, @"Invalid geofence longitude: %f", longitude);
+    _longitude = longitude;
+}
+
+- (void)setRadius:(double)radius
+{
+    if (radius > StreetHawk.locationManager.geofenceMaximumRadius)
+    {
+        _radius = StreetHawk.locationManager.geofenceMaximumRadius;
+    }
+    else
+    {
+        _radius = radius;
+    }
+}
+
+- (BOOL)isLeaves
+{
+    return _isLeaves;
+}
+
+#pragma mark - public functions
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"[%@](%f,%f)~%f. Is inside: %@. Nodes:%@", self.serverId, self.latitude, self.longitude, self.radius, shBoolToString(self.isInside), self.arrayNodes];
+}
+
+- (CLCircularRegion *)getGeoRegion
+{
+    return [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(self.latitude, self.longitude) radius:self.radius identifier:self.serverId];
+}
+
+- (BOOL)isEqualToCircleRegion:(CLCircularRegion *)geoRegion
+{
+    //region only compares by `identifier`.
+    return ([self.serverId compare:geoRegion.identifier] == NSOrderedSame);
+}
+
+- (NSDictionary *)serializeGeofeneToDict
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[@"id"] = self.serverId;
+    dict[@"latitude"] = @(self.latitude);
+    dict[@"longitude"] = @(self.longitude);
+    dict[@"radius"] = @(self.radius);
+    dict[@"inside"] = @(self.isInside);
+    if (self.isLeaves)
+    {
+        NSAssert(self.arrayNodes.count == 0, @"Leave node should not have child.");
+        return dict;
+    }
+    else
+    {
+        NSAssert(self.arrayNodes.count > 0, @"Inner node should have child.");
+        NSMutableArray *arrayChild = [NSMutableArray array];
+        for (SHServerGeofence *childFence in self.arrayNodes)
+        {
+            [arrayChild addObject:[childFence serializeGeofeneToDict]];
+        }
+        dict[@"geofences"] = arrayChild;
+        return dict;
+    }
+}
+
++ (SHServerGeofence *)parseGeofenceFromDict:(NSDictionary *)dict
+{
+    NSAssert([dict isKindOfClass:[NSDictionary class]], @"Geofence dict invalid type: %@.", dict);
+    if ([dict isKindOfClass:[NSDictionary class]])
+    {
+        BOOL isValidKey = (dict.allKeys.count >= 4 && [dict.allKeys containsObject:@"id"] && [dict.allKeys containsObject:@"latitude"] && [dict.allKeys containsObject:@"longitude"] && [dict.allKeys containsObject:@"radius"]);
+        NSAssert(isValidKey, @"Geofence key format invalid: %@.", dict);
+        if (isValidKey)
+        {
+            BOOL isValidValue = [dict[@"id"] isKindOfClass:[NSString class]] && [dict[@"latitude"] isKindOfClass:[NSNumber class]] && [dict[@"longitude"] isKindOfClass:[NSNumber class]] && [dict[@"radius"] isKindOfClass:[NSNumber class]];
+            NSAssert(isValidValue, @"Geofence value format invalid: %@.", dict);
+            if (isValidValue)
+            {
+                SHServerGeofence *geofence = [[SHServerGeofence alloc] init];
+                geofence.serverId = dict[@"id"];
+                geofence.latitude = [dict[@"latitude"] doubleValue];
+                geofence.longitude = [dict[@"longitude"] doubleValue];
+                geofence.radius = [dict[@"radius"] doubleValue];
+                if ([dict.allKeys containsObject:@"inside"])
+                {
+                    geofence.isInside = [dict[@"inside"] boolValue];
+                }
+                BOOL hasGeofence = [dict.allKeys containsObject:@"geofences"] && ([dict[@"geofences"] isKindOfClass:[NSArray class]]) && (((NSArray *)dict[@"geofences"]).count > 0);
+                if (geofence.isLeaves)
+                {
+                    NSAssert(!hasGeofence, @"Leave dict should not have child.");
+                    return geofence;
+                }
+                else
+                {
+                    NSAssert(hasGeofence, @"Inner dict should have child.");
+                    if (hasGeofence)
+                    {
+                        for (NSDictionary *dictChild in dict[@"geofences"])
+                        {
+                            SHServerGeofence *childFence = [SHServerGeofence parseGeofenceFromDict:dictChild];
+                            if (childFence != nil)
+                            {
+                                childFence.parentFence = geofence;
+                                [geofence.arrayNodes addObject:childFence];
+                            }
+                        }
+                    }
+                    NSAssert(geofence.arrayNodes.count > 0, @"Inner node have none child.");
+                    return geofence;
+                }
+            }
+        }
+    }
+    return nil;
+}
+
++ (NSArray *)serializeToArrayDict:(NSArray *)parentFences
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (SHServerGeofence *parentFence in parentFences)
+    {
+        [array addObject:[parentFence serializeGeofeneToDict]];
+    }
+    return array;
+}
+
++ (NSArray *)deserializeToArrayObj:(NSArray *)arrayDict
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSDictionary *dict in arrayDict)
+    {
+        [array addObject:[SHServerGeofence parseGeofenceFromDict:dict]];
+    }
+    return array;
 }
 
 @end

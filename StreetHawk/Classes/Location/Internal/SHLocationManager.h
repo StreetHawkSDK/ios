@@ -167,6 +167,11 @@ A core class to monitor location change. By default process of StreetHawk SDK, i
  */
 @property (weak, nonatomic, readonly) NSArray *monitoredRegions;
 
+/*
+ Get from CLLocationManager's `maximumRegionMonitoringDistance`. It's the maximum geofence radius. Attempts to register a region larger than this will generate a CLErrorRegionMonitoringFailure. This value may vary based on the hardware features of the device, as well as on dynamically changing resource constraints.
+ */
+@property (nonatomic, readonly) CLLocationDistance geofenceMaximumRadius;
+
 /** @name Operation */
 
 /**

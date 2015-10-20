@@ -131,7 +131,7 @@ enum
         return;
     }
     
-    if ((code == LOG_CODE_LOCATION_GEO || code == LOG_CODE_LOCATION_IBEACON || code == LOG_CODE_LOCATION_MORE) && ![SHAppStatus sharedInstance].uploadLocationChange) //if current App Status requires disable location update
+    if ((code == LOG_CODE_LOCATION_GEO || code == LOG_CODE_LOCATION_IBEACON || code == LOG_CODE_LOCATION_GEOFENCE || code == LOG_CODE_LOCATION_MORE) && ![SHAppStatus sharedInstance].uploadLocationChange) //if current App Status requires disable location update
     {
         if (handler)
         {
@@ -225,7 +225,7 @@ enum
             [[NSUserDefaults standardUserDefaults] synchronize];
             SHLog(@"LOG (%d @ %@) <%d> %@.", logid, shFormatStreetHawkDate(created), code, comment);
         }
-        BOOL isForce = (code == LOG_CODE_LOCATION_GEO || code == LOG_CODE_LOCATION_IBEACON || code == LOG_CODE_LOCATION_DENIED)  //immediately send for geo and ibeacon location, but not for code 19.
+        BOOL isForce = (code == LOG_CODE_LOCATION_GEO || code == LOG_CODE_LOCATION_IBEACON || code == LOG_CODE_LOCATION_GEOFENCE || code == LOG_CODE_LOCATION_DENIED)  //immediately send for geo and ibeacon location, but not for code 19.
         || (code == LOG_CODE_APP_VISIBLE || code == LOG_CODE_APP_INVISIBLE)  //immediately send for session change
         || (code == LOG_CODE_TAG_INCREMENT || code == LOG_CODE_TAG_DELETE || code == LOG_CODE_TAG_ADD)  //immediately send for add/remove/increment user tag
         || (code == LOG_CODE_TIMEOFFSET)  //immediately send for time utc offset change
@@ -511,6 +511,13 @@ enum
             {
                 NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
                 NSAssert(dictComment != nil, @"Fail to parse code 21 iBeacon json.");
+                logRecord[@"json"] = dictComment;
+            }
+            //Code: 22. Geofence Update
+            else if (code == LOG_CODE_LOCATION_GEOFENCE)
+            {
+                NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
+                NSAssert(dictComment != nil, @"Fail to parse code 22 geofence json.");
                 logRecord[@"json"] = dictComment;
             }
             //Code: 8050. UTC Offset
@@ -807,6 +814,7 @@ enum
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"EXIT_PAGE_HISTORY"];
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"APPSTATUS_IBEACON_FETCH_TIME"]; //although App may still monitor these iBeacon regions, fetch them again for new intall.
     [[NSUserDefaults standardUserDefaults] setObject:[NSArray array] forKey:@"APPSTATUS_IBEACON_FETCH_LIST"]; //server side iBeacon UUID format changed in 1.6.0, must clear and re-register.
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"APPSTATUS_GEOFENCE_FETCH_TIME"]; //although App may still monitor these geofence regions, fetch them again for new install.
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"LOCATION_DENIED_SENT"]; //new install should send location denied log once.
     [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:FGBG_SESSION]; //new install session start from 1.
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -816,6 +824,7 @@ enum
     //Crash report: CrashLog_MD5. Make sure not sent duplicate crash report again in new install.
     //Customer setting: ENABLE_LOCATION_SERVICE, ENABLE_PUSH_NOTIFICATION, FRIENDLYNAME_KEY. Cannot reset, must keep same setting as previous install.
     //Keep old version and adjust by App itself: APPKEY_KEY, NETWORK_RECOVER_TIME, APPSTATUS_STREETHAWKENABLED, APPSTATUS_DEFAULT_HOST, APPSTATUS_ALIVE_HOST, APPSTATUS_UPLOAD_LOCATION, APPSTATUS_SUBMIT_FRIENDLYNAME, APPSTATUS_CHECK_TIME, APPSTATUS_APPSTOREID, REGULAR_HEARTBEAT_LOGTIME, REGULAR_LOCATION_LOGTIME, SMART_PUSH_PAYLOAD. These will be updated automatically by App, keep old version till next App update them.
+    //APPSTATUS_GEOFENCE_FETCH_LIST: cannot reset to empty, otherwise when change cannot find previous fence so not stop monitor.
     //User pass in: ADS_IDENTIFIER. Should not delete, move to next install.
     //Rarely use: ALERTSETTINGS_MINUTES, PHONEGAP_8004_PAGE, PHONEGAP_8004_PUSHDATA. These are rarely use, and it will be correct when next customer call, ignore and not reset.
     //Delete SQLite database file, it will be re-build for this fresh new install, thus make sure logid start from 1.

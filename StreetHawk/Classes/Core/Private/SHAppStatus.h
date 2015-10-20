@@ -75,6 +75,11 @@ extern NSString * const SHAppStatusChangeNotification;
 @property (nonatomic, strong) NSString *iBeaconTimeStamp;
 
 /**
+ Match to `app_status` dictionary's `geofences`. It's a time stamp of server provided geofence list. If the time stamp is newer than client fetch time, client should fetch geofence list again and monitor new list; if the time stamp is NULL or empty, client should clear cached geofence and stop monitor.
+ */
+@property (nonatomic, strong) NSString *geofenceTimeStamp;
+
+/**
  Match to `app_status` dictionary's `feed`. It's a time stamp of server last modify feeds. If the time stamp is newer than client fetch time, client should fetch feeds again and trigger customer's callback; if the time stamp is NULL or older than client fetch time, do nothing.
  */
 @property (nonatomic, strong) NSString *feedTimeStamp;

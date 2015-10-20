@@ -214,7 +214,7 @@
     self.locationManager.distanceFilter = distance;
 }
 
-#pragma mark - iBeacon detecting result
+#pragma mark - detecting result
 
 - (SHiBeaconState)iBeaconSupportState
 {
@@ -243,6 +243,11 @@
 - (NSArray *)monitoredRegions
 {
     return self.locationManager.monitoredRegions.allObjects;
+}
+
+- (CLLocationDistance)geofenceMaximumRadius
+{
+    return self.locationManager.maximumRegionMonitoringDistance;
 }
 
 #pragma mark - operation
@@ -572,7 +577,7 @@
     {
         return YES;
     }
-    //Only consider Beacon region so far, other kind of CLRegion treat as not equal. CLBeaconRegion isEqual is not correct, it compares memory, for example, after I change UUID it still return equal. So compare beacon region manually.
+    //CLBeaconRegion isEqual is not correct, it compares memory, for example, after I change UUID it still return equal. So compare beacon region manually.
     if (r1 != nil && r2 != nil && [r1 isKindOfClass:[CLBeaconRegion class]] && [r2 isKindOfClass:[CLBeaconRegion class]])
     {
         CLBeaconRegion *br1 = (CLBeaconRegion *)r1;
@@ -592,7 +597,14 @@
             }
         }
     }
-    return NO;
+    //CLCircularRegion compares identifier.
+    if (r1 != nil && r2 != nil && [r1 isKindOfClass:[CLCircularRegion class]] && [r2 isKindOfClass:[CLCircularRegion class]])
+    {
+        CLCircularRegion *gr1 = (CLCircularRegion *)r1;
+        CLCircularRegion *gr2 = (CLCircularRegion *)r2;
+        return [gr1.identifier isEqualToString:gr2.identifier];
+    }
+    return [r1 isEqual:r2];
 }
 
 - (void)networkStatusChanged:(NSNotification *)notification
