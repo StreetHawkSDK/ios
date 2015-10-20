@@ -980,7 +980,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     NSAssert(index != NSNotFound, @"Server id for %@ is not valid.", geoFence.serverId);
     if (index > 0 && index < geoFence.serverId.length)
     {
-        NSString *serverId = [geoFence.serverId substringToIndex:index - 1];
+        NSString *serverId = [geoFence.serverId substringToIndex:index];
         NSString *distance = [geoFence.serverId substringFromIndex:index + 1];
         NSDictionary *dictDistance = @{serverId : @(isInside ? [distance doubleValue] : -1)};
         NSString *distanceStr = shSerializeObjToJson(dictDistance);
@@ -1324,7 +1324,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 {
     NSAssert(!shStrIsEmpty(serverId), @"Invalid geofence server Id.");
     _serverId = serverId;
-    _isLeaves = [_serverId hasPrefix:@"_"];
+    _isLeaves = ![_serverId hasPrefix:@"_"];
 }
 
 - (void)setLatitude:(double)latitude
