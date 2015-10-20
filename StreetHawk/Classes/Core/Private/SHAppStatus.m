@@ -1322,7 +1322,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 - (void)setServerId:(NSString *)serverId
 {
-    NSAssert(!strIsEmpty(serverId), @"Invalid geofence server Id.");
+    NSAssert(!shStrIsEmpty(serverId), @"Invalid geofence server Id.");
     _serverId = serverId;
     _isLeaves = [_serverId hasPrefix:@"_"];
 }

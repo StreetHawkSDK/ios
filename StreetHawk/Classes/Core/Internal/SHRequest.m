@@ -34,7 +34,6 @@
 #import "SHNotificationHandler.h" //for call handle function
 #endif
 
-
 @interface SHRequest()
 {
     dispatch_semaphore_t flagsSemaphore;
