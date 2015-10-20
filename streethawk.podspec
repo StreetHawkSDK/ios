@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.documentation_url   = 'https://streethawk.freshdesk.com/solution/categories/5000158959'
 
   s.source              = { :git => 'https://github.com/StreetHawkSDK/ios.git', :tag => s.version.to_s, :submodules => true }
-  s.platform            = :ios, '6.0'
+  s.platform            = :ios, '7.0'
   s.requires_arc        = true
   
   s.xcconfig            = { 'OTHER_LDFLAGS' => '$(inherited) -lObjC', 
