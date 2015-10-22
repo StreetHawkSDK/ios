@@ -665,26 +665,35 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
                     {
                         //successfully fetch server's geofence list. local cache time is already updated, store fetch list and active monitor.
                         SHLog(@"Fetch server geofence list: %@.", request.resultValue);
-                        NSAssert([request.resultValue isKindOfClass:[NSArray class]], @"Server return should be array.");
-                        if ([request.resultValue isKindOfClass:[NSArray class]])
+                        NSAssert([request.resultValue isKindOfClass:[NSArray class]] || [request.resultValue isKindOfClass:[NSDictionary class]], @"Server return should be array or empty dictionary.");
+                        if ([request.resultValue isKindOfClass:[NSArray class]] || [request.resultValue isKindOfClass:[NSDictionary class]])
                         {
                             //Geofence would monitor parent or child, and it's possible `id` not change but latitude/longitude/radius change. When timestamp change, stop monitor existing geofences and start to monitor from new list totally.
                             [self stopMonitorPreviousGeofencesOnlyForOutside:NO parentCanKeepChild:NO]; //server's geofence change, stop monitor all.
-                            NSMutableArray *arrayList = [NSMutableArray array];
-                            for (NSDictionary *dictParent in (NSArray *)request.resultValue)
+                            if ([request.resultValue isKindOfClass:[NSArray class]]) //array means there is new geofence list from server
                             {
-                                SHServerGeofence *geofence = [SHServerGeofence parseGeofenceFromDict:dictParent];
-                                NSAssert(geofence != nil, @"Fail to parse geofence from %@.", dictParent);
-                                if (geofence != nil)
+                                NSMutableArray *arrayList = [NSMutableArray array];
+                                for (NSDictionary *dictParent in (NSArray *)request.resultValue)
                                 {
-                                    [arrayList addObject:geofence];
+                                    SHServerGeofence *geofence = [SHServerGeofence parseGeofenceFromDict:dictParent];
+                                    NSAssert(geofence != nil, @"Fail to parse geofence from %@.", dictParent);
+                                    if (geofence != nil)
+                                    {
+                                        [arrayList addObject:geofence];
+                                    }
                                 }
+                                //Update local cache and memory, start monitor parent.
+                                self.arrayGeofenceFetchList = arrayList;
+                                [[NSUserDefaults standardUserDefaults] setObject:[SHServerGeofence serializeToArrayDict:arrayList] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];
+                                [[NSUserDefaults standardUserDefaults] synchronize];
+                                [self startMonitorGeofences:arrayList];
                             }
-                            //Update local cache and memory, start monitor parent.
-                            self.arrayGeofenceFetchList = arrayList;
-                            [[NSUserDefaults standardUserDefaults] setObject:[SHServerGeofence serializeToArrayDict:arrayList] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];
-                            [[NSUserDefaults standardUserDefaults] synchronize];
-                            [self startMonitorGeofences:arrayList];
+                            else //dictionary means empty geofence list from server.
+                            {
+                                self.arrayGeofenceFetchList = [NSMutableArray array]; //cannot set to nil, as nil will read from NSUserDefaults again.
+                                [[NSUserDefaults standardUserDefaults] setObject:[NSArray array] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];  //clear local cache, not start when kill and launch App.
+                                [[NSUserDefaults standardUserDefaults] synchronize];
+                            }
                         }
                     }
                     else
