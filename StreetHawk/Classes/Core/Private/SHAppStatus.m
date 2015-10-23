@@ -210,6 +210,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 - (void)startMonitorGeofences:(NSArray *)arrayGeofences;  //Give an array of SHServerGeofence and convert to be monitored. It doesn't create region for child nodes.
 - (void)markSelfAndChildGeofenceOutside:(SHServerGeofence *)geofence; //When a geofence outside, mark itself and child (if has) to be outside, send out geofene logline for previous inside leave geofence too. Make it a separate function because it's recurisive.
 - (void)stopMonitorSelfAndChildGeofence:(SHServerGeofence *)geofence; //when stop monitor inner geofence, stop monitor its child too. As child not stop when exit due to parent keep it.
+- (SHServerGeofence *)searchSelfAndChild:(SHServerGeofence *)geofence forRegion:(CLCircularRegion *)geoRegion; //search recursively to match
 #endif
 
 #if defined(SH_FEATURE_IBEACON) || defined(SH_FEATURE_GEOFENCE)
@@ -1011,16 +1012,10 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     CLCircularRegion *geoRegion = (CLCircularRegion *)region;
     for (SHServerGeofence *geofence in self.arrayGeofenceFetchList)
     {
-        if ([geofence isEqualToCircleRegion:geoRegion])
+        SHServerGeofence *matchGeofence = [self searchSelfAndChild:geofence forRegion:geoRegion];
+        if (matchGeofence != nil)
         {
-            return geofence;
-        }
-        for (SHServerGeofence *childGeoFence in geofence.arrayNodes)
-        {
-            if ([childGeoFence isEqualToCircleRegion:geoRegion])
-            {
-                return childGeoFence;
-            }
+            return matchGeofence;
         }
     }
     return nil;
@@ -1095,6 +1090,23 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             [self stopMonitorSelfAndChildGeofence:childGeofence]; //recurisively do it as child geofence may contains child too.
         }
     }
+}
+
+- (SHServerGeofence *)searchSelfAndChild:(SHServerGeofence *)geofence forRegion:(CLCircularRegion *)geoRegion
+{
+    if ([geofence isEqualToCircleRegion:geoRegion])
+    {
+        return geofence;
+    }
+    for (SHServerGeofence *childGeoFence in geofence.arrayNodes)
+    {
+        SHServerGeofence *match = [self searchSelfAndChild:childGeoFence forRegion:geoRegion];
+        if (match != nil)
+        {
+            return match;
+        }
+    }
+    return nil;
 }
 
 #endif
