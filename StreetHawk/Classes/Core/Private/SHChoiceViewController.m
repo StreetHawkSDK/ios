@@ -98,8 +98,8 @@
     {
         self.labelTitle.hidden = NO;
         self.labelTitle.text = self.displayTitle;
-        CGSize size = [self.displayTitle sizeWithFont:self.labelTitle.font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-        frameTitle = CGRectMake(horizontalMargin, verticalMargin, viewWidth - 2 * horizontalMargin, size.height);
+        CGRect rectSize = [self.displayTitle boundingRectWithSize:constraintSize options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) attributes:@{NSFontAttributeName:self.labelTitle.font} context:nil];
+        frameTitle = CGRectMake(horizontalMargin, verticalMargin, viewWidth - 2 * horizontalMargin, rectSize.size.height);
         usedHeight = frameTitle.origin.y + frameTitle.size.height;
     }
     else
@@ -111,8 +111,8 @@
     {
         self.labelMessage.hidden = NO;
         self.labelMessage.text = self.displayMessage;
-        CGSize size = [self.displayMessage sizeWithFont:self.labelMessage.font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
-        frameMessage = CGRectMake(horizontalMargin, usedHeight + verticalMargin, viewWidth - 2 * horizontalMargin, size.height);
+        CGRect rectSize = [self.displayMessage boundingRectWithSize:constraintSize options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) attributes:@{NSFontAttributeName:self.labelMessage.font} context:nil];
+        frameMessage = CGRectMake(horizontalMargin, usedHeight + verticalMargin, viewWidth - 2 * horizontalMargin, rectSize.size.height);
         usedHeight = frameMessage.origin.y + frameMessage.size.height;
     }
     else
@@ -138,9 +138,9 @@
     {
         self.displayCancelButton = @"Cancel";
     }
-    CGSize buttonSize = [self.displayCancelButton sizeWithFont:self.buttonCancel.titleLabel.font constrainedToSize:constraintSize];
+    CGRect rectSize = [self.displayCancelButton boundingRectWithSize:constraintSize options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) attributes:@{NSFontAttributeName:self.buttonCancel.titleLabel.font} context:nil];
     [self.buttonCancel setTitle:self.displayCancelButton forState:UIControlStateNormal];
-    frameCancel = CGRectMake((viewWidth - buttonSize.width) / 2, frameTable.origin.y + frameTable.size.height + verticalMargin, buttonSize.width, self.buttonCancel.frame.size.height);
+    frameCancel = CGRectMake((viewWidth - rectSize.size.width) / 2, frameTable.origin.y + frameTable.size.height + verticalMargin, rectSize.size.width, self.buttonCancel.frame.size.height);
     //whole view
     self.viewDialog.frame = CGRectMake(viewMargin, (screenRect.size.height - viewHeight) / 2, viewWidth, viewHeight);
     self.labelTitle.frame = frameTitle;

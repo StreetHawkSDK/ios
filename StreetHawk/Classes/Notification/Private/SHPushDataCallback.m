@@ -46,9 +46,9 @@
             {
                 float screenWidth = [UIScreen mainScreen].bounds.size.width; //here just roughly guess, iPad/iPhone6+ may rotate so actually banner in height, but iOS8 also consider rotate, thus simply use "width" here.
                 UIFont *notificationFont = [UIFont systemFontOfSize:14]; //also guess
-                CGSize lineSize = [[alertBanner substringToIndex:1] sizeWithFont:notificationFont];
-                CGSize alertSize = [alertBanner sizeWithFont:notificationFont constrainedToSize:CGSizeMake(screenWidth, 1000/*enough to wrapper*/) lineBreakMode:NSLineBreakByWordWrapping];
-                if (alertSize.height > lineSize.height * 2 + 10/*margin but not enough for one line*/)
+                CGSize lineSize = [[alertBanner substringToIndex:1] sizeWithAttributes:@{NSFontAttributeName:notificationFont}];
+                CGRect alertSize = [alertBanner boundingRectWithSize:CGSizeMake(screenWidth, 1000/*enough to wrapper*/) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) attributes:@{NSFontAttributeName:notificationFont} context:nil];
+                if (alertSize.size.height > lineSize.height * 2 + 10/*margin but not enough for one line*/)
                 {
                     isAlertLong = YES; //alert more than 2 lines
                 }
