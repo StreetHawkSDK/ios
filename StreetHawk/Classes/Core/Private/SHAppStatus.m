@@ -208,6 +208,8 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 - (SHServerGeofence *)findServerGeofenceForRegion:(CLRegion *)region;  //get SHServerGeofence list, subset of self.arrayGeofenceFetchList, which match this region. It searches both parent and child list.
 - (void)stopMonitorPreviousGeofencesOnlyForOutside:(BOOL)onlyForOutside parentCanKeepChild:(BOOL)parentKeep;  //Geofence monitor region need to change, stop previous monitor for server's geofence. If `onlyForOutside`=YES, only stop monitor those outside; otherwise stop all regardless inside or outside. `parentKeep`=YES take effect when `onlyForOutside`=YES, if it's parent fence is inside, child fence not stop although it's outside.
 - (void)startMonitorGeofences:(NSArray *)arrayGeofences;  //Give an array of SHServerGeofence and convert to be monitored. It doesn't create region for child nodes.
+- (void)markSelfAndChildGeofenceOutside:(SHServerGeofence *)geofence; //When a geofence outside, mark itself and child (if has) to be outside, send out geofene logline for previous inside leave geofence too. Make it a separate function because it's recurisive.
+- (void)stopMonitorSelfAndChildGeofence:(SHServerGeofence *)geofence; //when stop monitor inner geofence, stop monitor its child too. As child not stop when exit due to parent keep it.
 #endif
 
 #if defined(SH_FEATURE_IBEACON) || defined(SH_FEATURE_GEOFENCE)
@@ -1049,7 +1051,8 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             }
             if (shouldStop)
             {
-                [StreetHawk.locationManager stopMonitorRegion:monitorRegion];
+                //Test multiple levels case: level1 inner->level 2 inner->leave. Before exit it's inside leave. Suddenly exit them all, when exit leave it's kept monitor by level 2, when exit level 2 it stops monitor, but still leave is monitor. In this case should remove level geofence too.
+                [self stopMonitorSelfAndChildGeofence:matchGeofence];
             }
         }
     }
@@ -1060,6 +1063,37 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     for (SHServerGeofence *geofence in arrayGeofences)
     {
         [StreetHawk.locationManager startMonitorRegion:[geofence getGeoRegion]];
+    }
+}
+
+- (void)markSelfAndChildGeofenceOutside:(SHServerGeofence *)geofence
+{
+    if (geofence.isInside)
+    {
+        geofence.isInside = NO;
+        if (geofence.isLeaves) //for leave go outside, send logline.
+        {
+            [self sendLogForGeoFence:geofence isInside:NO];
+        }
+        else //if parent geofence out, make all child geofence outside too.
+        {
+            for (SHServerGeofence *childGeofence in geofence.arrayNodes)
+            {
+                [self markSelfAndChildGeofenceOutside:childGeofence]; //recurisively do it as child geofence may contains child too.
+            }
+        }
+    }
+}
+
+- (void)stopMonitorSelfAndChildGeofence:(SHServerGeofence *)geofence
+{
+    [StreetHawk.locationManager stopMonitorRegion:[geofence getGeoRegion]];
+    if (!geofence.isLeaves)
+    {
+        for (SHServerGeofence *childGeofence in geofence.arrayNodes)
+        {
+            [self stopMonitorSelfAndChildGeofence:childGeofence]; //recurisively do it as child geofence may contains child too.
+        }
     }
 }
 
@@ -1125,24 +1159,21 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             SHServerGeofence *geofence = [self findServerGeofenceForRegion:region];
             if (geofence != nil && geofence.isInside/*only take action if change*/)
             {
-                geofence.isInside = NO;
-                if (!geofence.isLeaves) //if parent geofence out, make all child geofence outside too
-                {
-                    for (SHServerGeofence *childGeofence in geofence.arrayNodes)
-                    {
-                        childGeofence.isInside = NO;
-                    }
-                }
+                [self markSelfAndChildGeofenceOutside:geofence]; //recursively mark this geofence and its child all outside. It also sends exit logline for child if necessary, because if parent exit before child leave, child will be marked as outside, and this logic will not enter when child leave detect outside.
                 [[NSUserDefaults standardUserDefaults] setObject:[SHServerGeofence serializeToArrayDict:self.arrayGeofenceFetchList] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                if (geofence.isLeaves) //if this is child geofence, send exit logline and it's done
-                {
-                    [self sendLogForGeoFence:geofence isInside:NO];
-                }
-                else //if this is parent geofence, stop monitor its child geofence, add other parent geofence.
+                if (!geofence.isLeaves) //if this is inner geofence, stop monitor its child geofence, add itself and it's same level.
                 {
                     [self stopMonitorPreviousGeofencesOnlyForOutside:YES parentCanKeepChild:YES]; //in case overlap and in another parent geofence, this will keep it un-affected.
-                    [self startMonitorGeofences:self.arrayGeofenceFetchList]; //monitor all parenet geofences.
+                    if (geofence.parentFence != nil && geofence.parentFence.isInside)
+                    {
+                        //Move out from a inner geofence, if its parent geofence is still inside, monitor itself and its same level. Cannot monitor top level in this case, because if monitor top level, its parent fence is already monitored, and not stop/add again, no enter happens, so the same level geofence (some maybe leave geofence), will not be monitored.
+                        [self startMonitorGeofences:geofence.parentFence.arrayNodes];
+                    }
+                    else
+                    {
+                        [self startMonitorGeofences:self.arrayGeofenceFetchList]; //monitor all top level geofences.
+                    }
                 }
             }
 #endif
