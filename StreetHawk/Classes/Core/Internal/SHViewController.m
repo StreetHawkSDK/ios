@@ -89,9 +89,6 @@
 
 - (void)viewDidLoad
 {
-    //since iOS 7.0 wantsFullScreenLayout is deprecated, but the behavior is wantsFullScreenLayout=YES. This makes VC go up and overlap in status bar area. Solution to fix and keep compatibility is: make wantsFullScreenLayout=YES as default for either before or after iOS 7.0, and re-design xib to avoid overlap.
-    self.vc.wantsFullScreenLayout = YES;
-    
     //If current VC is under navigation controller, must set edgesForExtendedLayout = UIRectEdgeNone otherwise navigation bar will cover on the view. By setting edgesForExtendedLayout = UIRectEdgeNone so that view is under navigation bar.
     //But one thing need notice: navigation bar may automatically add 20 pixels for status bar if navigation bar is up to windows top, making the xib design not need move down 20 pixels.
     if([UIViewController instancesRespondToSelector:@selector(edgesForExtendedLayout)])

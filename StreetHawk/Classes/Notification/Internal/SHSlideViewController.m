@@ -122,7 +122,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.wantsFullScreenLayout = YES;  //for pre iOS 7.0
     self.view.backgroundColor = [UIColor clearColor];  //The background VC is invisible, show light gray window.
 }
 

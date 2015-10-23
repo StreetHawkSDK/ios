@@ -382,7 +382,7 @@
         }
         else
         {
-            isMonitorRegionAvailable = [CLLocationManager regionMonitoringAvailable];
+            isMonitorRegionAvailable = NO;//[CLLocationManager regionMonitoringAvailable];
         }
     }
     if (!isMonitorRegionAvailable)
