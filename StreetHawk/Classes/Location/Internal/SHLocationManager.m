@@ -531,6 +531,7 @@
 
 - (void)sendGeoLocationUpdate
 {
+#ifdef SH_FEATURE_LATLNG
     if (self.currentGeoLocation.latitude == 0 || self.currentGeoLocation.longitude == 0)
     {
         return; //if current location is not detected, not send log 20.
@@ -555,6 +556,7 @@
         self.sentGeoLocationTime = [[NSDate date] timeIntervalSince1970];
         [StreetHawk sendLogForCode:LOG_CODE_LOCATION_GEO withComment:shSerializeObjToJson(dictLoc)];
     }
+#endif
 }
 
 - (NSString *)formatBeaconRegion:(CLBeaconRegion *)region
