@@ -19,10 +19,10 @@
 		CB5962DD1B749BEC0086CC7D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5962D61B749BEC0086CC7D /* main.m */; };
 		CB5962DE1B749BEC0086CC7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB5962D71B749BEC0086CC7D /* Main.storyboard */; };
 		CB5962E41B749DAE0086CC7D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5962E31B749DAE0086CC7D /* Default-568h@2x.png */; };
-		CBA7EA021BABC2FF002C3F51 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBA7EA011BABC2FF002C3F51 /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
-		CBD6BA4A1BC79C650037CF1F /* InstallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD6BA491BC79C650037CF1F /* InstallViewController.m */; settings = {ASSET_TAGS = (); }; };
-		CBD6BA4E1BC7B4770037CF1F /* TagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD6BA4C1BC7B4770037CF1F /* TagViewController.m */; settings = {ASSET_TAGS = (); }; };
-		CBD6BA4F1BC7B4770037CF1F /* TagViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBD6BA4D1BC7B4770037CF1F /* TagViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		CBA7EA021BABC2FF002C3F51 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBA7EA011BABC2FF002C3F51 /* Launch Screen.storyboard */; };
+		CBD6BA4A1BC79C650037CF1F /* InstallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD6BA491BC79C650037CF1F /* InstallViewController.m */; };
+		CBD6BA4E1BC7B4770037CF1F /* TagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD6BA4C1BC7B4770037CF1F /* TagViewController.m */; };
+		CBD6BA4F1BC7B4770037CF1F /* TagViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBD6BA4D1BC7B4770037CF1F /* TagViewController.xib */; };
 		CBEEC8511B78AAAE006BC283 /* DeepLinkingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEEC84C1B78AAAE006BC283 /* DeepLinkingViewController.m */; };
 		CBEEC8521B78AAAE006BC283 /* DeepLinkingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBEEC84D1B78AAAE006BC283 /* DeepLinkingViewController.xib */; };
 		CBEEC8531B78AAAE006BC283 /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEEC84F1B78AAAE006BC283 /* NotificationViewController.m */; };
@@ -240,6 +240,7 @@
 				CB59629F1B749B9A0086CC7D /* Frameworks */,
 				CB5962A01B749B9A0086CC7D /* Resources */,
 				A2A106A8F0A4E5DD520FE03E /* Copy Pods Resources */,
+				0548DBD490D7601C6FC91453 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -313,6 +314,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0548DBD490D7601C6FC91453 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		737EDBF440C07F92BEF67AEB /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

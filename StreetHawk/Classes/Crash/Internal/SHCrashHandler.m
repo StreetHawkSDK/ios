@@ -20,7 +20,7 @@
 #import "SHLogger.h" //for sending logline
 //header from Third-party
 //The downloaded binary is Framework style, however if use Framework it's not built inside StreetHawk.Framework, cause the calling App such as Peeptoe.project needs to include CrashReport.Framework explictly. This is not expected. A tricky is to use this as lib and header files, thus the lib is built inside.
-#import "CrashReporter.h"
+#import <CrashReporter/CrashReporter.h>
 
 @implementation SHCrashHandler
 
