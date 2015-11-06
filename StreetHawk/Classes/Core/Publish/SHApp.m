@@ -726,7 +726,7 @@
         [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:30*60/*perform background fetch in half an hour to increase chance*/];
     }
     
-    if (StreetHawk.isDebugMode && shAppMode() != SHAppMode_AppStore && shAppMode() != SHAppMode_Enterprise && ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground))  //In debug mode, not live for AppStore, not in background wake up (either by location with option has location key, or by background fetch with optional is nil), check current version and StreetHawk's latest version. Print log if current not the latest version.
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native && StreetHawk.isDebugMode && shAppMode() != SHAppMode_AppStore && shAppMode() != SHAppMode_Enterprise && ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground))  //In debug mode, not live for AppStore, not in background wake up (either by location with option has location key, or by background fetch with optional is nil), check current version and StreetHawk's latest version. Print log if current not the latest version.
     {
         SHRequest *requestCheckVersion = [SHRequest requestWithPath:@"core/library/" withParams:@[@"operating_system", @"ios", @"development_platform", shDevelopmentPlatformString()]];
         requestCheckVersion.requestHandler = ^(SHRequest *request)
