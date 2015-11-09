@@ -25,7 +25,7 @@
  * If local has crash report, use `loadPendingCrashReport` to get the report data string. 
  * After send crash report to server, use `purgePendingCrashReport` to clear the local one.
  
- For StreetHawkCoreCompact, remove PLCrashReport to reduce library size, thus only can catch some basic information by `ExceptionHandler`.
+ For compact build, remove PLCrashReport to reduce library size, thus only can catch some basic information by `ExceptionHandler`.
  */
 @interface SHCrashHandler : NSObject
 
