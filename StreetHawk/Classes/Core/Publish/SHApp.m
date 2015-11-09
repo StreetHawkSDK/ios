@@ -118,6 +118,9 @@
 - (void)checkUtcOffsetUpdate;  //Check utc_offset: if not logged before or changed, log it immediately.
 - (void)timeZoneChangeNotificationHandler:(NSNotification *)notification;  //Notification handler called when time zone change
 
+//send module tags
+- (void)sendModuleTags; //Send current build include what modules.
+
 //Log enter/exit page.
 @property (nonatomic, strong) SHViewActivity *currentView;
 - (void)shNotifyPageEnter:(NSString *)page sendEnter:(BOOL)doEnter sendExit:(BOOL)doExit;
@@ -276,6 +279,8 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     //check time zone and register for later change
     [self checkUtcOffsetUpdate];
+    //check current build include which modules and send tags.
+    [self sendModuleTags];
     //setup intercept app delegate
     if (self.autoIntegrateAppDelegate)
     {
@@ -1126,6 +1131,99 @@
         }];
         [self.backgroundQueue addOperation:op];
     }
+}
+
+- (void)sendModuleTags
+{
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap) //native and phonegap plugin uses preprocessor macro to enable feature at compile time.
+    {
+        NSString *growthCurrent = nil;
+#ifdef SH_FEATURE_GROWTH
+        growthCurrent = @"true";
+#else
+        growthCurrent = @"false";
+#endif
+        NSString *growthSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_growth"];
+        if ([growthCurrent compare:growthSent] != NSOrderedSame)
+        {
+            [StreetHawk tagString:growthCurrent forKey:@"sh_module_growth"];
+            [[NSUserDefaults standardUserDefaults] setObject:growthCurrent forKey:@"sh_module_growth"];
+        }
+        NSString *pushCurrent = nil;
+#ifdef SH_FEATURE_NOTIFICATION
+        pushCurrent = @"true";
+#else
+        pushCurrent = @"false";
+#endif
+        NSString *pushSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_push"];
+        if ([pushCurrent compare:pushSent] != NSOrderedSame)
+        {
+            [StreetHawk tagString:pushCurrent forKey:@"sh_module_push"];
+            [[NSUserDefaults standardUserDefaults] setObject:pushCurrent forKey:@"sh_module_push"];
+        }
+        NSString *locationCurrent = nil;
+#ifdef SH_FEATURE_LATLNG
+        locationCurrent = @"true";
+#else
+        locationCurrent = @"false";
+#endif
+        NSString *locationSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_location"];
+        if ([locationCurrent compare:locationSent] != NSOrderedSame)
+        {
+            [StreetHawk tagString:locationCurrent forKey:@"sh_module_location"];
+            [[NSUserDefaults standardUserDefaults] setObject:locationCurrent forKey:@"sh_module_location"];
+        }
+        NSString *geofenceCurrent = nil;
+#ifdef SH_FEATURE_GEOFENCE
+        geofenceCurrent = @"true";
+#else
+        geofenceCurrent = @"false";
+#endif
+        NSString *geofenceSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_geofence"];
+        if ([geofenceCurrent compare:geofenceSent] != NSOrderedSame)
+        {
+            [StreetHawk tagString:geofenceCurrent forKey:@"sh_module_geofence"];
+            [[NSUserDefaults standardUserDefaults] setObject:geofenceCurrent forKey:@"sh_module_geofence"];
+        }
+        NSString *iBeaconCurrent = nil;
+#ifdef SH_FEATURE_IBEACON
+        iBeaconCurrent = @"true";
+#else
+        iBeaconCurrent = @"false";
+#endif
+        NSString *iBeaconSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_beacon"];
+        if ([iBeaconCurrent compare:iBeaconSent] != NSOrderedSame)
+        {
+            [StreetHawk tagString:iBeaconCurrent forKey:@"sh_module_beacon"];
+            [[NSUserDefaults standardUserDefaults] setObject:iBeaconCurrent forKey:@"sh_module_beacon"];
+        }
+        NSString *crashCurrent = nil;
+#ifdef SH_FEATURE_CRASH
+        crashCurrent = @"true";
+#else
+        crashCurrent = @"false";
+#endif
+        NSString *crashSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_crash"];
+        if ([crashCurrent compare:crashSent] != NSOrderedSame)
+        {
+            [StreetHawk tagString:crashCurrent forKey:@"sh_module_crash"];
+            [[NSUserDefaults standardUserDefaults] setObject:crashCurrent forKey:@"sh_module_crash"];
+        }
+        NSString *feedsCurrent = nil;
+#ifdef SH_FEATURE_FEED
+        feedsCurrent = @"true";
+#else
+        feedsCurrent = @"false";
+#endif
+        NSString *feedsSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_feeds"];
+        if ([feedsCurrent compare:feedsSent] != NSOrderedSame)
+        {
+            [StreetHawk tagString:feedsCurrent forKey:@"sh_module_feeds"];
+            [[NSUserDefaults standardUserDefaults] setObject:feedsCurrent forKey:@"sh_module_feeds"];
+        }
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    //other cross platform will be add when implement them.
 }
 
 - (void)endBackgroundTask:(UIBackgroundTaskIdentifier)backgroundTask
