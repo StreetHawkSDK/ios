@@ -439,7 +439,7 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
          {
              return; //nothing to open, usually because have registered already.
          }
-         SHLog(@"Growth register try to open:%@.", result);
+         SHLog(@"Growth register try to open: %@.", result);
          if (error == nil && result != nil && [result isKindOfClass:[NSDictionary class]])
          {
              NSDictionary *dictResult = (NSDictionary *)result;
@@ -474,7 +474,7 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
                             }
                             else
                             {
-                                SHLog(@"Growth url %@ not find suitable way to launch.");
+                                SHLog(@"Growth url %@ not find suitable way to launch.", deeplinkingUrl);
                             }
                         });
                  }
