@@ -68,25 +68,6 @@ A core class to monitor location change. By default process of StreetHawk SDK, i
 - Even if the App crashes or is terminated, or phone power off/on, the App will be woken up and put in background because significant location monitoring.
 - Once location update notification occur, (according to the algorithm above) logs are post to server immediately, and install updated.
  
- **Default Values by Application state**
- <table>
-    <tr>
-        <th>Parameter</th>
-        <th>Background</th>
-        <th>Foreground</th>
-    </tr>
-    <tr>
-        <td>(bg/fg)MinDistanceBetweenEvents</td>
-        <td>500m</td>
-        <td>100m</td>
-    </tr>
-    <tr>
-        <td>(bg/fg)MinTimeBetweenEvents</td>
-        <td>5mins</td>
-        <td>1min</td>
-    </tr>
- </table>
- 
  **Related project settings:**
     In "Required background modes" there is a choice for location service (Location updates). Note: this is ONLY for keeping standard location service to run at background; it has NO effect for significant location service. With or without this setting checked, significant location service keeps running at background, or even App is terminated or Phone power off/on. Because StreetHawk SDK uses standard location update in foreground, uses significant location update in background, there is NO need to check this setting.
  

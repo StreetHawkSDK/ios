@@ -122,6 +122,11 @@ extern NSString * const SHLMNotification_kRegionState; //string @"RegionState", 
 extern NSString * const SHLMNotification_kBeacons; //string @"Beacons", get NSArray for CLBeacon.
 extern NSString * const SHLMNotification_kAuthStatus;  //string @"AuthStatus", get NSNumber for int representing CLAuthorizationStatus.
 
+extern int const SHLocation_FG_Interval; //Default minimum time interval for updating location when App in FG, 1 mins.
+extern int const SHLocation_FG_Distance; //Default minimum distance for updating location when App in FG, 100 meters.
+extern int const SHLocation_BG_Interval; //Default minimum time interval for updating location when App in BG, 5 mins.
+extern int const SHLocation_BG_Distance; //Default minimum distance for updating location when App in BG, 500 meters.
+
 @class SHLocationManager;
 
 /**
@@ -152,6 +157,34 @@ extern NSString * const SHLMNotification_kAuthStatus;  //string @"AuthStatus", g
  Does user disable location permission for this App in system preference settings App. It's used to check before promote settings dialog by calling `- (void)launchSystemPreferenceSettings` to let user reset location since iOS 8, or before iOS 8 needs to show self made instruction. It's only return YES when make sure global location is disabled or App location is disabled. If this App not has location required (for example not have location key in Info.plist), or not ask for location service by prevent enable it, return NO.
  */
 @property (nonatomic, readonly) BOOL systemPreferenceDisableLocation;
+
+/**
+ StreetHawk SDK sends logline to server to report current location. The frequency can be controlled by this API. By default the frequency is following.
+ 
+ <table>
+ <tr>
+ <th>Parameter</th>
+ <th>Background</th>
+ <th>Foreground</th>
+ </tr>
+ <tr>
+ <td>(bg/fg)MinDistanceBetweenEvents</td>
+ <td>500m `SHLocation_BG_Distance`</td>
+ <td>100m `SHLocation_FG_Distance`</td>
+ </tr>
+ <tr>
+ <td>(bg/fg)MinTimeBetweenEvents</td>
+ <td>5mins `SHLocation_BG_Interval`</td>
+ <td>1min `SHLocation_FG_Interval`</td>
+ </tr>
+ </table>
+ 
+ @param fgInterval Minimum time interval for sending location logline when App in FG, measured in minutes.
+ @param fgDistance Minimum distance for sending location logline when App in FG, measured in meters.
+ @param bgInterval Minimum time interval for sending location logline when App in BG, measured in minutes.
+ @param bgDistance Minimum distance for sending location logline when App in BG, measured in meters.
+ */
+- (void)setLocationUpdateFrequencyForFGInterval:(int)fgInterval forFGDistance:(int)fgDistance forBGInterval:(int)bgInterval forBGDistance:(int)bgDistance;
 
 @end
 

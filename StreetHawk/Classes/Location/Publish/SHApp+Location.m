@@ -49,6 +49,11 @@ NSString * const SHLMNotification_kRegionState = @"RegionState";
 NSString * const SHLMNotification_kBeacons = @"Beacons";
 NSString * const SHLMNotification_kAuthStatus = @"AuthStatus";
 
+int const SHLocation_FG_Interval = 1;
+int const SHLocation_FG_Distance = 100;
+int const SHLocation_BG_Interval = 5;
+int const SHLocation_BG_Distance = 500;
+
 #define ENABLE_LOCATION_SERVICE             @"ENABLE_LOCATION_SERVICE"  //key for record user manually set isLocationServiceEnabled
 
 @implementation SHApp (LocationExt)
@@ -125,6 +130,14 @@ NSString * const SHLMNotification_kAuthStatus = @"AuthStatus";
     BOOL globalDisable = ![CLLocationManager locationServicesEnabled];
     BOOL appDisable = [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied;
     return (globalDisable || appDisable);
+}
+
+- (void)setLocationUpdateFrequencyForFGInterval:(int)fgInterval forFGDistance:(int)fgDistance forBGInterval:(int)bgInterval forBGDistance:(int)bgDistance
+{
+    StreetHawk.locationManager.fgMinTimeBetweenEvents = fgInterval;
+    StreetHawk.locationManager.fgMinDistanceBetweenEvents = fgDistance;
+    StreetHawk.locationManager.bgMinTimeBetweenEvents = bgInterval;
+    StreetHawk.locationManager.bgMinDistanceBetweenEvents = bgDistance;
 }
 
 @end
