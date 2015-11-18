@@ -97,10 +97,12 @@
         return @"iPad Air";
     if ([platform hasPrefix:@"iPad5,3"] || [platform hasPrefix:@"iPad5,4"])
         return @"iPad Air 2";
+    if ([platform hasPrefix:@"iPad6,7"] || [platform hasPrefix:@"iPad6,8"])
+        return @"iPad Pro";
     if ([platform hasPrefix:@"iPad2,5"] || [platform hasPrefix:@"2,6"] || [platform hasPrefix:@"2,7"])
-        return @"iPad mini 1G";
+        return @"iPad mini 1";
     if ([platform hasPrefix:@"iPad4,4"] || [platform hasPrefix:@"iPad4,5"] || [platform hasPrefix:@"iPad4,6"])
-        return @"iPad mini 2G";
+        return @"iPad mini 2";
     if ([platform hasPrefix:@"iPad4,7"] || [platform hasPrefix:@"iPad4,8"] || [platform hasPrefix:@"iPad4,9"])
         return @"iPad mini 3";
     if ([platform hasPrefix:@"iPad5,1"] || [platform hasPrefix:@"iPad5,2"])
