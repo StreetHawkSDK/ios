@@ -629,8 +629,13 @@
 
 - (void)setAdvertisingIdentifier:(NSString *)advertisingIdentifier
 {
-    [[NSUserDefaults standardUserDefaults] setObject:NONULL(advertisingIdentifier) forKey:ADS_IDENTIFIER];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSString *refinedAds = NONULL(advertisingIdentifier);
+    if ([refinedAds compare:StreetHawk.advertisingIdentifier] != NSOrderedSame)
+    {
+        [StreetHawk tagString:refinedAds forKey:@"sh_advertising_identifier"];
+        [[NSUserDefaults standardUserDefaults] setObject:refinedAds forKey:ADS_IDENTIFIER];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 - (NSString *)advertisingIdentifier

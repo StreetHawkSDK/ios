@@ -985,12 +985,7 @@ enum
                 }
                 else if ([valueObj isKindOfClass:[NSString class]])
                 {
-                    NSString *strValue = (NSString *)valueObj;
-                    if (strValue.length == 0)
-                    {
-                        SHLog(@"Error: Tag user dict has empty string value %@.", valueObj);
-                        return nil;
-                    }
+                    //currently for string nothing to check. Previous there was a check to forbid empty string, however since more cases are included such as `sh_advertising_identifier`, empty string should be possible.
                 }
                 else
                 {
