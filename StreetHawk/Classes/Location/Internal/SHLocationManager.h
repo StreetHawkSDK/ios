@@ -114,12 +114,12 @@ A core class to monitor location change. By default process of StreetHawk SDK, i
 @property (nonatomic) CLLocationDistance distanceFilter;
 
 /**
- Foreground minimum time between events, if last event till now less than this, location update notification will not happen. default = 60 (seconds)
+ Foreground minimum time between events, if last event till now less than this, location update notification will not happen. default = 1 (minute).
  */
 @property (nonatomic) NSTimeInterval fgMinTimeBetweenEvents;
 
 /**
- Background minimum time between events, if last event till now less than this, location update notification will not happen. default = 300 (seconds)
+ Background minimum time between events, if last event till now less than this, location update notification will not happen. default = 5 (minute).
  */
 @property (nonatomic) NSTimeInterval bgMinTimeBetweenEvents;
 
