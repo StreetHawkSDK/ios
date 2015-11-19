@@ -185,11 +185,6 @@ NSString * const SHInstallNotification_kError = @"Error";
             [params addObject:[identifierForVendor UUIDString]];
         }
     }
-    if (StreetHawk.advertisingIdentifier != nil && StreetHawk.advertisingIdentifier.length > 0)
-    {
-        [params addObject:@"advertising_identifier"];
-        [params addObject:StreetHawk.advertisingIdentifier];
-    }
 #ifdef SH_FEATURE_IBEACON
     switch (StreetHawk.locationManager.iBeaconSupportState)
     {
