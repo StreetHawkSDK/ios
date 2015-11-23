@@ -86,8 +86,8 @@
 
     // iPad
     if ([platform hasPrefix:@"iPad1,1"])
-        return @"iPad 1G";
-    if ([platform hasPrefix:@"iPad2,1"] || [platform hasPrefix:@"2,2"] || [platform hasPrefix:@"2,3"] || [platform hasPrefix:@"2,4"])
+        return @"iPad 1";
+    if ([platform hasPrefix:@"iPad2,1"] || [platform hasPrefix:@"iPad2,2"] || [platform hasPrefix:@"iPad2,3"] || [platform hasPrefix:@"iPad2,4"])
         return @"iPad 2";
     if ([platform hasPrefix:@"iPad3,1"] || [platform hasPrefix:@"iPad3,2"] || [platform hasPrefix:@"iPad3,3"])
         return @"iPad 3";
@@ -99,7 +99,7 @@
         return @"iPad Air 2";
     if ([platform hasPrefix:@"iPad6,7"] || [platform hasPrefix:@"iPad6,8"])
         return @"iPad Pro";
-    if ([platform hasPrefix:@"iPad2,5"] || [platform hasPrefix:@"2,6"] || [platform hasPrefix:@"2,7"])
+    if ([platform hasPrefix:@"iPad2,5"] || [platform hasPrefix:@"iPad2,6"] || [platform hasPrefix:@"iPad2,7"])
         return @"iPad mini 1";
     if ([platform hasPrefix:@"iPad4,4"] || [platform hasPrefix:@"iPad4,5"] || [platform hasPrefix:@"iPad4,6"])
         return @"iPad mini 2";
