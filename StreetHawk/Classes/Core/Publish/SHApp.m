@@ -206,6 +206,7 @@
 #endif
 #if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
         self.isDefaultLocationServiceEnabled = YES;  //same as isDefaultPushNotificationEnabled.
+        self.reportWorkHomeLocationOnly = NO;
 #endif
         self.backgroundQueue = [[NSOperationQueue alloc] init];
         self.backgroundQueue.maxConcurrentOperationCount = 1;
@@ -869,7 +870,7 @@
     
     //start location services in FG so we get a better lock on location
 #ifdef SH_FEATURE_LATLNG
-    [self.locationManager startMonitorGeoLocationStandard:YES];
+    [self.locationManager startMonitorGeoLocationStandard:!StreetHawk.reportWorkHomeLocationOnly];
 #endif
     if (self.currentInstall != nil)
     {

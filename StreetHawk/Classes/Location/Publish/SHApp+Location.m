@@ -92,7 +92,7 @@ int const SHLocation_BG_Distance = 500;
 {
     if (self.isLocationServiceEnabled != isLocationServiceEnabled)
     {
-        if (isLocationServiceEnabled)
+        if (isLocationServiceEnabled) //This assumes to start location, not consider `StreetHawk.reportWorkHomeLocationOnly`, even it enables standard location service, next FG/BG will correct it.
         {
             //if enable update first, as next part will consider it.
             [[NSUserDefaults standardUserDefaults] setBool:isLocationServiceEnabled forKey:ENABLE_LOCATION_SERVICE];
@@ -113,6 +113,20 @@ int const SHLocation_BG_Distance = 500;
         }
         [StreetHawk registerOrUpdateInstallWithHandler:nil]; //update "feature_locations"
     }
+}
+
+- (BOOL)reportWorkHomeLocationOnly
+{
+    NSNumber *value = objc_getAssociatedObject(self, @selector(reportWorkHomeLocationOnly));
+    return [value boolValue];
+}
+
+- (void)setReportWorkHomeLocationOnly:(BOOL)reportWorkHomeLocationOnly
+{
+    objc_setAssociatedObject(self, @selector(reportWorkHomeLocationOnly), [NSNumber numberWithBool:reportWorkHomeLocationOnly], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+#ifdef SH_FEATURE_LATLNG
+    [self.locationManager startMonitorGeoLocationStandard:(!reportWorkHomeLocationOnly && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)]; //must use self, cannot use `StreetHawk` as it's used in `init`, otherwise cause dead loop.
+#endif
 }
 
 - (SHLocationManager *)locationManager

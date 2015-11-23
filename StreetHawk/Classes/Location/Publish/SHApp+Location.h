@@ -149,6 +149,11 @@ extern int const SHLocation_BG_Distance; //Default minimum distance for updating
 @property (nonatomic) BOOL isLocationServiceEnabled;
 
 /**
+ A flag to only sends logline 19, stop logline 20. Keep consistent with Android to save battery. Default is `NO` to report 20 logline normally, FG uses standard and BG uses significant. If set to `YES` to save battery and meantime can detect location for logline 19, always uses significant location, not use standard location even in FG.
+ */
+@property (nonatomic) BOOL reportWorkHomeLocationOnly;
+
+/**
  An instance to deal with location.
  */
 @property (nonatomic, strong) SHLocationManager *locationManager;
