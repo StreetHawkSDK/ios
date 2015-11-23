@@ -1,0 +1,727 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>SHObject Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.1 (build 858)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">StreetHawkCore </a></h1>
+				<a id="developerHome" href="../index.html">StreetHawk</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">SHObject Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/suid">&nbsp;&nbsp;&nbsp;&nbsp;suid</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/initWithSuid:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithSuid:</option>
+	
+	<option value="//api/name/loadFromDictionary:">&nbsp;&nbsp;&nbsp;&nbsp;- loadFromDictionary:</option>
+	
+	<option value="//api/name/loadFromServer:">&nbsp;&nbsp;&nbsp;&nbsp;- loadFromServer:</option>
+	
+	<option value="//api/name/saveBody">&nbsp;&nbsp;&nbsp;&nbsp;- saveBody</option>
+	
+	<option value="//api/name/saveToServer:">&nbsp;&nbsp;&nbsp;&nbsp;- saveToServer:</option>
+	
+	<option value="//api/name/serverLoadURL">&nbsp;&nbsp;&nbsp;&nbsp;- serverLoadURL</option>
+	
+	<option value="//api/name/serverSaveURL">&nbsp;&nbsp;&nbsp;&nbsp;- serverSaveURL</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Creator">Creator</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Properties">Properties</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Communicate With Server">Communicate With Server</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/suid">suid</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithSuid:">initWithSuid:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/loadFromDictionary:">loadFromDictionary:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/loadFromServer:">loadFromServer:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/saveBody">saveBody</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/saveToServer:">saveToServer:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/serverLoadURL">serverLoadURL</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/serverSaveURL">serverSaveURL</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="SHObject Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">SHObject Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">StreetHawkObject.h</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Base class of StreetHawk objects, such as <a href="../Classes/SHInstall.html">SHInstall</a>, SHAlertSettings. It provides basic properties and common functions. If would like to create a new StreetHawk object, inherit from this base class and do:</p>
+
+<ul>
+<li>add properties for the object itself.</li>
+<li>override <a href="#//api/name/serverLoadURL"><code>serverLoadURL</code></a> and <a href="#//api/name/loadFromDictionary:"><code>loadFromDictionary:</code></a> if the object can be <a href="#//api/name/loadFromServer:"><code>loadFromServer:</code></a>.</li>
+<li>override <a href="#//api/name/serverSaveURL"><code>serverSaveURL</code></a> and <a href="#//api/name/saveBody"><code>saveBody</code></a> if the object can be <a href="#//api/name/saveToServer:"><code>saveToServer:</code></a>.</li>
+</ul>
+
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Creator" name="task_Creator"></a>
+						<h3 class="subsubtitle task-title">Creator</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithSuid:">&ndash;&nbsp;initWithSuid:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Properties" name="task_Properties"></a>
+						<h3 class="subsubtitle task-title">Properties</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/suid">&nbsp;&nbsp;suid</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Communicate With Server" name="task_Communicate With Server"></a>
+						<h3 class="subsubtitle task-title">Communicate With Server</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/serverLoadURL">&ndash;&nbsp;serverLoadURL</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/loadFromDictionary:">&ndash;&nbsp;loadFromDictionary:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/loadFromServer:">&ndash;&nbsp;loadFromServer:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/serverSaveURL">&ndash;&nbsp;serverSaveURL</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/saveBody">&ndash;&nbsp;saveBody</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/saveToServer:">&ndash;&nbsp;saveToServer:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/suid" title="suid"></a>
+	<h3 class="subsubtitle method-title">suid</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Unique primary Id.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSString *suid</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithSuid:" title="initWithSuid:"></a>
+	<h3 class="subsubtitle method-title">initWithSuid:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Create a SHObject with <a href="#//api/name/suid"><code>suid</code></a>, which is unique id of the object in server. <a href="#//api/name/suid"><code>suid</code></a> is mandatory for a StreetHawk object, but other properties are not ready when <code>initWithSuid:</code>. If would like to get other properties, either there is a dictionary from server so call <a href="#//api/name/loadFromDictionary:"><code>loadFromDictionary:</code></a>, or request from server by <a href="#//api/name/loadFromServer:"><code>loadFromServer:</code></a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (id)initWithSuid:(NSString *)<em>suid</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>suid</em></dt>
+			<dd><p>Unique primary key match to StreetHawk server. This cannot be empty.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/loadFromDictionary:" title="loadFromDictionary:"></a>
+	<h3 class="subsubtitle method-title">loadFromDictionary:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Normally the object is requested from server. Server returns json and parsed to be dictionary, use this method to fill properties from dictionary.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)loadFromDictionary:(NSDictionary *)<em>dict</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>dict</em></dt>
+			<dd><p>Server return json information.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/loadFromServer:" title="loadFromServer:"></a>
+	<h3 class="subsubtitle method-title">loadFromServer:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Send a request to StreetHawk server and fill the properties of this object. The process is common, normally child class should not override this function. It does:</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)loadFromServer:(SHCallbackHandler)<em>load_handler</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>loadhandler</em></dt>
+			<dd><p>Asynchronous callback for handling.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<ol>
+<li>Send request to StreetHawk server, formatted by <a href="#//api/name/serverLoadURL"><code>serverLoadURL</code></a>.</li>
+<li>Get the request&rsquo;s response, process it. If meet error call <code>load_handler</code> to return; if not call <a href="#//api/name/loadFromDictionary:"><code>loadFromDictionary:</code></a> to fill properties and then call <code>load_handler</code> to return.</li>
+</ol>
+
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/saveBody" title="saveBody"></a>
+	<h3 class="subsubtitle method-title">saveBody</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The content post to server for saving this object.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSObject *)saveBody</code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>savePostBody</em></dt>
+			<dd><p>The content for posting to server, it can be NSArray, NSDictionary, NSString or NSData.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/saveToServer:" title="saveToServer:"></a>
+	<h3 class="subsubtitle method-title">saveToServer:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Send a request to StreetHawk server and post the content of this object to save. The process is common, normally child class should not override this function. It does:</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)saveToServer:(SHCallbackHandler)<em>save_handler</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<ol>
+<li>Send request to StreetHawk server, formatted by <a href="#//api/name/serverSaveURL"><code>serverSaveURL</code></a>.</li>
+<li>Get the request&rsquo;s response, process it. If meet error call <code>save_handler</code> to return; if not check whether it returns json, if so call <a href="#//api/name/loadFromDictionary:"><code>loadFromDictionary:</code></a> to fill properties,  and then call <code>save_handler</code> to return.</li>
+</ol>
+
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/serverLoadURL" title="serverLoadURL"></a>
+	<h3 class="subsubtitle method-title">serverLoadURL</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The URL that is used to load this object from the server. It&rsquo;s relative path to main host url, and no need to include parameter such as <code>installid</code>. A sample for load install details is @&ldquo;installs/details/&rdquo;.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)serverLoadURL</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/serverSaveURL" title="serverSaveURL"></a>
+	<h3 class="subsubtitle method-title">serverSaveURL</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The URL that is used to post save request to server. It&rsquo;s relative path to main host url, and no need to include paramter such as <code>installid</code>. A sample for save install is @&ldquo;installs/update/&rdquo;.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)serverSaveURL</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 StreetHawk. All rights reserved. (Last updated: 2015-06-05)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

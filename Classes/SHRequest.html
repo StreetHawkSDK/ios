@@ -1,0 +1,1149 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>SHRequest Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.1 (build 858)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">StreetHawkCore </a></h1>
+				<a id="developerHome" href="../index.html">StreetHawk</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">SHRequest Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/error">&nbsp;&nbsp;&nbsp;&nbsp;error</option>
+	
+	<option value="//api/name/requestHandler">&nbsp;&nbsp;&nbsp;&nbsp;requestHandler</option>
+	
+	<option value="//api/name/response">&nbsp;&nbsp;&nbsp;&nbsp;response</option>
+	
+	<option value="//api/name/responseData">&nbsp;&nbsp;&nbsp;&nbsp;responseData</option>
+	
+	<option value="//api/name/responseStatusCode">&nbsp;&nbsp;&nbsp;&nbsp;responseStatusCode</option>
+	
+	<option value="//api/name/responseString">&nbsp;&nbsp;&nbsp;&nbsp;responseString</option>
+	
+	<option value="//api/name/resultCode">&nbsp;&nbsp;&nbsp;&nbsp;resultCode</option>
+	
+	<option value="//api/name/resultValue">&nbsp;&nbsp;&nbsp;&nbsp;resultValue</option>
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/requestCancelledError">&nbsp;&nbsp;&nbsp;&nbsp;+ requestCancelledError</option>
+	
+	<option value="//api/name/requestWithPath:">&nbsp;&nbsp;&nbsp;&nbsp;+ requestWithPath:</option>
+	
+	<option value="//api/name/requestWithPath:withParams:">&nbsp;&nbsp;&nbsp;&nbsp;+ requestWithPath:withParams:</option>
+	
+	<option value="//api/name/requestWithPath:withParams:withMethod:">&nbsp;&nbsp;&nbsp;&nbsp;+ requestWithPath:withParams:withMethod:</option>
+	
+	<option value="//api/name/requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:">&nbsp;&nbsp;&nbsp;&nbsp;+ requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:</option>
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/cancel">&nbsp;&nbsp;&nbsp;&nbsp;- cancel</option>
+	
+	<option value="//api/name/startAsynchronously">&nbsp;&nbsp;&nbsp;&nbsp;- startAsynchronously</option>
+	
+	<option value="//api/name/startSynchronously">&nbsp;&nbsp;&nbsp;&nbsp;- startSynchronously</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Create">Create</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Start/Cancel functions">Start/Cancel functions</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Result">Result</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/error">error</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/requestHandler">requestHandler</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/response">response</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseData">responseData</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseStatusCode">responseStatusCode</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseString">responseString</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/resultCode">resultCode</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/resultValue">resultValue</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/requestCancelledError">requestCancelledError</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/requestWithPath:">requestWithPath:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/requestWithPath:withParams:">requestWithPath:withParams:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/requestWithPath:withParams:withMethod:">requestWithPath:withParams:withMethod:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:">requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/cancel">cancel</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/startAsynchronously">startAsynchronously</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/startSynchronously">startSynchronously</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="SHRequest Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">SHRequest Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSOperation</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">StreetHawkRequest.h</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>All http requests used to communicate with server uses this class. It&rsquo;s a wrapper of NSURLConnection and easier to use by block callback.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Create" name="task_Create"></a>
+						<h3 class="subsubtitle task-title">Create</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:">+&nbsp;requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/requestWithPath:withParams:withMethod:">+&nbsp;requestWithPath:withParams:withMethod:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/requestWithPath:withParams:">+&nbsp;requestWithPath:withParams:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/requestWithPath:">+&nbsp;requestWithPath:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/requestHandler">&nbsp;&nbsp;requestHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Start/Cancel functions" name="task_Start/Cancel functions"></a>
+						<h3 class="subsubtitle task-title">Start/Cancel functions</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/startAsynchronously">&ndash;&nbsp;startAsynchronously</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/startSynchronously">&ndash;&nbsp;startSynchronously</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/cancel">&ndash;&nbsp;cancel</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Result" name="task_Result"></a>
+						<h3 class="subsubtitle task-title">Result</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/response">&nbsp;&nbsp;response</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseStatusCode">&nbsp;&nbsp;responseStatusCode</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseData">&nbsp;&nbsp;responseData</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseString">&nbsp;&nbsp;responseString</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/error">&nbsp;&nbsp;error</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/requestCancelledError">+&nbsp;requestCancelledError</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/resultCode">&nbsp;&nbsp;resultCode</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/resultValue">&nbsp;&nbsp;resultValue</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/error" title="error"></a>
+	<h3 class="subsubtitle method-title">error</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The error of handling this request.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) NSError *error</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/requestHandler" title="requestHandler"></a>
+	<h3 class="subsubtitle method-title">requestHandler</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The request handler for caller to deal with returned value.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) SHRequestHandler requestHandler</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/response" title="response"></a>
+	<h3 class="subsubtitle method-title">response</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The response of this request.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) NSURLResponse *response</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseData" title="responseData"></a>
+	<h3 class="subsubtitle method-title">responseData</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The data of received <a href="#//api/name/response">response</a> data. It&rsquo;s appended when connection didReceiveData.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) NSData *responseData</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseStatusCode" title="responseStatusCode"></a>
+	<h3 class="subsubtitle method-title">responseStatusCode</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The HTTP stauts code of <a href="#//api/name/response">response</a>, for example 200 means OK, 404 means page not found.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSInteger responseStatusCode</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseString" title="responseString"></a>
+	<h3 class="subsubtitle method-title">responseString</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The NSUTF8StringEncoding string of received <a href="#//api/name/response">response</a> data (<a href="#//api/name/responseData"><code>responseData</code></a>).</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) NSString *responseString</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/resultCode" title="resultCode"></a>
+	<h3 class="subsubtitle method-title">resultCode</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The JSON returned from server is formatted as {&ldquo;code&rdquo;=0, &ldquo;value&rdquo;=&hellip;}. <code>resultCode</code> is the part of &ldquo;code&rdquo;. It can only be got after successfully parse the JSON.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) int resultCode</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/resultValue" title="resultValue"></a>
+	<h3 class="subsubtitle method-title">resultValue</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The JSON returned from server is formatted as {&ldquo;code&rdquo;=0, &ldquo;value&rdquo;=&hellip;}. <code>resultValue</code> is the part of &ldquo;value&rdquo;. It can only be got after successfully parse the JSON.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) NSObject *resultValue</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/requestCancelledError" title="requestCancelledError"></a>
+	<h3 class="subsubtitle method-title">requestCancelledError</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Static function to get <a href="#//api/name/cancel">cancel</a> request <a href="#//api/name/error">error</a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (NSError *)requestCancelledError</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/requestWithPath:" title="requestWithPath:"></a>
+	<h3 class="subsubtitle method-title">requestWithPath:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Helper method to create a simple GET request object.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (SHRequest *)requestWithPath:(NSString *)<em>path</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>path</em></dt>
+			<dd><p>The internal path after root url, for example: &ldquo;products/product_id/description/&rdquo;.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>An auto-released request.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/requestWithPath:withParams:" title="requestWithPath:withParams:"></a>
+	<h3 class="subsubtitle method-title">requestWithPath:withParams:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Helper method to create a simple request object for GET methods.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (SHRequest *)requestWithPath:(NSString *)<em>path</em> withParams:(NSArray *)<em>params</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>path</em></dt>
+			<dd><p>The internal path after root url, for example: &ldquo;products/product_id/description/&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>params</em></dt>
+			<dd><p>A key/value pair, which will format to paramters in URL, for example (@&ldquo;family&rdquo;, @&ldquo;tops&rdquo;) will become &ldquo;?family=tops&rdquo;.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>An auto-released request.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/requestWithPath:withParams:withMethod:" title="requestWithPath:withParams:withMethod:"></a>
+	<h3 class="subsubtitle method-title">requestWithPath:withParams:withMethod:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Helper method to create a simple request object.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (SHRequest *)requestWithPath:(NSString *)<em>path</em> withParams:(NSArray *)<em>params</em> withMethod:(NSString *)<em>method</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>path</em></dt>
+			<dd><p>The internal path after root url, for example: &ldquo;products/product_id/description/&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>params</em></dt>
+			<dd><p>A key/value pair, which will format to paramters in URL, for example (@&ldquo;family&rdquo;, @&ldquo;tops&rdquo;) will become &ldquo;?family=tops&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>method</em></dt>
+			<dd><p>GET or POST. If pass nil it&rsquo;s GET by default.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>An auto-released request.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:" title="requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:"></a>
+	<h3 class="subsubtitle method-title">requestWithPath:withVersion:withParams:withMethod:withHeaders:withBodyOrStream:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Helper method to create a request object.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (SHRequest *)requestWithPath:(NSString *)<em>path</em> withVersion:(SHHostVersion)<em>hostVersion</em> withParams:(NSArray *)<em>params</em> withMethod:(NSString *)<em>method</em> withHeaders:(NSDictionary *)<em>headers</em> withBodyOrStream:(id)<em>body_or_stream</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>path</em></dt>
+			<dd><p>The internal path after root url, for example: &ldquo;products/product_id/description/&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>hostVersion</em></dt>
+			<dd><p>The version of current host.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>params</em></dt>
+			<dd><p>A key/value pair, which will format to paramters in URL, for example (@&ldquo;family&rdquo;, @&ldquo;tops&rdquo;) will become &ldquo;?family=tops&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>method</em></dt>
+			<dd><p>GET or POST. If pass nil it&rsquo;s GET by default.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>headers</em></dt>
+			<dd><p>The header fields sent in request. Pass nil if no header need to set.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>body_or_stream</em></dt>
+			<dd><p>Set to post body. It&rsquo;s usually array, dictionary or data.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>An auto-released request.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/cancel" title="cancel"></a>
+	<h3 class="subsubtitle method-title">cancel</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Cancel the connection and dealloc it. Only asynchronous request can be cancelled. <a href="#//api/name/requestHandler"><code>requestHandler</code></a> is invoked with error=<a href="#//api/name/requestCancelledError"><code>requestCancelledError</code></a>.
+Note: Once a request is cancelled or finished, it cannot be added into queue again, otherwise exception occur.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)cancel</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/startAsynchronously" title="startAsynchronously"></a>
+	<h3 class="subsubtitle method-title">startAsynchronously</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Add request into operation queue. It will stay in the queue and start when ready to execute it, or caller to <a href="#//api/name/cancel">cancel</a> it. Once it&rsquo;s finished or cancelled it&rsquo;s auto released. The result is callback by <a href="#//api/name/requestHandler"><code>requestHandler</code></a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)startAsynchronously</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/startSynchronously" title="startSynchronously"></a>
+	<h3 class="subsubtitle method-title">startSynchronously</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Starts the request synchronously. When the request finish, it&rsquo;s dealloc. To start a request asynchronously, use the <a href="#//api/name/startAsynchronously">startAsynchronously</a> method.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSData *)startSynchronously</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The returned NSData value from the request.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">StreetHawkRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 StreetHawk. All rights reserved. (Last updated: 2015-06-05)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>
