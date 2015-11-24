@@ -47,6 +47,8 @@
 	
 	<option value="//api/name/arrayCustomisedHandler">&nbsp;&nbsp;&nbsp;&nbsp;arrayCustomisedHandler</option>
 	
+	<option value="//api/name/arrayPGObservers">&nbsp;&nbsp;&nbsp;&nbsp;arrayPGObservers</option>
+	
 	<option value="//api/name/autoIntegrateAppDelegate">&nbsp;&nbsp;&nbsp;&nbsp;autoIntegrateAppDelegate</option>
 	
 	<option value="//api/name/clientVersion">&nbsp;&nbsp;&nbsp;&nbsp;clientVersion</option>
@@ -71,6 +73,8 @@
 	
 	<option value="//api/name/isNotificationEnabled">&nbsp;&nbsp;&nbsp;&nbsp;isNotificationEnabled</option>
 	
+	<option value="//api/name/isSendingCrashReport">&nbsp;&nbsp;&nbsp;&nbsp;isSendingCrashReport</option>
+	
 	<option value="//api/name/itunesAppId">&nbsp;&nbsp;&nbsp;&nbsp;itunesAppId</option>
 	
 	<option value="//api/name/locationManager">&nbsp;&nbsp;&nbsp;&nbsp;locationManager</option>
@@ -85,7 +89,7 @@
 	
 	<option value="//api/name/openUrlHandler">&nbsp;&nbsp;&nbsp;&nbsp;openUrlHandler</option>
 	
-	<option value="//api/name/rateHandler">&nbsp;&nbsp;&nbsp;&nbsp;rateHandler</option>
+	<option value="//api/name/reportWorkHomeLocationOnly">&nbsp;&nbsp;&nbsp;&nbsp;reportWorkHomeLocationOnly</option>
 	
 	<option value="//api/name/systemPreferenceDisableLocation">&nbsp;&nbsp;&nbsp;&nbsp;systemPreferenceDisableLocation</option>
 	
@@ -133,11 +137,15 @@
 	
 	<option value="//api/name/openURL:sourceApplication:annotation:">&nbsp;&nbsp;&nbsp;&nbsp;- openURL:sourceApplication:annotation:</option>
 	
-	<option value="//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:">&nbsp;&nbsp;&nbsp;&nbsp;- originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:</option>
+	<option value="//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:">&nbsp;&nbsp;&nbsp;&nbsp;- originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:</option>
 	
-	<option value="//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:">&nbsp;&nbsp;&nbsp;&nbsp;- originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:</option>
+	<option value="//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:">&nbsp;&nbsp;&nbsp;&nbsp;- originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:</option>
+	
+	<option value="//api/name/registerForNotificationAndNotifyServer">&nbsp;&nbsp;&nbsp;&nbsp;- registerForNotificationAndNotifyServer</option>
 	
 	<option value="//api/name/registerInstallForApp:withDebugMode:">&nbsp;&nbsp;&nbsp;&nbsp;- registerInstallForApp:withDebugMode:</option>
+	
+	<option value="//api/name/registerInstallForApp:withDebugMode:withiTunesId:">&nbsp;&nbsp;&nbsp;&nbsp;- registerInstallForApp:withDebugMode:withiTunesId:</option>
 	
 	<option value="//api/name/registerOrUpdateInstallWithHandler:">&nbsp;&nbsp;&nbsp;&nbsp;- registerOrUpdateInstallWithHandler:</option>
 	
@@ -152,6 +160,8 @@
 	<option value="//api/name/setApplicationBadge:">&nbsp;&nbsp;&nbsp;&nbsp;- setApplicationBadge:</option>
 	
 	<option value="//api/name/setDefaultStartingUrl:">&nbsp;&nbsp;&nbsp;&nbsp;- setDefaultStartingUrl:</option>
+	
+	<option value="//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:">&nbsp;&nbsp;&nbsp;&nbsp;- setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</option>
 	
 	<option value="//api/name/shCustomActivityList:">&nbsp;&nbsp;&nbsp;&nbsp;- shCustomActivityList:</option>
 	
@@ -175,9 +185,7 @@
 	
 	<option value="//api/name/shSetCustomiseHandler:">&nbsp;&nbsp;&nbsp;&nbsp;- shSetCustomiseHandler:</option>
 	
-	<option value="//api/name/slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:">&nbsp;&nbsp;&nbsp;&nbsp;- slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:</option>
-	
-	<option value="//api/name/slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:">&nbsp;&nbsp;&nbsp;&nbsp;- slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:</option>
+	<option value="//api/name/tagCuid:">&nbsp;&nbsp;&nbsp;&nbsp;- tagCuid:</option>
 	
 	<option value="//api/name/tagDatetime:forKey:">&nbsp;&nbsp;&nbsp;&nbsp;- tagDatetime:forKey:</option>
 	
@@ -205,10 +213,6 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Global properties">Global properties</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Location Service">Location Service</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Notification">Notification</a></span></li>
-	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Handlers">Handlers</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Global properties and methods">Global properties and methods</a></span></li>
@@ -216,10 +220,6 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Background Regular Task">Background Regular Task</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Open Url Scheme">Open Url Scheme</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Feeds">Feeds</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Growth">Growth</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Permission">Permission</a></span></li>
 	
@@ -240,6 +240,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appKey">appKey</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/arrayCustomisedHandler">arrayCustomisedHandler</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/arrayPGObservers">arrayPGObservers</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/autoIntegrateAppDelegate">autoIntegrateAppDelegate</a></span></li>
 	
@@ -265,6 +267,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isNotificationEnabled">isNotificationEnabled</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isSendingCrashReport">isSendingCrashReport</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/itunesAppId">itunesAppId</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/locationManager">locationManager</a></span></li>
@@ -279,7 +283,7 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/openUrlHandler">openUrlHandler</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/rateHandler">rateHandler</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/reportWorkHomeLocationOnly">reportWorkHomeLocationOnly</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/systemPreferenceDisableLocation">systemPreferenceDisableLocation</a></span></li>
 	
@@ -329,11 +333,15 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/openURL:sourceApplication:annotation:">openURL:sourceApplication:annotation:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:">originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:">originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:">originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:">originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/registerForNotificationAndNotifyServer">registerForNotificationAndNotifyServer</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/registerInstallForApp:withDebugMode:">registerInstallForApp:withDebugMode:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/registerInstallForApp:withDebugMode:withiTunesId:">registerInstallForApp:withDebugMode:withiTunesId:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/registerOrUpdateInstallWithHandler:">registerOrUpdateInstallWithHandler:</a></span></li>
 	
@@ -348,6 +356,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setApplicationBadge:">setApplicationBadge:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setDefaultStartingUrl:">setDefaultStartingUrl:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:">setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shCustomActivityList:">shCustomActivityList:</a></span></li>
 	
@@ -371,9 +381,7 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shSetCustomiseHandler:">shSetCustomiseHandler:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:">slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:">slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/tagCuid:">tagCuid:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/tagDatetime:forKey:">tagDatetime:forKey:</a></span></li>
 	
@@ -411,7 +419,7 @@
 	<td class="specification-value">UIApplicationDelegate</td>
 </tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">StreetHawkApp.h</td>
+	<td class="specification-value">SHApp.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -437,20 +445,6 @@
 
 <pre><code>  [StreetHawk tagString:@"a@a.com" forKey:@"sh_email"];
 </code></pre></li>
-<li><p>Submit friendly names, code like:</p>
-
-<pre><code>  SHFriendlyNameObject *name1 = [[SHFriendlyNameObject alloc] init];
-  SHFriendlyNameObject *name2 = [[SHFriendlyNameObject alloc] init];
-  SHFriendlyNameObject *name3 = [[SHFriendlyNameObject alloc] init];
-  name1.friendlyName = FRIENDLYNAME_LOGIN;
-  name1.vc = @"LogTagCasesViewController";
-  name2.friendlyName = FRIENDLYNAME_REGISTER;
-  name2.vc = @"LogTagCasesViewController";
-  name3.friendlyName = @"Input iBeacon region";
-  name3.vc = @"BeaconRegionInputViewController";
-  name3.xib_iphone = @"BeaconRegionInputViewController";
-  [StreetHawk shCustomActivityList:@[name1, name2, name3]];
-</code></pre></li>
 </ul>
 
 
@@ -464,20 +458,6 @@
 <li>Add &ldquo;Background fetch&rdquo; in &ldquo;Background Modes&rdquo;, since iOS 7.</li>
 <li>Add &ldquo;NSLocationAlwaysUsageDescription&rdquo; or &ldquo;NSLocationWhenInUseUsageDescription&rdquo; in Info.plist for enabling location service since iOS 8.</li>
 <li>Because StreetHawk SDK uses significant location change at background, there is NO need to add &ldquo;Required background modes&rdquo; with <em>location service</em>.</li>
-</ul>
-
-
-<p><strong>Extension for install register or update:</strong></p>
-
-<p>Call <a href="#//api/name/registerOrUpdateInstallWithHandler:"><code>registerOrUpdateInstallWithHandler:</code></a> to register or update install attributes.</p>
-
-<p><strong>Extension for slide:</strong></p>
-
-<p>Slide utility to show some content. For example:</p>
-
-<ul>
-<li><code>slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:</code> is to slide a web view showing the url.</li>
-<li><code>slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:</code> is to slide a customized view controller, the view controller can be created by customer and do whatever they want.</li>
 </ul>
 
 
@@ -496,6 +476,20 @@
 
 
 <p>[StreetHawk removeTag:@&ldquo;sh_email&rdquo;];</p>
+
+<p>Extension for Crash API.</p>
+
+<p><strong>Extension for install register or update:</strong></p>
+
+<p>Call <a href="#//api/name/registerOrUpdateInstallWithHandler:"><code>registerOrUpdateInstallWithHandler:</code></a> to register or update install attributes.</p>
+
+<p>Extension for Notification API.</p>
+
+<p>Extension for Crash API.</p>
+
+<p>Extension for Feed API.</p>
+
+<p>Extension for Growth API.</p>
 					</div>
 					
 					
@@ -523,6 +517,12 @@
 	</span>
 	
 	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/registerInstallForApp:withDebugMode:withiTunesId:">&ndash;&nbsp;registerInstallForApp:withDebugMode:withiTunesId:</a></code>
+	</span>
+	
+	
 </li>
 						</ul>
 						
@@ -546,12 +546,6 @@
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/isDebugMode">&nbsp;&nbsp;isDebugMode</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/isEnableCrashReport">&nbsp;&nbsp;isEnableCrashReport</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -601,8 +595,158 @@
 						</ul>
 						
 						
-						<a title="Location Service" name="task_Location Service"></a>
-						<h3 class="subsubtitle task-title">Location Service</h3>
+						<a title="Handlers" name="task_Handlers"></a>
+						<h3 class="subsubtitle task-title">Handlers</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/logger">&nbsp;&nbsp;logger</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Global properties and methods" name="task_Global properties and methods"></a>
+						<h3 class="subsubtitle task-title">Global properties and methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shCustomActivityList:">&ndash;&nbsp;shCustomActivityList:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shFeedback:needInputDialog:needConfirmDialog:withTitle:withMessage:withPushData:">&ndash;&nbsp;shFeedback:needInputDialog:needConfirmDialog:withTitle:withMessage:withPushData:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shSendFeedbackWithTitle:withContent:withHandler:">&ndash;&nbsp;shSendFeedbackWithTitle:withContent:withHandler:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shNotifyPageEnter:">&ndash;&nbsp;shNotifyPageEnter:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shNotifyPageExit:">&ndash;&nbsp;shNotifyPageExit:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/openUrlHandler">&nbsp;&nbsp;openUrlHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/advertisingIdentifier">&nbsp;&nbsp;advertisingIdentifier</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Background Regular Task" name="task_Background Regular Task"></a>
+						<h3 class="subsubtitle task-title">Background Regular Task</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shRegularTask:needComplete:">&ndash;&nbsp;shRegularTask:needComplete:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Open Url Scheme" name="task_Open Url Scheme"></a>
+						<h3 class="subsubtitle task-title">Open Url Scheme</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/openURL:sourceApplication:annotation:">&ndash;&nbsp;openURL:sourceApplication:annotation:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Permission" name="task_Permission"></a>
+						<h3 class="subsubtitle task-title">Permission</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/launchSystemPreferenceSettings">&ndash;&nbsp;launchSystemPreferenceSettings</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/tagCuid:">&ndash;&nbsp;tagCuid:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/tagString:forKey:">&ndash;&nbsp;tagString:forKey:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/tagNumeric:forKey:">&ndash;&nbsp;tagNumeric:forKey:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/tagDatetime:forKey:">&ndash;&nbsp;tagDatetime:forKey:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/removeTag:">&ndash;&nbsp;removeTag:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/incrementTag:">&ndash;&nbsp;incrementTag:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
 
 						<ul class="task-list">
 							<li>
@@ -617,12 +761,56 @@
 	</span>
 	<span class="task-item-suffix">property</span>
 	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/reportWorkHomeLocationOnly">&nbsp;&nbsp;reportWorkHomeLocationOnly</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/locationManager">&nbsp;&nbsp;locationManager</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/systemPreferenceDisableLocation">&nbsp;&nbsp;systemPreferenceDisableLocation</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:">&ndash;&nbsp;setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</a></code>
+	</span>
+	
+	
 </li>
 						</ul>
 						
 						
-						<a title="Notification" name="task_Notification"></a>
-						<h3 class="subsubtitle task-title">Notification</h3>
+						<a title="Install" name="task_Install"></a>
+						<h3 class="subsubtitle task-title">Install</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/registerOrUpdateInstallWithHandler:">&ndash;&nbsp;registerOrUpdateInstallWithHandler:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/checkInstallChangeForLaunch">&ndash;&nbsp;checkInstallChangeForLaunch</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
 
 						<ul class="task-list">
 							<li>
@@ -648,6 +836,18 @@
 		<code><a href="#//api/name/_0">&nbsp;&nbsp;_0</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/notificationHandler">&nbsp;&nbsp;notificationHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/registerForNotificationAndNotifyServer">&ndash;&nbsp;registerForNotificationAndNotifyServer</a></code>
+	</span>
+	
 	
 </li><li>
 	<span class="tooltip">
@@ -715,82 +915,6 @@
 	</span>
 	
 	
-</li>
-						</ul>
-						
-						
-						<a title="Handlers" name="task_Handlers"></a>
-						<h3 class="subsubtitle task-title">Handlers</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/locationManager">&nbsp;&nbsp;locationManager</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/logger">&nbsp;&nbsp;logger</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/notificationHandler">&nbsp;&nbsp;notificationHandler</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/crashHandler">&nbsp;&nbsp;crashHandler</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/rateHandler">&nbsp;&nbsp;rateHandler</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li>
-						</ul>
-						
-						
-						<a title="Global properties and methods" name="task_Global properties and methods"></a>
-						<h3 class="subsubtitle task-title">Global properties and methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/shFeedback:needInputDialog:needConfirmDialog:withTitle:withMessage:withPushData:">&ndash;&nbsp;shFeedback:needInputDialog:needConfirmDialog:withTitle:withMessage:withPushData:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/shSendFeedbackWithTitle:withContent:withHandler:">&ndash;&nbsp;shSendFeedbackWithTitle:withContent:withHandler:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/shCustomActivityList:">&ndash;&nbsp;shCustomActivityList:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/shNotifyPageEnter:">&ndash;&nbsp;shNotifyPageEnter:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/shNotifyPageExit:">&ndash;&nbsp;shNotifyPageExit:</a></code>
-	</span>
-	
-	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/arrayCustomisedHandler">&nbsp;&nbsp;arrayCustomisedHandler</a></code>
@@ -817,6 +941,12 @@
 	
 </li><li>
 	<span class="tooltip">
+		<code><a href="#//api/name/arrayPGObservers">&nbsp;&nbsp;arrayPGObservers</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/shGetViewName">&ndash;&nbsp;shGetViewName</a></code>
 	</span>
 	
@@ -829,13 +959,33 @@
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/openUrlHandler">&nbsp;&nbsp;openUrlHandler</a></code>
+		<code><a href="#//api/name/systemPreferenceDisableNotification">&nbsp;&nbsp;systemPreferenceDisableNotification</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isEnableCrashReport">&nbsp;&nbsp;isEnableCrashReport</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/advertisingIdentifier">&nbsp;&nbsp;advertisingIdentifier</a></code>
+		<code><a href="#//api/name/crashHandler">&nbsp;&nbsp;crashHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isSendingCrashReport">&nbsp;&nbsp;isSendingCrashReport</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -843,36 +993,8 @@
 						</ul>
 						
 						
-						<a title="Background Regular Task" name="task_Background Regular Task"></a>
-						<h3 class="subsubtitle task-title">Background Regular Task</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/shRegularTask:needComplete:">&ndash;&nbsp;shRegularTask:needComplete:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
 						
-						
-						<a title="Open Url Scheme" name="task_Open Url Scheme"></a>
-						<h3 class="subsubtitle task-title">Open Url Scheme</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/openURL:sourceApplication:annotation:">&ndash;&nbsp;openURL:sourceApplication:annotation:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						<a title="Feeds" name="task_Feeds"></a>
-						<h3 class="subsubtitle task-title">Feeds</h3>
+						<h3 class="subsubtitle task-title">Other Methods</h3>
 
 						<ul class="task-list">
 							<li>
@@ -903,123 +1025,19 @@
 						</ul>
 						
 						
-						<a title="Growth" name="task_Growth"></a>
-						<h3 class="subsubtitle task-title">Growth</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:">&ndash;&nbsp;originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:">&ndash;&nbsp;originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						<a title="Permission" name="task_Permission"></a>
-						<h3 class="subsubtitle task-title">Permission</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/systemPreferenceDisableLocation">&nbsp;&nbsp;systemPreferenceDisableLocation</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/systemPreferenceDisableNotification">&nbsp;&nbsp;systemPreferenceDisableNotification</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/launchSystemPreferenceSettings">&ndash;&nbsp;launchSystemPreferenceSettings</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						<a title="Install" name="task_Install"></a>
-						<h3 class="subsubtitle task-title">Install</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/registerOrUpdateInstallWithHandler:">&ndash;&nbsp;registerOrUpdateInstallWithHandler:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/checkInstallChangeForLaunch">&ndash;&nbsp;checkInstallChangeForLaunch</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
 						
 						<h3 class="subsubtitle task-title">Other Methods</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:">&ndash;&nbsp;slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:</a></code>
+		<code><a href="#//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:">&ndash;&nbsp;originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:">&ndash;&nbsp;slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						
-						<h3 class="subsubtitle task-title">Other Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/tagString:forKey:">&ndash;&nbsp;tagString:forKey:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/tagNumeric:forKey:">&ndash;&nbsp;tagNumeric:forKey:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/tagDatetime:forKey:">&ndash;&nbsp;tagDatetime:forKey:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/removeTag:">&ndash;&nbsp;removeTag:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/incrementTag:">&ndash;&nbsp;incrementTag:</a></code>
+		<code><a href="#//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:">&ndash;&nbsp;originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:</a></code>
 	</span>
 	
 	
@@ -1060,21 +1078,20 @@
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>// Define an action for the category
-UIMutableUserNotificationAction *action = [[UIMutableUserNotificationAction alloc] init];
+		<p>// Define an action for the category
+UIMutableUserNotificationAction <em>action = [[UIMutableUserNotificationAction alloc] init];
 action.destructive = NO;
 action.activationMode = UIUserNotificationActivationModeForeground;
 action.authenticationRequired = YES;
-action.title = @"Action!";
-action.identifier = @"custom_action";
+action.title = @&ldquo;Action!&rdquo;;
+action.identifier = @&ldquo;custom_action&rdquo;;
 // Define the category
-UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
+UIMutableUserNotificationCategory </em>category = [[UIMutableUserNotificationCategory alloc] init];
 [category setActions:@[action] forContext:UIUserNotificationActionContextMinimal];
 [category setActions:@[action] forContext:UIUserNotificationActionContextDefault];
-category.identifier = @"custom_category";
+category.identifier = @&ldquo;custom_category&rdquo;;
 // Set the custom categories
-StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
-</code></pre>
+StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];</p>
 
 <p>Customer is free to add their own categories, make sure categories' <code>identifier</code> is not same as StreetHawk&rsquo;s pre-defined code such as 8000, 8004 etc. In case customer&rsquo;s category uses same <code>identifier</code> as StreetHawk&rsquo;s predefined code, StreetHawk&rsquo;s function will be override. Customer&rsquo;s categories, combined with StreetHawk&rsquo;s predefined categories, work side by side. Customer needs to handle their own category by their own code, usually needs to implement their own AppDelegate functions, check document <a href="http://api.streethawk.com/v1/docs/ios-manualsetup.html">http://api.streethawk.com/v1/docs/ios-manualsetup.html</a>#ios-manualsetup. Make sure setting up this property before registering for remote notification, such as before calling [registerForInstall&hellip;].</p>
 	</div>
@@ -1087,7 +1104,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -1123,7 +1140,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1159,7 +1176,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1195,7 +1212,43 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/arrayPGObservers" title="arrayPGObservers"></a>
+	<h3 class="subsubtitle method-title">arrayPGObservers</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Array for hosting PG observers. Set it by <code>- (void)</code>shPGHtmlReceiver:<code>(id</code>ISHPhonegapObserver<code>)phonegapObserver</code>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSMutableArray *arrayPGObservers</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -1275,7 +1328,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1311,7 +1364,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1329,7 +1382,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) SHCrashHandler *crashHandler</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) SHCrashHandler *crashHandler</code></div>
 
     
 	
@@ -1347,7 +1400,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Crash.h</code><br />
 	</div>				
 	
 	
@@ -1383,7 +1436,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1419,7 +1472,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1455,7 +1508,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1491,7 +1544,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1521,10 +1574,9 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>`StreetHawk.isDefaultLocationServiceEnabled = NO; //not trigger location service when App launch.`
-`[registerInstallForApp... ];   //do register without trigger location service`
-`StreetHawk.`isLocationServiceEnabled` = YES; //later trigger location service when need it.`
-</code></pre>
+		<p><code>StreetHawk.isDefaultLocationServiceEnabled = NO; //not trigger location service when App launch.</code>
+<code>[registerInstallForApp... ];   //do register without trigger location service</code>
+<code>StreetHawk.</code>isLocationServiceEnabled<code> = YES; //later trigger location service when need it.</code></p>
 	</div>
 	
 	
@@ -1535,7 +1587,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Location.h</code><br />
 	</div>				
 	
 	
@@ -1565,10 +1617,9 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>`StreetHawk.isDefaultNotificationEnabled = NO; //not trigger remote/local notification when App launch.`
-`[registerInstallForApp... ];   //do register, it will not register notification.`
-`StreetHawk.`isNotificationEnabled` = YES; //later trigger remote/local notification when need it.`
-</code></pre>
+		<p><code>StreetHawk.isDefaultNotificationEnabled = NO; //not trigger remote/local notification when App launch.</code>
+<code>[registerInstallForApp... ];   //do register, it will not register notification.</code>
+<code>StreetHawk.</code>isNotificationEnabled<code> = YES; //later trigger remote/local notification when need it.</code></p>
 	</div>
 	
 	
@@ -1579,7 +1630,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -1592,7 +1643,8 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	
 	<div class="method-subsection brief-description">
-		<p>StreetHawk uses PLCrashReport to collect App&rsquo;s crash report and upload to StreetHawk server when next launch the App. You can check crash report on web site. It&rsquo;s enabled by default.</p>
+		<p>StreetHawk uses PLCrashReport to collect App&rsquo;s crash report and upload to StreetHawk server when next launch the App. You can check crash report on web site. It&rsquo;s enabled by default.
+Note: if would like to disable crash report, suggest set this property before &ldquo;registerInstallForApp&rdquo; to avoid loading PLCrashReport.</p>
 	</div>		
 	
     
@@ -1615,7 +1667,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Crash.h</code><br />
 	</div>				
 	
 	
@@ -1651,7 +1703,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Location.h</code><br />
 	</div>				
 	
 	
@@ -1699,7 +1751,43 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/isSendingCrashReport" title="isSendingCrashReport"></a>
+	<h3 class="subsubtitle method-title">isSendingCrashReport</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>To avoid sending twice, for example SHDemo location update and login happen same time, cause two install/update happen. This should be private however category class cannot define property in private interface.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL isSendingCrashReport</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp+Crash.h</code><br />
 	</div>				
 	
 	
@@ -1735,7 +1823,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1753,7 +1841,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) SHLocationManager *locationManager</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) SHLocationManager *locationManager</code></div>
 
     
 	
@@ -1771,7 +1859,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Location.h</code><br />
 	</div>				
 	
 	
@@ -1807,7 +1895,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -1843,7 +1931,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Feed.h</code><br />
 	</div>				
 	
 	
@@ -1861,7 +1949,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) SHNotificationHandler *notificationHandler</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) SHNotificationHandler *notificationHandler</code></div>
 
     
 	
@@ -1879,7 +1967,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -1926,7 +2014,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -1939,7 +2027,11 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Callback happen when open url delegate trigger.</p>
+		<p>Callback to let customer App to handle deeplinking url.
+Launch view controller in such scenarios:
+1. Click a link &ldquo;&lt;app_scheme://host/path?param=value>&rdquo; in Email or social App, launch this App by <code>openURL</code>.
+2. Notification &ldquo;Launch page activity&rdquo; sends from StreetHawk campaign with deeplinking url &ldquo;&lt;app_scheme://host/path?param=value>&rdquo;, and host not equal &ldquo;launchvc&rdquo;.
+3. Growth recommend friend to install a new App, after first launch Growth automatically match a deeplinking url &ldquo;&lt;app_scheme://host/path?param=value>&rdquo; and launch view controller.</p>
 	</div>		
 	
     
@@ -1962,25 +2054,25 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/rateHandler" title="rateHandler"></a>
-	<h3 class="subsubtitle method-title">rateHandler</h3>
+	<a name="//api/name/reportWorkHomeLocationOnly" title="reportWorkHomeLocationOnly"></a>
+	<h3 class="subsubtitle method-title">reportWorkHomeLocationOnly</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Hanlder for rating.</p>
+		<p>A flag to only sends logline 19, stop logline 20. Keep consistent with Android to save battery. Default is <code>NO</code> to report 20 logline normally, FG uses standard and BG uses significant. If set to <code>YES</code> to save battery and meantime can detect location for logline 19, always uses significant location, not use standard location even in FG.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, weak) SHRateHandler *rateHandler</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL reportWorkHomeLocationOnly</code></div>
 
     
 	
@@ -1998,7 +2090,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Location.h</code><br />
 	</div>				
 	
 	
@@ -2034,7 +2126,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Location.h</code><br />
 	</div>				
 	
 	
@@ -2070,7 +2162,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2083,7 +2175,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Version for StreetHawkCore.framework SDK, formatted as [server api version] / [framework version] (X.Y.Z), for example &ldquo;1/1.2.5&rdquo;. In Finder [framework version] is visible by view framework file info.</p>
+		<p>Version for StreetHawkCore.framework SDK, formatted as [framework version] (X.Y.Z), for example &ldquo;1.2.5&rdquo;. In Finder [framework version] is visible by view framework file info.</p>
 	</div>		
 	
     
@@ -2106,7 +2198,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -2155,7 +2247,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -2199,7 +2291,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2240,7 +2332,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkInstall.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -2291,7 +2383,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Feed.h</code><br />
 	</div>				
 	
 	
@@ -2332,7 +2424,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2380,7 +2472,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2435,11 +2527,10 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>`- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification`
+		<p><code>- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification</code>
 {
-    [StreetHawk handleLocalNotification:notification needComplete:YES fetchCompletionHandler:nil];
-}` 
-</code></pre>
+[StreetHawk handleLocalNotification:notification needComplete:YES fetchCompletionHandler:nil];
+}`</p>
 	</div>
 	
 	
@@ -2450,7 +2541,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2505,11 +2596,10 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>`- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
+		<p><code>- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
 {
-    [StreetHawk handleLocalNotification:notification withActionId:identifier needComplete:YES completionHandler:completionHandler];
-}`
-</code></pre>
+[StreetHawk handleLocalNotification:notification withActionId:identifier needComplete:YES completionHandler:completionHandler];
+}</code></p>
 	</div>
 	
 	
@@ -2520,7 +2610,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2571,7 +2661,7 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2626,18 +2716,17 @@ StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>`-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+		<p><code>-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [StreetHawk handleRemoteNotification:userInfo needComplete:YES fetchCompletionHandler:nil];
-}`
+[StreetHawk handleRemoteNotification:userInfo needComplete:YES fetchCompletionHandler:nil];
+}</code></p>
 
-or
+<p>or</p>
 
-`-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+<p><code>-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    [StreetHawk handleRemoteNotification:userInfo needComplete:YES fetchCompletionHandler:completionHandler];
-}`
-</code></pre>
+[StreetHawk handleRemoteNotification:userInfo needComplete:YES fetchCompletionHandler:completionHandler];
+}</code></p>
 	</div>
 	
 	
@@ -2648,7 +2737,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2703,11 +2792,10 @@ or
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>`- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
+		<p><code>- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
 {
-    [StreetHawk handleRemoteNotification:userInfo withActionId:identifier needComplete:YES completionHandler:completionHandler];
-}`
-</code></pre>
+[StreetHawk handleRemoteNotification:userInfo withActionId:identifier needComplete:YES completionHandler:completionHandler];
+}</code></p>
 	</div>
 	
 	
@@ -2718,7 +2806,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2748,11 +2836,10 @@ or
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>`- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings`
-`{`
-    `[StreetHawk handleUserNotificationSettings:notificationSettings];`
-`}`
-</code></pre>
+		<p><code>- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings</code>
+<code>{</code>
+<code>[StreetHawk handleUserNotificationSettings:notificationSettings];</code>
+<code>}</code></p>
 	</div>
 	
 	
@@ -2763,7 +2850,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -2814,7 +2901,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -2855,7 +2942,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -2902,15 +2989,15 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:" title="originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:"></a>
-	<h3 class="subsubtitle method-title">originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:withMessage:</h3>
+	<a name="//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:" title="originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:"></a>
+	<h3 class="subsubtitle method-title">originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:</h3>
 	
 	
 	
@@ -2920,7 +3007,7 @@ or
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (void)originateShareWithCampaign:(NSString *)<em>utm_campaign</em> withMedium:(NSString *)<em>utm_medium</em> withContent:(NSString *)<em>utm_content</em> withTerm:(NSString *)<em>utm_term</em> shareUrl:(NSURL *)<em>shareUrl</em> withDestinationUrl:(NSURL *)<em>default_url</em> withMessage:(NSString *)<em>message</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (void)originateShareWithCampaign:(NSString *)<em>utm_campaign</em> withMedium:(NSString *)<em>utm_medium</em> withContent:(NSString *)<em>utm_content</em> withTerm:(NSString *)<em>utm_term</em> shareUrl:(NSURL *)<em>shareUrl</em> withDefaultUrl:(NSURL *)<em>default_url</em> withMessage:(NSString *)<em>message</em></code></div>
 
     
 	
@@ -2978,15 +3065,15 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Growth.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:" title="originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:"></a>
-	<h3 class="subsubtitle method-title">originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDestinationUrl:streetHawkGrowth_object:</h3>
+	<a name="//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:" title="originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:"></a>
+	<h3 class="subsubtitle method-title">originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:</h3>
 	
 	
 	
@@ -2996,7 +3083,7 @@ or
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (void)originateShareWithCampaign:(NSString *)<em>utm_campaign</em> withSource:(NSString *)<em>utm_source</em> withMedium:(NSString *)<em>utm_medium</em> withContent:(NSString *)<em>utm_content</em> withTerm:(NSString *)<em>utm_term</em> shareUrl:(NSURL *)<em>shareUrl</em> withDestinationUrl:(NSURL *)<em>default_url</em> streetHawkGrowth_object:(SHCallbackHandler)<em>handler</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (void)originateShareWithCampaign:(NSString *)<em>utm_campaign</em> withSource:(NSString *)<em>utm_source</em> withMedium:(NSString *)<em>utm_medium</em> withContent:(NSString *)<em>utm_content</em> withTerm:(NSString *)<em>utm_term</em> shareUrl:(NSURL *)<em>shareUrl</em> withDefaultUrl:(NSURL *)<em>default_url</em> streetHawkGrowth_object:(SHCallbackHandler)<em>handler</em></code></div>
 
     
 	
@@ -3059,7 +3146,52 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Growth.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/registerForNotificationAndNotifyServer" title="registerForNotificationAndNotifyServer"></a>
+	<h3 class="subsubtitle method-title">registerForNotificationAndNotifyServer</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>According to system and customer code&rsquo;s setting, call system API to register notification <both for remote notification and local notification> or update revoked.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)registerForNotificationAndNotifyServer</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<ul>
+<li>Call system API to register notification unless <code>StreetHawk.isEnableNotification=NO</code>.</li>
+<li>Check system enable notification or <code>StreetHawk.isEnableNotification=NO</code> to update flag <code>revoked</code> in StreetHawk server. This flag can stop StreetHawk server from sending remote notification.</li>
+</ul>
+
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -3113,7 +3245,43 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/registerInstallForApp:withDebugMode:withiTunesId:" title="registerInstallForApp:withDebugMode:withiTunesId:"></a>
+	<h3 class="subsubtitle method-title">registerInstallForApp:withDebugMode:withiTunesId:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Deprecated, use <code>- (void)registerInstallForApp:(NSString *)</code>appKey<code> withDebugMode:(BOOL)</code>isDebugMode<code>;</code> instead. <code>iTunesId</code> is setup in web console, or by property <code>@property (nonatomic, strong) NSString *</code>itunesAppId<code>;</code>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)registerInstallForApp:(NSString *)<em>appKey</em> withDebugMode:(BOOL)<em>isDebugMode</em> withiTunesId:(NSString *)<em>iTunesId</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3159,7 +3327,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkInstall.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3210,7 +3378,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3256,7 +3424,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Feed.h</code><br />
 	</div>				
 	
 	
@@ -3307,7 +3475,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Feed.h</code><br />
 	</div>				
 	
 	
@@ -3347,11 +3515,10 @@ or
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>`-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken`
-`{`
-    `[StreetHawk setApnsDeviceToken:deviceToken];`
-`}`
-</code></pre>
+		<p><code>-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken</code>
+<code>{</code>
+<code>[StreetHawk setApnsDeviceToken:deviceToken];</code>
+<code>}</code></p>
 	</div>
 	
 	
@@ -3362,7 +3529,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -3413,7 +3580,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -3426,7 +3593,7 @@ or
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Set up default host url, it&rsquo;s the starting url. Normally customers does not need to set it, and use &ldquo;<a href="https://api.streethawk.com">https://api.streethawk.com</a>&rdquo; as starting url. Some test App can set it be &ldquo;<a href="https://dev.streethawk.com">https://dev.streethawk.com</a>&rdquo;. It&rsquo;s only used for initialise, set this before call <a href="#//api/name/registerInstallForApp:withDebugMode:"><code>registerInstallForApp:withDebugMode:</code></a>.</p>
+		<p>Only for internal usage. It&rsquo;s &ldquo;<a href="https://api.streethawk.com">https://api.streethawk.com</a>&rdquo;.</p>
 	</div>		
 	
     
@@ -3449,7 +3616,90 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:" title="setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:"></a>
+	<h3 class="subsubtitle method-title">setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>StreetHawk SDK sends logline to server to report current location. The frequency can be controlled by this API. By default the frequency is following.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)setLocationUpdateFrequencyForFGInterval:(int)<em>fgInterval</em> forFGDistance:(int)<em>fgDistance</em> forBGInterval:(int)<em>bgInterval</em> forBGDistance:(int)<em>bgDistance</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>fgInterval</em></dt>
+			<dd><p>Minimum time interval for sending location logline when App in FG, measured in minutes.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>fgDistance</em></dt>
+			<dd><p>Minimum distance for sending location logline when App in FG, measured in meters.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>bgInterval</em></dt>
+			<dd><p>Minimum time interval for sending location logline when App in BG, measured in minutes.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>bgDistance</em></dt>
+			<dd><p>Minimum distance for sending location logline when App in BG, measured in meters.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<table>
+<tr>
+<th>Parameter</th>
+<th>Background</th>
+<th>Foreground</th>
+</tr>
+<tr>
+<td>(bg/fg)MinDistanceBetweenEvents</td>
+<td>500m `SHLocation_BG_Distance`</td>
+<td>100m `SHLocation_FG_Distance`</td>
+</tr>
+<tr>
+<td>(bg/fg)MinTimeBetweenEvents</td>
+<td>5mins `SHLocation_BG_Interval`</td>
+<td>1min `SHLocation_FG_Interval`</td>
+</tr>
+</table>
+
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp+Location.h</code><br />
 	</div>				
 	
 	
@@ -3527,7 +3777,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3608,7 +3858,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3649,7 +3899,7 @@ or
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -3696,7 +3946,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3742,7 +3992,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3788,7 +4038,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -3834,7 +4084,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -3888,7 +4138,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3944,7 +4194,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -3995,7 +4245,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
@@ -4041,25 +4291,25 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:" title="slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:"></a>
-	<h3 class="subsubtitle method-title">slideForUrl:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:withPushData:</h3>
+	<a name="//api/name/tagCuid:" title="tagCuid:"></a>
+	<h3 class="subsubtitle method-title">tagCuid:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Utility function to show slide with url content.</p>
+		<p>Internally call</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (void)slideForUrl:(NSString *)<em>url</em> withDirection:(SHSlideDirection)<em>direction</em> withSpeed:(double)<em>speed</em> withCoverPercentage:(double)<em>percentage</em> withHideLoading:(BOOL)<em>isHideLoading</em> withAlertTitle:(NSString *)<em>alertTitle</em> withAlertMessage:(NSString *)<em>alertMessage</em> withNeedShowDialog:(BOOL)<em>needShowDialog</em> withPushData:(PushDataForApplication *)<em>pushData</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (BOOL)tagCuid:(NSString *)<em>uniqueId</em></code></div>
 
     
 	
@@ -4067,57 +4317,27 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
-			<dt><em>url</em></dt>
-			<dd><p>The content&rsquo;s url link, NSString type, for example @&ldquo;www.google.com&rdquo; or @&ldquo;<a href="https://www.some.com">https://www.some.com</a>&rdquo;. If it does not contain the protocal prefix @&ldquo;://&rdquo;, default @&ldquo;http://&rdquo; will be added. But if it&rsquo;s not http protocal, must have the complete address.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>direction</em></dt>
-			<dd><p>The slide show direction, refer to enum <code>SHSlideDirection</code>.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>speed</em></dt>
-			<dd><p>The seconds duration from start slide till it complete, measured in seconds. It should be a positive number. Note: it&rsquo;s the time for animate slide show, not include time for loading web page. It should be a positive number, if not use 0.1 by default.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>percentage</em></dt>
-			<dd><p>The width or height (depending on direction) of the slide cover on screen. It should be from 0 to 1. If set too much to outside of screen, the slide cover whole screen.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>isHideLoading</em></dt>
-			<dd><p>Whether the slide should wait till web page load finished. If YES the slide will not show till web page finish loading, and then call confirm alert (if <code>alertTitle</code> or <code>alertMessage</code> not empty) or slide without activity spinner; If NO the slide show immediately with an acivity spinner, not wait till web page load finish.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>alertTitle</em></dt>
-			<dd><p>Before slide it may be show a confirm dialog if <code>alertTitle</code> or <code>alertMessage</code> not empty and <code>needShowDialog</code>=YES. This title will also display on slide top.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>alertMessage</em></dt>
-			<dd><p>Same as <code>alertTitle</code>.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>needShowDialog</em></dt>
-			<dd><p>Before slide it may be show a confirm dialog if <code>alertTitle</code> or <code>alertMessage</code> not empty and <code>needShowDialog</code>=YES.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>pushData</em></dt>
-			<dd><p>When used in notification, pass in payload information. If not used in notification, pass nil.</p></dd>
+			<dt><em>uniqueId</em></dt>
+			<dd><p>The unique user id from customer&rsquo;s App.</p></dd>
 		</dl>
 		
 	</div>
 	
 	
 	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>If tag to server return YES; if fail to send to server return NO.</p>
+	</div>
 	
 	
 	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p><code>[StreetHawk tagString:uniqueId forKey:@"sh_cuid"];</code></p>
+	</div>
 	
 	
 	
@@ -4127,83 +4347,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkSlideViewController.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:" title="slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:"></a>
-	<h3 class="subsubtitle method-title">slideForVC:withDirection:withSpeed:withCoverPercentage:withHideLoading:withAlertTitle:withAlertMessage:withNeedShowDialog:</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Utility function to show slide with url content.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)slideForVC:(UIViewController&lt;SHSlideContentViewController&gt; *)<em>contentVC</em> withDirection:(SHSlideDirection)<em>direction</em> withSpeed:(double)<em>speed</em> withCoverPercentage:(double)<em>percentage</em> withHideLoading:(BOOL)<em>isHideLoading</em> withAlertTitle:(NSString *)<em>alertTitle</em> withAlertMessage:(NSString *)<em>alertMessage</em> withNeedShowDialog:(BOOL)<em>needShowDialog</em></code></div>
-
-    
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>contentVC</em></dt>
-			<dd><p>A view controller to display as content of the slide.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>direction</em></dt>
-			<dd><p>The slide show direction, refer to enum <code>SHSlideDirection</code>.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>speed</em></dt>
-			<dd><p>The seconds duration from start slide till it complete, measured in seconds. It should be a positive number. Note: it&rsquo;s the time for animate slide show, not include time for loading content VC. It should be a positive number, if not use 0.1 by default.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>percentage</em></dt>
-			<dd><p>The width or height (depending on direction) of the slide cover on screen. It should be from 0 to 1. If set too much to outside of screen, the slide cover whole screen.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>isHideLoading</em></dt>
-			<dd><p>Whether the slide should wait till content VC load finished. If YES the slide will not show till content VC finish loading, and then call confirm alert (if <code>alertTitle</code> or <code>alertMessage</code> not empty) or slide without activity spinner; If NO the slide show immediately with an acivity spinner, not wait till content VC load finish.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>alertTitle</em></dt>
-			<dd><p>Before slide it may be show a confirm dialog if <code>alertTitle</code> or <code>alertMessage</code> not empty.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>alertMessage</em></dt>
-			<dd><p>Same as <code>alertTitle</code>.</p></dd>
-		</dl>
-		
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkSlideViewController.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -4266,7 +4410,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -4329,7 +4473,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -4392,7 +4536,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">StreetHawkApp.h</code><br />
+		<code class="declared-in-ref">SHApp.h</code><br />
 	</div>				
 	
 	
@@ -4413,7 +4557,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 StreetHawk. All rights reserved. (Last updated: 2015-07-24)</span><br />
+						<p><span class="copyright">&copy; 2015 StreetHawk. All rights reserved. (Last updated: 2015-11-24)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
