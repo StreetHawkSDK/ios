@@ -33,6 +33,11 @@ typedef void (^SHOpenUrlHandler)(NSURL *openUrl);
 #define StreetHawk          [SHApp sharedInstance]
 
 /**
+ Notification for init module's bridge class. The bridge class is for adding modules and it will handle the detail corresponding function notifications.
+ */
+#define SH_InitBridge_Notification  @"SH_InitBridge_Notification"
+
+/**
  The SHApp Class is core of whole SDK. It contains almost all the functions.
  
  **Normal usage:**

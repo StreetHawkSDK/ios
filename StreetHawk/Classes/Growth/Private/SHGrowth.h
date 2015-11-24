@@ -87,4 +87,14 @@
  */
 - (void)increaseGrowth:(NSString *)shareUrlStr withHandler:(SHCallbackHandler)handler;
 
+/**
+ Notification handler for register growth.
+ */
+- (void)installRegistrationSucceededForGrowth:(NSNotification *)notification;
+
+/**
+ Notification handler for register growth.
+ */
+- (void)installUpdateSucceededForGrowth:(NSNotification *)notification;
+
 @end

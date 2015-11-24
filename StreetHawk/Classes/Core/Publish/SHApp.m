@@ -38,9 +38,6 @@
 #import "SHApp+Location.h"
 #import "SHLocationManager.h" //for create SHLocationManager instance
 #endif
-#ifdef SH_FEATURE_GROWTH
-#import "SHGrowth.h" //for growth handle register notification
-#endif
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -90,6 +87,7 @@
 
 @interface SHApp ()
 
+@property (nonatomic) BOOL isBridgeInitCalled; //Flag to let module's bridge init only call once.
 @property (nonatomic) BOOL isRegisterInstallForAppCalled; //Customer Sandstone call `registerInstallForApp` many times and meet crash. It does not make sense to call it twice and later, add this flag to ignore second and later call.
 @property (nonatomic) BOOL isFinishLaunchOptionCalled; //For handle Phonegap, Unity, Titanium finish launch is postpone to call again after a few seconds, at that time StreetHawk is register and ready to use. However it cause native and Xamarin enter twice. To avoid call it again add this flag.
 
@@ -173,6 +171,26 @@
     {
         instance = [[SHApp alloc] init];
     });
+    if (!instance.isBridgeInitCalled)
+    {
+        instance.isBridgeInitCalled = YES;
+        //add module init bridges. This is automatically for native and Phonegap. For Xamarin and Titanium need customer add these notification handler before call `streethawkinit`.
+        //disable warning as this selector is defined in sub-module category.
+#pragma GCC diagnostic push
+#pragma clang diagnostic push
+#pragma GCC diagnostic ignored "-Wundeclared-selector"
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+        Class growthBridge = NSClassFromString(@"SHGrowthBridge");
+        if (growthBridge)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:growthBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
+        }
+#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
+        //finally post notification to let bridge ready.
+        [[NSNotificationCenter defaultCenter] postNotificationName:SH_InitBridge_Notification object:nil];
+    }
+    
     return instance;
 }
 
@@ -180,6 +198,7 @@
 {
     if (self = [super init])
     {
+        self.isBridgeInitCalled = NO;
         self.isRegisterInstallForAppCalled = NO;
         self.isFinishLaunchOptionCalled = NO;
         //Check local SQLite database and NSUserDefaults at first time before any call. If not match next will be treat as a new install. This is only checked when launch App, not check during App running. Check Apns mode also.
@@ -619,9 +638,7 @@
     }
     if (!handledBySDK && StreetHawk.openUrlHandler != nil)
     {
-#ifdef SH_FEATURE_GROWTH
-        [[SHGrowth sharedInstance] increaseGrowth:url.absoluteString withHandler:nil]; //send Growth increase request
-#endif
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_GrowthBridge_Increase_Notification" object:nil userInfo:@{@"url": NONULL(url.absoluteString)}]; //send Growth increase request
         StreetHawk.openUrlHandler(url);
         return YES; //open url is handled by customer code.
     }
@@ -1083,10 +1100,6 @@
 #pragma clang diagnostic push
 #pragma GCC diagnostic ignored "-Wundeclared-selector"
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-#ifdef SH_FEATURE_GROWTH
-    [[NSNotificationCenter defaultCenter] addObserver:[SHGrowth sharedInstance] selector:@selector(installRegistrationSucceededForGrowth:) name:SHInstallRegistrationSuccessNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:[SHGrowth sharedInstance] selector:@selector(installUpdateSucceededForGrowth:) name:SHInstallUpdateSuccessNotification object:nil];
-#endif
 #ifdef SH_FEATURE_NOTIFICATION
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appStatusChange:) name:SHAppStatusChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegistrationSucceededForNotification:) name:SHInstallRegistrationSuccessNotification object:nil]; //first registerForRemoteNotification need be called after register install, because it needs to be updated to an install id.
@@ -1141,14 +1154,10 @@
 
 - (void)sendModuleTags
 {
-    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap) //native and phonegap plugin uses preprocessor macro to enable feature at compile time.
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap) //native and phonegap plugin compiles bridge class.
     {
-        NSString *growthCurrent = nil;
-#ifdef SH_FEATURE_GROWTH
-        growthCurrent = @"true";
-#else
-        growthCurrent = @"false";
-#endif
+        Class growthBridge = NSClassFromString(@"SHGrowthBridge");
+        NSString *growthCurrent = (growthBridge == nil) ? @"false" : @"true";
         NSString *growthSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_growth"];
         if ([growthCurrent compare:growthSent] != NSOrderedSame)
         {

@@ -19,9 +19,6 @@
 //header from StreetHawk
 #import "SHUtils.h" //for streetHawkIsEnabled()
 #import "SHFriendlyNameObject.h"  //for friendly name parse
-#ifdef SH_FEATURE_GROWTH
-#import "SHGrowth.h" //for growth increase click
-#endif
 #ifdef SH_FEATURE_NOTIFICATION
 #import "SHApp+Notification.h" //for handlePushDataForAppCallback
 #endif
@@ -52,10 +49,7 @@
     
     if (shouldIncreaseClick)
     {
-        //send Growth increase request
-#ifdef SH_FEATURE_GROWTH
-        [[SHGrowth sharedInstance] increaseGrowth:deepLinking withHandler:nil];
-#endif
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_GrowthBridge_Increase_Notification" object:nil userInfo:@{@"url": NONULL(deepLinking)}]; //send Growth increase request
     }
     
     NSString *vcClassName = nil;
