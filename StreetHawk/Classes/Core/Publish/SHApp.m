@@ -174,13 +174,15 @@
     if (!instance.isBridgeInitCalled)
     {
         instance.isBridgeInitCalled = YES;
-        //add module init bridges. This is automatically for native and Phonegap. For Xamarin and Titanium need customer add these notification handler before call `streethawkinit`.
+        //add module init bridges. This is automatically for native, Phonegap, Xamarin.
+        //In case cannot reflect bridge class, customer need to manually add notification observer.
         //disable warning as this selector is defined in sub-module category.
 #pragma GCC diagnostic push
 #pragma clang diagnostic push
 #pragma GCC diagnostic ignored "-Wundeclared-selector"
 #pragma clang diagnostic ignored "-Wundeclared-selector"
         Class growthBridge = NSClassFromString(@"SHGrowthBridge");
+        NSLog(@"Bridge for growth: %@.", growthBridge); //cannot use SHLog as this place `isDebugMode` not configured yet. Use NSLog to make sure prints important bridge message.
         if (growthBridge)
         {
             [[NSNotificationCenter defaultCenter] addObserver:growthBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
@@ -1154,7 +1156,7 @@
 
 - (void)sendModuleTags
 {
-    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap) //native and phonegap plugin compiles bridge class.
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin) //all these can reflect bridge class.
     {
         Class growthBridge = NSClassFromString(@"SHGrowthBridge");
         NSString *growthCurrent = (growthBridge == nil) ? @"false" : @"true";
