@@ -25,11 +25,6 @@
 #import "SHDeepLinking.h"
 #import "SHFriendlyNameObject.h"
 #import "SHUtils.h"
-#ifdef SH_FEATURE_NOTIFICATION
-#import "SHApp+Notification.h" //for access notification properties
-#import "SHNotificationHandler.h" //for create SHNotificationHandler instance
-#import "SHPushDataCallback.h" //for create SHPushDataCallback
-#endif
 #ifdef SH_FEATURE_CRASH
 #import "SHApp+Crash.h" //for crash handler
 #import "SHCrashHandler.h" //for create SHCrashHandler instance
@@ -187,6 +182,12 @@
         {
             [[NSNotificationCenter defaultCenter] addObserver:growthBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
         }
+        Class notificationBridge = NSClassFromString(@"SHNotificationBridge");
+        NSLog(@"Bridge for notification: %@.", notificationBridge);
+        if (notificationBridge)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:notificationBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
+        }
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
         //finally post notification to let bridge ready.
@@ -211,20 +212,6 @@
 #ifdef SH_FEATURE_CRASH
         self.isEnableCrashReport = YES;
 #endif
-#ifdef SH_FEATURE_NOTIFICATION
-        self.isDefaultNotificationEnabled = YES;  //default value, user can change it by StreetHawk.isDefaultNotificationEnabled = NO. Default value only used to initialize isNotificationEnabled one time, once user manually set StreetHawk.isNotificationEnabled, default value is ignored.        
-        if ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0)
-        {
-            self.notificationTypes = UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
-        }
-        else
-        {
-            self.notificationTypes = UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeNewsstandContentAvailability;
-        }
-        self.arrayCustomisedHandler = [NSMutableArray array];
-        [self shSetCustomiseHandler:[[SHPushDataCallback alloc] init]]; //streethawk's add first, so customer's will insert before it.
-        self.arrayPGObservers = [NSMutableArray array];
-#endif
 #if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
         self.isDefaultLocationServiceEnabled = YES;  //same as isDefaultPushNotificationEnabled.
         self.reportWorkHomeLocationOnly = NO;
@@ -234,9 +221,7 @@
         self.install_semaphore = dispatch_semaphore_create(1);  //happen in sequence
         //some handlers initialize erlier
         self.installHandler = [[SHInstallHandler alloc] init];
-#ifdef SH_FEATURE_NOTIFICATION
-        self.notificationHandler = [[SHNotificationHandler alloc] init]; //Phonegap do streethawkinit() later, but need notification handler to available to process 8004 set view name at first time.
-#endif
+
         self.autoIntegrateAppDelegate = YES;
         [self setupNotifications]; //move early so that Phonegap can handle remote notification in appDidFinishLaunching.
     }
@@ -701,22 +686,6 @@
     SHLog(@"Application did finish launching with launchOptions: %@", launchOptions);
 
     BOOL isFromDelayLaunch = [notification.name isEqualToString:@"StreetHawkDelayLaunchOptionsNotification"]; //in case from delay launch options, the remote delegate happens when app launch, and at that time StreetHawk delegate not ready, it's pass and cannot handle. Handle it again here.
-    //Since iOS 7.0 delegate with `completionHandler` is introduced, by testing if App not launched and notification arrives, new style function is called, but old style function not called. Remote notification function should NOT be called twice, so since iOS 7.0 not call it here.
-#ifdef SH_FEATURE_NOTIFICATION
-    if (isFromDelayLaunch || [[UIDevice currentDevice].systemVersion doubleValue] < 7.0)
-    {
-        NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
-        if (remoteNotification != nil)
-        {
-            [StreetHawk handleRemoteNotification:remoteNotification treatAppAs:isFromDelayLaunch ? SHAppFGBG_BG/*if from delay launch it's must from BG, like Phonegap, so treat as BG*/ : SHAppFGBG_Unknown needComplete:YES fetchCompletionHandler:nil];
-        }
-        UILocalNotification *localNotification = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey];
-        if (localNotification != nil)
-        {
-            [StreetHawk handleLocalNotification:localNotification treatAppAs:isFromDelayLaunch ? SHAppFGBG_BG/*if from delay launch it's must from BG, like Phonegap, so treat as BG*/ : SHAppFGBG_Unknown needComplete:YES fetchCompletionHandler:nil];
-        }
-    }
-#endif
     //Phonegap open url system delegate happen before StreetHawk library get ready, so `sh.shDeeplinking(function(result){alert("open url: " + result)},function(){});` not trigger when App not launch. Check delay launch options, if from open url, give it second chance to trigger again.
     if (isFromDelayLaunch)
     {
@@ -878,9 +847,7 @@
 {
     //check app status from background to foreground, most actually return because of "one day not call" limitation.
     [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO completeHandler:nil];  //a chance to check if sdk was disabled, may be able to wake up again. Choose this instead of applicationWillEnterForeground because this is also called when App not launched, manually click to open.
-#ifdef SH_FEATURE_NOTIFICATION
-    [StreetHawk setApplicationBadge:0]; //clear badge when App open, for some user they don't like this number and would like to launch App to dismiss it.
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_SetBadge_Notification" object:nil userInfo:@{@"badge": @(0)}]; //clear badge when App open, for some user they don't like this number and would like to launch App to dismiss it.
     if (!streetHawkIsEnabled())
     {
         return;
@@ -894,9 +861,7 @@
     if (self.currentInstall != nil)
     {
         //each time when App go to foreground, check push message situation. user can disable App's push message when App is in background, so this is the time to check. Only do it when currentInstall!=nil, because if currentInstall==nil, next will call register install, and that will trigger registerForRemoteNotification.
-#ifdef SH_FEATURE_NOTIFICATION
-        [StreetHawk registerForNotificationAndNotifyServer];
-#endif
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_Register_Notification" object:nil];
         if ([self checkInstallChangeForLaunch] //check whether App or device attribute change, tricky: this must be first, as it sends client upgrade logline. If move to later, self.currentInstall.appKey is always nil when fresh launch, and correct sent client version, so no chance to send the logline.
             || self.currentInstall.appKey == nil || self.currentInstall.appKey.length == 0) //check install attribute is filled, to make sure later visit currentInstall has correct value, meantime fix crash report submitted immediately after App launch
         {
@@ -911,19 +876,7 @@
     //check when App is active
     [self shRegularTask:nil needComplete:NO];
     //check smart push
-#ifdef SH_FEATURE_NOTIFICATION
-    NSObject *smartpushObj = [[NSUserDefaults standardUserDefaults] objectForKey:SMART_PUSH_PAYLOAD];
-    if (smartpushObj != nil && [smartpushObj isKindOfClass:[NSDictionary class]])
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:SMART_PUSH_PAYLOAD]; //clear, not launch next time.
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        NSDictionary *payload = (NSDictionary *)smartpushObj;
-        if ([StreetHawk.notificationHandler isDefinedCode:payload])
-        {
-            [StreetHawk.notificationHandler handleDefinedUserInfo:payload withAction:SHNotificationActionResult_Unknown treatAppAs:SHAppFGBG_FG forNotificationType:SHNotificationType_SmartPush];
-        }
-    }
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_Smart_Notification" object:nil];
 }
 
 - (void)applicationWillTerminateNotificationHandler:(NSNotification *)notification
@@ -966,11 +919,9 @@
 
 #pragma mark - UIAppDelegate auto integration
 
-#ifdef SH_FEATURE_NOTIFICATION
-
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings  //since iOS 8.0
 {
-    [StreetHawk handleUserNotificationSettings:notificationSettings];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_DidRegisterUserNotification" object:nil userInfo:@{@"notificationSettings": notificationSettings}];
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didRegisterUserNotificationSettings:)])
     {
         [self.appDelegateInterceptor.secondResponder application:application didRegisterUserNotificationSettings:notificationSettings];
@@ -979,7 +930,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [StreetHawk setApnsDeviceToken:deviceToken];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveToken_Notification" object:nil userInfo:@{@"token": deviceToken}];    
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)])
     {
         [self.appDelegateInterceptor.secondResponder application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
@@ -989,17 +940,6 @@
 //called when notification arrives and:
 //1. App in FG, directly call this.
 //2. App in BG notification banner show, click the banner (not the button) and call this.
-//Because of following function, this one ONLY used for iOS 6 now.
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    [StreetHawk handleRemoteNotification:userInfo treatAppAs:SHAppFGBG_Unknown needComplete:YES fetchCompletionHandler:nil];
-    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didReceiveRemoteNotification:)])
-    {
-        [self.appDelegateInterceptor.secondResponder application:application didReceiveRemoteNotification:userInfo];
-    }
-}
-
-//Since iOS 7, same as above but able to perform background task. Because this function, above function actually is NEVER called since iOS 7; in iOS 6 above function is called.
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     //Because StreetHawk take over didReceiveRemoteNotification, customer's AppDelegate may have one to call, do that first as this will call completeHandler.
@@ -1008,7 +948,7 @@
         [self.appDelegateInterceptor.secondResponder application:application didReceiveRemoteNotification:userInfo];
     }
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:)];
-    [StreetHawk handleRemoteNotification:userInfo treatAppAs:SHAppFGBG_Unknown needComplete:!customerAppResponse fetchCompletionHandler:completionHandler];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveRemoteNotification" object:nil userInfo:@{@"payload": userInfo, @"fgbg": @(SHAppFGBG_Unknown), @"needComplete": @(!customerAppResponse), @"fetchCompletionHandler": completionHandler}];
     if (customerAppResponse)
     {
         [self.appDelegateInterceptor.secondResponder application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
@@ -1023,7 +963,7 @@
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
 {
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleActionWithIdentifier:forRemoteNotification:completionHandler:)];
-    [StreetHawk handleRemoteNotification:userInfo withActionId:identifier needComplete:!customerAppResponse/*if customer needs, not complete in StreetHawk call but let customer AppDelegate to end it*/ completionHandler:completionHandler];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HanleRemoteActionButton" object:nil userInfo:@{@"payload": userInfo, @"actionid": identifier, @"needComplete": @(!customerAppResponse)/*if customer needs, not complete in StreetHawk call but let customer AppDelegate to end it*/, @"completionHandler": completionHandler}];
     if (customerAppResponse)
     {
         [self.appDelegateInterceptor.secondResponder application:application handleActionWithIdentifier:identifier forRemoteNotification:userInfo completionHandler:completionHandler];
@@ -1032,7 +972,7 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    [StreetHawk handleLocalNotification:notification treatAppAs:SHAppFGBG_Unknown needComplete:YES fetchCompletionHandler:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveLocalNotification" object:nil userInfo:@{@"notification": notification, @"fgbg": @(SHAppFGBG_Unknown), @"needComplete": @(YES)}];
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didReceiveLocalNotification:)])
     {
         [self.appDelegateInterceptor.secondResponder application:application didReceiveLocalNotification:notification];
@@ -1042,14 +982,12 @@
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
 {
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleActionWithIdentifier:forLocalNotification:completionHandler:)];
-    [StreetHawk handleLocalNotification:notification withActionId:identifier needComplete:!customerAppResponse/*if customer needs, not complete in StreetHawk call but let customer AppDelegate to end it*/ completionHandler:completionHandler];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HanleLocalActionButton" object:nil userInfo:@{@"notification": notification, @"actionid": identifier, @"needComplete": @(!customerAppResponse)/*if customer needs, not complete in StreetHawk call but let customer AppDelegate to end it*/, @"completionHandler": completionHandler}];
     if (customerAppResponse)
     {
         [self.appDelegateInterceptor.secondResponder application:application handleActionWithIdentifier:identifier forLocalNotification:notification completionHandler:completionHandler];
     }
 }
-
-#endif
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
@@ -1102,10 +1040,7 @@
 #pragma clang diagnostic push
 #pragma GCC diagnostic ignored "-Wundeclared-selector"
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-#ifdef SH_FEATURE_NOTIFICATION
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appStatusChange:) name:SHAppStatusChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegistrationSucceededForNotification:) name:SHInstallRegistrationSuccessNotification object:nil]; //first registerForRemoteNotification need be called after register install, because it needs to be updated to an install id.
-#endif
 #ifdef SH_FEATURE_CRASH
     self.isSendingCrashReport = NO;  //must use `self` instead of `StreetHawk` as this is called in `init`.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installUpdateSucceededForCrash:) name:SHInstallUpdateSuccessNotification object:nil];
@@ -1166,12 +1101,8 @@
             [StreetHawk tagString:growthCurrent forKey:@"sh_module_growth"];
             [[NSUserDefaults standardUserDefaults] setObject:growthCurrent forKey:@"sh_module_growth"];
         }
-        NSString *pushCurrent = nil;
-#ifdef SH_FEATURE_NOTIFICATION
-        pushCurrent = @"true";
-#else
-        pushCurrent = @"false";
-#endif
+        Class notificationBridge = NSClassFromString(@"SHNotificationBridge");
+        NSString *pushCurrent = (notificationBridge == nil) ? @"false" : @"true";
         NSString *pushSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_push"];
         if ([pushCurrent compare:pushSent] != NSOrderedSame)
         {

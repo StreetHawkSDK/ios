@@ -29,10 +29,6 @@
 #import "SHInstall.h" //for `StreetHawk.currentInstall.suid`
 #import "SHAppStatus.h" //for alive host
 #import "SHUtils.h" //for shAppendParamsArrayToString
-#ifdef SH_FEATURE_NOTIFICATION
-#import "SHApp+Notification.h" //for notificationHandler
-#import "SHNotificationHandler.h" //for call handle function
-#endif
 
 @interface SHRequest()
 {
@@ -689,21 +685,14 @@
                 //response may have "push" for smart push.
                 if ([dict.allKeys containsObject:@"push"] && [dict[@"push"] isKindOfClass:[NSDictionary class]])
                 {
-#ifdef SH_FEATURE_NOTIFICATION
                     NSDictionary *payload = (NSDictionary *)dict[@"push"]; //it's same format as remote notification.
+                    [[NSUserDefaults standardUserDefaults] setObject:payload forKey:SMART_PUSH_PAYLOAD];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    //App not in FG, store locally and wait for `applicationDidBecomeActiveNotificationHandler` to handle it.
                     if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) //App in FG, directly handle this smart push.
                     {
-                        if ([StreetHawk.notificationHandler isDefinedCode:payload])
-                        {
-                            [StreetHawk.notificationHandler handleDefinedUserInfo:payload withAction:SHNotificationActionResult_Unknown treatAppAs:SHAppFGBG_FG forNotificationType:SHNotificationType_SmartPush];
-                        }
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_Smart_Notification" object:nil];
                     }
-                    else //App not in FG, store locally and wait for `applicationDidBecomeActiveNotificationHandler` to handle it.
-                    {
-                        [[NSUserDefaults standardUserDefaults] setObject:payload forKey:SMART_PUSH_PAYLOAD];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
-#endif
                 }
             }
         }

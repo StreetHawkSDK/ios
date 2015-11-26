@@ -21,9 +21,6 @@
 #import "SHLogger.h" //for sending logline
 #import "SHRequest.h" //for sending register request
 #import "SHUtils.h" //for shParseDate
-#ifdef SH_FEATURE_NOTIFICATION
-#import "SHApp+Notification.h" //for access_token
-#endif
 #if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
 #import "SHApp+Location.h"
 #endif
@@ -157,14 +154,12 @@ NSString * const SHInstallNotification_kError = @"Error";
             //for SHAppMode_Unknown not submit.
             break;
     }
-#ifdef SH_FEATURE_NOTIFICATION
-    NSString *token = StreetHawk.apnsDeviceToken;
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"APNS_DEVICE_TOKEN"]; //cannot access notification module API `StreetHawk.apnsDeviceToken`, use direct value.
     if (token != nil && token.length > 0)
     {
         [params addObject:@"access_data"];
         [params addObject:token];
     }
-#endif
     [params addObject:@"revoked"];
     NSNumber *disablePushTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APNS_DISABLE_TIMESTAMP];
     [[NSUserDefaults standardUserDefaults] setObject:disablePushTimeVal != nil ? disablePushTimeVal : @0.0 forKey:APNS_SENT_DISABLE_TIMESTAMP];
@@ -242,12 +237,6 @@ NSString * const SHInstallNotification_kError = @"Error";
     [params addObject:@"feature_locations"];
 #if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
     [params addObject:StreetHawk.isLocationServiceEnabled ? @"true" : @"false"];
-#else
-    [params addObject:@"false"];
-#endif
-    [params addObject:@"feature_push"];
-#ifdef SH_FEATURE_NOTIFICATION
-    [params addObject:StreetHawk.isNotificationEnabled ? @"true" : @"false"];
 #else
     [params addObject:@"false"];
 #endif

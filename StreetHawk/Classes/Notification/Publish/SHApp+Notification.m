@@ -30,13 +30,6 @@
 #define ENABLE_PUSH_NOTIFICATION            @"ENABLE_PUSH_NOTIFICATION"  //key for record user manually set isNotificationEnabled. Although it's used for both remote and local, key not change name to be compatible with old version.
 #define ALERTSETTINGS_MINUTES   @"ALERTSETTINGS_MINUTES"  //Get and set alert settings is asynchronous, but need an synchronous API in SHApp. Store this locally. It's int value of pause minutes.
 
-@interface SHApp (Private)
-
-//Notifications
-- (void)installRegistrationSucceededForNotification:(NSNotification *)notification;
-
-@end
-
 @implementation SHApp (NotificationExt)
 
 #pragma mark - properties
@@ -510,13 +503,6 @@
     {
         [observer shPGDisplayHtmlFileName:htmlFile];
     }
-}
-
-#pragma mark - private functions
-
-- (void)installRegistrationSucceededForNotification:(NSNotification *)notification
-{
-    [StreetHawk registerForNotificationAndNotifyServer];
 }
 
 @end

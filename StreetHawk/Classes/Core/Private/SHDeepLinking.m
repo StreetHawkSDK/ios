@@ -19,9 +19,6 @@
 //header from StreetHawk
 #import "SHUtils.h" //for streetHawkIsEnabled()
 #import "SHFriendlyNameObject.h"  //for friendly name parse
-#ifdef SH_FEATURE_NOTIFICATION
-#import "SHApp+Notification.h" //for handlePushDataForAppCallback
-#endif
 #import "PushDataForApplication.h" //for pushData
 #import "SHBaseViewController.h" //for `ISHDeepLinking` protocol
 //header from System
@@ -201,9 +198,12 @@
         //Requested by Tobias and Anurag, even user is already viewing the page, should still show message box, maybe the message box contains some information that user should read.
         if ([pushData shouldShowConfirmDialog])
         {
-#ifdef SH_FEATURE_NOTIFICATION
-            [StreetHawk handlePushDataForAppCallback:pushData clickButton:nil];
-#endif
+            NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+            if (pushData != nil)
+            {
+                dictUserInfo[@"pushdata"] = pushData;
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandlePushData" object:nil userInfo:dictUserInfo];
         }
         return YES;  //already visible, not continue to create and show
     }
@@ -282,16 +282,20 @@
     };
     if ([pushData shouldShowConfirmDialog])
     {
-#ifdef SH_FEATURE_NOTIFICATION
-        [StreetHawk handlePushDataForAppCallback:pushData clickButton:^(SHResult result)
-         {
-             if (result == SHResult_Accept)
-             {
-                 action();
-             }
-             [pushData sendPushResult:result withHandler:nil];
-         }];
-#endif
+        NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+        if (pushData != nil)
+        {
+            dictUserInfo[@"pushdata"] = pushData;
+        }
+        dictUserInfo[@"clickbutton"] = ^(SHResult result)
+        {
+            if (result == SHResult_Accept)
+            {
+                action();
+            }
+            [pushData sendPushResult:result withHandler:nil];
+        };
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandlePushData" object:nil userInfo:dictUserInfo];
     }
     else
     {
