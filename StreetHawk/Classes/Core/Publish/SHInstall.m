@@ -234,18 +234,6 @@ NSString * const SHInstallNotification_kError = @"Error";
         }
             break;
     }
-    [params addObject:@"feature_locations"];
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-    [params addObject:StreetHawk.isLocationServiceEnabled ? @"true" : @"false"];
-#else
-    [params addObject:@"false"];
-#endif
-    [params addObject:@"feature_ibeacons"];
-#ifdef SH_FEATURE_IBEACON
-    [params addObject:@"true"];
-#else
-    [params addObject:@"false"];
-#endif
     return params;
 }
 

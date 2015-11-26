@@ -188,6 +188,24 @@
         {
             [[NSNotificationCenter defaultCenter] addObserver:notificationBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
         }
+        Class locationBridge = NSClassFromString(@"SHLocationBridge");
+        NSLog(@"Bridge for location: %@.", locationBridge);
+        if (locationBridge)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:locationBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
+        }
+        Class geofenceBridge = NSClassFromString(@"SHGeofenceBridge");
+        NSLog(@"Bridge for geofence: %@.", geofenceBridge);
+        if (geofenceBridge)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:geofenceBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
+        }
+        Class beaconBridge = NSClassFromString(@"SHBeaconBridge");
+        NSLog(@"Bridge for beacon: %@.", beaconBridge);
+        if (beaconBridge)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:beaconBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
+        }
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
         //finally post notification to let bridge ready.
@@ -211,10 +229,6 @@
         self.isDebugMode = NO;
 #ifdef SH_FEATURE_CRASH
         self.isEnableCrashReport = YES;
-#endif
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-        self.isDefaultLocationServiceEnabled = YES;  //same as isDefaultPushNotificationEnabled.
-        self.reportWorkHomeLocationOnly = NO;
 #endif
         self.backgroundQueue = [[NSOperationQueue alloc] init];
         self.backgroundQueue.maxConcurrentOperationCount = 1;
@@ -258,9 +272,7 @@
     self.isDebugMode = isDebugMode;
     //initialize handlers
     self.innerLogger = [[SHLogger alloc] init];  //this creates logs db, wait till user call `registerInstallForApp` to take action. logger must before location manager, because location manager create and start to send log, for example failure, and logger must be ready.
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-    self.locationManager = [SHLocationManager sharedInstance];  //cannot move to `init` because it starts `startMonitorGeoLocationStandard` when create, more important move up cause dead loop on [SHApp sharedInstance].
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_CreateLocationManager" object:nil];
 #ifdef SH_FEATURE_CRASH
     if (self.isEnableCrashReport)
     {

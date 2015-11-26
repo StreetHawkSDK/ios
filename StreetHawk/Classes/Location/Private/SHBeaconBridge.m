@@ -17,10 +17,34 @@
 
 #import "SHBeaconBridge.h"
 //header from StreetHawk
+#import "SHApp+Location.h"
+#import "SHLocationManager.h"
+
+@interface SHBeaconBridge (private)
+
++ (void)createLocationManagerHandler:(NSNotification *)notification;
+
+@end
 
 @implementation SHBeaconBridge
 
 + (void)bridgeHandler:(NSNotification *)notification
-{}
+{
+    //initialise variables, move from SHApp's init.
+    StreetHawk.isDefaultLocationServiceEnabled = YES;
+    StreetHawk.reportWorkHomeLocationOnly = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createLocationManagerHandler:) name:@"SH_LMBridge_CreateLocationManager" object:nil];
+}
+
+#pragma mark - private functions
+
++ (void)createLocationManagerHandler:(NSNotification *)notification
+{
+    if (StreetHawk.locationManager == nil)
+    {
+        StreetHawk.locationManager = [SHLocationManager sharedInstance];  //cannot move to `init` because it starts `startMonitorGeoLocationStandard` when create.
+    }
+}
 
 @end
