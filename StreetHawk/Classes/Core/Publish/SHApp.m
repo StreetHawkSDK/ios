@@ -921,7 +921,12 @@
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings  //since iOS 8.0
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_DidRegisterUserNotification" object:nil userInfo:@{@"notificationSettings": notificationSettings}];
+    NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+    if (notificationSettings != nil)
+    {
+        dictUserInfo[@"notificationSettings"] = notificationSettings;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_DidRegisterUserNotification" object:nil userInfo:dictUserInfo];
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didRegisterUserNotificationSettings:)])
     {
         [self.appDelegateInterceptor.secondResponder application:application didRegisterUserNotificationSettings:notificationSettings];
@@ -930,7 +935,12 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveToken_Notification" object:nil userInfo:@{@"token": deviceToken}];    
+    NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+    if (deviceToken != nil)
+    {
+        dictUserInfo[@"token"] = deviceToken;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveToken_Notification" object:nil userInfo:dictUserInfo];
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)])
     {
         [self.appDelegateInterceptor.secondResponder application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
@@ -948,7 +958,18 @@
         [self.appDelegateInterceptor.secondResponder application:application didReceiveRemoteNotification:userInfo];
     }
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:)];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveRemoteNotification" object:nil userInfo:@{@"payload": userInfo, @"fgbg": @(SHAppFGBG_Unknown), @"needComplete": @(!customerAppResponse), @"fetchCompletionHandler": completionHandler}];
+    NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+    if (userInfo != nil)
+    {
+        dictUserInfo[@"payload"] = userInfo;
+    }
+    dictUserInfo[@"fgbg"] = @(SHAppFGBG_Unknown);
+    dictUserInfo[@"needComplete"] = @(!customerAppResponse);
+    if (completionHandler)
+    {
+        dictUserInfo[@"fetchCompletionHandler"] = completionHandler;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveRemoteNotification" object:nil userInfo:dictUserInfo];
     if (customerAppResponse)
     {
         [self.appDelegateInterceptor.secondResponder application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
@@ -963,7 +984,21 @@
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
 {
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleActionWithIdentifier:forRemoteNotification:completionHandler:)];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HanleRemoteActionButton" object:nil userInfo:@{@"payload": userInfo, @"actionid": identifier, @"needComplete": @(!customerAppResponse)/*if customer needs, not complete in StreetHawk call but let customer AppDelegate to end it*/, @"completionHandler": completionHandler}];
+    NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+    if (userInfo != nil)
+    {
+        dictUserInfo[@"payload"] = userInfo;
+    }
+    if (identifier != nil)
+    {
+        dictUserInfo[@"actionid"] = identifier;
+    }
+    dictUserInfo[@"needComplete"] = @(!customerAppResponse)/*if customer needs, not complete in StreetHawk call but let customer AppDelegate to end it*/;
+    if (completionHandler)
+    {
+        dictUserInfo[@"completionHandler"] = completionHandler;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandleRemoteActionButton" object:nil userInfo:dictUserInfo];
     if (customerAppResponse)
     {
         [self.appDelegateInterceptor.secondResponder application:application handleActionWithIdentifier:identifier forRemoteNotification:userInfo completionHandler:completionHandler];
@@ -972,7 +1007,14 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveLocalNotification" object:nil userInfo:@{@"notification": notification, @"fgbg": @(SHAppFGBG_Unknown), @"needComplete": @(YES)}];
+    NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+    if (notification != nil)
+    {
+        dictUserInfo[@"notification"] = notification;
+    }
+    dictUserInfo[@"fgbg"] = @(SHAppFGBG_Unknown);
+    dictUserInfo[@"needComplete"] = @(YES);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveLocalNotification" object:nil userInfo:dictUserInfo];
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didReceiveLocalNotification:)])
     {
         [self.appDelegateInterceptor.secondResponder application:application didReceiveLocalNotification:notification];
@@ -982,7 +1024,21 @@
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
 {
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleActionWithIdentifier:forLocalNotification:completionHandler:)];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HanleLocalActionButton" object:nil userInfo:@{@"notification": notification, @"actionid": identifier, @"needComplete": @(!customerAppResponse)/*if customer needs, not complete in StreetHawk call but let customer AppDelegate to end it*/, @"completionHandler": completionHandler}];
+    NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+    if (notification != nil)
+    {
+        dictUserInfo[@"notification"] = notification;
+    }
+    if (identifier != nil)
+    {
+        dictUserInfo[@"actionid"] = identifier;
+    }
+    dictUserInfo[@"needComplete"] = @(!customerAppResponse)/*if customer needs, not complete in StreetHawk call but let customer AppDelegate to end it*/;
+    if (completionHandler)
+    {
+        dictUserInfo[@"completionHandler"] = completionHandler;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandleLocalActionButton" object:nil userInfo:dictUserInfo];
     if (customerAppResponse)
     {
         [self.appDelegateInterceptor.secondResponder application:application handleActionWithIdentifier:identifier forLocalNotification:notification completionHandler:completionHandler];

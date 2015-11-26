@@ -21,9 +21,6 @@
 #import "PushDataForApplication.h" //for use pushData
 #import "SHUtils.h" //for format date utility
 #import "SHPresentDialog.h" //for present modal dialog
-#ifdef SH_FEATURE_NOTIFICATION
-#import "SHApp+Notification.h" //for handlePushDataForAppCallback
-#endif
 #import "SHInstall.h" //for `StreetHawk.currentInstall.suid`
 #import "SHLogger.h" //for send logline
 #import "SHFeedbackViewController.h" //for input feedback comment
@@ -222,23 +219,24 @@
                     {
                         pushData.title = alertTitle;
                     }
-#ifdef SH_FEATURE_NOTIFICATION
-                    [StreetHawk handlePushDataForAppCallback:pushData clickButton:^(SHResult result)
-                     {
-                         switch (result)
-                         {
-                             case SHResult_Accept:
-                                 actionInput();
-                                 break;
-                             case SHResult_Decline:
-                                 [pushData sendPushResult:SHResult_Decline withHandler:nil];
-                                 [self checkNextFeedback];
-                                 break;
-                             default:
-                                 break;
-                         }
-                     }];
-#endif
+                    NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+                    dictUserInfo[@"pushdata"] = pushData;
+                    dictUserInfo[@"clickbutton"] = ^(SHResult result)
+                    {
+                        switch (result)
+                        {
+                            case SHResult_Accept:
+                                actionInput();
+                                break;
+                            case SHResult_Decline:
+                                [pushData sendPushResult:SHResult_Decline withHandler:nil];
+                                [self checkNextFeedback];
+                                break;
+                            default:
+                                break;
+                        }
+                    };
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandlePushData" object:nil userInfo:dictUserInfo];
                 }
             }
             else

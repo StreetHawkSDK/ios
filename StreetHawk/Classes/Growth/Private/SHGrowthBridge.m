@@ -43,6 +43,7 @@
 + (void)increaseGrowthHandler:(NSNotification *)notification
 {
     NSString *url = notification.userInfo[@"url"];
+    NSAssert(url != nil, @"\"url\" in increaseGrowthHandler should not be nil.");
     [[SHGrowth sharedInstance] increaseGrowth:url withHandler:nil];
 }
 

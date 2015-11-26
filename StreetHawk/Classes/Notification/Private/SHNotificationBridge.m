@@ -30,9 +30,9 @@
 + (void)didRegisterUserNotificationHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings`. notification name: SH_PushBridge_DidRegisterUserNotification; user info: @{notificationSettings: <value>}.
 + (void)didReceiveDeviceTokenHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken`. notification name: SH_PushBridge_ReceiveToken_Notification; user info: @{token: <NSData_token>}.
 + (void)receiveRemoteNotificationHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler`. notification name: SH_PushBridge_ReceiveRemoteNotification; user info: @{@"payload": userInfo, @"fgbg": @(SHAppFGBG_Unknown), @"needComplete": @(!customerAppResponse), @"fetchCompletionHandler": completionHandler}.
-+ (void)handleRemoteNotificationActionHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler`. notification name: SH_PushBridge_HanleRemoteActionButton; user info: @{@"payload": userInfo, @"actionid": identifier, @"needComplete": <bool>, @"completionHandler": completionHandler}.
++ (void)handleRemoteNotificationActionHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler`. notification name: SH_PushBridge_HandleRemoteActionButton; user info: @{@"payload": userInfo, @"actionid": identifier, @"needComplete": <bool>, @"completionHandler": completionHandler}.
 + (void)receiveLocalNotificationHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification`. notification name: SH_PushBridge_ReceiveLocalNotification; user info: @{@"notification": notification, @"fgbg": @(SHAppFGBG_Unknown), @"needComplete": @(YES)}.
-+ (void)handleLocalNotificationActionHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler`. notification name: SH_PushBridge_HanleLocalActionButton; user info: @{@"notification": notification, @"actionid": identifier, @"needComplete": <bool>, @"completionHandler": completionHandler}.
++ (void)handleLocalNotificationActionHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler`. notification name: SH_PushBridge_HandleLocalActionButton; user info: @{@"notification": notification, @"actionid": identifier, @"needComplete": <bool>, @"completionHandler": completionHandler}.
 + (void)sendPushResultHandler:(NSNotification *)notification; //for using register callback to send push result. notification name: @"SH_PushBridge_SendResult_Notification"; user info: @{@"pushdata": self, @"result": @(result)};
 + (void)handlePushDataHandler:(NSNotification *)notification; //for handle push data. notification name: SH_PushBridge_HandlePushData; user info: @{@"pushdata": self, @"clickbutton": clickbuttonhandler}.
 
@@ -67,9 +67,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterUserNotificationHandler:) name:@"SH_PushBridge_DidRegisterUserNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveDeviceTokenHandler:) name:@"SH_PushBridge_ReceiveToken_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveRemoteNotificationHandler:) name:@"SH_PushBridge_ReceiveRemoteNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationActionHandler:) name:@"SH_PushBridge_HanleRemoteActionButton" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationActionHandler:) name:@"SH_PushBridge_HandleRemoteActionButton" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotificationHandler:) name:@"SH_PushBridge_ReceiveLocalNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLocalNotificationActionHandler:) name:@"SH_PushBridge_HanleLocalActionButton" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLocalNotificationActionHandler:) name:@"SH_PushBridge_HandleLocalActionButton" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendPushResultHandler:) name:@"SH_PushBridge_SendResult_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushDataHandler:) name:@"SH_PushBridge_HandlePushData" object:nil];
 }
@@ -104,18 +104,21 @@
 + (void)didRegisterUserNotificationHandler:(NSNotification *)notification
 {
     UIUserNotificationSettings *notificationSettings = notification.userInfo[@"notificationSettings"];
+    NSAssert(notificationSettings != nil, @"\"notificationSettings\" in didRegisterUserNotificationHandler should not be nil.");
     [StreetHawk handleUserNotificationSettings:notificationSettings];
 }
 
 + (void)didReceiveDeviceTokenHandler:(NSNotification *)notification
 {
     NSData *deviceToken = notification.userInfo[@"token"];
+    NSAssert(deviceToken != nil, @"\"deviceToken\" in didReceiveDeviceTokenHandler should not be nil.");
     [StreetHawk setApnsDeviceToken:deviceToken];
 }
 
 + (void)receiveRemoteNotificationHandler:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo[@"payload"];
+    NSAssert(userInfo != nil, @"\"userInfo\" in receiveRemoteNotificationHandler should not be nil.");
     SHAppFGBG fgbg = [notification.userInfo[@"fgbg"] intValue];
     BOOL needComplete = [notification.userInfo[@"needComplete"] boolValue];
     [StreetHawk handleRemoteNotification:userInfo treatAppAs:fgbg needComplete:needComplete fetchCompletionHandler:notification.userInfo[@"fetchCompletionHandler"]];
@@ -124,7 +127,9 @@
 + (void)handleRemoteNotificationActionHandler:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo[@"payload"];
+    NSAssert(userInfo != nil, @"\"userInfo\" in handleRemoteNotificationActionHandler should not be nil.");
     NSString *actionIdentifier = notification.userInfo[@"actionid"];
+    NSAssert(actionIdentifier != nil, @"\"actionIdentifier\" in handleRemoteNotificationActionHandler should not be nil.");
     BOOL needComplete = [notification.userInfo[@"needComplete"] boolValue];
     [StreetHawk handleRemoteNotification:userInfo withActionId:actionIdentifier needComplete:needComplete completionHandler:notification.userInfo[@"completionHandler"]];
 }
@@ -132,6 +137,7 @@
 + (void)receiveLocalNotificationHandler:(NSNotification *)notification
 {
     UILocalNotification *localNotification = notification.userInfo[@"notification"];
+    NSAssert(localNotification != nil, @"\"localNotification\" in receiveLocalNotificationHandler should not be nil.");
     SHAppFGBG fgbg = [notification.userInfo[@"fgbg"] intValue];
     BOOL needComplete = [notification.userInfo[@"needComplete"] boolValue];
     [StreetHawk handleLocalNotification:localNotification treatAppAs:fgbg needComplete:needComplete fetchCompletionHandler:nil];
@@ -140,7 +146,9 @@
 + (void)handleLocalNotificationActionHandler:(NSNotification *)notification
 {
     UILocalNotification *localNotification = notification.userInfo[@"notification"];
+    NSAssert(localNotification != nil, @"\"localNotification\" in handleLocalNotificationActionHandler should not be nil.");
     NSString *actionIdentifier = notification.userInfo[@"actionid"];
+    NSAssert(actionIdentifier != nil, @"\"actionIdentifier\" in handleLocalNotificationActionHandler should not be nil.");
     BOOL needComplete = [notification.userInfo[@"needComplete"] boolValue];
     [StreetHawk handleLocalNotification:localNotification withActionId:actionIdentifier needComplete:needComplete completionHandler:notification.userInfo[@"completionHandler"]];
 }
@@ -148,6 +156,7 @@
 + (void)sendPushResultHandler:(NSNotification *)notification
 {
     PushDataForApplication *pushData = notification.userInfo[@"pushdata"];
+    NSAssert(pushData != nil, @"\"pushData\" in sendPushResultHandler should not be nil.");
     SHResult result = [notification.userInfo[@"result"] intValue];
     for (id<ISHCustomiseHandler> callback in StreetHawk.arrayCustomisedHandler)
     {
@@ -161,6 +170,7 @@
 + (void)handlePushDataHandler:(NSNotification *)notification
 {
     PushDataForApplication *pushData = notification.userInfo[@"pushdata"];
+    NSAssert(pushData != nil, @"\"pushData\" in handlePushDataHandler should not be nil.");
     ClickButtonHandler handler = notification.userInfo[@"clickbutton"];
     [StreetHawk handlePushDataForAppCallback:pushData clickButton:handler];
 }

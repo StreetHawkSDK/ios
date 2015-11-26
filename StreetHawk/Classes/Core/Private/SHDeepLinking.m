@@ -198,12 +198,7 @@
         //Requested by Tobias and Anurag, even user is already viewing the page, should still show message box, maybe the message box contains some information that user should read.
         if ([pushData shouldShowConfirmDialog])
         {
-            NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
-            if (pushData != nil)
-            {
-                dictUserInfo[@"pushdata"] = pushData;
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandlePushData" object:nil userInfo:dictUserInfo];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandlePushData" object:nil userInfo:@{@"pushdata": pushData}];
         }
         return YES;  //already visible, not continue to create and show
     }
@@ -283,10 +278,7 @@
     if ([pushData shouldShowConfirmDialog])
     {
         NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
-        if (pushData != nil)
-        {
-            dictUserInfo[@"pushdata"] = pushData;
-        }
+        dictUserInfo[@"pushdata"] = pushData;
         dictUserInfo[@"clickbutton"] = ^(SHResult result)
         {
             if (result == SHResult_Accept)
