@@ -111,7 +111,7 @@
     self.distanceFilter = 10.0f;
     
     //initialize detecting location
-    self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0); //all location set to 0 (means not detected) after restart, not use local cache. It should show real device location, cache has no meaning.
+    self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0); //all location set to 0 (means not detected) after restart, not use local cache. It should show real device location, cache has no meaning. Cache SH_GEOLOCATION_LAT and SH_GEOLOCATION_LNG are also set to (0, 0) when launch.
     self.sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0); //not sent when App launch.
     self.sentGeoLocationTime = 0;  //not update yet
     _geolocationMonitorState = SHGeoLocationMonitorState_Stopped;
