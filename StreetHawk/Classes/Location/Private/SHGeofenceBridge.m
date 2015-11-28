@@ -19,10 +19,12 @@
 //header from StreetHawk
 #import "SHApp+Location.h"
 #import "SHLocationManager.h"
+#import "SHGeofenceStatus.h"
 
 @interface SHGeofenceBridge ()
 
 + (void)createLocationManagerHandler:(NSNotification *)notification;
++ (void)setGeofenceTimestampHandler:(NSNotification *)notification; //handle app_status set geofence timestamp. notification name: SH_LMBridge_SetGeofenceTimeStamp; user info: @{@"timestamp": NONULL(geofenceTimeStamp)}.
 
 @end
 
@@ -35,6 +37,7 @@
     StreetHawk.reportWorkHomeLocationOnly = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createLocationManagerHandler:) name:@"SH_LMBridge_CreateLocationManager" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setGeofenceTimestampHandler:) name:@"SH_LMBridge_SetGeofenceTimeStamp" object:nil];
 }
 
 #pragma mark - private functions
@@ -45,6 +48,12 @@
     {
         StreetHawk.locationManager = [SHLocationManager sharedInstance];  //cannot move to `init` because it starts `startMonitorGeoLocationStandard` when create.
     }
+}
+
++ (void)setGeofenceTimestampHandler:(NSNotification *)notification
+{
+    NSString *timestamp = notification.userInfo[@"timestamp"];
+    [SHGeofenceStatus sharedInstance].geofenceTimeStamp = timestamp;
 }
 
 @end
