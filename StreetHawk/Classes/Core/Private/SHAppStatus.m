@@ -20,9 +20,6 @@
 #import "SHUtils.h" //for SHLog
 #import "SHApp.h" //for `StreetHawk.currentInstall`
 #import "SHLogger.h" //for sending logline
-#ifdef SH_FEATURE_FEED
-#import "SHApp+Feed.h" //for feed
-#endif
 
 #define APPSTATUS_STREETHAWKENABLED         @"APPSTATUS_STREETHAWKENABLED" //whether enable library functions
 #define APPSTATUS_DEFAULT_HOST              @"APPSTATUS_DEFAULT_HOST" //default starting host url
@@ -278,48 +275,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 - (void)setFeedTimeStamp:(NSString *)feedTimeStamp
 {
-#ifdef SH_FEATURE_FEED
-    if (StreetHawk.currentInstall == nil)
-    {
-        return; //not register yet, wait for next time.
-    }
-    if (StreetHawk.newFeedHandler == nil)
-    {
-        return; //no need to continue if user not setup fetch handler
-    }
-    if (!streetHawkIsEnabled())
-    {
-        return;
-    }
-    if (feedTimeStamp != nil && [feedTimeStamp isKindOfClass:[NSString class]])
-    {
-        NSDate *serverTime = shParseDate(feedTimeStamp, 0);
-        if (serverTime != nil)
-        {
-            BOOL needFetch = NO;
-            NSObject *localTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_FEED_FETCH_TIME];
-            if (localTimeVal == nil || ![localTimeVal isKindOfClass:[NSNumber class]])
-            {
-                needFetch = YES;  //local never fetched, do fetch.
-            }
-            else
-            {
-                NSDate *localTime = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSNumber *)localTimeVal doubleValue]];
-                if ([localTime compare:serverTime] == NSOrderedAscending)
-                {
-                    needFetch = YES;  //local fetched, but too old, do fetch.
-                }
-            }
-            if (needFetch)
-            {
-                //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setFeedTimeStamp` again. Customer's code controls feed function, they can do fetch anytime want.
-                [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:APPSTATUS_FEED_FETCH_TIME];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                StreetHawk.newFeedHandler(); //just notice user, not do fetch actually.
-            }
-        }
-    }
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SetFeedTimeStamp" object:nil userInfo:@{@"timestamp": NONULL(feedTimeStamp)}];
 }
 
 - (BOOL)reregister

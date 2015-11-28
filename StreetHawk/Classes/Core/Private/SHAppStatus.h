@@ -18,8 +18,6 @@
 #import <Foundation/Foundation.h>
 #import "SHRequest.h" //for enum SHHostVersion
 
-#define APPSTATUS_FEED_FETCH_TIME           @"APPSTATUS_FEED_FETCH_TIME"  //last successfully fetch feed time
-
 /**
  Notification sent when server returns `app_status` different from local. Its user info is empty, read singletone `[SHAppStatus sharedInstance]` to get current situation.
  */

@@ -1153,12 +1153,8 @@
             [StreetHawk tagString:crashCurrent forKey:@"sh_module_crash"];
             [[NSUserDefaults standardUserDefaults] setObject:crashCurrent forKey:@"sh_module_crash"];
         }
-        NSString *feedsCurrent = nil;
-#ifdef SH_FEATURE_FEED
-        feedsCurrent = @"true";
-#else
-        feedsCurrent = @"false";
-#endif
+        Class feedBridge = NSClassFromString(@"SHFeedBridge");
+        NSString *feedsCurrent = (feedBridge == nil) ? @"false" : @"true";
         NSString *feedsSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_feeds"];
         if ([feedsCurrent compare:feedsSent] != NSOrderedSame)
         {

@@ -18,7 +18,7 @@
 #import "SHApp+Feed.h"
 //header from StreetHawk
 #import "SHRequest.h" //for sending request
-#import "SHAppStatus.h" //for APPSTATUS_FEED_FETCH_TIME
+#import "SHFeedBridge.h" //for APPSTATUS_FEED_FETCH_TIME
 #import "SHUtils.h" //for streetHawkIsEnabled
 #import "SHLogger.h" //for sending logline
 //header from System

@@ -663,9 +663,7 @@
                     //check "feed"
                     if ([dictStatus.allKeys containsObject:@"feed"])
                     {
-#ifdef SH_FEATURE_FEED
                         [SHAppStatus sharedInstance].feedTimeStamp = dictStatus[@"feed"];
-#endif
                     }
                     //check "reregister"
                     if ([dictStatus.allKeys containsObject:@"reregister"])
