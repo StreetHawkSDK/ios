@@ -20,7 +20,7 @@
 #import "SHGrowth.h" //for SHGrowth instance
 #import "SHInstall.h" //for install notification names
 
-@interface SHGrowthBridge (private)
+@interface SHGrowthBridge ()
 
 + (void)increaseGrowthHandler:(NSNotification *)notification; //for handle increase growth. notification name: SH_GrowthBridge_Increase_Notification; user info: @{url: string_url}.
 

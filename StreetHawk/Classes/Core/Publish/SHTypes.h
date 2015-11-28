@@ -72,5 +72,7 @@ typedef enum SHDevelopmentPlatform SHDevelopmentPlatform;
 #define SH_GEOLOCATION_LNG      @"SH_GEOLOCATION_LNG"
 //For get Beacon module's bluetooth status, before use it must have notification "SH_LMBridge_UpdateBluetoothStatus" to update the value.
 #define SH_BEACON_BLUETOOTH     @"SH_BEACON_BLUETOOTH"
+//For get Beacon module's iBeacon support status, before use it must have notification "SH_LMBridge_UpdateiBeaconStatus" to update the value.
+#define SH_BEACON_iBEACON       @"SH_BEACON_iBEACON"
 
 #endif

@@ -177,36 +177,39 @@ NSString * const SHInstallNotification_kError = @"Error";
             [params addObject:[identifierForVendor UUIDString]];
         }
     }
-#ifdef SH_FEATURE_IBEACON
-    switch (StreetHawk.locationManager.iBeaconSupportState)
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateiBeaconStatus" object:nil];
+    int iBeaconSupportStatus = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_iBEACON] intValue];
+    switch (iBeaconSupportStatus)
     {
-        case SHiBeaconState_Unknown:
+        case 0/*SHiBeaconState_Unknown*/:
         {
             //not get accurate iBeacon state, do nothing.
         }
             break;
-        case SHiBeaconState_Support:
+        case 1/*SHiBeaconState_Support*/:
         {
             [params addObject:@"ibeacons"];
             [params addObject:@"true"];
         }
             break;
-        case SHiBeaconState_NotSupport:
+        case 2/*SHiBeaconState_NotSupport*/:
         {
             [params addObject:@"ibeacons"];
             [params addObject:@"false"];
         }
             break;
+        case 3/*SHiBeaconState_Ignore*/:
+        {
+            [params addObject:@"ibeacons"]; //if remove streetHawk/Beacons module, refresh otherwise server still treat as it supports iBeacons.
+            [params addObject:@"false"];
+        }
+            break;
         default:
         {
-            NSAssert(NO, @"Unexpected iBeacon state: %d.", StreetHawk.locationManager.iBeaconSupportState);
+            NSAssert(NO, @"Unexpected iBeacon state: %d.", iBeaconSupportStatus);
         }
             break;
     }
-#else
-    [params addObject:@"ibeacons"]; //if remove streetHawk/Beacons module, refresh otherwise server still treat as it supports iBeacons.
-    [params addObject:@"false"];
-#endif
     switch (shAppMode())
     {
         case SHAppMode_AppStore:

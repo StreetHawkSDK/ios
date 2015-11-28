@@ -20,7 +20,7 @@
 #import "SHApp+Location.h"
 #import "SHLocationManager.h"
 
-@interface SHGeofenceBridge (private)
+@interface SHGeofenceBridge ()
 
 + (void)createLocationManagerHandler:(NSNotification *)notification;
 

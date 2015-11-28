@@ -22,7 +22,7 @@
 #import "SHNotificationHandler.h" //for create instance
 #import "SHRequest.h" //for SMART_PUSH_PAYLOAD definition
 
-@interface SHNotificationBridge (private)
+@interface SHNotificationBridge ()
 
 + (void)setBadgeHandler:(NSNotification *)notification;  //Set Application badge. notification name: SH_PushBridge_SetBadge_Notification; user info: @{badge, <int_number>}.
 + (void)registerNotificationHandler:(NSNotification *)notification; //Register for Apple's notification. notification name: SH_PushBridge_Register_Notification; user info: empty.

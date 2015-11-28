@@ -225,6 +225,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:SH_GEOLOCATION_LAT];
         [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:SH_GEOLOCATION_LNG];
         [[NSUserDefaults standardUserDefaults] setObject:@(0)/*CBCentralManagerStateUnknown*/ forKey:SH_BEACON_BLUETOOTH];
+        [[NSUserDefaults standardUserDefaults] setObject:@(3)/*SHiBeaconState_Ignore*/ forKey:SH_BEACON_iBEACON];
         [[NSUserDefaults standardUserDefaults] synchronize];
         //Then continue normal code.
         self.isDebugMode = NO;
@@ -1496,9 +1497,9 @@
                                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:shAppMode()] forKey:SentInstall_Mode];
                                    [[NSUserDefaults standardUserDefaults] setObject:shGetCarrierName() forKey:SentInstall_Carrier];
                                    [[NSUserDefaults standardUserDefaults] setObject:[UIDevice currentDevice].systemVersion forKey:SentInstall_OSVersion];
-#ifdef SH_FEATURE_IBEACON
-                                   [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:StreetHawk.locationManager.iBeaconSupportState] forKey:SentInstall_IBeacon];
-#endif
+                                   [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateiBeaconStatus" object:nil];
+                                   int iBeaconSupportStatus = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_iBEACON] intValue];
+                                   [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:iBeaconSupportStatus] forKey:SentInstall_IBeacon];
                                    [[NSUserDefaults standardUserDefaults] synchronize];
                                    NSDictionary *userInfo = @{SHInstallNotification_kInstall: self.currentInstall};
                                    [[NSNotificationCenter defaultCenter] postNotificationName:SHInstallUpdateSuccessNotification object:self userInfo:userInfo];
@@ -1530,9 +1531,9 @@
                                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:shAppMode()] forKey:SentInstall_Mode];
                                    [[NSUserDefaults standardUserDefaults] setObject:shGetCarrierName() forKey:SentInstall_Carrier];
                                    [[NSUserDefaults standardUserDefaults] setObject:[UIDevice currentDevice].systemVersion forKey:SentInstall_OSVersion];
-#ifdef SH_FEATURE_IBEACON
-                                   [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:StreetHawk.locationManager.iBeaconSupportState] forKey:SentInstall_IBeacon];
-#endif
+                                   [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateiBeaconStatus" object:nil];
+                                   int iBeaconSupportStatus = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_iBEACON] intValue];
+                                   [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:iBeaconSupportStatus] forKey:SentInstall_IBeacon];
                                    [[NSUserDefaults standardUserDefaults] synchronize];
                                    NSDictionary *userInfo = @{SHInstallNotification_kInstall: self.currentInstall};
                                    [[NSNotificationCenter defaultCenter] postNotificationName:SHInstallRegistrationSuccessNotification object:self userInfo:userInfo];
@@ -1559,9 +1560,7 @@ NSString *SentInstall_ShVersion = @"SentInstall_ShVersion";
 NSString *SentInstall_Mode = @"SentInstall_Mode";
 NSString *SentInstall_Carrier = @"SentInstall_Carrier";
 NSString *SentInstall_OSVersion = @"SentInstall_OSVersion";
-#ifdef SH_FEATURE_IBEACON
 NSString *SentInstall_IBeacon = @"SentInstall_IBeacon";
-#endif
 
 -(BOOL)checkInstallChangeForLaunch
 {
@@ -1570,22 +1569,26 @@ NSString *SentInstall_IBeacon = @"SentInstall_IBeacon";
     NSString *sentShVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_ShVersion];
     NSString *sentCarrier = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_Carrier];
     NSString *sentOsVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_OSVersion];
-#ifdef SH_FEATURE_IBEACON
-    SHiBeaconState sentiBeacon = [[[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_IBeacon] intValue];
-    SHiBeaconState currentiBeacon = StreetHawk.locationManager.iBeaconSupportState;
-    return ((sentAppKey != nil && sentAppKey.length > 0 && ![sentAppKey isEqualToString:StreetHawk.appKey])
-            || (sentClientVersion != nil && sentClientVersion.length > 0 && ![sentClientVersion isEqualToString:StreetHawk.clientVersion])
-            || (sentShVersion != nil && sentShVersion.length > 0 && ![sentShVersion isEqualToString:StreetHawk.version])
-            || (sentCarrier != nil && sentCarrier.length > 0 && ![sentCarrier isEqualToString:shGetCarrierName()])
-            || (sentOsVersion != nil && sentOsVersion.length > 0 && ![sentOsVersion isEqualToString:[UIDevice currentDevice].systemVersion])
-            || (sentiBeacon == SHiBeaconState_Unknown)/*sent is unknown, update install and refresh sent again*/ || (currentiBeacon != SHiBeaconState_Unknown && sentiBeacon != currentiBeacon/*current change*/));
-#else
-    return ((sentAppKey != nil && sentAppKey.length > 0 && ![sentAppKey isEqualToString:StreetHawk.appKey])
-            || (sentClientVersion != nil && sentClientVersion.length > 0 && ![sentClientVersion isEqualToString:StreetHawk.clientVersion])
-            || (sentShVersion != nil && sentShVersion.length > 0 && ![sentShVersion isEqualToString:StreetHawk.version])
-            || (sentCarrier != nil && sentCarrier.length > 0 && ![sentCarrier isEqualToString:shGetCarrierName()])
-            || (sentOsVersion != nil && sentOsVersion.length > 0 && ![sentOsVersion isEqualToString:[UIDevice currentDevice].systemVersion]));
-#endif
+    int sentiBeacon = [[[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_IBeacon] intValue];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateiBeaconStatus" object:nil];
+    int currentiBeacon = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_iBEACON] intValue];
+    if (currentiBeacon != 3/*SHiBeaconState_Ignore*/)
+    {
+        return ((sentAppKey != nil && sentAppKey.length > 0 && ![sentAppKey isEqualToString:StreetHawk.appKey])
+                || (sentClientVersion != nil && sentClientVersion.length > 0 && ![sentClientVersion isEqualToString:StreetHawk.clientVersion])
+                || (sentShVersion != nil && sentShVersion.length > 0 && ![sentShVersion isEqualToString:StreetHawk.version])
+                || (sentCarrier != nil && sentCarrier.length > 0 && ![sentCarrier isEqualToString:shGetCarrierName()])
+                || (sentOsVersion != nil && sentOsVersion.length > 0 && ![sentOsVersion isEqualToString:[UIDevice currentDevice].systemVersion])
+                || (sentiBeacon == 0/*SHiBeaconState_Unknown*/)/*sent is unknown, update install and refresh sent again*/ || (currentiBeacon != 0/*SHiBeaconState_Unknown*/ && sentiBeacon != currentiBeacon/*current change*/));
+    }
+    else
+    {
+        return ((sentAppKey != nil && sentAppKey.length > 0 && ![sentAppKey isEqualToString:StreetHawk.appKey])
+                || (sentClientVersion != nil && sentClientVersion.length > 0 && ![sentClientVersion isEqualToString:StreetHawk.clientVersion])
+                || (sentShVersion != nil && sentShVersion.length > 0 && ![sentShVersion isEqualToString:StreetHawk.version])
+                || (sentCarrier != nil && sentCarrier.length > 0 && ![sentCarrier isEqualToString:shGetCarrierName()])
+                || (sentOsVersion != nil && sentOsVersion.length > 0 && ![sentOsVersion isEqualToString:[UIDevice currentDevice].systemVersion]));
+    }
 }
 
 #pragma mark - private functions

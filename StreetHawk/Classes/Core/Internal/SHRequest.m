@@ -653,9 +653,7 @@
                     //check "ibeacon"
                     if ([dictStatus.allKeys containsObject:@"ibeacon"])
                     {
-#ifdef SH_FEATURE_IBEACON
                         [SHAppStatus sharedInstance].iBeaconTimeStamp = dictStatus[@"ibeacon"]; //it may be nil
-#endif
                     }
                     //check "geofences"
                     if ([dictStatus.allKeys containsObject:@"geofences"])

@@ -22,7 +22,7 @@
 #import "SHLogger.h" //for sendLogForCode
 #import "SHUtils.h" //for shSerializeObjToJson
 
-@interface SHLocationBridge (private)
+@interface SHLocationBridge ()
 
 + (void)createLocationManagerHandler:(NSNotification *)notification;
 + (void)startMonitorGeoLocationHandler:(NSNotification *)notification; //for start location monitor for lat/lng. notification name: SH_LMBridge_StartMonitorGeoLocation; user info: empty.

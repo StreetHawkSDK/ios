@@ -46,15 +46,19 @@ enum SHiBeaconState
     /**
      Bluetooth state not determined yet, unknown at this moment.
      */
-    SHiBeaconState_Unknown,
+    SHiBeaconState_Unknown = 0,
     /**
      Current device is ready to use iBeacon, means it's iOS 7.0+, location service enabled, Bluetooth on.
      */
-    SHiBeaconState_Support,
+    SHiBeaconState_Support = 1,
     /**
      Current device not ready to use iBeacon, one condition not match.
      */
-    SHiBeaconState_NotSupport,
+    SHiBeaconState_NotSupport = 2,
+    /**
+     Not have Beacon module, ignore this statue.
+     */
+    SHiBeaconState_Ignore = 3,
 };
 typedef enum SHiBeaconState SHiBeaconState;
 
@@ -207,8 +211,6 @@ A core class to monitor location change. By default process of StreetHawk SDK, i
  */
 - (void)stopMonitorRegion:(CLRegion *)region;
 
-#ifdef SH_FEATURE_IBEACON
-
 /**
  Start to range one iBeacon region.
  
@@ -224,7 +226,5 @@ A core class to monitor location change. By default process of StreetHawk SDK, i
  Stop monitoring one iBeacon region. Nothing happen even the iBeacon is not monitoring now. 
  */
 - (void)stopRangeiBeaconRegion:(CLBeaconRegion *)iBeaconRegion __OSX_AVAILABLE_STARTING(__MAC_NA,__IPHONE_7_0);
-
-#endif
 
 @end

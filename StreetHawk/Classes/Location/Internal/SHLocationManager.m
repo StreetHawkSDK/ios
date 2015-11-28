@@ -552,8 +552,6 @@
     }
 }
 
-#ifdef SH_FEATURE_IBEACON
-
 - (BOOL)startRangeiBeaconRegion:(CLBeaconRegion *)iBeaconRegion
 {
     if (!streetHawkIsEnabled())
@@ -616,8 +614,6 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:SHLMStopRangeiBeaconRegionNotification object:self userInfo:userInfo];
     }
 }
-
-#endif
 
 #pragma mark - private functions
 
@@ -908,8 +904,6 @@
     [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
-#ifdef SH_FEATURE_IBEACON
-
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
     if (!streetHawkIsEnabled())
@@ -941,8 +935,6 @@
     NSNotification *notification = [NSNotification notificationWithName:SHLMRangeiBeaconFailNotification object:self userInfo:userInfo];
     [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
-
-#endif
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
