@@ -64,4 +64,13 @@ typedef enum SHDevelopmentPlatform SHDevelopmentPlatform;
  */
 #define NONULL(str)     ((str && str != (id)[NSNull null]) ? (str) : @"")
 
+#define REGULAR_HEARTBEAT_LOGTIME       @"REGULAR_HEARTBEAT_LOGTIME"
+#define REGULAR_LOCATION_LOGTIME        @"REGULAR_LOCATION_LOGTIME"
+
+//NSUserDefaults value for passing value between modules. It's not used as local cache for location, and before use it must have notification "SH_LMBridge_UpdateGeoLocation" to update the value.
+#define SH_GEOLOCATION_LAT      @"SH_GEOLOCATION_LAT"
+#define SH_GEOLOCATION_LNG      @"SH_GEOLOCATION_LNG"
+//For get Beacon module's bluetooth status, before use it must have notification "SH_LMBridge_UpdateBluetoothStatus" to update the value.
+#define SH_BEACON_BLUETOOTH     @"SH_BEACON_BLUETOOTH"
+
 #endif

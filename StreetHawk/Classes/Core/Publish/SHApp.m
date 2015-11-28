@@ -224,6 +224,7 @@
         //New launch makes lat/lng to be (0, 0), as must have location bridge to update them.
         [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:SH_GEOLOCATION_LAT];
         [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:SH_GEOLOCATION_LNG];
+        [[NSUserDefaults standardUserDefaults] setObject:@(0)/*CBCentralManagerStateUnknown*/ forKey:SH_BEACON_BLUETOOTH];
         [[NSUserDefaults standardUserDefaults] synchronize];
         //Then continue normal code.
         self.isDebugMode = NO;

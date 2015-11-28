@@ -19,7 +19,7 @@
 //header from StreetHawk
 #import "SHApp+Location.h"
 #import "SHLocationManager.h"
-#import "SHLogger.h" //for REGULAR_LOCATION_LOGTIME
+#import "SHLogger.h" //for sendLogForCode
 #import "SHUtils.h" //for shSerializeObjToJson
 
 @interface SHLocationBridge (private)
@@ -29,6 +29,7 @@
 + (void)stopMonitorGeoLocationHandler:(NSNotification *)notification; //for stop location monitor for lat/lng. notification name: SH_LMBridge_StopMonitorGeoLocation; user info: empty.
 + (void)regularTaskHandler:(NSNotification *)notification; //for sending regular logline for heart beat and more location. notification name: SH_LMBridge_RegularTask; user info: {@"needHeartbeatLog": <bool>, @"needComplete": <bool>, @"completionHandler": <completionHandler>}.
 + (void)updateGeolocationCacheHandler:(NSNotification *)notification; //for updating local NSUserDefaults to pass values between modules, use notification to update when necessary, not refresh local cache too often. notification name: SH_LMBridge_UpdateGeoLocation; user info: empty.
++ (void)sendGeolocationUpdateHandler:(NSNotification *)notification; //for sending logline 20. notification name: SH_LMBridge_SendGeoLocationLogline; user info: @{comment: <json_comment>}.
 
 @end
 
@@ -45,6 +46,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopMonitorGeoLocation) name:@"SH_LMBridge_StopMonitorGeoLocation" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(regularTaskHandler:) name:@"SH_LMBridge_RegularTask" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGeolocationCacheHandler:) name:@"SH_LMBridge_UpdateGeoLocation" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGeolocationUpdateHandler:) name:@"SH_LMBridge_SendGeoLocationLogline" object:nil];
 }
 
 #pragma mark - private functions
@@ -142,6 +144,13 @@ typedef void (^RegularTaskCompletionHandler)(UIBackgroundFetchResult);
     [[NSUserDefaults standardUserDefaults] setObject:@(StreetHawk.locationManager.currentGeoLocation.latitude) forKey:SH_GEOLOCATION_LAT];
     [[NSUserDefaults standardUserDefaults] setObject:@(StreetHawk.locationManager.currentGeoLocation.longitude) forKey:SH_GEOLOCATION_LNG];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (void)sendGeolocationUpdateHandler:(NSNotification *)notification
+{
+    NSString *comment = notification.userInfo[@"comment"];
+    NSAssert(comment != nil, @"\"comment\" in sendGeolocationUpdateHandler should not be nil.");
+    [StreetHawk sendLogForCode:LOG_CODE_LOCATION_GEO withComment:comment];
 }
 
 @end

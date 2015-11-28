@@ -59,13 +59,6 @@
 #define LOG_RESULT_LATER        0
 #define LOG_RESULT_ACCEPT       1
 
-#define REGULAR_HEARTBEAT_LOGTIME       @"REGULAR_HEARTBEAT_LOGTIME"
-#define REGULAR_LOCATION_LOGTIME        @"REGULAR_LOCATION_LOGTIME"
-
-//NSUserDefaults value for passing value between modules. It's not used as local cache for location, and before use it must have notification "SH_LMBridge_UpdateGeoLocation" to update the value.
-#define SH_GEOLOCATION_LAT      @"SH_GEOLOCATION_LAT"
-#define SH_GEOLOCATION_LNG      @"SH_GEOLOCATION_LNG"
-
 /**
  This is responsible for logging App's events and send to server. The events are logged in local database, once they have enough number (LOG_UPLOAD_INTERVAL (50)), they are uploaded to server automatically. Some special events upload local to server immediatly regardless local number. To record an event, the sample code is:
  

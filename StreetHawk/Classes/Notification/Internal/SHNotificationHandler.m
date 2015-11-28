@@ -24,10 +24,8 @@
 #import "SHAppStatus.h" //for 8003 sendAppStatusCheckRequest
 #import "SHDeepLinking.h" //for 8004 launch page
 #import "SHFeedbackQueue.h" //for 8010 feedback push
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-#import "SHLocationManager.h" //for 8012 enable bluetooth push
-#endif
 #import "SHUtils.h" //for shLocalizedString
+#import "SHTypes.h" //for SH_BEACON_BLUETOOTH
 //header from System
 #import <CoreBluetooth/CoreBluetooth.h>
 //header from Third-party
@@ -782,15 +780,13 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     //action handler has done, start to invoke.
     if (pushData.action == SHAction_EnableBluetooth)  //8012 is to warn user to turn on Bluetooth for iBeacon, not show it if: 1) not iOS 7.0+; 2) Bluetooth is already turn on.
     {
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-        double iOSVersion = [[UIDevice currentDevice].systemVersion doubleValue];
-        if ((iOSVersion < 7.0) ||
-            (pushData.isAppOnForeground/*is App from BG system setting maybe modified but bluetoothState is not updated on time yet. A good thing is it goes to direct action, and CBCentralManager can decide show dialog or not*/ && StreetHawk.locationManager.bluetoothState == CBCentralManagerStatePoweredOn/*if App in FG this is accurate*/))
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateBluetoothStatus" object:nil];
+        NSInteger bluetoothStatus = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_BLUETOOTH] integerValue];
+        if ((pushData.isAppOnForeground/*is App from BG system setting maybe modified but bluetoothState is not updated on time yet. A good thing is it goes to direct action, and CBCentralManager can decide show dialog or not*/ && bluetoothStatus == CBCentralManagerStatePoweredOn/*if App in FG this is accurate*/))
         {
             [pushData sendPushResult:SHResult_Accept withHandler:nil];
             return YES;  //stop handle
         }
-#endif
     }
     //start process
     if ((pushData.action == SHAction_SimplePrompt) //simple promote may show dialog even from BG.

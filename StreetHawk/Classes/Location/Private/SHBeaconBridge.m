@@ -19,10 +19,12 @@
 //header from StreetHawk
 #import "SHApp+Location.h"
 #import "SHLocationManager.h"
+#import "SHTypes.h" //for SH_BEACON_BLUETOOTH
 
 @interface SHBeaconBridge (private)
 
 + (void)createLocationManagerHandler:(NSNotification *)notification;
++ (void)updateBluetoothStatusHandler:(NSNotification *)notification; //update bluetooth status to NSUserDefaults "SH_BEACON_BLUETOOTH". notification name: SH_LMBridge_UpdateBluetoothStatus; user info: empty.
 
 @end
 
@@ -35,6 +37,7 @@
     StreetHawk.reportWorkHomeLocationOnly = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createLocationManagerHandler:) name:@"SH_LMBridge_CreateLocationManager" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBluetoothStatusHandler:) name:@"SH_LMBridge_UpdateBluetoothStatus" object:nil];
 }
 
 #pragma mark - private functions
@@ -45,6 +48,12 @@
     {
         StreetHawk.locationManager = [SHLocationManager sharedInstance];  //cannot move to `init` because it starts `startMonitorGeoLocationStandard` when create.
     }
+}
+
++ (void)updateBluetoothStatusHandler:(NSNotification *)notification
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(StreetHawk.locationManager.bluetoothState) forKey:SH_BEACON_BLUETOOTH];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end
