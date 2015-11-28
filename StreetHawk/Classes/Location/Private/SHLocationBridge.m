@@ -19,10 +19,16 @@
 //header from StreetHawk
 #import "SHApp+Location.h"
 #import "SHLocationManager.h"
+#import "SHLogger.h" //for REGULAR_LOCATION_LOGTIME
+#import "SHUtils.h" //for shSerializeObjToJson
 
 @interface SHLocationBridge (private)
 
 + (void)createLocationManagerHandler:(NSNotification *)notification;
++ (void)startMonitorGeoLocationHandler:(NSNotification *)notification; //for start location monitor for lat/lng. notification name: SH_LMBridge_StartMonitorGeoLocation; user info: empty.
++ (void)stopMonitorGeoLocationHandler:(NSNotification *)notification; //for stop location monitor for lat/lng. notification name: SH_LMBridge_StopMonitorGeoLocation; user info: empty.
++ (void)regularTaskHandler:(NSNotification *)notification; //for sending regular logline for heart beat and more location. notification name: SH_LMBridge_RegularTask; user info: {@"needHeartbeatLog": <bool>, @"needComplete": <bool>, @"completionHandler": <completionHandler>}.
++ (void)updateGeolocationCacheHandler:(NSNotification *)notification; //for updating local NSUserDefaults to pass values between modules, use notification to update when necessary, not refresh local cache too often. notification name: SH_LMBridge_UpdateGeoLocation; user info: empty.
 
 @end
 
@@ -35,6 +41,10 @@
     StreetHawk.reportWorkHomeLocationOnly = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createLocationManagerHandler:) name:@"SH_LMBridge_CreateLocationManager" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startMonitorGeoLocationHandler:) name:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopMonitorGeoLocation) name:@"SH_LMBridge_StopMonitorGeoLocation" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(regularTaskHandler:) name:@"SH_LMBridge_RegularTask" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGeolocationCacheHandler:) name:@"SH_LMBridge_UpdateGeoLocation" object:nil];
 }
 
 #pragma mark - private functions
@@ -45,6 +55,93 @@
     {
         StreetHawk.locationManager = [SHLocationManager sharedInstance];  //cannot move to `init` because it starts `startMonitorGeoLocationStandard` when create.
     }
+}
+
++ (void)startMonitorGeoLocationHandler:(NSNotification *)notification
+{
+    [StreetHawk.locationManager startMonitorGeoLocationStandard:(!StreetHawk.reportWorkHomeLocationOnly && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)];
+}
+
++ (void)stopMonitorGeoLocationHandler:(NSNotification *)notification
+{
+    [StreetHawk.locationManager stopMonitorGeoLocation];
+}
+
+typedef void (^RegularTaskCompletionHandler)(UIBackgroundFetchResult);
+
++ (void)regularTaskHandler:(NSNotification *)notification
+{
+    BOOL needHeartbeatLog = [notification.userInfo[@"needHeartbeatLog"] boolValue];
+    BOOL needComplete = [notification.userInfo[@"needComplete"] boolValue];
+    RegularTaskCompletionHandler completionHandler = notification.userInfo[@"completionHandler"];
+    BOOL needLocationLog = ([SHLocationManager locationServiceEnabledForApp:NO/*must allowed location already*/] && StreetHawk.locationManager.currentGeoLocation.latitude != 0 && StreetHawk.locationManager.currentGeoLocation.longitude != 0); //log current geo location if location service is enabled and already detect location.
+    if (needLocationLog)
+    {
+        NSObject *lastPostLocationLogsVal = [[NSUserDefaults standardUserDefaults] objectForKey:REGULAR_LOCATION_LOGTIME];
+        if (lastPostLocationLogsVal != nil && [lastPostLocationLogsVal isKindOfClass:[NSNumber class]])
+        {
+            NSTimeInterval lastPostLocationLogs = [(NSNumber *)lastPostLocationLogsVal doubleValue];
+            if ([[NSDate date] timeIntervalSinceReferenceDate] - lastPostLocationLogs < 60*60) //more location time interval is 1 hour
+            {
+                needLocationLog = NO;
+            }
+        }
+    }
+    if (!needHeartbeatLog && !needLocationLog) //nothing to do
+    {
+        if (needComplete && completionHandler != nil)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionHandler(UIBackgroundFetchResultNewData);
+            });
+        }
+    }
+    else if (needHeartbeatLog && needLocationLog)  //send both
+    {
+        NSDictionary *dictLoc = @{@"lat": @(StreetHawk.locationManager.currentGeoLocation.latitude), @"lng": @(StreetHawk.locationManager.currentGeoLocation.longitude)};
+        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_MORE withComment:shSerializeObjToJson(dictLoc)];
+        [StreetHawk sendLogForCode:LOG_CODE_HEARTBEAT withComment:@"Heart beat." forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
+         {
+             if (needComplete && completionHandler != nil)
+             {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     completionHandler(UIBackgroundFetchResultNewData);
+                 });
+             }
+         }];
+    }
+    else if (needHeartbeatLog)  //only send heart beat
+    {
+        [StreetHawk sendLogForCode:LOG_CODE_HEARTBEAT withComment:@"Heart beat." forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
+         {
+             if (needComplete && completionHandler != nil)
+             {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     completionHandler(UIBackgroundFetchResultNewData);
+                 });
+             }
+         }];
+    }
+    else  //only send more location
+    {
+        NSDictionary *dictLoc = @{@"lat": @(StreetHawk.locationManager.currentGeoLocation.latitude), @"lng": @(StreetHawk.locationManager.currentGeoLocation.longitude)};
+        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_MORE withComment:shSerializeObjToJson(dictLoc) forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
+         {
+             if (needComplete && completionHandler != nil)
+             {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     completionHandler(UIBackgroundFetchResultNewData);
+                 });
+             }
+         }];
+    }
+}
+
++ (void)updateGeolocationCacheHandler:(NSNotification *)notification
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(StreetHawk.locationManager.currentGeoLocation.latitude) forKey:SH_GEOLOCATION_LAT];
+    [[NSUserDefaults standardUserDefaults] setObject:@(StreetHawk.locationManager.currentGeoLocation.longitude) forKey:SH_GEOLOCATION_LNG];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

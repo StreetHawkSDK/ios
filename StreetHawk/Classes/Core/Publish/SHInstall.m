@@ -21,9 +21,6 @@
 #import "SHLogger.h" //for sending logline
 #import "SHRequest.h" //for sending register request
 #import "SHUtils.h" //for shParseDate
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-#import "SHApp+Location.h"
-#endif
 #ifdef SH_FEATURE_IBEACON
 #import "SHLocationManager.h" //for check iBeacon status
 #endif

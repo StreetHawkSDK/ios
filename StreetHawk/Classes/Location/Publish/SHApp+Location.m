@@ -98,15 +98,11 @@ int const SHLocation_BG_Distance = 500;
             [[NSUserDefaults standardUserDefaults] setBool:isLocationServiceEnabled forKey:ENABLE_LOCATION_SERVICE];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [StreetHawk.locationManager requestPermissionSinceiOS8];
-#ifdef SH_FEATURE_LATLNG
-            [StreetHawk.locationManager startMonitorGeoLocationStandard:([UIApplication sharedApplication].applicationState == UIApplicationStateActive)];
-#endif
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
         }
         else
         {
-#ifdef SH_FEATURE_LATLNG
-            [StreetHawk.locationManager stopMonitorGeoLocation];
-#endif
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StopMonitorGeoLocation" object:nil];
             //if disable update after take effect, otherwise above function will ignore it.
             [[NSUserDefaults standardUserDefaults] setBool:isLocationServiceEnabled forKey:ENABLE_LOCATION_SERVICE];
             [[NSUserDefaults standardUserDefaults] synchronize];
@@ -124,9 +120,7 @@ int const SHLocation_BG_Distance = 500;
 - (void)setReportWorkHomeLocationOnly:(BOOL)reportWorkHomeLocationOnly
 {
     objc_setAssociatedObject(self, @selector(reportWorkHomeLocationOnly), [NSNumber numberWithBool:reportWorkHomeLocationOnly], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-#ifdef SH_FEATURE_LATLNG
-    [self.locationManager startMonitorGeoLocationStandard:(!reportWorkHomeLocationOnly && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)]; //must use self, cannot use `StreetHawk` as it's used in `init`, otherwise cause dead loop.
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
 }
 
 - (SHLocationManager *)locationManager

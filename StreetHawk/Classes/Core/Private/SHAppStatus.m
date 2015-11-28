@@ -17,9 +17,6 @@
 
 #import "SHAppStatus.h"
 //header from StreetHawk
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-#import "SHLocationManager.h" //for SHLMNotification defines
-#endif
 #import "SHUtils.h" //for SHLog
 #import "SHApp.h" //for `StreetHawk.currentInstall`
 #import "SHLogger.h" //for sending logline

@@ -18,9 +18,6 @@
 #import "SHLogger.h"
 //header from StreetHawk
 #import "SHAppStatus.h" //for `uploadLocationChange`
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-#import "SHLocationManager.h" //for get lat/lng
-#endif
 #import "SHApp.h" //for register install
 #import "SHUtils.h" //for streetHawkIsEnabled
 
@@ -196,13 +193,9 @@ enum
         //session_id must be set for: install_session, install_view, install_enter_exit_view, install_fg_bg; for other log lines it can be null.
         BOOL requireSession = (code == LOG_CODE_APP_LAUNCH) || (code == LOG_CODE_APP_VISIBLE) || (code == LOG_CODE_APP_INVISIBLE) || (code == LOG_CODE_APP_COMPLETE) || (code == LOG_CODE_VIEW_ENTER) || (code == LOG_CODE_VIEW_EXIT) || (code == LOG_CODE_VIEW_COMPLETE);
         NSInteger session = (isAppBG && !requireSession) ? 0/*App in BG and not forcely require session id, use 0, later change to NULL*/ : (self.fgbgSession > 0 ? self.fgbgSession : 1/*Phonegap first launch "app did finish launch" delay 2 second, make fgbgSession=0, but enter view called and log null for session_id.*/);
-#ifdef SH_FEATURE_LATLNG
-        double lat_deprecate = StreetHawk.locationManager.currentGeoLocation.latitude;
-        double lng_deprecate = StreetHawk.locationManager.currentGeoLocation.longitude;
-#else
-        double lat_deprecate = 0;
-        double lng_deprecate = 0;
-#endif
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
+        double lat_deprecate = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
+        double lng_deprecate = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
         NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, 0, %ld, '%ld'", (long)session, shFormatStreetHawkDate(created), (long)code, [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"], lat_deprecate, lng_deprecate, (long)assocId, (long)result];
         NSString *sql_str = [NSString stringWithFormat:@"INSERT OR REPLACE INTO '%@' (%@) VALUES (%@)", tableName, columns, values];
         @synchronized(self)
@@ -821,6 +814,7 @@ enum
     //These not need to update
     //Remote notification: APNS_DISABLE_TIMESTAMP, APNS_SENT_DISABLE_TIMESTAMP, APNS_DEVICE_TOKEN. Because old data is correct when register new install, and old data is passed in install/register to server. Note: if revoked=timestamp, this will make revoked earlier than created, it's correct as revoked means first time when notification is disabled.
     //Sent history: SentInstall_AppKey, SentInstall_ClientVersion, SentInstall_ShVersion, SentInstall_Mode, SentInstall_Carrier, SentInstall_OSVersion, SentInstall_IBeacon. They are reset after install/register.
+    //Geolocation: SH_GEOLOCATION_LAT, SH_GEOLOCATION_LNG. They are reset after launch.
     //Crash report: CrashLog_MD5. Make sure not sent duplicate crash report again in new install.
     //Customer setting: ENABLE_LOCATION_SERVICE, ENABLE_PUSH_NOTIFICATION, FRIENDLYNAME_KEY. Cannot reset, must keep same setting as previous install.
     //Keep old version and adjust by App itself: APPKEY_KEY, NETWORK_RECOVER_TIME, APPSTATUS_STREETHAWKENABLED, APPSTATUS_DEFAULT_HOST, APPSTATUS_ALIVE_HOST, APPSTATUS_UPLOAD_LOCATION, APPSTATUS_SUBMIT_FRIENDLYNAME, APPSTATUS_CHECK_TIME, APPSTATUS_APPSTOREID, REGULAR_HEARTBEAT_LOGTIME, REGULAR_LOCATION_LOGTIME, SMART_PUSH_PAYLOAD. These will be updated automatically by App, keep old version till next App update them.

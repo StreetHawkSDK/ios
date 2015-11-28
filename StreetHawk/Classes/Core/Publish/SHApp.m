@@ -29,10 +29,6 @@
 #import "SHApp+Crash.h" //for crash handler
 #import "SHCrashHandler.h" //for create SHCrashHandler instance
 #endif
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-#import "SHApp+Location.h"
-#import "SHLocationManager.h" //for create SHLocationManager instance
-#endif
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -225,6 +221,10 @@
         //Check local SQLite database and NSUserDefaults at first time before any call. If not match next will be treat as a new install. This is only checked when launch App, not check during App running. Check Apns mode also.
         [SHLogger checkLogdbForFreshInstall];
         [SHLogger checkSentApnsModeForFreshInstall];
+        //New launch makes lat/lng to be (0, 0), as must have location bridge to update them.
+        [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:SH_GEOLOCATION_LAT];
+        [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:SH_GEOLOCATION_LNG];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         //Then continue normal code.
         self.isDebugMode = NO;
 #ifdef SH_FEATURE_CRASH
@@ -524,99 +524,42 @@
             needHeartbeatLog = NO;
         }
     }
-#if defined(SH_FEATURE_LATLNG) || defined(SH_FEATURE_GEOFENCE) || defined(SH_FEATURE_IBEACON)
-    if (needHeartbeatLog)
+    Class locationBridge = NSClassFromString(@"SHLocationBridge");
+    if (locationBridge) //consider sending more location logline 19.
     {
-        //Meet one crash when turn off air-plan mode after one night. At this time background fetch happen, but meantime location change happen due to network recover. Try to not do background task in this case to avoid crash. https://bitbucket.org/shawk/streethawk/issue/442/crash-background-fetch-exceed-time.
-        NSTimeInterval recoverTime = 0;
-        NSObject *recoverTimeValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"NETWORK_RECOVER_TIME"];
-        if (recoverTimeValue != nil && [recoverTimeValue isKindOfClass:[NSNumber class]])
+        NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+        dictUserInfo[@"needHeartbeatLog"] = @(needHeartbeatLog);
+        dictUserInfo[@"needComplete"] = @(needComplete);
+        if (completionHandler)
         {
-            recoverTime = [(NSNumber *)recoverTimeValue doubleValue];
+            dictUserInfo[@"completionHandler"] = completionHandler;
         }
-        if (recoverTime == 0/*If reachability says it's not connected, not do heartbeat. It may be not accurate(https://bitbucket.org/shawk/streethawk/issue/443/not-send-request-if-network-unavailable), but in bad network status it's more possible to crash, and avoid crash is first priority.*/
-            || [[NSDate date] timeIntervalSinceReferenceDate] - recoverTime < 3/*not just turn off air plan mode*/)
-        {
-            needHeartbeatLog = NO;
-        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_RegularTask" object:nil userInfo:dictUserInfo];
     }
-#endif
-#ifdef SH_FEATURE_LATLNG
-    BOOL needLocationLog = ([SHLocationManager locationServiceEnabledForApp:NO/*must allowed location already*/] && StreetHawk.locationManager.currentGeoLocation.latitude != 0 && StreetHawk.locationManager.currentGeoLocation.longitude != 0); //log current geo location if location service is enabled and already detect location.
-    if (needLocationLog)
+    else //only do heart beat as location is not available
     {
-        NSObject *lastPostLocationLogsVal = [[NSUserDefaults standardUserDefaults] objectForKey:REGULAR_LOCATION_LOGTIME];
-        if (lastPostLocationLogsVal != nil && [lastPostLocationLogsVal isKindOfClass:[NSNumber class]])
+        if (!needHeartbeatLog) //nothing to do
         {
-            NSTimeInterval lastPostLocationLogs = [(NSNumber *)lastPostLocationLogsVal doubleValue];
-            if ([[NSDate date] timeIntervalSinceReferenceDate] - lastPostLocationLogs < 60*60) //more location time interval is 1 hour
+            if (needComplete && completionHandler != nil)
             {
-                needLocationLog = NO;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completionHandler(UIBackgroundFetchResultNewData);
+                });
             }
         }
-    }
-#else
-    BOOL needLocationLog = NO;
-#endif
-    if (!needHeartbeatLog && !needLocationLog) //nothing to do
-    {
-        if (needComplete && completionHandler != nil)
+        else //send heart beat
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionHandler(UIBackgroundFetchResultNewData);
-            });
+            [StreetHawk sendLogForCode:LOG_CODE_HEARTBEAT withComment:@"Heart beat." forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
+             {
+                 if (needComplete && completionHandler != nil)
+                 {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         completionHandler(UIBackgroundFetchResultNewData);
+                     });
+                 }
+             }];
         }
-    }
-    else if (needHeartbeatLog && needLocationLog)  //send both
-    {
-#ifdef SH_FEATURE_LATLNG
-        NSDictionary *dictLoc = @{@"lat": @(StreetHawk.locationManager.currentGeoLocation.latitude), @"lng": @(StreetHawk.locationManager.currentGeoLocation.longitude)};
-        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_MORE withComment:shSerializeObjToJson(dictLoc)];
-#endif
-        [StreetHawk sendLogForCode:LOG_CODE_HEARTBEAT withComment:@"Heart beat." forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
-         {
-             if (needComplete && completionHandler != nil)
-             {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     completionHandler(UIBackgroundFetchResultNewData);
-                 });
-             }
-         }];
-    }
-    else if (needHeartbeatLog)  //only send heart beat
-    {
-        [StreetHawk sendLogForCode:LOG_CODE_HEARTBEAT withComment:@"Heart beat." forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
-         {
-             if (needComplete && completionHandler != nil)
-             {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     completionHandler(UIBackgroundFetchResultNewData);
-                 });
-             }
-         }];
-    }
-    else  //only send more location
-    {
-#ifdef SH_FEATURE_LATLNG
-        NSDictionary *dictLoc = @{@"lat": @(StreetHawk.locationManager.currentGeoLocation.latitude), @"lng": @(StreetHawk.locationManager.currentGeoLocation.longitude)};
-        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_MORE withComment:shSerializeObjToJson(dictLoc) forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
-         {
-             if (needComplete && completionHandler != nil)
-             {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     completionHandler(UIBackgroundFetchResultNewData);
-                 });
-             }
-         }];
-#else
-        if (needComplete && completionHandler != nil)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionHandler(UIBackgroundFetchResultNewData);
-            });
-        }
-#endif
-    }
+    }    
 }
 
 - (BOOL)openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -708,27 +651,26 @@
         }
     }
     
-#ifdef SH_FEATURE_LATLNG
     if (launchOptions[UIApplicationLaunchOptionsLocationKey] != nil)  //happen when significate location service wake up App, the value is a number such as 1
     {
         //To fix location service after phone power off/on.
         //After phone power on, register significate location service App is wake up, and applicationDidFinishLaunching is called.
         //In this situation, it stays in background, using significant location change.
-        [self.locationManager startMonitorGeoLocationStandard:NO];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
     }
-#endif
     
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground)/*avoid send visible log when App wake up in background. Here cannot use Active, its status is InActive for normal launch, Background for location launch.*/
     {
         NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
         [dictComment setObject:@"App launch from not running." forKey:@"action"];
-#ifdef SH_FEATURE_LATLNG
-        if (StreetHawk.locationManager.currentGeoLocation.latitude != 0 && StreetHawk.locationManager.currentGeoLocation.longitude != 0)
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
+        double lat = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
+        double lng = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
+        if (lat != 0 && lng != 0)
         {
-            [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.latitude) forKey:@"lat"];
-            [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.longitude) forKey:@"lng"];
+            [dictComment setObject:@(lat) forKey:@"lat"];
+            [dictComment setObject:@(lng) forKey:@"lng"];
         }
-#endif
         [StreetHawk sendLogForCode:LOG_CODE_APP_VISIBLE withComment:shSerializeObjToJson(dictComment)];
     }
 
@@ -783,9 +725,7 @@
         return;
     }
     SHLog(@"Application did enter background with info: %@", notification.userInfo);
-#ifdef SH_FEATURE_LATLNG
-    [self.locationManager startMonitorGeoLocationStandard:NO];
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
     //Go to BG, send exit log.
     [StreetHawk shNotifyPageExit:nil/*for send exit log, not really go to new page*/ clearEnterHistory:NO/*keep history for go to FG send enter*/ logCompleteView:YES/*enter BG complete as bg=true*/];
     //Send install/log when enter background, begin a background task to gain 10 minutes to finish this.
@@ -799,13 +739,14 @@
         {
             NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
             [dictComment setObject:@"App to BG." forKey:@"action"];
-#ifdef SH_FEATURE_LATLNG
-            if (StreetHawk.locationManager.currentGeoLocation.latitude != 0 && StreetHawk.locationManager.currentGeoLocation.longitude != 0)
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
+            double lat = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
+            double lng = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
+            if (lat != 0 && lng != 0)
             {
-                [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.latitude) forKey:@"lat"];
-                [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.longitude) forKey:@"lng"];
+                [dictComment setObject:@(lat) forKey:@"lat"];
+                [dictComment setObject:@(lng) forKey:@"lng"];
             }
-#endif
             [StreetHawk sendLogForCode:LOG_CODE_APP_INVISIBLE withComment:shSerializeObjToJson(dictComment) forAssocId:0 withResult:100/*ignore*/ withHandler:^(id result, NSError *error)
             {
                 //Once start not cancel the install/log request, there are 10 minutes so make sure it can finish. Call endBackgroundTask after it's done.
@@ -837,13 +778,14 @@
     //Log here instead of applicationDidBecomeActive when interrupt by phone or permission dialog or control center or notification center, this is not called.
     NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
     [dictComment setObject:@"App opened from BG." forKey:@"action"];
-#ifdef SH_FEATURE_LATLNG
-    if (StreetHawk.locationManager.currentGeoLocation.latitude != 0 && StreetHawk.locationManager.currentGeoLocation.longitude != 0)
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
+    double lat = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
+    double lng = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
+    if (lat != 0 && lng != 0)
     {
-        [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.latitude) forKey:@"lat"];
-        [dictComment setObject:@(StreetHawk.locationManager.currentGeoLocation.longitude) forKey:@"lng"];
+        [dictComment setObject:@(lat) forKey:@"lat"];
+        [dictComment setObject:@(lng) forKey:@"lng"];
     }
-#endif
     [StreetHawk sendLogForCode:LOG_CODE_APP_VISIBLE withComment:shSerializeObjToJson(dictComment)];
     [StreetHawk shNotifyPageEnter:nil/*not know previoius page, but can get from history*/ sendEnter:YES sendExit:NO/*Not send exit for App go to FG*/];
 }
@@ -867,9 +809,7 @@
     SHLog(@"Application did become active with info: %@", notification.userInfo);
     
     //start location services in FG so we get a better lock on location
-#ifdef SH_FEATURE_LATLNG
-    [self.locationManager startMonitorGeoLocationStandard:!StreetHawk.reportWorkHomeLocationOnly];
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
     if (self.currentInstall != nil)
     {
         //each time when App go to foreground, check push message situation. user can disable App's push message when App is in background, so this is the time to check. Only do it when currentInstall!=nil, because if currentInstall==nil, next will call register install, and that will trigger registerForRemoteNotification.
@@ -900,9 +840,7 @@
     SHLog(@"Application will terminate with info: %@", notification.userInfo);
     //When open App it's active and use standard location service. At this time when power phone off/on, standard location service cannot wake up App.
     //By testing applicationWillTerminate is called in this situation, and it's a chance to switch to significate location service.
-#ifdef SH_FEATURE_LATLNG
-    [self.locationManager startMonitorGeoLocationStandard:NO];
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
     //Same as go to BG, send exit log.
     [StreetHawk shNotifyPageExit:nil/*for send exit log, not really go to new page*/ clearEnterHistory:NO/*keep history for go to FG send enter*/ logCompleteView:YES/*enter BG complete as bg=true*/];
 }
@@ -1177,36 +1115,24 @@
             [StreetHawk tagString:pushCurrent forKey:@"sh_module_push"];
             [[NSUserDefaults standardUserDefaults] setObject:pushCurrent forKey:@"sh_module_push"];
         }
-        NSString *locationCurrent = nil;
-#ifdef SH_FEATURE_LATLNG
-        locationCurrent = @"true";
-#else
-        locationCurrent = @"false";
-#endif
+        Class locationBridge = NSClassFromString(@"SHLocationBridge");
+        NSString *locationCurrent = (locationBridge == nil) ? @"false" : @"true";
         NSString *locationSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_location"];
         if ([locationCurrent compare:locationSent] != NSOrderedSame)
         {
             [StreetHawk tagString:locationCurrent forKey:@"sh_module_location"];
             [[NSUserDefaults standardUserDefaults] setObject:locationCurrent forKey:@"sh_module_location"];
         }
-        NSString *geofenceCurrent = nil;
-#ifdef SH_FEATURE_GEOFENCE
-        geofenceCurrent = @"true";
-#else
-        geofenceCurrent = @"false";
-#endif
+        Class geofenceBridge = NSClassFromString(@"SHGeofenceBridge");
+        NSString *geofenceCurrent = (geofenceBridge == nil) ? @"false" : @"true";
         NSString *geofenceSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_geofence"];
         if ([geofenceCurrent compare:geofenceSent] != NSOrderedSame)
         {
             [StreetHawk tagString:geofenceCurrent forKey:@"sh_module_geofence"];
             [[NSUserDefaults standardUserDefaults] setObject:geofenceCurrent forKey:@"sh_module_geofence"];
         }
-        NSString *iBeaconCurrent = nil;
-#ifdef SH_FEATURE_IBEACON
-        iBeaconCurrent = @"true";
-#else
-        iBeaconCurrent = @"false";
-#endif
+        Class beaconBridge = NSClassFromString(@"SHBeaconBridge");
+        NSString *iBeaconCurrent = (beaconBridge == nil) ? @"false" : @"true";
         NSString *iBeaconSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_beacon"];
         if ([iBeaconCurrent compare:iBeaconSent] != NSOrderedSame)
         {
