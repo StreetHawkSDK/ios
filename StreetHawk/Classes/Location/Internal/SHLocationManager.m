@@ -635,7 +635,6 @@
 
 - (void)sendGeoLocationUpdate
 {
-#ifdef SH_FEATURE_LATLNG
     if (StreetHawk.reportWorkHomeLocationOnly)
     {
         return; //not send logline 20.
@@ -662,9 +661,10 @@
         SHLog(lmLog);
         self.sentGeoLocationValue = self.currentGeoLocation; //do it early
         self.sentGeoLocationTime = [[NSDate date] timeIntervalSince1970];
-        [StreetHawk sendLogForCode:LOG_CODE_LOCATION_GEO withComment:shSerializeObjToJson(dictLoc)];
+        //Only send logline 20 when have location bridge. Above check must kept here because the internal variables cannot move to SHLocationBridge.
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SendGeoLocationLogline" object:nil userInfo:@{@"comment": NONULL(shSerializeObjToJson(dictLoc))}];
+
     }
-#endif
 }
 
 - (NSString *)formatBeaconRegion:(CLBeaconRegion *)region
