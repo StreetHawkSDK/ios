@@ -21,9 +21,6 @@
 #import "SHLogger.h" //for sending logline
 #import "SHRequest.h" //for sending register request
 #import "SHUtils.h" //for shParseDate
-#ifdef SH_FEATURE_IBEACON
-#import "SHLocationManager.h" //for check iBeacon status
-#endif
 //header from Third-party
 #import "SHUIDevice-Hardware.h"
 
