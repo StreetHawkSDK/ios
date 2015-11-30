@@ -202,6 +202,12 @@
         {
             [[NSNotificationCenter defaultCenter] addObserver:beaconBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
         }
+        Class feedBridge = NSClassFromString(@"SHFeedBridge");
+        NSLog(@"Bridge for feed: %@.", feedBridge);
+        if (feedBridge)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:feedBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
+        }
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
         //finally post notification to let bridge ready.
