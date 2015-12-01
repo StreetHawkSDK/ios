@@ -43,7 +43,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createLocationManagerHandler:) name:@"SH_LMBridge_CreateLocationManager" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startMonitorGeoLocationHandler:) name:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopMonitorGeoLocation) name:@"SH_LMBridge_StopMonitorGeoLocation" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopMonitorGeoLocationHandler:) name:@"SH_LMBridge_StopMonitorGeoLocation" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(regularTaskHandler:) name:@"SH_LMBridge_RegularTask" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGeolocationCacheHandler:) name:@"SH_LMBridge_UpdateGeoLocation" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGeolocationUpdateHandler:) name:@"SH_LMBridge_SendGeoLocationLogline" object:nil];
