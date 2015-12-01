@@ -204,6 +204,12 @@
         {
             [[NSNotificationCenter defaultCenter] addObserver:feedBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
         }
+        Class crashBridge = NSClassFromString(@"SHCrashBridge");
+        NSLog(@"Bridge for crash: %@.", crashBridge);
+        if (crashBridge)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:crashBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
+        }
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
         //finally post notification to let bridge ready.
