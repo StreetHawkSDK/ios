@@ -24,7 +24,7 @@
 @interface SHGeofenceBridge ()
 
 + (void)createLocationManagerHandler:(NSNotification *)notification;
-+ (void)setGeofenceTimestampHandler:(NSNotification *)notification; //handle app_status set geofence timestamp. notification name: SH_LMBridge_SetGeofenceTimeStamp; user info: @{@"timestamp": NONULL(geofenceTimeStamp)}.
++ (void)setGeofenceTimestampHandler:(NSNotification *)notification; //handle app_status set geofence timestamp. notification name: SH_LMBridge_SetGeofenceTimestamp; user info: @{@"timestamp": NONULL(geofenceTimestamp)}.
 
 @end
 
@@ -37,7 +37,7 @@
     StreetHawk.reportWorkHomeLocationOnly = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createLocationManagerHandler:) name:@"SH_LMBridge_CreateLocationManager" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setGeofenceTimestampHandler:) name:@"SH_LMBridge_SetGeofenceTimeStamp" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setGeofenceTimestampHandler:) name:@"SH_LMBridge_SetGeofenceTimestamp" object:nil];
 }
 
 #pragma mark - private functions
@@ -53,7 +53,7 @@
 + (void)setGeofenceTimestampHandler:(NSNotification *)notification
 {
     NSString *timestamp = notification.userInfo[@"timestamp"];
-    [SHGeofenceStatus sharedInstance].geofenceTimeStamp = timestamp;
+    [SHGeofenceStatus sharedInstance].geofenceTimestamp = timestamp;
 }
 
 @end

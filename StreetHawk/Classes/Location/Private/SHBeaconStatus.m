@@ -122,13 +122,13 @@
 
 #pragma mark - properties
 
-- (NSString *)iBeaconTimeStamp
+- (NSString *)iBeaconTimestamp
 {
-    NSAssert(NO, @"Should not call iBeaconTimeStamp.");
+    NSAssert(NO, @"Should not call iBeaconTimestamp.");
     return nil;
 }
 
-- (void)setIBeaconTimeStamp:(NSString *)iBeaconTimeStamp
+- (void)setIBeaconTimestamp:(NSString *)iBeaconTimestamp
 {
     if (StreetHawk.currentInstall == nil)
     {
@@ -143,9 +143,9 @@
     {
         return;
     }
-    if (iBeaconTimeStamp != nil && [iBeaconTimeStamp isKindOfClass:[NSString class]])
+    if (iBeaconTimestamp != nil && [iBeaconTimestamp isKindOfClass:[NSString class]])
     {
-        NSDate *serverTime = shParseDate(iBeaconTimeStamp, 0);
+        NSDate *serverTime = shParseDate(iBeaconTimestamp, 0);
         if (serverTime != nil)
         {
             BOOL needFetch = NO;
@@ -164,7 +164,7 @@
             }
             if (needFetch)
             {
-                //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setIBeaconTimeStamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
+                //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setIBeaconTimestamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
                 [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:APPSTATUS_IBEACON_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 SHRequest *fetchRequest = [SHRequest requestWithPath:@"/ibeacons/"];

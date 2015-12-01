@@ -27,7 +27,7 @@
 + (void)createLocationManagerHandler:(NSNotification *)notification;
 + (void)updateBluetoothStatusHandler:(NSNotification *)notification; //update bluetooth status to NSUserDefaults "SH_BEACON_BLUETOOTH". notification name: SH_LMBridge_UpdateBluetoothStatus; user info: empty.
 + (void)updateiBeaconStatusHandler:(NSNotification *)notification; //update iBeacon support status to NSUserDefaults "SH_BEACON_iBEACON". notification name: SH_LMBridge_UpdateiBeaconStatus; user info: empty.
-+ (void)setIBeaconTimestampStatusHandler:(NSNotification *)notification; //for handle app_status's iBeacon timestamp. notification name: SH_LMBridge_SetIBeaconTimeStamp; user info: @{@"timestamp": NONULL(iBeaconTimeStamp)}].
++ (void)setIBeaconTimestampStatusHandler:(NSNotification *)notification; //for handle app_status's iBeacon timestamp. notification name: SH_LMBridge_SetIBeaconTimestamp; user info: @{@"timestamp": NONULL(iBeaconTimestamp)}].
 
 @end
 
@@ -42,7 +42,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createLocationManagerHandler:) name:@"SH_LMBridge_CreateLocationManager" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBluetoothStatusHandler:) name:@"SH_LMBridge_UpdateBluetoothStatus" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateiBeaconStatusHandler:) name:@"SH_LMBridge_UpdateiBeaconStatus" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setIBeaconTimestampStatusHandler:) name:@"SH_LMBridge_SetIBeaconTimeStamp" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setIBeaconTimestampStatusHandler:) name:@"SH_LMBridge_SetIBeaconTimestamp" object:nil];
 }
 
 #pragma mark - private functions
@@ -70,7 +70,7 @@
 + (void)setIBeaconTimestampStatusHandler:(NSNotification *)notification
 {
     NSString *timestamp = notification.userInfo[@"timestamp"];
-    [SHBeaconStatus sharedInstance].iBeaconTimeStamp = timestamp;
+    [SHBeaconStatus sharedInstance].iBeaconTimestamp = timestamp;
 }
 
 @end

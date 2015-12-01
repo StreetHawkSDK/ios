@@ -30,6 +30,6 @@
 /**
  Match to `app_status` dictionary's `geofences`. It's a time stamp of server provided geofence list. If the time stamp is newer than client fetch time, client should fetch geofence list again and monitor new list; if the time stamp is NULL or empty, client should clear cached geofence and stop monitor.
  */
-@property (nonatomic, strong) NSString *geofenceTimeStamp;
+@property (nonatomic, strong) NSString *geofenceTimestamp;
 
 @end

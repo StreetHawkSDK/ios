@@ -152,13 +152,13 @@
 
 #pragma mark - properties
 
-- (NSString *)geofenceTimeStamp
+- (NSString *)geofenceTimestamp
 {
-    NSAssert(NO, @"Should not call geofenceTimeStamp.");
+    NSAssert(NO, @"Should not call geofenceTimestamp.");
     return nil;
 }
 
-- (void)setGeofenceTimeStamp:(NSString *)geofenceTimeStamp
+- (void)setGeofenceTimestamp:(NSString *)geofenceTimestamp
 {
     if (StreetHawk.currentInstall == nil)
     {
@@ -173,9 +173,9 @@
     {
         return;
     }
-    if (geofenceTimeStamp != nil && [geofenceTimeStamp isKindOfClass:[NSString class]])
+    if (geofenceTimestamp != nil && [geofenceTimestamp isKindOfClass:[NSString class]])
     {
-        NSDate *serverTime = shParseDate(geofenceTimeStamp, 0);
+        NSDate *serverTime = shParseDate(geofenceTimestamp, 0);
         if (serverTime != nil)
         {
             BOOL needFetch = NO;
@@ -194,7 +194,7 @@
             }
             if (needFetch)
             {
-                //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setGeofenceTimeStamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
+                //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setGeofenceTimestamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
                 [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:APPSTATUS_GEOFENCE_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 SHRequest *fetchRequest = [SHRequest requestWithPath:@"/geofences/tree/"];

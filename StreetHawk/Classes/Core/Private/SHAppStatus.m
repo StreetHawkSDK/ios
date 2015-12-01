@@ -245,37 +245,37 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     }
 }
 
-- (NSString *)iBeaconTimeStamp
+- (NSString *)iBeaconTimestamp
 {
-    NSAssert(NO, @"Should not call iBeaconTimeStamp.");
+    NSAssert(NO, @"Should not call iBeaconTimestamp.");
     return nil;
 }
 
-- (void)setIBeaconTimeStamp:(NSString *)iBeaconTimeStamp
+- (void)setIBeaconTimestamp:(NSString *)iBeaconTimestamp
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SetIBeaconTimeStamp" object:nil userInfo:@{@"timestamp": NONULL(iBeaconTimeStamp)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SetIBeaconTimestamp" object:nil userInfo:@{@"timestamp": NONULL(iBeaconTimestamp)}];
 }
 
-- (NSString *)geofenceTimeStamp
+- (NSString *)geofenceTimestamp
 {
-    NSAssert(NO, @"Should not call geofenceTimeStamp.");
+    NSAssert(NO, @"Should not call geofenceTimestamp.");
     return nil;
 }
 
-- (void)setGeofenceTimeStamp:(NSString *)geofenceTimeStamp
+- (void)setGeofenceTimestamp:(NSString *)geofenceTimestamp
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SetGeofenceTimeStamp" object:nil userInfo:@{@"timestamp": NONULL(geofenceTimeStamp)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SetGeofenceTimestamp" object:nil userInfo:@{@"timestamp": NONULL(geofenceTimestamp)}];
 }
 
-- (NSString *)feedTimeStamp
+- (NSString *)feedTimestamp
 {
-    NSAssert(NO, @"Should not call feedTimeStamp.");
+    NSAssert(NO, @"Should not call feedTimestamp.");
     return nil;
 }
 
-- (void)setFeedTimeStamp:(NSString *)feedTimeStamp
+- (void)setFeedTimestamp:(NSString *)feedTimestamp
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SetFeedTimeStamp" object:nil userInfo:@{@"timestamp": NONULL(feedTimeStamp)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SetFeedTimestamp" object:nil userInfo:@{@"timestamp": NONULL(feedTimestamp)}];
 }
 
 - (BOOL)reregister

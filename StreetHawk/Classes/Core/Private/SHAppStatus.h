@@ -70,17 +70,17 @@ extern NSString * const SHAppStatusChangeNotification;
 /**
  Match to `app_status` dictionary's `ibeacon`. It's a time stamp of server provided iBeacon list. If the time stamp is newer than client fetch time, client should fetch iBeacon list again and monitor new list; if the time stamp is NULL, client should clear cached iBeacon and stop monitor.
  */
-@property (nonatomic, strong) NSString *iBeaconTimeStamp;
+@property (nonatomic, strong) NSString *iBeaconTimestamp;
 
 /**
  Match to `app_status` dictionary's `geofences`. It's a time stamp of server provided geofence list. If the time stamp is newer than client fetch time, client should fetch geofence list again and monitor new list; if the time stamp is NULL or empty, client should clear cached geofence and stop monitor.
  */
-@property (nonatomic, strong) NSString *geofenceTimeStamp;
+@property (nonatomic, strong) NSString *geofenceTimestamp;
 
 /**
  Match to `app_status` dictionary's `feed`. It's a time stamp of server last modify feeds. If the time stamp is newer than client fetch time, client should fetch feeds again and trigger customer's callback; if the time stamp is NULL or older than client fetch time, do nothing.
  */
-@property (nonatomic, strong) NSString *feedTimeStamp;
+@property (nonatomic, strong) NSString *feedTimestamp;
 
 /**
  Match to `app_status` dictionary's `reregister`. In case it is given and set to true let the install register one more time.

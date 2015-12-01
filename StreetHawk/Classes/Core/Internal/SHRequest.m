@@ -653,17 +653,17 @@
                     //check "ibeacon"
                     if ([dictStatus.allKeys containsObject:@"ibeacon"])
                     {
-                        [SHAppStatus sharedInstance].iBeaconTimeStamp = dictStatus[@"ibeacon"]; //it may be nil
+                        [SHAppStatus sharedInstance].iBeaconTimestamp = dictStatus[@"ibeacon"]; //it may be nil
                     }
                     //check "geofences"
                     if ([dictStatus.allKeys containsObject:@"geofences"])
                     {
-                        [SHAppStatus sharedInstance].geofenceTimeStamp = dictStatus[@"geofences"];
+                        [SHAppStatus sharedInstance].geofenceTimestamp = dictStatus[@"geofences"];
                     }
                     //check "feed"
                     if ([dictStatus.allKeys containsObject:@"feed"])
                     {
-                        [SHAppStatus sharedInstance].feedTimeStamp = dictStatus[@"feed"];
+                        [SHAppStatus sharedInstance].feedTimestamp = dictStatus[@"feed"];
                     }
                     //check "reregister"
                     if ([dictStatus.allKeys containsObject:@"reregister"])

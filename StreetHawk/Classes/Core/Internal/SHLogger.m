@@ -216,7 +216,7 @@ enum
             int logid = (int)sqlite3_last_insert_rowid(database);
             [[NSUserDefaults standardUserDefaults] setObject:@(logid) forKey:MAX_LOGID];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            SHLog(@"LOG (%d @ %@) <%d> %@.", logid, shFormatStreetHawkDate(created), code, comment);
+            SHLog(@"LOG (%d @ %@) <%d> %@", logid, shFormatStreetHawkDate(created), code, comment);
         }
         BOOL isForce = (code == LOG_CODE_LOCATION_GEO || code == LOG_CODE_LOCATION_IBEACON || code == LOG_CODE_LOCATION_GEOFENCE || code == LOG_CODE_LOCATION_DENIED)  //immediately send for geo and ibeacon location, but not for code 19.
         || (code == LOG_CODE_APP_VISIBLE || code == LOG_CODE_APP_INVISIBLE)  //immediately send for session change

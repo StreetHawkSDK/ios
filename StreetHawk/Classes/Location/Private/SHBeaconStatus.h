@@ -30,6 +30,6 @@
 /**
  Match to `app_status` dictionary's `ibeacon`. It's a time stamp of server provided iBeacon list. If the time stamp is newer than client fetch time, client should fetch iBeacon list again and monitor new list; if the time stamp is NULL, client should clear cached iBeacon and stop monitor.
  */
-@property (nonatomic, strong) NSString *iBeaconTimeStamp;
+@property (nonatomic, strong) NSString *iBeaconTimestamp;
 
 @end

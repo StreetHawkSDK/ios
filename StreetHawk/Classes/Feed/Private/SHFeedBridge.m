@@ -25,7 +25,7 @@
 
 @interface SHFeedBridge ()
 
-+ (void)setFeedtimestampHandler:(NSNotification *)notification; //for set app_status's feed time stamp. notification name: SH_LMBridge_SetFeedTimeStamp; user info: @{@"timestamp": NONULL(feedTimeStamp)}].
++ (void)setFeedTimestampHandler:(NSNotification *)notification; //for set app_status's feed time stamp. notification name: SH_LMBridge_SetFeedTimestamp; user info: @{@"timestamp": NONULL(feedTimestamp)}].
 
 @end
 
@@ -33,14 +33,14 @@
 
 + (void)bridgeHandler:(NSNotification *)notification
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setFeedtimestampHandler:) name:@"SH_LMBridge_SetFeedTimeStamp" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setFeedTimestampHandler:) name:@"SH_LMBridge_SetFeedTimestamp" object:nil];
 }
 
 #pragma mark - private functions
 
-+ (void)setFeedtimestampHandler:(NSNotification *)notification
++ (void)setFeedTimestampHandler:(NSNotification *)notification
 {
-    NSString *feedTimeStamp = notification.userInfo[@"timestamp"];
+    NSString *feedTimestamp = notification.userInfo[@"timestamp"];
     if (StreetHawk.currentInstall == nil)
     {
         return; //not register yet, wait for next time.
@@ -53,9 +53,9 @@
     {
         return;
     }
-    if (feedTimeStamp != nil && [feedTimeStamp isKindOfClass:[NSString class]])
+    if (feedTimestamp != nil && [feedTimestamp isKindOfClass:[NSString class]])
     {
-        NSDate *serverTime = shParseDate(feedTimeStamp, 0);
+        NSDate *serverTime = shParseDate(feedTimestamp, 0);
         if (serverTime != nil)
         {
             BOOL needFetch = NO;
@@ -74,7 +74,7 @@
             }
             if (needFetch)
             {
-                //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setFeedTimeStamp` again. Customer's code controls feed function, they can do fetch anytime want.
+                //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setFeedTimestamp` again. Customer's code controls feed function, they can do fetch anytime want.
                 [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:APPSTATUS_FEED_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 StreetHawk.newFeedHandler(); //just notice user, not do fetch actually.
