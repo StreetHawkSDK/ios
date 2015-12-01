@@ -25,10 +25,6 @@
 #import "SHDeepLinking.h"
 #import "SHFriendlyNameObject.h"
 #import "SHUtils.h"
-#ifdef SH_FEATURE_CRASH
-#import "SHApp+Crash.h" //for crash handler
-#import "SHCrashHandler.h" //for create SHCrashHandler instance
-#endif
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -235,9 +231,6 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         //Then continue normal code.
         self.isDebugMode = NO;
-#ifdef SH_FEATURE_CRASH
-        self.isEnableCrashReport = YES;
-#endif
         self.backgroundQueue = [[NSOperationQueue alloc] init];
         self.backgroundQueue.maxConcurrentOperationCount = 1;
         self.install_semaphore = dispatch_semaphore_create(1);  //happen in sequence
@@ -281,13 +274,7 @@
     //initialize handlers
     self.innerLogger = [[SHLogger alloc] init];  //this creates logs db, wait till user call `registerInstallForApp` to take action. logger must before location manager, because location manager create and start to send log, for example failure, and logger must be ready.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_CreateLocationManager" object:nil];
-#ifdef SH_FEATURE_CRASH
-    if (self.isEnableCrashReport)
-    {
-        self.crashHandler = [[SHCrashHandler alloc] init];
-        [self.crashHandler enableCrashReporter];
-    }
-#endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_CrashBridge_CreateObject" object:nil];
     //At first possible place check app/status (https://bitbucket.org/shawk/streethawk/issue/555/apps-status-should-be-called-before), note:
     //1. It does NOT stop anything, streethawkEnabled is YES by default, and all other functions work, not wait for completeHandler.
     //2. It sends /apps/status request before all other request, but cannot put init as app_key is not known yet.
@@ -1049,18 +1036,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotificationHandler:) name:UIApplicationWillTerminateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotificationHandler:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timeZoneChangeNotificationHandler:) name:UIApplicationSignificantTimeChangeNotification object:nil];
-    //disable warning as this selector is defined in sub-module category.
-#pragma GCC diagnostic push
-#pragma clang diagnostic push
-#pragma GCC diagnostic ignored "-Wundeclared-selector"
-#pragma clang diagnostic ignored "-Wundeclared-selector"
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appStatusChange:) name:SHAppStatusChangeNotification object:nil];
-#ifdef SH_FEATURE_CRASH
-    self.isSendingCrashReport = NO;  //must use `self` instead of `StreetHawk` as this is called in `init`.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installUpdateSucceededForCrash:) name:SHInstallUpdateSuccessNotification object:nil];
-#endif
-#pragma GCC diagnostic pop
-#pragma clang diagnostic pop
 }
 
 - (void)checkUtcOffsetUpdate
@@ -1147,12 +1123,8 @@
             [StreetHawk tagString:iBeaconCurrent forKey:@"sh_module_beacon"];
             [[NSUserDefaults standardUserDefaults] setObject:iBeaconCurrent forKey:@"sh_module_beacon"];
         }
-        NSString *crashCurrent = nil;
-#ifdef SH_FEATURE_CRASH
-        crashCurrent = @"true";
-#else
-        crashCurrent = @"false";
-#endif
+        Class crashBridge = NSClassFromString(@"SHCrashBridge");
+        NSString *crashCurrent = (crashBridge == nil) ? @"false" : @"true";
         NSString *crashSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_crash"];
         if ([crashCurrent compare:crashSent] != NSOrderedSame)
         {

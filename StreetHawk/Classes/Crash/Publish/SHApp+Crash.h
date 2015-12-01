@@ -40,4 +40,9 @@
  */
 @property (nonatomic) BOOL isSendingCrashReport;
 
+/**
+ Sends crash report content info to the server.
+ */
+- (void)sendCrashReportForInstall:(NSString *)installId withContent:(NSString *)crashReportContent onCrashDate:(NSDate *)crashDate withHandler:(SHCallbackHandler)handler;
+
 @end
