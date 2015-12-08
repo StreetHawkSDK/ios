@@ -19,12 +19,14 @@
 
 @interface TagViewController ()
 
+@property (retain, nonatomic) IBOutlet UITableViewCell *cellCuid;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellNumeric;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellString;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellDatetime;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellIncrement;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellDelete;
 
+@property (retain, nonatomic) IBOutlet UITextField *textboxCuidValue;
 @property (retain, nonatomic) IBOutlet UITextField *textboxKeyNumeric;
 @property (retain, nonatomic) IBOutlet UITextField *textboxValueNumeric;
 @property (retain, nonatomic) IBOutlet UITextField *textboxKeyString;
@@ -34,6 +36,7 @@
 @property (retain, nonatomic) IBOutlet UITextField *textboxKeyIncrement;
 @property (retain, nonatomic) IBOutlet UITextField *textboxKeyDelete;
 
+- (IBAction)buttonCuidClicked:(id)sender;
 - (IBAction)buttonNumericClicked:(id)sender;
 - (IBAction)buttonSringClicked:(id)sender;
 - (IBAction)buttonDatetimeClicked:(id)sender;
@@ -53,7 +56,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.arrayCells = @[self.cellNumeric, self.cellString, self.cellDatetime, self.cellIncrement, self.cellDelete];
+    self.arrayCells = @[self.cellCuid, self.cellNumeric, self.cellString, self.cellDatetime, self.cellIncrement, self.cellDelete];
 }
 
 #pragma mark - Table view data source
@@ -88,6 +91,21 @@
 }
 
 #pragma mark - event handler
+
+- (IBAction)buttonCuidClicked:(id)sender
+{
+    NSString *value = [self.textboxCuidValue.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (value == nil || value.length == 0)
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Please input value." message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        [alertView show];
+        return;
+    }
+    BOOL isSuccess = [StreetHawk tagCuid:value];
+    [self.textboxCuidValue resignFirstResponder];
+    [self showDoneAlert:isSuccess];
+}
+
 
 - (IBAction)buttonNumericClicked:(id)sender
 {
