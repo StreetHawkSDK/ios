@@ -58,6 +58,7 @@ Pod::Spec.new do |s|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_LATLNG' }
     sp.source_files           = 'StreetHawk/Classes/Location/**/*.{h,m}'
     sp.public_header_files    = 'StreetHawk/Classes/Location/**/Publish/*.h'
+    sp.exclude_files          = 'StreetHawk/Classes/Location/Private/SHBeaconBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHBeaconStatus.{h,m}', 'StreetHawk/Classes/Location/Private/SHGeofenceBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHGeofenceStatus.{h,m}'
     sp.frameworks             = 'CoreLocation'
     sp.dependency               'streethawk/Core'
     sp.dependency               'Reachability'
@@ -67,6 +68,7 @@ Pod::Spec.new do |s|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_GEOFENCE' }
     sp.source_files           = 'StreetHawk/Classes/Location/**/*.{h,m}'
     sp.public_header_files    = 'StreetHawk/Classes/Location/**/Publish/*.h'
+    sp.exclude_files          = 'StreetHawk/Classes/Location/Private/SHBeaconBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHBeaconStatus.{h,m}', 'StreetHawk/Classes/Location/Private/SHLocationBridge.{h,m}'
     sp.frameworks             = 'CoreLocation'
     sp.dependency               'streethawk/Core'
     sp.dependency               'Reachability'
@@ -76,6 +78,7 @@ Pod::Spec.new do |s|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_IBEACON' }
     sp.source_files           = 'StreetHawk/Classes/Location/**/*.{h,m}'
     sp.public_header_files    = 'StreetHawk/Classes/Location/**/Publish/*.h'
+    sp.exclude_files          = 'StreetHawk/Classes/Location/Private/SHLocationBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHGeofenceBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHGeofenceStatus.{h,m}'
     sp.frameworks             = 'CoreLocation'
     sp.dependency               'streethawk/Core'
     sp.dependency               'Reachability'
