@@ -494,11 +494,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
             if (shStrIsEmpty(jsonString))
             {
                 [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Error: Meet error when serialize %@ to json. Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100 withHandler:nil];
-                //Notification data has error, but user launch App from BG, still treat as positive action. If App in FG this notification will be ignored, so no result sent.
-                if (!pushData.isAppOnForeground)
-                {
-                    [pushData sendPushResult:SHResult_Accept withHandler:nil];
-                }
+                 jsonString = [NSString stringWithFormat:@"%@", pushData.data]; //still try to pass to customer handler.
             }            
         }
         else
@@ -508,18 +504,15 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
             [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"data is not string or dictionary: %@. Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100 withHandler:nil];
             jsonString = [NSString stringWithFormat:@"%@", pushData.data];
         }
-        if (!shStrIsEmpty(jsonString))
+        for (id<ISHCustomiseHandler> handler in StreetHawk.arrayCustomisedHandler)
         {
-            for (id<ISHCustomiseHandler> handler in StreetHawk.arrayCustomisedHandler)
+            if ([handler respondsToSelector:@selector(shRawJsonCallbackWithTitle:withMessage:withJson:)]) //implementation is optional
             {
-                if ([handler respondsToSelector:@selector(shRawJsonCallbackWithTitle:withMessage:withJson:)]) //implementation is optional
-                {
-                    [handler shRawJsonCallbackWithTitle:pushData.title withMessage:pushData.message withJson:jsonString];
-                    isCustomisedHandled = YES;
-                }
+                [handler shRawJsonCallbackWithTitle:pushData.title withMessage:pushData.message withJson:jsonString];
+                isCustomisedHandled = YES;
             }
-            [pushData sendPushResult:isCustomisedHandled ? SHResult_Accept : SHResult_Decline withHandler:nil];
         }
+        [pushData sendPushResult:isCustomisedHandled ? SHResult_Accept : SHResult_Decline withHandler:nil];
         return isCustomisedHandled;
     }
     BOOL shouldShowConfirmDialog = [pushData shouldShowConfirmDialog];
