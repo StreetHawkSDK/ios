@@ -528,12 +528,11 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         if (pushData.data == nil || ![pushData.data isKindOfClass:[NSString class]] || ((NSString *)pushData.data).length == 0)
         {
             [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Open webpage with invalid url: %@. Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
-            //Notification data has error, but user launch App from BG, still treat as positive action. If App in FG this notification will be ignored, so no result sent.
-            if (!pushData.isAppOnForeground)
-            {
+            pushData.isInAppSlide = NO; //wrong data cannot slide, just forcily make confirm dialog show, because if isInAppSlide=YES will show dialog when loading slide.
+            //Notification data has error, App in BG sends pushresult=1; App in FG depends on confirm dialog.
+            confirmAction = ^ {
                 [pushData sendPushResult:SHResult_Accept withHandler:nil];
-            }
-            return NO;  //if data is empty, nothing happen for loading url
+            };
         }
         else
         {
