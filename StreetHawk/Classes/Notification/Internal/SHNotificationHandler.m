@@ -693,12 +693,9 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
                 {
                     NSString *appDisplayName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
                     [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"App %@ try to open AppStore without setup itunes id. Push msgid: %ld.", appDisplayName, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
-                    //Notification data has error, but user launch App from BG, still treat as positive action. If App in FG this notification will be ignored, so no result sent.
-                    if (!pushData.isAppOnForeground)
-                    {
-                        [pushData sendPushResult:SHResult_Accept withHandler:nil];
-                    }
-                    return;  //no suitable app id
+                    //Notification data has error, App in BG sends pushresult=1; App in FG depends on confirm dialog.
+                    [pushData sendPushResult:SHResult_Accept withHandler:nil];
+                    SHLog(@"WARNING: Please setup iTunes Id in web console -> App Details -> App Summary.");
                 }
             };
         }
