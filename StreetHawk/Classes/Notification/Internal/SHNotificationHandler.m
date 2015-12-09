@@ -765,8 +765,18 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         else
         {
             [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Fail to parse feedback string: \"%@\". Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100/*ignored*/ withHandler:nil];
-            //Notification data has error, but user launch App from BG, still treat as positive action. If App in FG this notification will be ignored, so no result sent.
-            if (!pushData.isAppOnForeground)
+            //Cannot show feedback list, however still need to show confirm dialog in FG, and sends pushresult; in BG always sends pushresult=1.
+            if ([pushData shouldShowConfirmDialog])
+            {
+                NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+                dictUserInfo[@"pushdata"] = pushData;
+                dictUserInfo[@"clickbutton"] = ^(SHResult result)
+                {
+                    [pushData sendPushResult:result withHandler:nil];
+                };
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandlePushData" object:nil userInfo:dictUserInfo];
+            }
+            else
             {
                 [pushData sendPushResult:SHResult_Accept withHandler:nil];
             }
