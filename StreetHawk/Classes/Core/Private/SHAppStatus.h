@@ -92,6 +92,16 @@ extern NSString * const SHAppStatusChangeNotification;
  */
 @property (nonatomic, strong) NSString *appstoreId;
 
+/**
+ Match to `app_status` dictionary's `disable_logs`. It's for setting up disabled logline code. It would be nil means clear, or array of code list.
+ */
+@property (nonatomic, strong) NSObject *logDisableCodes;
+
+/**
+ Match to `app_status` dictionary's `priority`. It's for setting up priority logline code. It would be nil means clear, or array of code list.
+ */
+@property (nonatomic, strong) NSObject *logPriorityCodes;
+
 /** @name Functions */
 
 /**
@@ -100,5 +110,10 @@ extern NSString * const SHAppStatusChangeNotification;
  @param handler Handler is triggered when check complete. If not send request handler(nil), otherwise handler(request).
  */
 - (void)sendAppStatusCheckRequest:(BOOL)force completeHandler:(SHRequestHandler)handler;
+
+/**
+ Save this check time to avoid frequent check. No matter any property changed or not, record the time.
+ */
+- (void)recordCheckTime;
 
 @end

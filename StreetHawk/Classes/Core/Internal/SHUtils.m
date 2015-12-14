@@ -749,3 +749,40 @@ BOOL shStrIsEmpty(NSString *str)
 {
     return (str == nil || str.length == 0);
 }
+
+BOOL shArrayIsSame(NSArray *array1, NSArray *array2)
+{
+    if (array1 == nil && array2 == nil)
+    {
+        return YES;
+    }
+    if (array1 == nil && array2 != nil)
+    {
+        return NO;
+    }
+    if (array1 != nil && array2 == nil)
+    {
+        return NO;
+    }
+    if (array1.count != array2.count)
+    {
+        return NO;
+    }
+    for (id item1 in array1)
+    {
+        BOOL isFound = NO;
+        for (id item2 in array2)
+        {
+            if ([item1 compare:item2] == NSOrderedSame)
+            {
+                isFound = YES;
+                break;
+            }
+        }
+        if (!isFound)
+        {
+            return NO;
+        }
+    }
+    return YES;
+}

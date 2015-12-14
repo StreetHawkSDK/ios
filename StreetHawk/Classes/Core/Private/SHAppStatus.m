@@ -28,6 +28,8 @@
 #define APPSTATUS_SUBMIT_FRIENDLYNAME       @"APPSTATUS_SUBMIT_FRIENDLYNAME"  //whether server allow submit friendly name
 #define APPSTATUS_REREGISTER                @"APPSTATUS_REREGISTER" //a flag set to notice next launch must re-register install
 #define APPSTATUS_APPSTOREID                @"APPSTATUS_APPSTOREID" //server push itunes id to client side
+#define APPSTATUS_DISABLECODES              @"APPSTATUS_DISABLECODES" //disable logline codes
+#define APPSTATUS_PRIORITYCODES             @"APPSTATUS_PRIORITYCODES" //priority logline codes
 
 #define APPSTATUS_CHECK_TIME                @"APPSTATUS_CHECK_TIME"  //the last successfully check app status time, record to avoid frequently call server.
 
@@ -43,8 +45,8 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 @property (nonatomic) dispatch_semaphore_t semaphore_uploadLocationChange;
 @property (nonatomic) dispatch_semaphore_t semaphore_allowSubmitFriendlyNames;
 @property (nonatomic) dispatch_semaphore_t semaphore_appstoreId;
-
-- (void)recordCheckTime; //Save this check time to avoid frequent check. No matter any property changed or not, record the time.
+@property (nonatomic) dispatch_semaphore_t semaphore_disableCodes;
+@property (nonatomic) dispatch_semaphore_t semaphore_priorityCodes;
 
 @end
 
@@ -87,6 +89,8 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
         self.semaphore_uploadLocationChange = dispatch_semaphore_create(1);
         self.semaphore_allowSubmitFriendlyNames = dispatch_semaphore_create(1);
         self.semaphore_appstoreId = dispatch_semaphore_create(1);
+        self.semaphore_disableCodes = dispatch_semaphore_create(1);
+        self.semaphore_priorityCodes = dispatch_semaphore_create(1);
     }
     return self;
 }
@@ -116,7 +120,6 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
         }
         dispatch_semaphore_signal(self.semaphore_streethawkEnabled);
-        [self recordCheckTime];
     }
 }
 
@@ -198,7 +201,6 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             dispatch_semaphore_signal(self.semaphore_aliveHost);
         }
     }
-    [self recordCheckTime];
 }
 
 - (BOOL)uploadLocationChange
@@ -219,7 +221,6 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
         }
         dispatch_semaphore_signal(self.semaphore_uploadLocationChange);
-        [self recordCheckTime];
     }
 }
 
@@ -241,7 +242,6 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];        
         }
         dispatch_semaphore_signal(self.semaphore_allowSubmitFriendlyNames);
-        [self recordCheckTime];
     }
 }
 
@@ -320,7 +320,78 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             }
         }
         dispatch_semaphore_signal(self.semaphore_appstoreId);
-        [self recordCheckTime];
+    }
+}
+
+- (NSObject *)logDisableCodes
+{
+    NSAssert(NO, @"Should not call logDisableCodes.");
+    return nil;
+}
+
+- (void)setLogDisableCodes:(NSObject *)logDisableCodes
+{
+    NSAssert(![NSThread isMainThread], @"setLogDisableCodes wait in main thread.");
+    if (![NSThread isMainThread])
+    {
+        dispatch_semaphore_wait(self.semaphore_disableCodes, DISPATCH_TIME_FOREVER);
+        NSArray *arrayLocal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_DISABLECODES];
+        if (logDisableCodes == nil && arrayLocal != nil) //server get nil, local should clear.
+        {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:APPSTATUS_DISABLECODES];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
+        }
+        else if (logDisableCodes != nil)
+        {
+            NSAssert([logDisableCodes isKindOfClass:[NSArray class]], @"logDisableCodes should be array.");
+            if ([logDisableCodes isKindOfClass:[NSArray class]])
+            {
+                if (!shArrayIsSame((NSArray *)logDisableCodes, arrayLocal))
+                {
+                    [[NSUserDefaults standardUserDefaults] setObject:logDisableCodes forKey:APPSTATUS_DISABLECODES];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
+                }
+            }
+        }
+        dispatch_semaphore_signal(self.semaphore_disableCodes);
+    }
+}
+
+- (NSObject *)logPriorityCodes
+{
+    NSAssert(NO, @"Should not call logPriorityCodes.");
+    return nil;
+}
+
+- (void)setLogPriorityCodes:(NSObject *)logPriorityCodes
+{
+    NSAssert(![NSThread isMainThread], @"setLogPriorityCodes wait in main thread.");
+    if (![NSThread isMainThread])
+    {
+        dispatch_semaphore_wait(self.semaphore_priorityCodes, DISPATCH_TIME_FOREVER);
+        NSArray *arrayLocal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_PRIORITYCODES];
+        if (logPriorityCodes == nil && arrayLocal != nil) //server get nil, local should clear.
+        {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:APPSTATUS_PRIORITYCODES];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
+        }
+        else if (logPriorityCodes != nil)
+        {
+            NSAssert([logPriorityCodes isKindOfClass:[NSArray class]], @"logPriorityCodes should be array.");
+            if ([logPriorityCodes isKindOfClass:[NSArray class]])
+            {
+                if (!shArrayIsSame((NSArray *)logPriorityCodes, arrayLocal))
+                {
+                    [[NSUserDefaults standardUserDefaults] setObject:logPriorityCodes forKey:APPSTATUS_PRIORITYCODES];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
+                }
+            }
+        }
+        dispatch_semaphore_signal(self.semaphore_priorityCodes);
     }
 }
 
@@ -357,8 +428,6 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     request.requestHandler = handler;
     [request startAsynchronously];
 }
-
-#pragma mark - private functions
 
 - (void)recordCheckTime
 {

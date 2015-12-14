@@ -675,6 +675,12 @@
                     {
                         [SHAppStatus sharedInstance].appstoreId = dictStatus[@"app_store_id"];
                     }
+                    //check "disable_logs"
+                    [SHAppStatus sharedInstance].logDisableCodes = dictStatus[@"disable_logs"]; //directly pass nil
+                    //check "priority"
+                    [SHAppStatus sharedInstance].logPriorityCodes = dictStatus[@"priority"];
+                    //refresh app_status check time
+                    [[SHAppStatus sharedInstance] recordCheckTime];
                 }
                 //response may have "push" for smart push.
                 if ([dict.allKeys containsObject:@"push"] && [dict[@"push"] isKindOfClass:[NSDictionary class]])

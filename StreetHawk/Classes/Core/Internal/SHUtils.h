@@ -243,4 +243,12 @@ extern BOOL streetHawkIsEnabled();
  */
 extern BOOL shStrIsEmpty(NSString *str);
 
+/**
+ Utility function to check two array content is same.
+ @param array1 Array to compare 1.
+ @param array2 Array to compare 2.
+ @return If content is same return YES; otherwise return NO.
+ */
+extern BOOL shArrayIsSame(NSArray *array1, NSArray *array2);
+
 #endif //SH__UTILS__H
