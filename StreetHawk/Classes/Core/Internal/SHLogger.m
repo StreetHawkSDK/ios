@@ -137,6 +137,26 @@ enum
         return;
     }
     
+    //check app_status's ignore codes
+    NSArray *arrayIgnoreCodes = [[NSUserDefaults standardUserDefaults] objectForKey:@"APPSTATUS_DISABLECODES"];
+    BOOL isIgnored = NO;
+    for (id ignoreCode in arrayIgnoreCodes)
+    {
+        if ([[NSString stringWithFormat:@"%@", ignoreCode] integerValue] == code)
+        {
+            isIgnored = YES;
+            break;
+        }
+    }
+    if (isIgnored)
+    {
+        if (handler)
+        {
+            handler(nil, nil);
+        }
+        return;
+    }
+    
     if (code == LOG_CODE_APP_VISIBLE) //From BG to FG (either launch or resume from BG), is a new session.
     {
         self.fgbgSession++;
@@ -218,12 +238,29 @@ enum
             [[NSUserDefaults standardUserDefaults] synchronize];
             SHLog(@"LOG (%d @ %@) <%d> %@", logid, shFormatStreetHawkDate(created), code, comment);
         }
-        BOOL isForce = (code == LOG_CODE_LOCATION_GEO || code == LOG_CODE_LOCATION_IBEACON || code == LOG_CODE_LOCATION_GEOFENCE || code == LOG_CODE_LOCATION_DENIED)  //immediately send for geo and ibeacon location, but not for code 19.
-        || (code == LOG_CODE_APP_VISIBLE || code == LOG_CODE_APP_INVISIBLE)  //immediately send for session change
-        || (code == LOG_CODE_TAG_INCREMENT || code == LOG_CODE_TAG_DELETE || code == LOG_CODE_TAG_ADD)  //immediately send for add/remove/increment user tag
-        || (code == LOG_CODE_TIMEOFFSET)  //immediately send for time utc offset change
-        || (code == LOG_CODE_HEARTBEAT)  //immediately send for heart beat
-        || (code == LOG_CODE_PUSH_RESULT); //immediately send for pushresult
+        BOOL isForce = NO;
+        NSArray *arrayPriorityCodes = [[NSUserDefaults standardUserDefaults] objectForKey:@"APPSTATUS_PRIORITYCODES"];
+        if (arrayPriorityCodes == nil) //not set, same as before
+        {
+            isForce = (code == LOG_CODE_LOCATION_GEO || code == LOG_CODE_LOCATION_IBEACON || code == LOG_CODE_LOCATION_GEOFENCE || code == LOG_CODE_LOCATION_DENIED)  //immediately send for geo and ibeacon location, but not for code 19.
+            || (code == LOG_CODE_APP_VISIBLE || code == LOG_CODE_APP_INVISIBLE)  //immediately send for session change
+            || (code == LOG_CODE_TAG_INCREMENT || code == LOG_CODE_TAG_DELETE || code == LOG_CODE_TAG_ADD)  //immediately send for add/remove/increment user tag
+            || (code == LOG_CODE_TIMEOFFSET)  //immediately send for time utc offset change
+            || (code == LOG_CODE_HEARTBEAT)  //immediately send for heart beat
+            || (code == LOG_CODE_PUSH_RESULT); //immediately send for pushresult
+        }
+        else
+        {
+            //If have list, must inside the list to be priority
+            for (id priorityCode in arrayPriorityCodes)
+            {
+                if ([[NSString stringWithFormat:@"%@", priorityCode] integerValue] == code)
+                {
+                    isForce = YES;
+                    break;
+                }
+            }
+        }
         if (isForce || ((self.numLogsWritten != 0) && (self.numLogsWritten % LOG_UPLOAD_INTERVAL == 0)))
         {
             //continue to upload to server, finish will trigger handler
@@ -817,7 +854,7 @@ enum
     //Module bridge: SH_GEOLOCATION_LAT, SH_GEOLOCATION_LNG, SH_BEACON_BLUETOOTH, SH_BEACON_iBEACON. They are reset after launch.
     //Crash report: CrashLog_MD5. Make sure not sent duplicate crash report again in new install.
     //Customer setting: ENABLE_LOCATION_SERVICE, ENABLE_PUSH_NOTIFICATION, FRIENDLYNAME_KEY. Cannot reset, must keep same setting as previous install.
-    //Keep old version and adjust by App itself: APPKEY_KEY, NETWORK_RECOVER_TIME, APPSTATUS_STREETHAWKENABLED, APPSTATUS_DEFAULT_HOST, APPSTATUS_ALIVE_HOST, APPSTATUS_UPLOAD_LOCATION, APPSTATUS_SUBMIT_FRIENDLYNAME, APPSTATUS_CHECK_TIME, APPSTATUS_APPSTOREID, REGULAR_HEARTBEAT_LOGTIME, REGULAR_LOCATION_LOGTIME, SMART_PUSH_PAYLOAD. These will be updated automatically by App, keep old version till next App update them.
+    //Keep old version and adjust by App itself: APPKEY_KEY, NETWORK_RECOVER_TIME, APPSTATUS_STREETHAWKENABLED, APPSTATUS_DEFAULT_HOST, APPSTATUS_ALIVE_HOST, APPSTATUS_UPLOAD_LOCATION, APPSTATUS_SUBMIT_FRIENDLYNAME, APPSTATUS_CHECK_TIME, APPSTATUS_APPSTOREID, APPSTATUS_DISABLECODES, APPSTATUS_PRIORITYCODES, REGULAR_HEARTBEAT_LOGTIME, REGULAR_LOCATION_LOGTIME, SMART_PUSH_PAYLOAD. These will be updated automatically by App, keep old version till next App update them.
     //APPSTATUS_GEOFENCE_FETCH_LIST: cannot reset to empty, otherwise when change cannot find previous fence so not stop monitor.
     //User pass in: ADS_IDENTIFIER. Should not delete, move to next install.
     //Rarely use: ALERTSETTINGS_MINUTES, PHONEGAP_8004_PAGE, PHONEGAP_8004_PUSHDATA. These are rarely use, and it will be correct when next customer call, ignore and not reset.

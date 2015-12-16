@@ -773,7 +773,9 @@ BOOL shArrayIsSame(NSArray *array1, NSArray *array2)
         BOOL isFound = NO;
         for (id item2 in array2)
         {
-            if ([item1 compare:item2] == NSOrderedSame)
+            NSString *value1 = [NSString stringWithFormat:@"%@", item1];
+            NSString *value2 = [NSString stringWithFormat:@"%@", item2];
+            if ([value1 compare:value2] == NSOrderedSame)
             {
                 isFound = YES;
                 break;
