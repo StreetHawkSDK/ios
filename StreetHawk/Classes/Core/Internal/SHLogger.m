@@ -23,7 +23,6 @@
 
 #define tableName @"table_log" //not change table name, if need upgrade db schema, change to another file.
 #define LOG_UPLOAD_INTERVAL 50  //local has this number then upload
-#define LOAD_LOG_NUMBER     100 //when upload select how many
 
 #define FGBG_SESSION    @"FGBG_SESSION" //record current session id
 
@@ -59,13 +58,13 @@ enum
 
 //Log the information into local sqlite database. Normal events are uploaded after enough number. Special events are logged and uploaded immediately. This function has the flexibility, however for convenience [StreetHawk sendLogForCode:withComment:] is recommended.
 - (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSInteger)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler;
-//Uploads local sqlite's log records to the server. This is automatically called if system determine needs to upload, or user can manually call it to trigger an upload.
-- (void)uploadLogsToServer:(NSInteger)numRecords withHandler:(SHCallbackHandler)handler;
+//Uploads local sqlite's log records to the server. This is automatically called if system determine needs to upload.
+- (void)uploadLogsToServerWithHandler:(SHCallbackHandler)handler;
 
 //Open SQLite file, create it on demand.
 - (void)openSqliteDatabase;
-//Loads a given number of log records from new to old
-- (NSMutableArray *)loadLogRecords:(NSInteger)numRecords;
+//Loads all local database log records from new to old
+- (NSMutableArray *)loadLogRecords;
 //Makes the actual POST request to the server to record the logs.
 - (void)postLogRecords:(NSArray *)logRecords withHandler:(SHCallbackHandler)handler;
 //Clear records not send again.
@@ -263,8 +262,21 @@ enum
         }
         if (isForce || ((self.numLogsWritten != 0) && (self.numLogsWritten % LOG_UPLOAD_INTERVAL == 0)))
         {
-            //continue to upload to server, finish will trigger handler
-            [self uploadLogsToServer:LOAD_LOG_NUMBER withHandler:handler];
+            if (handler)
+            {
+                [self uploadLogsToServerWithHandler:handler]; //calling function waiting for handler back, must do this immediately. for example in background send push result.
+            }
+            else
+            {
+                //delay 1 second, if within 1 second there is some other records inserted, they can combine together. This is to combine priority logline together, because after delay first selection post all local logline, and all next will get empty records and directly return. If not combine together, serial priority logline such as sh_module_xxx make logline pending.
+                //Must use `dispatch_after` to another thread, `performSelector` and `NSTimer` doesn't work, due to current queue ends.
+                double delayInSeconds = 1;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void)
+                   {
+                       [self uploadLogsToServerWithHandler:handler];
+                   });
+            }
             self.numLogsWritten = 0;
         }
         else
@@ -279,14 +291,14 @@ enum
     });
 }
 
-- (void)uploadLogsToServer:(NSInteger)numRecords withHandler:(SHCallbackHandler)handler
+- (void)uploadLogsToServerWithHandler:(SHCallbackHandler)handler
 {
     //The database logs are selected and post to server, after post successfully they are removed from database; However if another selecting happen before previous one finish, duplicated records are selected and sent to server. Server expects unique records. Make a semaphore here to let it happen in sequence.
     NSAssert(![NSThread isMainThread], @"uploadLogsToServer wait in main thread.");
     if (![NSThread isMainThread])
     {
         dispatch_semaphore_wait(self.upload_semaphore, DISPATCH_TIME_FOREVER);
-        NSArray *logRecords = [self loadLogRecords:numRecords];
+        NSArray *logRecords = [self loadLogRecords];
         if (logRecords.count == 0)
         {
             dispatch_semaphore_signal(self.upload_semaphore);
@@ -474,12 +486,10 @@ enum
     create_stmt = NULL;
 }
 
-- (NSMutableArray *)loadLogRecords:(NSInteger)numRecords
+- (NSMutableArray *)loadLogRecords
 {
-    //Select from database to get the upload records
-    numRecords = (numRecords <= 0) ? LOAD_LOG_NUMBER : numRecords;
-    NSMutableArray *logRecords = [NSMutableArray arrayWithCapacity:numRecords];
-    NSString *select_sql_str = [NSString stringWithFormat:@"SELECT * from '%@' WHERE status = 0  ORDER BY logid LIMIT %ld", tableName, (long)numRecords];
+    NSMutableArray *logRecords = [NSMutableArray array];
+    NSString *select_sql_str = [NSString stringWithFormat:@"SELECT * from '%@' WHERE status = 0 ORDER BY logid", tableName];
     @synchronized(self)
     {
         sqlite3_stmt *select_sql = NULL;
