@@ -93,6 +93,18 @@
     {
         _action = SHAction_EnableBluetooth;
     }
+    else if (code == 8013)
+    {
+        _action = SHAction_EnablePushMsg;
+    }
+    else if (code == 8014)
+    {
+        _action = SHAction_EnableLocation;
+    }
+    else if (code == 8042)
+    {
+        _action = SHAction_Ghost;
+    }
     else if (code == 8049)
     {
         _action = SHAction_CustomJson;

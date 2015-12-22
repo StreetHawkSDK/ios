@@ -28,6 +28,7 @@
 + (void)updateBluetoothStatusHandler:(NSNotification *)notification; //update bluetooth status to NSUserDefaults "SH_BEACON_BLUETOOTH". notification name: SH_LMBridge_UpdateBluetoothStatus; user info: empty.
 + (void)updateiBeaconStatusHandler:(NSNotification *)notification; //update iBeacon support status to NSUserDefaults "SH_BEACON_iBEACON". notification name: SH_LMBridge_UpdateiBeaconStatus; user info: empty.
 + (void)setIBeaconTimestampStatusHandler:(NSNotification *)notification; //for handle app_status's iBeacon timestamp. notification name: SH_LMBridge_SetIBeaconTimestamp; user info: @{@"timestamp": NONULL(iBeaconTimestamp)}].
++ (void)updateLocationPermissionStatusHandler:(NSNotification *)notification; //update location permission status to NSUserDefauts "SH_LOCATION_STATUS". notification name: SH_LMBridge_UpdateLocationPermissionStatus; user info: empty.
 
 @end
 
@@ -43,6 +44,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBluetoothStatusHandler:) name:@"SH_LMBridge_UpdateBluetoothStatus" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateiBeaconStatusHandler:) name:@"SH_LMBridge_UpdateiBeaconStatus" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setIBeaconTimestampStatusHandler:) name:@"SH_LMBridge_SetIBeaconTimestamp" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLocationPermissionStatusHandler:) name:@"SH_LMBridge_UpdateLocationPermissionStatus" object:nil];
 }
 
 #pragma mark - private functions
@@ -71,6 +73,12 @@
 {
     NSString *timestamp = notification.userInfo[@"timestamp"];
     [SHBeaconStatus sharedInstance].iBeaconTimestamp = timestamp;
+}
+
++ (void)updateLocationPermissionStatusHandler:(NSNotification *)notification
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(StreetHawk.systemPreferenceDisableLocation) forKey:SH_LOCATION_STATUS];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

@@ -35,9 +35,10 @@ enum SHAction
     SHAction_EnableBluetooth = 10,
     SHAction_EnablePushMsg = 11,
     SHAction_EnableLocation = 12,
-    SHAction_CheckAppStatus,
-    SHAction_CustomJson,
-    SHAction_Undefined,
+    SHAction_CheckAppStatus = 13,
+    SHAction_CustomJson = 14,
+    SHAction_Ghost = 15,
+    SHAction_Undefined = 16,
 };
 typedef enum SHAction SHAction;
 

@@ -212,6 +212,39 @@ NSString * const SHNotificationActionId_Later = @"SHNotificationActionId_Later";
     category8012.identifier = @"8012";
     [category8012 setActions:@[action8012_positive, action8012_negative] forContext:UIUserNotificationActionContextDefault];
     [category8012 setActions:@[action8012_positive, action8012_negative] forContext:UIUserNotificationActionContextMinimal];
+    //8013 notification for remind to turn on push permission. Buttons: 1. Enable; 2. Cancel
+    UIMutableUserNotificationAction *action8013_positive = [[UIMutableUserNotificationAction alloc] init];
+    action8013_positive.identifier = SHNotificationActionId_YesPlease;
+    action8013_positive.title = shLocalizedString(@"STREETHAWK_8013_POSITIVE", @"Enable");
+    action8013_positive.activationMode = UIUserNotificationActivationModeForeground;
+    action8013_positive.destructive = NO;
+    UIMutableUserNotificationAction *action8013_negative = [[UIMutableUserNotificationAction alloc] init];
+    action8013_negative.identifier = SHNotificationActionId_Cancel;
+    action8013_negative.title = shLocalizedString(@"STREETHAWK_8013_NEGATIVE", @"Cancel");
+    action8013_negative.activationMode = UIUserNotificationActivationModeBackground;
+    action8013_negative.authenticationRequired = NO;
+    action8013_negative.destructive = NO;
+    UIMutableUserNotificationCategory *category8013 = [[UIMutableUserNotificationCategory alloc] init];
+    category8013.identifier = @"8013";
+    [category8013 setActions:@[action8013_positive, action8013_negative] forContext:UIUserNotificationActionContextDefault];
+    [category8013 setActions:@[action8013_positive, action8013_negative] forContext:UIUserNotificationActionContextMinimal];
+    //8014 notification for remind to turn on location permission. Buttons: 1. Enable; 2. Cancel
+    UIMutableUserNotificationAction *action8014_positive = [[UIMutableUserNotificationAction alloc] init];
+    action8014_positive.identifier = SHNotificationActionId_YesPlease;
+    action8014_positive.title = shLocalizedString(@"STREETHAWK_8014_POSITIVE", @"Enable");
+    action8014_positive.activationMode = UIUserNotificationActivationModeForeground;
+    action8014_positive.destructive = NO;
+    UIMutableUserNotificationAction *action8014_negative = [[UIMutableUserNotificationAction alloc] init];
+    action8014_negative.identifier = SHNotificationActionId_Cancel;
+    action8014_negative.title = shLocalizedString(@"STREETHAWK_8014_NEGATIVE", @"Cancel");
+    action8014_negative.activationMode = UIUserNotificationActivationModeBackground;
+    action8014_negative.authenticationRequired = NO;
+    action8014_negative.destructive = NO;
+    UIMutableUserNotificationCategory *category8014 = [[UIMutableUserNotificationCategory alloc] init];
+    category8014.identifier = @"8014";
+    [category8014 setActions:@[action8014_positive, action8014_negative] forContext:UIUserNotificationActionContextDefault];
+    [category8014 setActions:@[action8014_positive, action8014_negative] forContext:UIUserNotificationActionContextMinimal];
+    //8042 notification for ghost push, no action buttons.
     //8049 notification for customise. Buttons: 1. Yes please; 2. Cancel
     UIMutableUserNotificationAction *action8049_positive = [[UIMutableUserNotificationAction alloc] init];
     action8049_positive.identifier = SHNotificationActionId_YesPlease;
@@ -228,7 +261,7 @@ NSString * const SHNotificationActionId_Later = @"SHNotificationActionId_Later";
     category8049.identifier = @"8049";
     [category8049 setActions:@[action8049_positive, action8049_negative] forContext:UIUserNotificationActionContextDefault];
     [category8049 setActions:@[action8049_positive, action8049_negative] forContext:UIUserNotificationActionContextMinimal];
-    return [NSMutableSet setWithObjects:category8000, category8004, category8005, category8006, category8007, category8008, category8009, category8010, category8011, category8012, category8049, nil];
+    return [NSMutableSet setWithObjects:category8000, category8004, category8005, category8006, category8007, category8008, category8009, category8010, category8011, category8012, category8013, category8014, category8049, nil];
 }
 
 - (void)addCategory:(UIUserNotificationCategory *)category toSet:(NSMutableSet *)set
@@ -306,7 +339,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     {
         return NO;
     }
-    BOOL isKnownCode = (code == 8000 || code == 8003 || code == 8004 || code == 8005 || code == 8006 || code == 8007 || code == 8008 || code == 8009 || code == 8010 || code == 8011 || code == 8012 || code == 8049);
+    BOOL isKnownCode = (code == 8000 || code == 8003 || code == 8004 || code == 8005 || code == 8006 || code == 8007 || code == 8008 || code == 8009 || code == 8010 || code == 8011 || code == 8012 || code == 8013 || code == 8014 || code == 8042 || code == 8049);
     return isKnownCode;
 }
 
@@ -774,6 +807,13 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     }
     else if (pushData.action == SHAction_EnableBluetooth)
     {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateBluetoothStatus" object:nil];
+        NSInteger bluetoothStatus = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_BLUETOOTH] integerValue];
+        if ((pushData.isAppOnForeground/*is App from BG system setting maybe modified but bluetoothState is not updated on time yet. A good thing is it goes to direct action, and CBCentralManager can decide show dialog or not*/ && bluetoothStatus == CBCentralManagerStatePoweredOn/*if App in FG this is accurate*/))
+        {
+            [pushData sendPushResult:SHResult_Accept withHandler:nil];
+            return YES;  //stop handle
+        }
         confirmAction = ^{
             [pushData sendPushResult:SHResult_Accept withHandler:nil];
             //show dialog which can direct to system's Bluetooth setting page
@@ -784,18 +824,47 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
             }
         };
     }
-    //action handler has done, start to invoke.
-    if (pushData.action == SHAction_EnableBluetooth)  //8012 is to warn user to turn on Bluetooth for iBeacon, not show it if: 1) not iOS 7.0+; 2) Bluetooth is already turn on.
+    else if (pushData.action == SHAction_EnablePushMsg) //this also used for smart push, which can occur even when push is disabled.
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateBluetoothStatus" object:nil];
-        NSInteger bluetoothStatus = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_BLUETOOTH] integerValue];
-        if ((pushData.isAppOnForeground/*is App from BG system setting maybe modified but bluetoothState is not updated on time yet. A good thing is it goes to direct action, and CBCentralManager can decide show dialog or not*/ && bluetoothStatus == CBCentralManagerStatePoweredOn/*if App in FG this is accurate*/))
+        if (!StreetHawk.systemPreferenceDisableNotification)
         {
             [pushData sendPushResult:SHResult_Accept withHandler:nil];
             return YES;  //stop handle
         }
+        confirmAction = ^{
+            [pushData sendPushResult:SHResult_Accept withHandler:nil];
+            if (![StreetHawk launchSystemPreferenceSettings])
+            {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Info" message:@"Pre-iOS 8 please manually change in settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+            }
+        };
     }
-    //start process
+    else if (pushData.action == SHAction_EnableLocation)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateLocationPermissionStatus" object:nil];
+        BOOL locationPermission = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_LOCATION_STATUS] boolValue];
+        if (!locationPermission) //Get NO for: 1. Customer enables location permission; 2. Not have location module integrated. Both case should stop handler.
+        {
+            [pushData sendPushResult:SHResult_Accept withHandler:nil];
+            return YES;  //stop handle
+        }
+        confirmAction = ^{
+            [pushData sendPushResult:SHResult_Accept withHandler:nil];
+            if (![StreetHawk launchSystemPreferenceSettings])
+            {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Info" message:@"Pre-iOS 8 please manually change in settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+            }
+        };
+    }
+    else if (pushData.action == SHAction_Ghost)
+    {
+        [pushData sendPushResult:SHResult_Accept withHandler:nil];
+        SHLog(@"Ghost push is received"); //Ghost push does nothing, just silently send pushresult.
+        return YES;
+    }
+    //action handler has done, start to invoke.
     if ((pushData.action == SHAction_SimplePrompt) //simple promote may show dialog even from BG.
         || ([pushData shouldShowConfirmDialog]
             && !pushData.isInAppSlide/*confirm dialog for slide implemented in slide, because if hide loading, the dialog show after load finish*/

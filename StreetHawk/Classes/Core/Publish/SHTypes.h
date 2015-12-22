@@ -74,5 +74,7 @@ typedef enum SHDevelopmentPlatform SHDevelopmentPlatform;
 #define SH_BEACON_BLUETOOTH     @"SH_BEACON_BLUETOOTH"
 //For get Beacon module's iBeacon support status, before use it must have notification "SH_LMBridge_UpdateiBeaconStatus" to update the value.
 #define SH_BEACON_iBEACON       @"SH_BEACON_iBEACON"
+//For get location permission status, before use it must have notification "SH_LMBridge_UpdateLocationPermissionStatus" to update the value.
+#define SH_LOCATION_STATUS      @"SH_LOCATION_STATUS"
 
 #endif
