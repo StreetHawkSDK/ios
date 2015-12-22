@@ -182,7 +182,7 @@ The application version and build version of current Application, formatted as @
  
  - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
  {
-    return [StreetHawk openURL:url sourceApplication:sourceApplication annotation:annotation];
+    return [StreetHawk openURL:url];
  }`
  */
 @property (nonatomic) BOOL autoIntegrateAppDelegate;
@@ -297,13 +297,19 @@ The application version and build version of current Application, formatted as @
  Handle open URL, customer's App must register "URL Types" in Info.plist with its own scheme. User App implement this function by calling it in AppDelegate.m if NOT auto-integrate. If `StreetHawk.autoIntegrateAppDelegate = YES;` make sure NOT call this otherwise cause dead loop. Code snippet:
     `- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation`
     `{`
-        `return [StreetHawk openURL:url sourceApplication:sourceApplication annotation:annotation];`
+        `return [StreetHawk openURL:url];`
+    `}`
+ or
+    `- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options`
+    `{`
+        `return [StreetHawk openURL:url];`
     `}`
  
  This function performs following tasks:
- 1. Deeplinking: open a view and call function of the view. The url must be formatted as: <url scheme>://launchvc?vc=<friendly name or vc>&xib_iphone=<xib_iphone>&xib_ipad=<xib_ipad>&<additional params>. "<url scheme>" must same as Info.plist register URL type; "launchvc" is pre-defined command, case insensitive; "vc" is friendly name or UIViewController's class name, mandatory; others are optional.
+ 1. StreetHawk formatted deeplinking: open a view and call function of the view. The url must be formatted as: <url scheme>://launchvc?vc=<friendly name or vc>&xib_iphone=<xib_iphone>&xib_ipad=<xib_ipad>&<additional params>. "<url scheme>" must same as Info.plist register URL type; "launchvc" is pre-defined command, case insensitive; "vc" is friendly name or UIViewController's class name, mandatory; others are optional.
+ 2. Whatever deeplinking: any kind of url, but make sure you handle it by your own code in `StreetHawk.openUrlHandler = ^(NSURL *openUrl) {}`. 
  */
-- (BOOL)openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
+- (BOOL)openURL:(NSURL *)url;
 
 /** @name Permission */
 

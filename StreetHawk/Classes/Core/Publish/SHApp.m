@@ -563,7 +563,7 @@
     }    
 }
 
-- (BOOL)openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+- (BOOL)openURL:(NSURL *)url
 {
     BOOL handledBySDK = NO;
     if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
@@ -648,7 +648,7 @@
         NSURL *openUrl = launchOptions[UIApplicationLaunchOptionsURLKey];
         if (openUrl != nil)
         {
-            [StreetHawk openURL:openUrl sourceApplication:nil annotation:nil];
+            [StreetHawk openURL:openUrl];
         }
     }
     
@@ -1006,6 +1006,43 @@
     }
 }
 
+//since iOS 9 uses this delegate callback, and `- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation` is not called when this new delegate present.
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
+{
+    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:openURL:options:)])
+    {
+        if ([self.appDelegateInterceptor.secondResponder application:app openURL:url options:options])
+        {
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap)
+            {
+                return YES;
+            }
+        }
+    }
+    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:openURL:sourceApplication:annotation:)]) //try old style handle
+    {
+        if ([self.appDelegateInterceptor.secondResponder application:app openURL:url sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey] annotation:options[UIApplicationOpenURLOptionsAnnotationKey]])
+        {
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap)
+            {
+                return YES;
+            }
+        }
+    }
+    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleOpenURL:)]) //try old style handle
+    {
+        if ([self.appDelegateInterceptor.secondResponder application:app handleOpenURL:url])
+        {
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap)
+            {
+                return YES;
+            }
+        }
+    }
+    return [StreetHawk openURL:url];
+}
+
+//before iOS 9 still use this delegate.
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:openURL:sourceApplication:annotation:)])
@@ -1022,11 +1059,14 @@
     {
         if ([self.appDelegateInterceptor.secondResponder application:application handleOpenURL:url])
         {
-            return YES;
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap)
+            {
+                return YES;
+            }
         }
     }
     //If custom App cannot handle it, try StreetHawk's.
-    return [StreetHawk openURL:url sourceApplication:sourceApplication annotation:annotation];
+    return [StreetHawk openURL:url];
 }
 
 #pragma mark - private functions
