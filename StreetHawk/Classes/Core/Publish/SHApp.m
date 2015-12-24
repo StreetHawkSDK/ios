@@ -638,10 +638,11 @@
     {
         return;
     }
-    NSDictionary *launchOptions = [notification userInfo];
-    SHLog(@"Application did finish launching with launchOptions: %@", launchOptions);
-
+    
     BOOL isFromDelayLaunch = [notification.name isEqualToString:@"StreetHawkDelayLaunchOptionsNotification"]; //in case from delay launch options, the remote delegate happens when app launch, and at that time StreetHawk delegate not ready, it's pass and cannot handle. Handle it again here.
+    NSDictionary *launchOptions = [notification userInfo];
+    SHLog(@"Application did finish launching (%@) with launchOptions: %@", isFromDelayLaunch ? @"Delay" : @"Normal", launchOptions);
+    
     //Phonegap open url system delegate happen before StreetHawk library get ready, so `sh.shDeeplinking(function(result){alert("open url: " + result)},function(){});` not trigger when App not launch. Check delay launch options, if from open url, give it second chance to trigger again.
     if (isFromDelayLaunch)
     {
@@ -699,6 +700,12 @@
             }
         };
         [requestCheckVersion startAsynchronously];
+    }
+    
+    //If add push module later for Phonegap, if already have installs it won't register and show permission dialog until next BG to FG. `applicationDidBecomeActiveNotificationHandler` does the check however first launch it's not ready due to Phonegap web load. `applicationDidFinishLaunchingNotificationHandler` has delay load and good chance to do register at first launch.
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap && StreetHawk.currentInstall != nil)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_Register_Notification" object:nil];
     }
 }
 
