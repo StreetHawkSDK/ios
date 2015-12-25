@@ -489,6 +489,11 @@
 
 - (void)shNotifyPageExit:(NSString *)page
 {
+    if (self.currentView == nil)
+    {
+        //In growth open deeplinking case https://bitbucket.org/shawk/testing/issues/214/organic-share-and-open-page-meet-page, viewWillDisappear is called without viewDidAppear or viewWillAppear, in these cases the disappear view is not visible at all and should not do exit or complete logline. Because `currentView` is created in enter, use this as check.
+        return;
+    }
     //These checks applies to normal customer App calls. However even the check fail it only throw assert in Debug (not happen in official release), and not stop send 8109 log.
     NSAssert(page != nil && page.length > 0, @"Try to exit a page without page name.");
     if (page != nil && page.length > 0)
