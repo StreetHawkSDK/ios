@@ -1025,7 +1025,7 @@
     {
         if ([self.appDelegateInterceptor.secondResponder application:app openURL:url options:options])
         {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap)
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
             {
                 return YES;
             }
@@ -1035,7 +1035,7 @@
     {
         if ([self.appDelegateInterceptor.secondResponder application:app openURL:url sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey] annotation:options[UIApplicationOpenURLOptionsAnnotationKey]])
         {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap)
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
             {
                 return YES;
             }
@@ -1045,7 +1045,7 @@
     {
         if ([self.appDelegateInterceptor.secondResponder application:app handleOpenURL:url])
         {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap)
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
             {
                 return YES;
             }
@@ -1061,7 +1061,7 @@
     {
         if ([self.appDelegateInterceptor.secondResponder application:application openURL:url sourceApplication:sourceApplication annotation:annotation])
         {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap) //Phonegap has openURL function implemented, but iOS plugin still implement shDeepLinking to keep consistence with Android. https://bitbucket.org/shawk/streethawk/issue/587/handle-open-url-in-phonegap.
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
             {
                 return YES;
             }
@@ -1071,7 +1071,7 @@
     {
         if ([self.appDelegateInterceptor.secondResponder application:application handleOpenURL:url])
         {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap)
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
             {
                 return YES;
             }
