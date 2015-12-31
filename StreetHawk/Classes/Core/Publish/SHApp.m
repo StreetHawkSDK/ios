@@ -708,7 +708,7 @@
     }
     
     //If add push module later for Phonegap, if already have installs it won't register and show permission dialog until next BG to FG. `applicationDidBecomeActiveNotificationHandler` does the check however first launch it's not ready due to Phonegap web load. `applicationDidFinishLaunchingNotificationHandler` has delay load and good chance to do register at first launch.
-    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap && StreetHawk.currentInstall != nil)
+    if ((StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Titanium) && StreetHawk.currentInstall != nil)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_Register_Notification" object:nil];
     }
