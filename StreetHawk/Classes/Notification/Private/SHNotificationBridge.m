@@ -72,6 +72,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLocalNotificationActionHandler:) name:@"SH_PushBridge_HandleLocalActionButton" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendPushResultHandler:) name:@"SH_PushBridge_SendResult_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushDataHandler:) name:@"SH_PushBridge_HandlePushData" object:nil];
+    //Post a notification to notify push module is ready. This is used in Titanium for adding customise handler and phonegap observer.
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushModule_Ready" object:nil];
 }
 
 #pragma mark - private
