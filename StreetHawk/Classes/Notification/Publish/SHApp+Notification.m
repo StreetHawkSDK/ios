@@ -197,7 +197,7 @@
     }
     if (StreetHawk.isNotificationEnabled)  //not call this for customer disable notification to avoid permission message, work both for remote and location notification.
     {
-        //No matter system enabled or disabled, register it. Even for system disabled App, if user enable when App is in background, didRegisterForRemoteNotificationsWithDeviceToken is triggered.
+        //No matter system enabled or disabled, register it. For a fresh new App system is not enabled, if check `notificationDisabled` it will never register notification.
         if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])  //iOS 8 uses totally new way to register remote notification.
         {
             if (StreetHawk.notificationTypes > (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound))
