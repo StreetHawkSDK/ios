@@ -648,13 +648,23 @@
     NSDictionary *launchOptions = [notification userInfo];
     SHLog(@"Application did finish launching (%@) with launchOptions: %@", isFromDelayLaunch ? @"Delay" : @"Normal", launchOptions);
     
-    //Phonegap open url system delegate happen before StreetHawk library get ready, so `sh.shDeeplinking(function(result){alert("open url: " + result)},function(){});` not trigger when App not launch. Check delay launch options, if from open url, give it second chance to trigger again.
     if (isFromDelayLaunch)
     {
+        //Phonegap open url system delegate happen before StreetHawk library get ready, so `sh.shDeeplinking(function(result){alert("open url: " + result)},function(){});` not trigger when App not launch. Check delay launch options, if from open url, give it second chance to trigger again.
         NSURL *openUrl = launchOptions[UIApplicationLaunchOptionsURLKey];
         if (openUrl != nil)
         {
             [StreetHawk openURL:openUrl];
+        }
+        //Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again.
+        NSDictionary *notificationInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (notificationInfo != nil)
+        {
+            NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
+            dictUserInfo[@"payload"] = notificationInfo;
+            dictUserInfo[@"fgbg"] = @(SHAppFGBG_BG); //this must be wake from not launch
+            dictUserInfo[@"needComplete"] = @(NO);
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveRemoteNotification" object:nil userInfo:dictUserInfo];
         }
     }
     
