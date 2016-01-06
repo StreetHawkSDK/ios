@@ -117,7 +117,7 @@
     _geolocationMonitorState = SHGeoLocationMonitorState_Stopped;
     
     //Give Phonegap a chance to call location service. Ticket https://bitbucket.org/shawk/streethawk/issue/384/phonegap-location-service-not-start-until.
-    [self startMonitorGeoLocationStandard:(!StreetHawk.reportWorkHomeLocationOnly && [UIApplication sharedApplication].applicationState != UIApplicationStateBackground)];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
     
     //no need to start monitor server care iBeacon list, because it start and no code to stop, means when App launch (iOS 7 need manual launch, iOS 7.1+ automatically launch), it continues to monitor region and all related delegate works. Test by monitor a region in SHSample, kill App, enter/exit region, notification happen and output prints.
 }
