@@ -140,17 +140,18 @@ static const float SlideTitle_Height = 28;
     {
         return;  //if already remove all, stop showing.
     }
-    self.viewContainer = [[UIView alloc] initWithFrame:CGRectZero];  //not show it now, out of screen
-    [self.view addSubview:self.viewContainer];
-    //Add content VC so that content VC is loaded out of screen
-    self.contentVC.view.frame = self.viewContainer.bounds;
-    self.contentVC.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;;
-    [self.viewContainer addSubview:self.contentVC.view];
-    self.windowCover = [[SHCoverWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]; //cannot release window otherwise nothing get show, this window will be manually release when dismissSlideView, so ARC add strong property to keep this window.
-    self.windowCover.rootViewController = self;  //set rootViewController so that it can rotate
-    [self.windowCover makeKeyAndVisible];  //must use [windowCover makeKeyAndVisible] self.view.window is nil until the window show, and now window.rootViewController is setup.
     //animate show slide
     dispatch_block_t actionShowSlide = ^{
+        //Move add window to inside actionShowSlide, unless click Yes button not create cover window. This is to fix in case customer not implement clickHandler(SHResult).
+        self.viewContainer = [[UIView alloc] initWithFrame:CGRectZero];  //not show it now, out of screen
+        [self.view addSubview:self.viewContainer];
+        //Add content VC so that content VC is loaded out of screen
+        self.contentVC.view.frame = self.viewContainer.bounds;
+        self.contentVC.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;;
+        [self.viewContainer addSubview:self.contentVC.view];
+        self.windowCover = [[SHCoverWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]; //cannot release window otherwise nothing get show, this window will be manually release when dismissSlideView, so ARC add strong property to keep this window.
+        self.windowCover.rootViewController = self;  //set rootViewController so that it can rotate
+        [self.windowCover makeKeyAndVisible];  //must use [windowCover makeKeyAndVisible] self.view.window is nil until the window show, and now window.rootViewController is setup.
         self.viewContainer.frame = [self calculateStartRect];
         [self.contentVC contentViewAdjustUI];  //first time know view size.
         __block CGRect endRect = [self calculateEndRect];
@@ -288,8 +289,11 @@ static const float SlideTitle_Height = 28;
     {
         self.contentVC.contentLoadFinishHandler = nil;  //to avoid later show content after load successfully; although contentVC dealloc should set this, do it again here to avoid crash.
     }
-    self.view.window.hidden = YES;
-    self.windowCover = nil; //self's dealloc is called after this
+    if (self.windowCover != nil)
+    {
+        self.view.window.hidden = YES;
+        self.windowCover = nil; //self's dealloc is called after this
+    }
     [[SHSlideContainer shared] removeSlide:self];  //keep this at end so above self.view not cause deallocated object.
 }
 
