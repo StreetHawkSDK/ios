@@ -25,6 +25,9 @@
 #import "SHDeepLinking.h"
 #import "SHFriendlyNameObject.h"
 #import "SHUtils.h"
+//header from System
+#import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
+#import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -36,6 +39,8 @@
 #define EXIT_PAGE_HISTORY                   @"EXIT_PAGE_HISTORY"  //key for record send exit log history. It's set when send exit log and cleared when send enter log. This is to avoid send duplicated exit log.
 
 #define ADS_IDENTIFIER                      @"ADS_IDENTIFIER" //user pass in advertising identifier
+
+#define SPOTLIGHT_DEEPLINKING_MAPPING      @"SPOTLIGHT_DEEPLINKING_MAPPING" //key for spotlight identifier to deeplinking mappig
 
 @interface SHViewActivity : NSObject
 
@@ -625,6 +630,117 @@
     }
 }
 
+#pragma mark - Spotlight and Search
+
+- (void)indexSpotlightSearchForIdentifier:(NSString *)identifier forDeeplinking:(NSString *)deeplinking withSearchTitle:(NSString *)searchTitle withSearchDescription:(NSString *)searchDescription withThumbnail:(UIImage *)thumbnail withKeywords:(NSArray *)keywords
+{
+    if (shStrIsEmpty(identifier))
+    {
+        SHLog(@"Spotlight's identifier cannot be empty.");
+        return;
+    }
+    //index to system
+    CSSearchableItemAttributeSet *attributeSet = [[CSSearchableItemAttributeSet alloc] initWithItemContentType:(NSString*) kUTTypeImage];
+    attributeSet.title = searchTitle;
+    attributeSet.contentDescription = searchDescription;
+    if (thumbnail != nil)
+    {
+        attributeSet.thumbnailData = UIImagePNGRepresentation(thumbnail);
+    }
+    attributeSet.keywords = keywords;
+    CSSearchableItem *searchableItem = [[CSSearchableItem alloc] initWithUniqueIdentifier:identifier domainIdentifier:nil attributeSet:attributeSet];
+    [[CSSearchableIndex defaultSearchableIndex] indexSearchableItems:@[searchableItem] completionHandler:^(NSError * _Nullable error)
+    {
+        if (error)
+        {
+            SHLog(@"Fail to index splotlight item due to error: %@", error.localizedDescription);
+        }
+        else
+        {
+            //add index and deeplinking to StreetHawk mapping
+            if (!shStrIsEmpty(deeplinking))
+            {
+                BOOL needSave = YES;
+                NSDictionary *dictMapping = [[NSUserDefaults standardUserDefaults] objectForKey:SPOTLIGHT_DEEPLINKING_MAPPING];
+                if (dictMapping != nil && [dictMapping isKindOfClass:[NSDictionary class]])
+                {
+                    NSString *existingDeeplinking = dictMapping[identifier];
+                    if ([deeplinking compare:existingDeeplinking] == NSOrderedSame)
+                    {
+                        needSave = NO;
+                    }
+                }
+                if (needSave)
+                {
+                    NSMutableDictionary *dictSave = dictMapping ? [NSMutableDictionary dictionaryWithDictionary:dictMapping] : [NSMutableDictionary dictionary];
+                    dictSave[identifier] = deeplinking;
+                    [[NSUserDefaults standardUserDefaults] setObject:dictSave forKey:SPOTLIGHT_DEEPLINKING_MAPPING];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }
+            }
+        }
+    }];
+}
+
+- (void)deleteSpotlightItemsForIdentifiers:(NSArray *)arrayIdentifiers
+{
+    [[CSSearchableIndex defaultSearchableIndex] deleteSearchableItemsWithIdentifiers:arrayIdentifiers completionHandler:^(NSError * _Nullable error)
+    {
+        if (error)
+        {
+            SHLog(@"Fail to delete splotlight items due to error: %@", error.localizedDescription);
+        }
+        else
+        {
+            NSDictionary *dictMapping = [[NSUserDefaults standardUserDefaults] objectForKey:SPOTLIGHT_DEEPLINKING_MAPPING];
+            if (dictMapping != nil)
+            {
+                NSMutableDictionary *dictSave = [NSMutableDictionary dictionaryWithDictionary:dictMapping];
+                for (NSString *identifier in arrayIdentifiers)
+                {
+                    [dictSave removeObjectForKey:identifier];
+                }
+                [[NSUserDefaults standardUserDefaults] setObject:dictSave forKey:SPOTLIGHT_DEEPLINKING_MAPPING];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+        }
+    }];
+}
+
+- (void)deleteAllSpotlightItems
+{
+    [[CSSearchableIndex defaultSearchableIndex] deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error)
+    {
+        if (error)
+        {
+            SHLog(@"Fail to delete all splotlight items due to error: %@", error.localizedDescription);
+        }
+        else
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:@{} forKey:SPOTLIGHT_DEEPLINKING_MAPPING];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }];
+}
+
+- (BOOL)continueUserActivity:(NSUserActivity *)userActivity
+{
+    if (StreetHawk.openUrlHandler != nil)
+    {
+        NSString *spotlightIdentifier = userActivity.userInfo[@"kCSSearchableItemActivityIdentifier"];
+        NSDictionary *dictMapping = [[NSUserDefaults standardUserDefaults] objectForKey:SPOTLIGHT_DEEPLINKING_MAPPING];
+        NSString *deeplinking = nil;
+        if (dictMapping != nil && [dictMapping isKindOfClass:[NSDictionary class]])
+        {
+            deeplinking = dictMapping[spotlightIdentifier];
+        }
+        NSString *openUrl = deeplinking ? deeplinking : spotlightIdentifier;
+        StreetHawk.openUrlHandler([NSURL URLWithString:openUrl]);
+        return YES; //continue userActivity is handled by customer code.
+    }
+    return NO;
+}
+
 #pragma mark - application system notification handler
 
 //Good Apple doc for App states: https://developer.apple.com/library/ios/DOCUMENTATION/iPhone/Conceptual/iPhoneOSProgrammingGuide/ManagingYourApplicationsFlow/ManagingYourApplicationsFlow.html#//apple_ref/doc/uid/TP40007072-CH4.
@@ -1089,6 +1205,19 @@
     }
     //If custom App cannot handle it, try StreetHawk's.
     return [StreetHawk openURL:url];
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
+{
+    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:continueUserActivity:restorationHandler:)])
+    {
+        if ([self.appDelegateInterceptor.secondResponder application:application continueUserActivity:userActivity restorationHandler:restorationHandler])
+        {
+            return YES;
+        }
+    }
+    //If custom App cannot handle it, try StreetHawk's.
+    return [StreetHawk continueUserActivity:userActivity];
 }
 
 #pragma mark - private functions

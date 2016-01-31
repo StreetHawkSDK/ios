@@ -319,6 +319,41 @@ The application version and build version of current Application, formatted as @
  */
 - (BOOL)launchSystemPreferenceSettings NS_AVAILABLE_IOS(8_0);
 
+/** @name Spotlight and Search */
+
+/**
+ Add or update a spotlight search item into system. It's an easy to use wrapper for `CSSearchableItemAttributeSet`, `CSSearchableItem` and `CSSearchableIndex`, customer can gain same or more powerful result by using iOS API. However this wrapper API is more user friendly and easy to understand, besides it indexs deeplinking which will be used for `StreetHawk.openUrlHandler = ^(NSURL *openUrl) {}`.
+ @param identifier Mandatory, the identifier of this spotlight item. It's unique for each item, if use same identifier it means update to existing item.
+ @param deeplinking Optional, the deeplinking url of this item. It will be used in `StreetHawk.openUrlHandler = ^(NSURL *openUrl) {}` when customer clicks the search result. If `deeplinking` is empty, `StreetHawk.openUrlHandler = ^(NSURL *openUrl) {}` will get `identifier` as `openUrl`.
+ @param searchTitle Optional, the title displaying in search result as title.
+ @param searchDescription Optional, the description displaying in search result as description.
+ @param thumbnail Optional, the thumbnail displaying in search result in left.
+ @param keywords Optional, the keywords used for search, and it doesn't display in search result.
+ */
+- (void)indexSpotlightSearchForIdentifier:(NSString *)identifier forDeeplinking:(NSString *)deeplinking withSearchTitle:(NSString *)searchTitle withSearchDescription:(NSString *)searchDescription withThumbnail:(UIImage *)thumbnail withKeywords:(NSArray *)keywords NS_AVAILABLE_IOS(9_0);
+
+/**
+ Delete spotlight search items according to the array of identifiers.
+ @param arrayIdentifiers An array of identifiers.
+ */
+- (void)deleteSpotlightItemsForIdentifiers:(NSArray *)arrayIdentifiers NS_AVAILABLE_IOS(9_0);
+
+/**
+ Delete all spotlight search items.
+ */
+- (void)deleteAllSpotlightItems NS_AVAILABLE_IOS(9_0);
+
+/**
+ Handle user activity from spotlight search result. User App implement this function by calling it in AppDelegate.m if NOT auto-integrate. If `StreetHawk.autoIntegrateAppDelegate = YES;` make sure NOT call this otherwise cause dead loop. Code snippet:
+ `- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler`
+ `{`
+    `return [StreetHawk continueUserActivity:userActivity];`
+ `}`
+ 
+ This function checks local mapping of spotlight item's `identifier` and `deeplinking`, and trigger `StreetHawk.openUrlHandler = ^(NSURL *openUrl) {}`. If find mapping use `deeplinking` in callback's `openUrl`, otherwise use `identifier` in callback's `openUrl`.
+ */
+- (BOOL)continueUserActivity:(NSUserActivity *)userActivity NS_AVAILABLE_IOS(9_0);
+
 @end
 
 /**
