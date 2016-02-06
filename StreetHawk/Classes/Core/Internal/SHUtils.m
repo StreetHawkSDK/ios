@@ -575,7 +575,7 @@ NSString *shGetCarrierName()
     CTTelephonyNetworkInfo *netinfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [netinfo subscriberCellularProvider];
     NSString *carrierName = [carrier carrierName];
-    return (carrierName != nil && carrierName.length > 0) ? carrierName : @"Other";
+    return !shStrIsEmpty(carrierName) ? carrierName : @"Other";
 }
 
 SHAppMode shAppMode()

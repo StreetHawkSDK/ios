@@ -100,9 +100,13 @@ NSString * const SHInstallNotification_kError = @"Error";
                               @"client_version", StreetHawk.clientVersion,
                               @"sh_version", StreetHawk.version,
                               @"model", NONULL(shDevice.platformString), //rename class not use UIDevice extension, to avoid link to wrong obj
-                              @"carrier_name", shGetCarrierName(),
                               @"operating_system", @"ios",
                               @"os_version", uiDevice.systemVersion, nil];
+    if ([shGetCarrierName() compare:@"Other"] != NSOrderedSame)
+    {
+        [params addObject:@"carrier_name"];
+        [params addObject:shGetCarrierName()];
+    }
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
