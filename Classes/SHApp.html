@@ -113,6 +113,12 @@
 	
 	<option value="//api/name/checkInstallChangeForLaunch">&nbsp;&nbsp;&nbsp;&nbsp;- checkInstallChangeForLaunch</option>
 	
+	<option value="//api/name/continueUserActivity:">&nbsp;&nbsp;&nbsp;&nbsp;- continueUserActivity:</option>
+	
+	<option value="//api/name/deleteAllSpotlightItems">&nbsp;&nbsp;&nbsp;&nbsp;- deleteAllSpotlightItems</option>
+	
+	<option value="//api/name/deleteSpotlightItemsForIdentifiers:">&nbsp;&nbsp;&nbsp;&nbsp;- deleteSpotlightItemsForIdentifiers:</option>
+	
 	<option value="//api/name/feed:withHandler:">&nbsp;&nbsp;&nbsp;&nbsp;- feed:withHandler:</option>
 	
 	<option value="//api/name/getAlertSettingMinutes">&nbsp;&nbsp;&nbsp;&nbsp;- getAlertSettingMinutes</option>
@@ -132,6 +138,8 @@
 	<option value="//api/name/handleUserNotificationSettings:">&nbsp;&nbsp;&nbsp;&nbsp;- handleUserNotificationSettings:</option>
 	
 	<option value="//api/name/incrementTag:">&nbsp;&nbsp;&nbsp;&nbsp;- incrementTag:</option>
+	
+	<option value="//api/name/indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:">&nbsp;&nbsp;&nbsp;&nbsp;- indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:</option>
 	
 	<option value="//api/name/launchSystemPreferenceSettings">&nbsp;&nbsp;&nbsp;&nbsp;- launchSystemPreferenceSettings</option>
 	
@@ -225,6 +233,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Permission">Permission</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Spotlight and Search">Spotlight and Search</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Install">Install</a></span></li>
 	
 </ul></li>
@@ -311,6 +321,12 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/checkInstallChangeForLaunch">checkInstallChangeForLaunch</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/continueUserActivity:">continueUserActivity:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/deleteAllSpotlightItems">deleteAllSpotlightItems</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/deleteSpotlightItemsForIdentifiers:">deleteSpotlightItemsForIdentifiers:</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/feed:withHandler:">feed:withHandler:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/getAlertSettingMinutes">getAlertSettingMinutes</a></span></li>
@@ -330,6 +346,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/handleUserNotificationSettings:">handleUserNotificationSettings:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/incrementTag:">incrementTag:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:">indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/launchSystemPreferenceSettings">launchSystemPreferenceSettings</a></span></li>
 	
@@ -465,6 +483,18 @@
 </ul>
 
 
+<p>Extension for Feed API.</p>
+
+<p>Extension for Crash API.</p>
+
+<p><strong>Extension for install register or update:</strong></p>
+
+<p>Call <code>registerOrUpdateInstallWithHandler:</code> to register or update install attributes.</p>
+
+<p>Extension for Notification API.</p>
+
+<p>Extension for Growth API.</p>
+
 <p><strong>Extension for logs:</strong></p>
 
 <ul>
@@ -482,18 +512,6 @@
 <p>[StreetHawk removeTag:@&ldquo;sh_email&rdquo;];</p>
 
 <p>Extension for Crash API.</p>
-
-<p>Extension for Crash API.</p>
-
-<p><strong>Extension for install register or update:</strong></p>
-
-<p>Call <a href="#//api/name/registerOrUpdateInstallWithHandler:"><code>registerOrUpdateInstallWithHandler:</code></a> to register or update install attributes.</p>
-
-<p>Extension for Notification API.</p>
-
-<p>Extension for Feed API.</p>
-
-<p>Extension for Growth API.</p>
 					</div>
 					
 					
@@ -705,43 +723,63 @@
 						</ul>
 						
 						
+						<a title="Spotlight and Search" name="task_Spotlight and Search"></a>
+						<h3 class="subsubtitle task-title">Spotlight and Search</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:">&ndash;&nbsp;indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/deleteSpotlightItemsForIdentifiers:">&ndash;&nbsp;deleteSpotlightItemsForIdentifiers:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/deleteAllSpotlightItems">&ndash;&nbsp;deleteAllSpotlightItems</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/continueUserActivity:">&ndash;&nbsp;continueUserActivity:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
 						
 						<h3 class="subsubtitle task-title">Other Methods</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/tagCuid:">&ndash;&nbsp;tagCuid:</a></code>
+		<code><a href="#//api/name/newFeedHandler">&nbsp;&nbsp;newFeedHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/feed:withHandler:">&ndash;&nbsp;feed:withHandler:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/tagString:forKey:">&ndash;&nbsp;tagString:forKey:</a></code>
+		<code><a href="#//api/name/sendFeedAck:">&ndash;&nbsp;sendFeedAck:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/tagNumeric:forKey:">&ndash;&nbsp;tagNumeric:forKey:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/tagDatetime:forKey:">&ndash;&nbsp;tagDatetime:forKey:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/removeTag:">&ndash;&nbsp;removeTag:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/incrementTag:">&ndash;&nbsp;incrementTag:</a></code>
+		<code><a href="#//api/name/sendLogForFeed:withResult:">&ndash;&nbsp;sendLogForFeed:withResult:</a></code>
 	</span>
 	
 	
@@ -786,38 +824,6 @@
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:">&ndash;&nbsp;setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						
-						<h3 class="subsubtitle task-title">Other Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/isEnableCrashReport">&nbsp;&nbsp;isEnableCrashReport</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/crashHandler">&nbsp;&nbsp;crashHandler</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/isSendingCrashReport">&nbsp;&nbsp;isSendingCrashReport</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/sendCrashReportForInstall:withContent:onCrashDate:withHandler:">&ndash;&nbsp;sendCrashReportForInstall:withContent:onCrashDate:withHandler:</a></code>
 	</span>
 	
 	
@@ -1009,25 +1015,13 @@
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/newFeedHandler">&nbsp;&nbsp;newFeedHandler</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/feed:withHandler:">&ndash;&nbsp;feed:withHandler:</a></code>
+		<code><a href="#//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:">&ndash;&nbsp;originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/sendFeedAck:">&ndash;&nbsp;sendFeedAck:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/sendLogForFeed:withResult:">&ndash;&nbsp;sendLogForFeed:withResult:</a></code>
+		<code><a href="#//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:">&ndash;&nbsp;originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:</a></code>
 	</span>
 	
 	
@@ -1041,13 +1035,69 @@
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:">&ndash;&nbsp;originateShareWithCampaign:withSource:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:streetHawkGrowth_object:</a></code>
+		<code><a href="#//api/name/tagCuid:">&ndash;&nbsp;tagCuid:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:">&ndash;&nbsp;originateShareWithCampaign:withMedium:withContent:withTerm:shareUrl:withDefaultUrl:withMessage:</a></code>
+		<code><a href="#//api/name/tagString:forKey:">&ndash;&nbsp;tagString:forKey:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/tagNumeric:forKey:">&ndash;&nbsp;tagNumeric:forKey:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/tagDatetime:forKey:">&ndash;&nbsp;tagDatetime:forKey:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/removeTag:">&ndash;&nbsp;removeTag:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/incrementTag:">&ndash;&nbsp;incrementTag:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isEnableCrashReport">&nbsp;&nbsp;isEnableCrashReport</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/crashHandler">&nbsp;&nbsp;crashHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isSendingCrashReport">&nbsp;&nbsp;isSendingCrashReport</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sendCrashReportForInstall:withContent:onCrashDate:withHandler:">&ndash;&nbsp;sendCrashReportForInstall:withContent:onCrashDate:withHandler:</a></code>
 	</span>
 	
 	
@@ -2349,6 +2399,134 @@ Launch view controller in such scenarios:
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/continueUserActivity:" title="continueUserActivity:"></a>
+	<h3 class="subsubtitle method-title">continueUserActivity:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Handle user activity from spotlight search result. User App implement this function by calling it in AppDelegate.m if NOT auto-integrate. If <code>StreetHawk.</code>autoIntegrateAppDelegate<code> = YES;</code> make sure NOT call this otherwise cause dead loop. Code snippet:
+<code>- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler</code>
+<code>{</code></p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)continueUserActivity:(NSUserActivity *)<em>userActivity</em></code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>[StreetHawk continueUserActivity:userActivity];<code>
+</code>}`</p>
+
+<p>This function checks local mapping of spotlight item&rsquo;s <code>identifier</code> and <code>deeplinking</code>, and trigger <code>StreetHawk.openUrlHandler = ^(NSURL *openUrl) {}</code>. If find mapping use <code>deeplinking</code> in callback&rsquo;s <code>openUrl</code>, otherwise use <code>identifier</code> in callback&rsquo;s <code>openUrl</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/deleteAllSpotlightItems" title="deleteAllSpotlightItems"></a>
+	<h3 class="subsubtitle method-title">deleteAllSpotlightItems</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Delete all spotlight search items.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)deleteAllSpotlightItems</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/deleteSpotlightItemsForIdentifiers:" title="deleteSpotlightItemsForIdentifiers:"></a>
+	<h3 class="subsubtitle method-title">deleteSpotlightItemsForIdentifiers:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Delete spotlight search items according to the array of identifiers.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)deleteSpotlightItemsForIdentifiers:(NSArray *)<em>arrayIdentifiers</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>arrayIdentifiers</em></dt>
+			<dd><p>An array of identifiers.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/feed:withHandler:" title="feed:withHandler:"></a>
 	<h3 class="subsubtitle method-title">feed:withHandler:</h3>
 	
@@ -2898,6 +3076,77 @@ Launch view controller in such scenarios:
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
 		<p>If tag to server return YES; if fail to send to server return NO.</p>
 	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:" title="indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:"></a>
+	<h3 class="subsubtitle method-title">indexSpotlightSearchForIdentifier:forDeeplinking:withSearchTitle:withSearchDescription:withThumbnail:withKeywords:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Add or update a spotlight search item into system. It&rsquo;s an easy to use wrapper for <code>CSSearchableItemAttributeSet</code>, <code>CSSearchableItem</code> and <code>CSSearchableIndex</code>, customer can gain same or more powerful result by using iOS API. However this wrapper API is more user friendly and easy to understand, besides it indexs deeplinking which will be used for <code>StreetHawk.</code>openUrlHandler<code> = ^(NSURL *openUrl) {}</code>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)indexSpotlightSearchForIdentifier:(NSString *)<em>identifier</em> forDeeplinking:(NSString *)<em>deeplinking</em> withSearchTitle:(NSString *)<em>searchTitle</em> withSearchDescription:(NSString *)<em>searchDescription</em> withThumbnail:(UIImage *)<em>thumbnail</em> withKeywords:(NSArray *)<em>keywords</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>identifier</em></dt>
+			<dd><p>Mandatory, the identifier of this spotlight item. It&rsquo;s unique for each item, if use same identifier it means update to existing item.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>deeplinking</em></dt>
+			<dd><p>Optional, the deeplinking url of this item. It will be used in <code>StreetHawk.</code>openUrlHandler<code> = ^(NSURL *openUrl) {}</code> when customer clicks the search result. If <code>deeplinking</code> is empty, <code>StreetHawk.</code>openUrlHandler<code> = ^(NSURL *openUrl) {}</code> will get <code>identifier</code> as <code>openUrl</code>.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>searchTitle</em></dt>
+			<dd><p>Optional, the title displaying in search result as title.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>searchDescription</em></dt>
+			<dd><p>Optional, the description displaying in search result as description.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>thumbnail</em></dt>
+			<dd><p>Optional, the thumbnail displaying in search result in left.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>keywords</em></dt>
+			<dd><p>Optional, the keywords used for search, and it doesn&rsquo;t display in search result.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
 	
 	
 	
@@ -4608,7 +4857,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 StreetHawk. All rights reserved. (Last updated: 2015-12-23)</span><br />
+						<p><span class="copyright">&copy; 2016 StreetHawk. All rights reserved. (Last updated: 2016-02-22)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
