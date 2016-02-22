@@ -1147,77 +1147,57 @@
 //since iOS 9 uses this delegate callback, and `- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation` is not called when this new delegate present.
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
 {
+    BOOL customerHandled = NO;
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:openURL:options:)])
     {
-        if ([self.appDelegateInterceptor.secondResponder application:app openURL:url options:options])
-        {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
-            {
-                return YES;
-            }
-        }
+        customerHandled = [self.appDelegateInterceptor.secondResponder application:app openURL:url options:options];
     }
-    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:openURL:sourceApplication:annotation:)]) //try old style handle
+    if (!customerHandled)
     {
-        if ([self.appDelegateInterceptor.secondResponder application:app openURL:url sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey] annotation:options[UIApplicationOpenURLOptionsAnnotationKey]])
+        if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:openURL:sourceApplication:annotation:)]) //try old style handle
         {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
-            {
-                return YES;
-            }
+            customerHandled = [self.appDelegateInterceptor.secondResponder application:app openURL:url sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey] annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
         }
     }
-    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleOpenURL:)]) //try old style handle
+    if (!customerHandled)
     {
-        if ([self.appDelegateInterceptor.secondResponder application:app handleOpenURL:url])
+        if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleOpenURL:)]) //try old style handle
         {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
-            {
-                return YES;
-            }
+            customerHandled = [self.appDelegateInterceptor.secondResponder application:app handleOpenURL:url];
         }
     }
-    return [StreetHawk openURL:url];
+    BOOL sdkHandled = [StreetHawk openURL:url]; //always do StreetHawk handle
+    return customerHandled || sdkHandled;
 }
 
 //before iOS 9 still use this delegate.
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    BOOL customerHandled = NO;
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:openURL:sourceApplication:annotation:)])
     {
-        if ([self.appDelegateInterceptor.secondResponder application:application openURL:url sourceApplication:sourceApplication annotation:annotation])
-        {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
-            {
-                return YES;
-            }
-        }
+        customerHandled = [self.appDelegateInterceptor.secondResponder application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
     }
-    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleOpenURL:)]) //try old style handle
+    if (!customerHandled)
     {
-        if ([self.appDelegateInterceptor.secondResponder application:application handleOpenURL:url])
+        if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleOpenURL:)]) //try old style handle
         {
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Phonegap && StreetHawk.developmentPlatform != SHDevelopmentPlatform_Titanium)
-            {
-                return YES;
-            }
+            customerHandled = [self.appDelegateInterceptor.secondResponder application:application handleOpenURL:url];
         }
     }
-    //If custom App cannot handle it, try StreetHawk's.
-    return [StreetHawk openURL:url];
+    BOOL sdkHandled = [StreetHawk openURL:url];
+    return customerHandled || sdkHandled;
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
+    BOOL customerHandled = NO;
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:continueUserActivity:restorationHandler:)])
     {
-        if ([self.appDelegateInterceptor.secondResponder application:application continueUserActivity:userActivity restorationHandler:restorationHandler])
-        {
-            return YES;
-        }
+        customerHandled = [self.appDelegateInterceptor.secondResponder application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
     }
-    //If custom App cannot handle it, try StreetHawk's.
-    return [StreetHawk continueUserActivity:userActivity];
+    BOOL sdkHandled =  [StreetHawk continueUserActivity:userActivity];
+    return customerHandled || sdkHandled;
 }
 
 #pragma mark - private functions
