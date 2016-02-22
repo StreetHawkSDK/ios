@@ -14,8 +14,7 @@ Pod::Spec.new do |s|
   s.screenshots         = [ ]
   s.license             = 'LGPL'
   s.author              = { 'Christine' => 'christine@streethawk.com', 'Supporter' => 'support@streethawk.com' }
-  s.docset_url          = 'https://streethawk.freshdesk.com/solution/categories/5000158959'
-  s.documentation_url   = 'https://streethawk.freshdesk.com/solution/categories/5000158959'
+  s.documentation_url   = 'http://streethawksdk.github.io/ios/'
 
   s.source              = { :git => 'https://github.com/StreetHawkSDK/ios.git', :tag => s.version.to_s, :submodules => true }
   s.platform            = :ios, '7.0'
