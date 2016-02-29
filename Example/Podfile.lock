@@ -1,4 +1,19 @@
 PODS:
+  - AFNetworking (3.0.4):
+    - AFNetworking/NSURLSession (= 3.0.4)
+    - AFNetworking/Reachability (= 3.0.4)
+    - AFNetworking/Security (= 3.0.4)
+    - AFNetworking/Serialization (= 3.0.4)
+    - AFNetworking/UIKit (= 3.0.4)
+  - AFNetworking/NSURLSession (3.0.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.0.4)
+  - AFNetworking/Security (3.0.4)
+  - AFNetworking/Serialization (3.0.4)
+  - AFNetworking/UIKit (3.0.4):
+    - AFNetworking/NSURLSession
   - MBProgressHUD (0.9.2)
   - Reachability (3.2)
   - streethawk (1.7.6):
@@ -14,9 +29,11 @@ PODS:
     - Reachability
     - streethawk/Core
   - streethawk/Core (1.7.6):
+    - AFNetworking
     - MBProgressHUD
     - streethawk/Core/no-arc (= 1.7.6)
   - streethawk/Core/no-arc (1.7.6):
+    - AFNetworking
     - MBProgressHUD
   - streethawk/Crash (1.7.6):
     - streethawk/Core
@@ -41,8 +58,9 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
+  AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  streethawk: 23ad0121a96edf0be4d3ac912be4211e10d22593
+  streethawk: 0535327783e3f2e5652435665e5ad3400e98b6f0
 
 COCOAPODS: 0.39.0
