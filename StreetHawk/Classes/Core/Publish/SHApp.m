@@ -727,15 +727,23 @@
 {
     if (StreetHawk.openUrlHandler != nil)
     {
-        NSString *spotlightIdentifier = userActivity.userInfo[@"kCSSearchableItemActivityIdentifier"];
-        NSDictionary *dictMapping = [[NSUserDefaults standardUserDefaults] objectForKey:SPOTLIGHT_DEEPLINKING_MAPPING];
-        NSString *deeplinking = nil;
-        if (dictMapping != nil && [dictMapping isKindOfClass:[NSDictionary class]])
+        if ([userActivity.activityType compare:NSUserActivityTypeBrowsingWeb] == NSOrderedSame)
         {
-            deeplinking = dictMapping[spotlightIdentifier];
+            NSURL *webURL = userActivity.webpageURL;
+            StreetHawk.openUrlHandler(webURL);
         }
-        NSString *openUrl = deeplinking ? deeplinking : spotlightIdentifier;
-        StreetHawk.openUrlHandler([NSURL URLWithString:openUrl]);
+        else
+        {
+            NSString *spotlightIdentifier = userActivity.userInfo[@"kCSSearchableItemActivityIdentifier"];
+            NSDictionary *dictMapping = [[NSUserDefaults standardUserDefaults] objectForKey:SPOTLIGHT_DEEPLINKING_MAPPING];
+            NSString *deeplinking = nil;
+            if (dictMapping != nil && [dictMapping isKindOfClass:[NSDictionary class]])
+            {
+                deeplinking = dictMapping[spotlightIdentifier];
+            }
+            NSString *openUrl = deeplinking ? deeplinking : spotlightIdentifier;
+            StreetHawk.openUrlHandler([NSURL URLWithString:openUrl]);
+        }
         return YES; //continue userActivity is handled by customer code.
     }
     return NO;
