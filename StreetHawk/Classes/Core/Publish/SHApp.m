@@ -731,6 +731,7 @@
         {
             NSURL *webURL = userActivity.webpageURL;
             StreetHawk.openUrlHandler(webURL);
+            return YES; //for universal linking case
         }
         else
         {
@@ -742,9 +743,12 @@
                 deeplinking = dictMapping[spotlightIdentifier];
             }
             NSString *openUrl = deeplinking ? deeplinking : spotlightIdentifier;
-            StreetHawk.openUrlHandler([NSURL URLWithString:openUrl]);
+            if (!shStrIsEmpty(openUrl))
+            {
+                StreetHawk.openUrlHandler([NSURL URLWithString:openUrl]);
+                return YES; //for spotlight search case
+            }
         }
-        return YES; //continue userActivity is handled by customer code.
     }
     return NO;
 }
