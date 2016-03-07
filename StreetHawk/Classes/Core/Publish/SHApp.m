@@ -1501,7 +1501,7 @@
 
 - (BOOL)tagString:(NSObject *)value forKey:(NSString *)key
 {
-    if (value != nil && key != nil && key.length > 0)
+    if (value != nil && !shStrIsEmpty(key))
     {
         if ([self checkTagValue:value forKey:key])
         {
@@ -1516,7 +1516,7 @@
 
 - (BOOL)tagNumeric:(double)value forKey:(NSString *)key
 {
-    if (key != nil && key.length > 0)
+    if (!shStrIsEmpty(key))
     {
         if ([self checkTagValue:@(value) forKey:key])
         {
@@ -1531,7 +1531,7 @@
 
 - (BOOL)tagDatetime:(NSDate *)value forKey:(NSString *)key
 {
-    if (value != nil && key != nil && key.length > 0)
+    if (value != nil && !shStrIsEmpty(key))
     {
         if ([self checkTagValue:value forKey:key])
         {
@@ -1546,7 +1546,7 @@
 
 - (BOOL)removeTag:(NSString *)key
 {
-    if (key != nil && key.length > 0)
+    if (!shStrIsEmpty(key))
     {
         key = [self checkTagKey:key];
         NSDictionary *dict = @{@"key": key};
@@ -1558,10 +1558,15 @@
 
 - (BOOL)incrementTag:(NSString *)key
 {
-    if (key != nil && key.length > 0)
+    return [self incrementTag:1 forKey:key];
+}
+
+- (BOOL)incrementTag:(int)value forKey:(NSString *)key
+{
+    if (!shStrIsEmpty(key))
     {
         key = [self checkTagKey:key];
-        NSDictionary *dict = @{@"key": key, @"numeric": @1};
+        NSDictionary *dict = @{@"key": key, @"numeric": @(value)};
         [self sendLogForTag:dict withCode:LOG_CODE_TAG_INCREMENT];
         return YES;
     }
