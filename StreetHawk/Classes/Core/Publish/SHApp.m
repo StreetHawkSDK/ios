@@ -523,6 +523,11 @@
     [self shNotifyPageExit:page clearEnterHistory:YES/*for normal App calls, after exit clear history*/ logCompleteView:YES/*normal App call, this is manual exit a view so complete.*/];
 }
 
+- (NSString *)getFormattedDateTime:(NSTimeInterval)seconds
+{
+    return shFormatStreetHawkDate([NSDate dateWithTimeIntervalSince1970:seconds]);
+}
+
 - (void)shRegularTask:(void (^)(UIBackgroundFetchResult))completionHandler needComplete:(BOOL)needComplete
 {
     BOOL needHeartbeatLog = YES;
