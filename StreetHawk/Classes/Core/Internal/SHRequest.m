@@ -326,6 +326,29 @@
     return data;
 }
 
+- (void)cancel
+{
+    NSAssert(![NSThread isMainThread], @"cancel wait in main thread for request %@.", self);
+    dispatch_semaphore_wait(flagsSemaphore, DISPATCH_TIME_FOREVER);
+    if (self.isRequestCancelled)
+    {
+        dispatch_semaphore_signal(flagsSemaphore);
+        return;
+    }
+    else
+    {
+        self.isRequestCancelled = YES;
+        dispatch_semaphore_signal(flagsSemaphore);
+    }
+    if (LOG_REQUESTS)
+    {
+        SHLog(@"Cancel request (%@), URL: %@", self, self.request);
+    }
+    [self.connection cancel];
+    [super cancel];
+    [self invokeHandlerAndRelease];
+}
+
 #pragma mark - override NSOperation functions
 
 //called by NSOperationQueue to start the operation inside it. 

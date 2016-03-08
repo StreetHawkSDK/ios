@@ -38,7 +38,9 @@ typedef void (^SHRequestHandler)(SHRequest *request);
 
 #define SMART_PUSH_PAYLOAD  @"SMART_PUSH_PAYLOAD"
 
-
+/**
+ All http requests used to communicate with server uses this class. It's a wrapper of NSURLConnection and easier to use by block callback.
+ */
 @interface SHRequest : NSOperation
 
 /** @name Create */
@@ -97,7 +99,11 @@ typedef void (^SHRequestHandler)(SHRequest *request);
  */
 - (NSData *)startSynchronously;
 
-
+/**
+ Cancel the connection and dealloc it. Only asynchronous request can be cancelled. `requestHandler` is invoked with error=`requestCancelledError`. 
+ Note: Once a request is cancelled or finished, it cannot be added into queue again, otherwise exception occur.
+ */
+-(void)cancel;
 
 /** @name Result */
 
