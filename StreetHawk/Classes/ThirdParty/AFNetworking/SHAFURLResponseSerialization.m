@@ -223,7 +223,7 @@ static id SHAFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadin
         return nil;
     }
 
-    self.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", nil];
+    self.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/plain"/*StreetHawk specific for /core/library request*/, nil];
 
     return self;
 }
@@ -254,6 +254,11 @@ static id SHAFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadin
     NSError *serializationError = nil;
     @autoreleasepool {
         NSString *responseString = [[NSString alloc] initWithData:data encoding:stringEncoding];
+        /*StreetHawk specific for /core/library request, it returns text/plain with like 1.7.6, not json*/
+        if ([response.MIMEType compare:@"text/plain" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            return responseString;
+        }
         if (responseString && ![responseString isEqualToString:@" "]) {
             // Workaround for a bug in NSJSONSerialization when Unicode character escape codes are used instead of the actual character
             // See http://stackoverflow.com/a/12843465/157142
