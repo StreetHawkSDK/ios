@@ -19,6 +19,17 @@
 #import "AFHTTPSessionManager.h"
 
 /**
+ Current supporting host versions.
+ */
+enum SHHostVersion
+{
+    SHHostVersion_Unknown,
+    SHHostVersion_V1,
+    SHHostVersion_V2,
+};
+typedef enum SHHostVersion SHHostVersion;
+
+/**
  All http requests used to communicate with server uses this class.
  */
 @interface SHHTTPSessionManager : AFHTTPSessionManager
@@ -28,7 +39,27 @@
 /**
  Singleton instance. Caller normally only needs to use [SHHTTPSessionManager sharedInstance], which configures connection session to server.
  */
-+ (SHHTTPSessionManager *)sharedInstance;
++ (nonnull SHHTTPSessionManager *)sharedInstance;
+
+/**
+ Wrapper for `AFHTTPSessionManager` Get method.
+ @param URLString The path or complete url.
+ @param hostVersion StreetHawk's request has version /v1, /v2 etc. 
+ @param parameters Request parameters.
+ @param success Success callback.
+ @param failure Failure callback.
+ */
+- (nullable NSURLSessionDataTask *)GET:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
+
+/**
+ Wrapper for `AFHTTPSessionManager` POST method.
+ @param URLString The path or complete url.
+ @param hostVersion StreetHawk's request has version /v1, /v2 etc.
+ @param parameters Request parameters.
+ @param success Success callback.
+ @param failure Failure callback.
+ */
+- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
 
 @end
 
