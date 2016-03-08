@@ -523,6 +523,11 @@
     [self shNotifyPageExit:page clearEnterHistory:YES/*for normal App calls, after exit clear history*/ logCompleteView:YES/*normal App call, this is manual exit a view so complete.*/];
 }
 
+- (NSString *)getFormattedDateTime:(NSTimeInterval)seconds
+{
+    return shFormatStreetHawkDate([NSDate dateWithTimeIntervalSince1970:seconds]);
+}
+
 - (void)shRegularTask:(void (^)(UIBackgroundFetchResult))completionHandler needComplete:(BOOL)needComplete
 {
     BOOL needHeartbeatLog = YES;
@@ -731,6 +736,7 @@
         {
             NSURL *webURL = userActivity.webpageURL;
             StreetHawk.openUrlHandler(webURL);
+            return YES; //for universal linking case
         }
         else
         {
@@ -742,9 +748,12 @@
                 deeplinking = dictMapping[spotlightIdentifier];
             }
             NSString *openUrl = deeplinking ? deeplinking : spotlightIdentifier;
-            StreetHawk.openUrlHandler([NSURL URLWithString:openUrl]);
+            if (!shStrIsEmpty(openUrl))
+            {
+                StreetHawk.openUrlHandler([NSURL URLWithString:openUrl]);
+                return YES; //for spotlight search case
+            }
         }
-        return YES; //continue userActivity is handled by customer code.
     }
     return NO;
 }
@@ -1497,7 +1506,7 @@
 
 - (BOOL)tagString:(NSObject *)value forKey:(NSString *)key
 {
-    if (value != nil && key != nil && key.length > 0)
+    if (value != nil && !shStrIsEmpty(key))
     {
         if ([self checkTagValue:value forKey:key])
         {
@@ -1512,7 +1521,7 @@
 
 - (BOOL)tagNumeric:(double)value forKey:(NSString *)key
 {
-    if (key != nil && key.length > 0)
+    if (!shStrIsEmpty(key))
     {
         if ([self checkTagValue:@(value) forKey:key])
         {
@@ -1527,7 +1536,7 @@
 
 - (BOOL)tagDatetime:(NSDate *)value forKey:(NSString *)key
 {
-    if (value != nil && key != nil && key.length > 0)
+    if (value != nil && !shStrIsEmpty(key))
     {
         if ([self checkTagValue:value forKey:key])
         {
@@ -1542,7 +1551,7 @@
 
 - (BOOL)removeTag:(NSString *)key
 {
-    if (key != nil && key.length > 0)
+    if (!shStrIsEmpty(key))
     {
         key = [self checkTagKey:key];
         NSDictionary *dict = @{@"key": key};
@@ -1554,10 +1563,15 @@
 
 - (BOOL)incrementTag:(NSString *)key
 {
-    if (key != nil && key.length > 0)
+    return [self incrementTag:1 forKey:key];
+}
+
+- (BOOL)incrementTag:(int)value forKey:(NSString *)key
+{
+    if (!shStrIsEmpty(key))
     {
         key = [self checkTagKey:key];
-        NSDictionary *dict = @{@"key": key, @"numeric": @1};
+        NSDictionary *dict = @{@"key": key, @"numeric": @(value)};
         [self sendLogForTag:dict withCode:LOG_CODE_TAG_INCREMENT];
         return YES;
     }

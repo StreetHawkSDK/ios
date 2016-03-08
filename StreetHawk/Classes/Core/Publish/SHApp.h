@@ -259,6 +259,13 @@ The application version and build version of current Application, formatted as @
 - (void)shNotifyPageExit:(NSString *)page;
 
 /**
+ Get StreetHawk formatted datetime string for given seconds since 1970.
+ @param seconds Seconds since 1970.
+ @return Streethawk formatted string in style `yyyy-MM-dd HH:mm:ss`, such as 2016-10-21 16:23:18.
+ */
+- (NSString *)getFormattedDateTime:(NSTimeInterval)seconds;
+
+/**
  Callback to let customer App to handle deeplinking url.
  Launch view controller in such scenarios:
  1. Click a link "<app_scheme://host/path?param=value>" in Email or social App, launch this App by `openURL`.
@@ -431,6 +438,14 @@ The application version and build version of current Application, formatted as @
  @return If tag to server return YES; if fail to send to server return NO.
  */
 - (BOOL)incrementTag:(NSString *)key;
+
+/**
+ Send log with code=8997, comment={"key": "<key>", "numeric": <value>}.
+ @param value The int value of how many the key should be increment.
+ @param key Key for existing tag. Cannot be empty.
+ @return If tag to server return YES; if fail to send to server return NO.
+ */
+- (BOOL)incrementTag:(int)value forKey:(NSString *)key;
 
 @end
 
