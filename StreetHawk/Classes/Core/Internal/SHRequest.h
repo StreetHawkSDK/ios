@@ -16,17 +16,7 @@
  */
 
 #import <Foundation/Foundation.h>
-
-/**
- Current supporting host versions.
- */
-enum SHHostVersion
-{
-    SHHostVersion_Unknown,
-    SHHostVersion_V1,
-    SHHostVersion_V2,
-};
-typedef enum SHHostVersion SHHostVersion;
+#import "SHHTTPSessionManager.h"
 
 @class SHRequest;
 

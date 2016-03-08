@@ -16,7 +16,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "AFHTTPSessionManager.h"
+#import "SHAFHTTPSessionManager.h"
 
 /**
  Current supporting host versions.
@@ -32,7 +32,7 @@ typedef enum SHHostVersion SHHostVersion;
 /**
  All http requests used to communicate with server uses this class.
  */
-@interface SHHTTPSessionManager : AFHTTPSessionManager
+@interface SHHTTPSessionManager : SHAFHTTPSessionManager
 
 /** @name Creator */
 

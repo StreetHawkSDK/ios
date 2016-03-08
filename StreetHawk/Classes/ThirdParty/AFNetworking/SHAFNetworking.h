@@ -1,6 +1,6 @@
-// AFNetworking.h
+// SHAFNetworking.h
 //
-// Copyright (c) 2013 AFNetworking (http://afnetworking.com/)
+// Copyright (c) 2013 SHAFNetworking (http://afnetworking.com/)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,18 @@
 #import <Availability.h>
 #import <TargetConditionals.h>
 
-#ifndef _AFNETWORKING_
-    #define _AFNETWORKING_
+#ifndef _SHAFNETWORKING_
+    #define _SHAFNETWORKING_
 
-    #import "AFURLRequestSerialization.h"
-    #import "AFURLResponseSerialization.h"
-    #import "AFSecurityPolicy.h"
+    #import "SHAFURLRequestSerialization.h"
+    #import "SHAFURLResponseSerialization.h"
+    #import "SHAFSecurityPolicy.h"
 
 #if !TARGET_OS_WATCH
-    #import "AFNetworkReachabilityManager.h"
+    #import "SHAFNetworkReachabilityManager.h"
 #endif
 
-    #import "AFURLSessionManager.h"
-    #import "AFHTTPSessionManager.h"
+    #import "SHAFURLSessionManager.h"
+    #import "SHAFHTTPSessionManager.h"
 
-#endif /* _AFNETWORKING_ */
+#endif /* _SHAFNETWORKING_ */
