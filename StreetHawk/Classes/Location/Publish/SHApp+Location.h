@@ -112,6 +112,16 @@ extern NSString * const SHLMRangeiBeaconFailNotification;
 extern NSString * const SHLMChangeAuthorizationStatusNotification;
 
 /**
+ Notification sent when enter or exit a server monitoring geofence. The geofences are configured in web console. The user information contains NSDictionary representing one server monitor geofence.
+ */
+extern NSString * const SHLMEnterExitGeofenceNotification;
+
+/**
+ Notification sent when enter or exit a server monitoring beacon. The beacons are configured in web console. The user information contains NSDictionary representing one server monitor beacon.
+ */
+extern NSString * const SHLMEnterExitBeaconNotification;
+
+/**
  Keys for StreetHawkLocation notifications.
  */
 extern NSString * const SHLMNotification_kNewLocation; //string @"NewLocation", get CLLocation.

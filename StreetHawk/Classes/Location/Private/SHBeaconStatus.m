@@ -325,6 +325,14 @@
         {
             double distance = isInside ? (iBeacon.distance > 0 ? iBeacon.distance : 1)/*enter region set distance=meter value*/ : -1/*exit region set distance=-1*/;
             [dictDistance setObject:[NSNumber numberWithDouble:distance] forKey:[NSString stringWithFormat:@"%d", iBeacon.serverId]/*must use string for key, cannot use NSNumber*/];
+            //Send notification to inform customer App.
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo[@"uuid"] = NONULL(iBeacon.uuid);
+            userInfo[@"major"] = @(iBeacon.major);
+            userInfo[@"minor"] = @(iBeacon.minor);
+            userInfo[@"serverId"] = @(iBeacon.serverId);
+            userInfo[@"isInside"] = @(isInside);
+            [[NSNotificationCenter defaultCenter] postNotificationName:SHLMEnterExitBeaconNotification object:nil userInfo:userInfo];            
         }
         NSString *distanceStr = shSerializeObjToJson(dictDistance);
         if (!shStrIsEmpty(distanceStr))

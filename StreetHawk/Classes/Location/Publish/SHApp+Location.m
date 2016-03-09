@@ -41,6 +41,9 @@ NSString * const SHLMRangeiBeaconChangedNotification = @"SHLMRangeiBeaconChanged
 NSString * const SHLMRangeiBeaconFailNotification = @"SHLMRangeiBeaconFailNotification";
 NSString * const SHLMChangeAuthorizationStatusNotification = @"SHLMChangeAuthorizationStatusNotification";
 
+NSString * const SHLMEnterExitGeofenceNotification = @"SHLMEnterExitGeofenceNotification";
+NSString * const SHLMEnterExitBeaconNotification = @"SHLMEnterExitBeaconNotification";
+
 NSString * const SHLMNotification_kNewLocation = @"NewLocation";
 NSString * const SHLMNotification_kOldLocation = @"OldLocation";
 NSString * const SHLMNotification_kError = @"Error";
