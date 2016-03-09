@@ -32,7 +32,6 @@ Pod::Spec.new do |s|
     sp.frameworks          = 'CoreTelephony', 'Foundation', 'CoreGraphics', 'UIKit'
     sp.libraries           = 'sqlite3'    
     sp.dependency            'MBProgressHUD'
-    sp.dependency            'AFNetworking'
     sp.subspec 'no-arc' do |ssp|
     	ssp.source_files        = 'StreetHawk/Classes/Core/Private/SHPresentDialog.{h,m}', 'StreetHawk/Classes/Core/Private/SHCoverWindow.{h,m}'
     	ssp.requires_arc        = false

@@ -25,6 +25,7 @@
 #import "SHDeepLinking.h"
 #import "SHFriendlyNameObject.h"
 #import "SHUtils.h"
+#import "SHHTTPSessionManager.h"
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
@@ -831,23 +832,19 @@
     
     if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native && StreetHawk.isDebugMode && shAppMode() != SHAppMode_AppStore && shAppMode() != SHAppMode_Enterprise && ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground))  //In debug mode, not live for AppStore, not in background wake up (either by location with option has location key, or by background fetch with optional is nil), check current version and StreetHawk's latest version. Print log if current not the latest version.
     {
-        SHRequest *requestCheckVersion = [SHRequest requestWithPath:@"core/library/" withParams:@[@"operating_system", @"ios", @"development_platform", shDevelopmentPlatformString()]];
-        requestCheckVersion.requestHandler = ^(SHRequest *request)
+        [[SHHTTPSessionManager sharedInstance] GET:@"core/library/" hostVersion:SHHostVersion_V1 parameters:@{@"operating_system": @"ios", @"development_platform": shDevelopmentPlatformString()} success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
         {
-            if (request.error == nil && request.resultCode == 0)
+            NSString *serverVersion = (NSString *)responseObject;  //it's supposed to be @"1.3.2".
+            NSAssert([serverVersion isKindOfClass:[NSString class]] && !shStrIsEmpty(serverVersion), @"Fail to get server's sh_version. %@.", serverVersion);
+            if ([serverVersion isKindOfClass:[NSString class]] && !shStrIsEmpty(serverVersion))
             {
-                NSString *serverVersion = (NSString *)request.resultValue;  //it's supposed to be @"1/1.3.2" or @"1.3.2".
-                NSAssert(serverVersion != nil && [serverVersion isKindOfClass:[NSString class]] && serverVersion.length >= StreetHawk.version.length, @"Fail to get server's sh_version. %@.", serverVersion);
-                if (serverVersion != nil && [serverVersion isKindOfClass:[NSString class]] && serverVersion.length >= StreetHawk.version.length)
+                if ([serverVersion compare:StreetHawk.version options:NSCaseInsensitiveSearch] != NSOrderedSame)
                 {
-                    if ([serverVersion compare:StreetHawk.version/*like 1.3.2*/ options:NSCaseInsensitiveSearch range:NSMakeRange(serverVersion.length - StreetHawk.version.length, StreetHawk.version.length)] != NSOrderedSame)
-                    {
-                        SHLog(@"INFO: A newer version of the StreetHawk Library is available: %@.", serverVersion);
-                    }
+                    SHLog(@"INFO: A newer version of the StreetHawk Library is available: %@.", serverVersion);
                 }
             }
-        };
-        [requestCheckVersion startAsynchronously];
+            
+        } failure:nil];
     }
     
     //If add push module later for Phonegap, if already have installs it won't register and show permission dialog until next BG to FG. `applicationDidBecomeActiveNotificationHandler` does the check however first launch it's not ready due to Phonegap web load. `applicationDidFinishLaunchingNotificationHandler` has delay load and good chance to do register at first launch.
@@ -1459,16 +1456,25 @@
         //If has friendly name to submit, do it.
         if (arrayViews.count > 0)
         {
-            NSData *data = [NSJSONSerialization dataWithJSONObject:arrayViews options:0 error:nil];
-            SHRequest *request = [SHRequest requestWithPath:@"/apps/submit_views/" withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:data]; //get by /apps/list_views
-            request.requestHandler = ^(SHRequest *request)
+            [[SHHTTPSessionManager sharedInstance] POST:@"/apps/submit_views/" hostVersion:SHHostVersion_V1 parameters:arrayViews success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
             {
-                if (request.error != nil)
-                {
-                    SHLog(@"Fail to submit friendly name: %@", request.error); //submit friendly name not show error dialog to bother customer.
-                }
-            };
-            [request startAsynchronously];
+                
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+            {
+                SHLog(@"Fail to submit friendly name: %@", error); //submit friendly name not show error dialog to bother customer.
+            }];
+            
+            
+//            NSData *data = [NSJSONSerialization dataWithJSONObject:arrayViews options:0 error:nil];
+//            SHRequest *request = [SHRequest requestWithPath:@"/apps/submit_views/" withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:data]; //get by /apps/list_views
+//            request.requestHandler = ^(SHRequest *request)
+//            {
+//                if (request.error != nil)
+//                {
+//                    SHLog(@"Fail to submit friendly name: %@", request.error); //submit friendly name not show error dialog to bother customer.
+//                }
+//            };
+//            [request startAsynchronously];
         }
     }
 }

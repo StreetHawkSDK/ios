@@ -16,7 +16,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "AFHTTPSessionManager.h"
+#import "SHAFHTTPSessionManager.h"
 
 /**
  Current supporting host versions.
@@ -32,7 +32,7 @@ typedef enum SHHostVersion SHHostVersion;
 /**
  All http requests used to communicate with server uses this class.
  */
-@interface SHHTTPSessionManager : AFHTTPSessionManager
+@interface SHHTTPSessionManager : SHAFHTTPSessionManager
 
 /** @name Creator */
 
@@ -49,7 +49,7 @@ typedef enum SHHostVersion SHHostVersion;
  @param success Success callback.
  @param failure Failure callback.
  */
-- (nullable NSURLSessionDataTask *)GET:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
+- (nullable NSURLSessionDataTask *)GET:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable id)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
 
 /**
  Wrapper for `AFHTTPSessionManager` POST method.
@@ -59,7 +59,7 @@ typedef enum SHHostVersion SHHostVersion;
  @param success Success callback.
  @param failure Failure callback.
  */
-- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
+- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable id)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
 
 @end
 
