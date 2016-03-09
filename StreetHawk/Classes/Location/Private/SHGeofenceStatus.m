@@ -278,6 +278,14 @@
         {
             [StreetHawk sendLogForCode:LOG_CODE_LOCATION_GEOFENCE withComment:distanceStr];
         }
+        //Send notification to inform customer App.
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        userInfo[@"serverId"] = NONULL(geoFence.serverId);
+        userInfo[@"latitude"] = @(geoFence.latitude);
+        userInfo[@"longitude"] = @(geoFence.longitude);
+        userInfo[@"radius"] = @(geoFence.radius);
+        userInfo[@"isInside"] = @(isInside);
+        [[NSNotificationCenter defaultCenter] postNotificationName:SHLMEnterExitGeofenceNotification object:nil userInfo:userInfo];
     }
 }
 
