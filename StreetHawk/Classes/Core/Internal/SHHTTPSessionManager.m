@@ -46,7 +46,7 @@
 - (NSString *)completeUrl:(NSString *)urlString withHostVersion:(SHHostVersion)hostVersion; //StreetHawk can change base url on-fly, and has version as /v1, /v2.
 - (BOOL)isStreetHawkSpecific:(NSString *)completeUrl; //Whether talking to StreetHawk specific server, if yes need to add header and parameter.
 - (void)completeHeader; //StreetHawk has specific header.
-- (NSDictionary *)completeParameters:(NSDictionary *)parameters; //StreetHawk needs to add additional parameters.
+- (id)completeParameters:(id)parameters; //StreetHawk needs to add additional parameters.
 - (void)setTimeout; //set timeout for the task
 
 @end
@@ -107,7 +107,7 @@
     return task;
 }
 
-- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure
+- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable id)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure
 {
     URLString = [self completeUrl:URLString withHostVersion:hostVersion];
     if ([self isStreetHawkSpecific:URLString])
@@ -118,10 +118,29 @@
     [self setTimeout];
     NSURLSessionDataTask *task = [super POST:URLString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
-        
+        SHHTTPParseResult *parseResult = [self parseResponse:task.response withObject:responseObject]; //whenever success process a request, do parser as it affects AppStatus.
+        if (parseResult.resultCode != CODE_OK) //If resultCode != 0 it means error too.
+        {
+            if (failure)
+            {
+                NSString *errorDescription = [NSString stringWithFormat:@"%@", responseObject];
+                NSError *error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: errorDescription}];
+                failure(task, error);
+            }
+        }
+        else
+        {
+            if (success)
+            {
+                success(task, parseResult.resultObject);
+            }
+        }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-        
+        if (failure)
+        {
+            failure(task, error);
+        }
     }];
     SHLog(@"POST - %@", URLString);
     return task;
@@ -176,23 +195,34 @@
     [self.requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null" forHTTPHeaderField:@"X-Installid"];
 }
 
-- (NSDictionary *)completeParameters:(NSDictionary *)parameters
+- (id)completeParameters:(id)parameters
 {
     //Every streethawk.com request, no matter GET or POST, should include "installid" in the request. Add it no matter GET or POST in params.
-    if (!shStrIsEmpty(StreetHawk.currentInstall.suid) && ![parameters.allKeys containsObject:@"installid"])
+    if (!shStrIsEmpty(StreetHawk.currentInstall.suid) && parameters != nil)
     {
-        NSMutableDictionary *refinedParameters = [NSMutableDictionary dictionary];
-        if (parameters)
+        if ([parameters isKindOfClass:[NSDictionary class]])
         {
-            [refinedParameters addEntriesFromDictionary:parameters];
+            NSDictionary *dictParameters = (NSDictionary *)parameters;
+            if (![dictParameters.allKeys containsObject:@"installid"])
+            {
+                NSMutableDictionary *refinedParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
+                [refinedParameters setObject:StreetHawk.currentInstall.suid forKey:@"installid"];
+                return refinedParameters;
+            }
         }
-        [refinedParameters setObject:StreetHawk.currentInstall.suid forKey:@"installid"];
-        return refinedParameters;
+        else if ([parameters isKindOfClass:[NSArray class]])
+        {
+            NSArray *arrayParameters = (NSArray *)parameters;
+            if (![arrayParameters containsObject:@"installid"])
+            {
+                NSMutableArray *refinedParameters = [NSMutableArray arrayWithArray:parameters];
+                [refinedParameters addObject:@"installid"];
+                [refinedParameters addObject:StreetHawk.currentInstall.suid];
+                return refinedParameters;
+            }
+        }
     }
-    else
-    {
-        return parameters;
-    }
+    return parameters;
 }
 
 - (void)setTimeout
