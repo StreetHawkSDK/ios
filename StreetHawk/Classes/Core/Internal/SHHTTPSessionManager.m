@@ -42,6 +42,7 @@
     dispatch_once(&onceToken, ^
     {
         sharedHTTPSessionManager = [[SHHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        //By default it uses Json request/response serializer.
     });
     return sharedHTTPSessionManager;
 }
@@ -65,7 +66,6 @@
         
     }];
     SHLog(@"GET - %@", URLString);
-    [task resume];
     return task;
 }
 
@@ -86,7 +86,6 @@
         
     }];
     SHLog(@"POST - %@", URLString);
-    [task resume];
     return task;
 }
 
