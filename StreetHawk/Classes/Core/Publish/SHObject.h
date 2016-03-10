@@ -72,9 +72,9 @@
 
 /**
  The content post to server for saving this object.
- @param savePostBody The content for posting to server, it can be NSArray, NSDictionary, NSString or NSData.
+ @param savePostBody The content for posting to server, it must be an NSDictionary.
  */
-- (NSObject *)saveBody;
+- (NSDictionary *)saveBody;
 
 /**
  Send a request to StreetHawk server and post the content of this object to save. The process is common, normally child class should not override this function. It does:

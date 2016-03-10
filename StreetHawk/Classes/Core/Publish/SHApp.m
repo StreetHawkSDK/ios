@@ -1762,31 +1762,34 @@ NSString *SentInstall_IBeacon = @"SentInstall_IBeacon";
     SHInstall *fakeInstall = [[SHInstall alloc] initWithSuid:@"fake_install"];
     handler = [handler copy];
     NSAssert(StreetHawk.currentInstall == nil, @"Install should not exist when call installs/register/.");
-    SHRequest *request = [SHRequest requestWithPath:@"installs/register/" withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:[fakeInstall saveBody]];
-    request.requestHandler = ^(SHRequest *registerRequest)
+    [[SHHTTPSessionManager sharedInstance] POST:@"installs/register/" hostVersion:SHHostVersion_V1 body:[fakeInstall saveBody] success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
-        SHInstall *new_install = nil;
-        NSError *error = registerRequest.error;
-        if (registerRequest.error == nil)
+        NSAssert(responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]], @"Register install return wrong json: %@.", responseObject);
+        if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]])
         {
-            NSAssert(registerRequest.resultValue != nil && [registerRequest.resultValue isKindOfClass:[NSDictionary class]], @"Register install return wrong json: %@.", registerRequest.resultValue);
-            if (registerRequest.resultValue != nil && [registerRequest.resultValue isKindOfClass:[NSDictionary class]])
+            NSDictionary *dict = (NSDictionary *)responseObject;
+            SHInstall *new_install = [[SHInstall alloc] initWithSuid:dict[@"installid"]];
+            [new_install loadFromDictionary:dict];
+            if (handler)
             {
-                NSDictionary *dict = (NSDictionary *)registerRequest.resultValue;
-                new_install = [[SHInstall alloc] initWithSuid:dict[@"installid"]];
-                [new_install loadFromDictionary:dict];
-            }
-            else
-            {
-                error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Register install return wrong json: %@.", registerRequest.resultValue]}];
+                handler(new_install, nil);
             }
         }
+        else
+        {
+            NSError *error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Register install return wrong json: %@.", responseObject]}];
+            if (handler)
+            {
+                handler(nil, error);
+            }
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
         if (handler)
         {
-            handler(new_install, error);
+            handler(nil, error);
         }
-    };
-    [request startAsynchronously];
+    }];
 }
 
 @end

@@ -91,21 +91,20 @@ NSString * const SHInstallNotification_kError = @"Error";
     return @"installs/update/";
 }
 
-- (NSObject *)saveBody
+- (NSDictionary *)saveBody
 {
+    NSMutableDictionary *dictParams = [NSMutableDictionary dictionary];
     UIDevice *uiDevice = [UIDevice currentDevice];
     SHUIDevice *shDevice = [[SHUIDevice alloc] init];
-    NSMutableArray *params = [NSMutableArray arrayWithObjects:
-                              @"app_key", NONULL(StreetHawk.appKey),
-                              @"client_version", StreetHawk.clientVersion,
-                              @"sh_version", StreetHawk.version,
-                              @"model", NONULL(shDevice.platformString), //rename class not use UIDevice extension, to avoid link to wrong obj
-                              @"operating_system", @"ios",
-                              @"os_version", uiDevice.systemVersion, nil];
+    dictParams[@"app_key"] = NONULL(StreetHawk.appKey);
+    dictParams[@"client_version"] = StreetHawk.clientVersion;
+    dictParams[@"sh_version"] = StreetHawk.version;
+    dictParams[@"model"] = NONULL(shDevice.platformString); //rename class not use UIDevice extension, to avoid link to wrong obj
+    dictParams[@"operating_system"] = @"ios";
+    dictParams[@"os_version"] = uiDevice.systemVersion;
     if ([shGetCarrierName() compare:@"Other"] != NSOrderedSame)
     {
-        [params addObject:@"carrier_name"];
-        [params addObject:shGetCarrierName()];
+        dictParams[@"carrier_name"] = shGetCarrierName();
     }
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
@@ -116,15 +115,12 @@ NSString * const SHInstallNotification_kError = @"Error";
         screenHeight = screenWidth;
         screenWidth = temp;
     }
-    [params addObject:@"width"];
-    [params addObject:@(screenWidth)];
-    [params addObject:@"height"];
-    [params addObject:@(screenHeight)];
+    dictParams[@"width"] = @(screenWidth);
+    dictParams[@"height"] = @(screenHeight);
     NSString *developmentPlatform = shDevelopmentPlatformString();
     if (!shStrIsEmpty(developmentPlatform) && [developmentPlatform compare:@"unknown" options:NSCaseInsensitiveSearch] != NSOrderedSame)
     {
-        [params addObject:@"development_platform"];
-        [params addObject:developmentPlatform];
+        dictParams[@"development_platform"] = developmentPlatform;
     }
     switch (shAppMode())
     {
@@ -132,20 +128,17 @@ NSString * const SHInstallNotification_kError = @"Error";
         case SHAppMode_AppStore:
         case SHAppMode_Enterprise:
         {
-            [params addObject:@"mode"];
-            [params addObject:@"prod"]; //use StreetHawk server's production certificate
+            dictParams[@"mode"] = @"prod"; //use StreetHawk server's production certificate
         }
             break;
         case SHAppMode_DevProvisioning:
         {
-            [params addObject:@"mode"];
-            [params addObject:@"dev"]; //use StreetHawk server's development certificate
+            dictParams[@"mode"] = @"dev"; //use StreetHawk server's development certificate
         }
             break;
         case SHAppMode_Simulator:
         {
-            [params addObject:@"mode"];
-            [params addObject:@"simulator"]; //simulator cannot register remote notification
+            dictParams[@"mode"] = @"simulator"; //simulator cannot register remote notification
         }
             break;
         default:
@@ -155,27 +148,24 @@ NSString * const SHInstallNotification_kError = @"Error";
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"APNS_DEVICE_TOKEN"]; //cannot access notification module API `StreetHawk.apnsDeviceToken`, use direct value.
     if (token != nil && token.length > 0)
     {
-        [params addObject:@"access_data"];
-        [params addObject:token];
+        dictParams[@"access_data"] = token;
     }
-    [params addObject:@"revoked"];
     NSNumber *disablePushTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APNS_DISABLE_TIMESTAMP];
     [[NSUserDefaults standardUserDefaults] setObject:disablePushTimeVal != nil ? disablePushTimeVal : @0.0 forKey:APNS_SENT_DISABLE_TIMESTAMP];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [params addObject:(disablePushTimeVal == nil || [disablePushTimeVal doubleValue] == 0) ? @"" : shFormatStreetHawkDate([NSDate dateWithTimeIntervalSince1970:disablePushTimeVal.doubleValue])];
+    NSString *revokeDate = (disablePushTimeVal == nil || [disablePushTimeVal doubleValue] == 0) ? @"" : shFormatStreetHawkDate([NSDate dateWithTimeIntervalSince1970:disablePushTimeVal.doubleValue]);
+    dictParams[@"revoked"] = revokeDate;
     NSString *macAddress = shGetMacAddress();  //mac address cannot be got since iOS 7.0, always return "02:00:00:00:00:00".
     if (macAddress != nil && [macAddress compare:@"02:00:00:00:00:00"] != NSOrderedSame)
     {
-        [params addObject:@"macaddress"];
-        [params addObject:macAddress];
+        dictParams[@"macaddress"] = macAddress;
     }
     if ([uiDevice respondsToSelector:@selector(identifierForVendor)])  //identifierForVendor available since iOS 6.0
     {
         NSUUID *identifierForVendor = uiDevice.identifierForVendor;
         if (identifierForVendor != nil && [identifierForVendor UUIDString] != nil && [identifierForVendor UUIDString].length > 0)
         {
-            [params addObject:@"identifier_for_vendor"];
-            [params addObject:[identifierForVendor UUIDString]];
+            dictParams[@"identifier_for_vendor"] = [identifierForVendor UUIDString];
         }
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateiBeaconStatus" object:nil];
@@ -189,20 +179,17 @@ NSString * const SHInstallNotification_kError = @"Error";
             break;
         case 1/*SHiBeaconState_Support*/:
         {
-            [params addObject:@"ibeacons"];
-            [params addObject:@"true"];
+            dictParams[@"ibeacons"] = @"true";
         }
             break;
         case 2/*SHiBeaconState_NotSupport*/:
         {
-            [params addObject:@"ibeacons"];
-            [params addObject:@"false"];
+            dictParams[@"ibeacons"] = @"false";
         }
             break;
         case 3/*SHiBeaconState_Ignore*/:
         {
-            [params addObject:@"ibeacons"]; //if remove streetHawk/Beacons module, refresh otherwise server still treat as it supports iBeacons.
-            [params addObject:@"false"];
+            dictParams[@"ibeacons"] = @"false"; //if remove streetHawk/Beacons module, refresh otherwise server still treat as it supports iBeacons.
         }
             break;
         default:
@@ -216,8 +203,7 @@ NSString * const SHInstallNotification_kError = @"Error";
         case SHAppMode_AppStore:
         case SHAppMode_Enterprise:
         {
-            [params addObject:@"live"];
-            [params addObject:@"true"];
+            dictParams[@"live"] = @"true";
         }
             break;
         case SHAppMode_AdhocProvisioning:
@@ -225,8 +211,7 @@ NSString * const SHInstallNotification_kError = @"Error";
         case SHAppMode_Simulator:
         case SHAppMode_Unknown:
         {
-            [params addObject:@"live"];
-            [params addObject:@"false"];
+            dictParams[@"live"] = @"false";
         }
             break;
         default:
@@ -235,7 +220,7 @@ NSString * const SHInstallNotification_kError = @"Error";
         }
             break;
     }
-    return params;
+    return dictParams;
 }
 
 @end

@@ -108,7 +108,7 @@
     return nil;
 }
 
-- (NSObject *)saveBody
+- (NSDictionary *)saveBody
 {
     NSAssert(NO, @"saveBody for %@ is not yet implemented.", self.class);
     return nil;
