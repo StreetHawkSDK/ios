@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
                           }  
   
   s.subspec 'Core' do |sp|
-    sp.source_files        = 'StreetHawk/Classes/Core/**/*.{h,m}', 'StreetHawk/Classes/ThirdParty/UIDevice_Extension/*.{h,m}'
+    sp.source_files        = 'StreetHawk/Classes/Core/**/*.{h,m}', 'StreetHawk/Classes/ThirdParty/UIDevice_Extension/*.{h,m}', 'StreetHawk/Classes/ThirdParty/AFNetworking/*.{h,m}'
     sp.public_header_files = 'StreetHawk/Classes/Core/**/Publish/*.h'
     sp.exclude_files       = 'StreetHawk/Classes/Core/Private/SHPresentDialog.m', 'StreetHawk/Classes/Core/Private/SHCoverWindow.m'
     sp.resource_bundles    = {'streethawk' => ['StreetHawk/Assets/**/*']}
