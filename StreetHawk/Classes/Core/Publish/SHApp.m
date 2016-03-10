@@ -843,7 +843,6 @@
                     SHLog(@"INFO: A newer version of the StreetHawk Library is available: %@.", serverVersion);
                 }
             }
-            
         } failure:nil];
     }
     
@@ -1456,25 +1455,10 @@
         //If has friendly name to submit, do it.
         if (arrayViews.count > 0)
         {
-            [[SHHTTPSessionManager sharedInstance] POST:@"/apps/submit_views/" hostVersion:SHHostVersion_V1 parameters:arrayViews success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
-            {
-                
-            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+            [[SHHTTPSessionManager sharedInstance] POST:@"/apps/submit_views/" hostVersion:SHHostVersion_V1 body:@{SH_BODY: shSerializeObjToJson(arrayViews)} success:nil failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
             {
                 SHLog(@"Fail to submit friendly name: %@", error); //submit friendly name not show error dialog to bother customer.
             }];
-            
-            
-//            NSData *data = [NSJSONSerialization dataWithJSONObject:arrayViews options:0 error:nil];
-//            SHRequest *request = [SHRequest requestWithPath:@"/apps/submit_views/" withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:data]; //get by /apps/list_views
-//            request.requestHandler = ^(SHRequest *request)
-//            {
-//                if (request.error != nil)
-//                {
-//                    SHLog(@"Fail to submit friendly name: %@", request.error); //submit friendly name not show error dialog to bother customer.
-//                }
-//            };
-//            [request startAsynchronously];
         }
     }
 }

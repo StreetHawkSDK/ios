@@ -29,6 +29,8 @@ enum SHHostVersion
 };
 typedef enum SHHostVersion SHHostVersion;
 
+#define SH_BODY  @"SH_BODY" //for string pass into post body, use this as key.
+
 /**
  All http requests used to communicate with server uses this class.
  */
@@ -44,22 +46,22 @@ typedef enum SHHostVersion SHHostVersion;
 /**
  Wrapper for `AFHTTPSessionManager` Get method.
  @param URLString The path or complete url.
- @param hostVersion StreetHawk's request has version /v1, /v2 etc. 
- @param parameters Request parameters.
+ @param hostVersion StreetHawk's request has version /v1, /v2 etc.
+ @param parameters Request parameters. For Get request it will append as query string. The type must be NSDictionary as {key: value}.
  @param success Success callback.
  @param failure Failure callback.
  */
-- (nullable NSURLSessionDataTask *)GET:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable id)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
+- (nullable NSURLSessionDataTask *)GET:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
 
 /**
  Wrapper for `AFHTTPSessionManager` POST method.
  @param URLString The path or complete url.
  @param hostVersion StreetHawk's request has version /v1, /v2 etc.
- @param parameters Request parameters.
+ @param body It will go to post body, and this body will be posted as content-type=application/x-www-form-urlencoded. The type must be NSDictionary as {key: value}. If it's not NSDictionary, for example a string, use {SH_BODY: <value>}.
  @param success Success callback.
  @param failure Failure callback.
  */
-- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable id)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
+- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion body:(nullable NSDictionary *)body success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
 
 @end
 

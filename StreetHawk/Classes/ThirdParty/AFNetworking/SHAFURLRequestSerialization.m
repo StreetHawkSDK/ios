@@ -479,22 +479,30 @@ forHTTPHeaderField:(NSString *)field
 
     NSString *query = nil;
     if (parameters) {
-        if (self.queryStringSerialization) {
-            NSError *serializationError;
-            query = self.queryStringSerialization(request, parameters, &serializationError);
+        //StreetHawk special to pass a string
+        if ([parameters isKindOfClass:[NSDictionary class]] && ((NSDictionary *)parameters)[@"SH_BODY"] != nil)
+        {
+            query = ((NSDictionary *)parameters)[@"SH_BODY"];
+        }
+        else
+        {
+            if (self.queryStringSerialization) {
+                NSError *serializationError;
+                query = self.queryStringSerialization(request, parameters, &serializationError);
 
-            if (serializationError) {
-                if (error) {
-                    *error = serializationError;
+                if (serializationError) {
+                    if (error) {
+                        *error = serializationError;
+                    }
+
+                    return nil;
                 }
-
-                return nil;
-            }
-        } else {
-            switch (self.queryStringSerializationStyle) {
-                case SHAFHTTPRequestQueryStringDefaultStyle:
-                    query = SHAFQueryStringFromParameters(parameters);
-                    break;
+            } else {
+                switch (self.queryStringSerializationStyle) {
+                    case SHAFHTTPRequestQueryStringDefaultStyle:
+                        query = SHAFQueryStringFromParameters(parameters);
+                        break;
+                }
             }
         }
     }
