@@ -44,6 +44,7 @@
     {
         sharedHTTPSessionManager = [[SHHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
         //By default it uses Json request/response serializer.
+        sharedHTTPSessionManager.completionQueue = dispatch_queue_create("com.streethawk.StreetHawk.network", NULL/*NULL attribute same as DISPATCH_QUEUE_SERIAL, means this queue is FIFO.*/); //set completionQueue otherwise completion callback runs in main thread.
     });
     return sharedHTTPSessionManager;
 }
@@ -53,7 +54,7 @@
 - (nullable NSURLSessionDataTask *)GET:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure
 {
     URLString = [self completeStreetHawkSpecialUrl:URLString withHostVersion:hostVersion];
-    NSURLSessionDataTask *task = [super GET:URLString parameters:parameters/*append as query string*/ progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [super GET:URLString parameters:parameters/*append as query string*/ progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) 
     {
         [self processSuccessCallback:task withData:responseObject success:success failure:failure];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
