@@ -17,7 +17,7 @@
 
 #import "SHObject.h"
 //header from StreetHawk
-#import "SHRequest.h" //for sending request save and load
+#import "SHHTTPSessionManager.h" //for sending request save and load
 
 @interface SHObject()
 
@@ -75,31 +75,30 @@
         }
         return;
     }
-    
-    SHRequest *request = [SHRequest requestWithPath:url];
     load_handler = [load_handler copy];
-    request.requestHandler = ^(SHRequest *loadRequest)
+    [[SHHTTPSessionManager sharedInstance] GET:url hostVersion:SHHostVersion_V1 parameters:nil success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
-        NSError *error = loadRequest.error;
-        //Load the data from the server if no errors
-        if (loadRequest.error == nil)
+        NSError *error = nil;
+        NSAssert(responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]], @"Load from server get wrong result value: %@.", responseObject);  //load request suppose to get json dictionary
+        if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]])
         {
-            NSAssert(loadRequest.resultValue != nil && [loadRequest.resultValue isKindOfClass:[NSDictionary class]], @"Load from server get wrong result value: %@.", loadRequest.resultValue);  //load request suppose to get json dictionary
-            if (loadRequest.resultValue != nil && [loadRequest.resultValue isKindOfClass:[NSDictionary class]])
-            {
-                [self loadFromDictionary:(NSDictionary *)loadRequest.resultValue];
-            }
-            else
-            {
-                error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Load from server get wrong result value: %@.", loadRequest.resultValue]}];
-            }
+            [self loadFromDictionary:(NSDictionary *)responseObject];
+        }
+        else
+        {
+            error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Load from server get wrong result value: %@.", responseObject]}];
         }
         if (load_handler)
         {
             load_handler(self, error);
         }
-    };
-    [request startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
+        if (load_handler)
+        {
+            load_handler(self, error);
+        }
+    }];
 }
 
 - (NSString *)serverSaveURL
@@ -126,7 +125,7 @@
         }
         return;
     }
-    NSObject *body = [self saveBody];
+    NSDictionary *body = [self saveBody];
     NSAssert(body != nil, @"Fail to get server save body.");
     if (body == nil)
     {
@@ -136,25 +135,30 @@
         }
         return;
     }
-    
-    SHRequest *request = [SHRequest requestWithPath:url withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:body];
     save_handler = [save_handler copy];
-    request.requestHandler = ^(SHRequest *saveRequest)
+    [[SHHTTPSessionManager sharedInstance] POST:url hostVersion:SHHostVersion_V1 body:body success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
-        if (saveRequest.error == nil)
+        NSError *error = nil;
+        NSAssert(responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]], @"Save to server get wrong result value: %@.", responseObject);  //save request suppose to get json dictionary
+        if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) //After save server may return complete dictionary, so no need to request detail again, just load from server's return.
         {
-            //After save server may return complete dictionary, so no need to request detail again, just load from server's return.
-            if (saveRequest.resultValue != nil && [saveRequest.resultValue isKindOfClass:[NSDictionary class]])
-            {
-                [self loadFromDictionary:(NSDictionary *)saveRequest.resultValue];
-            }
+            [self loadFromDictionary:(NSDictionary *)responseObject];
+        }
+        else
+        {
+            error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Save to server get wrong result value: %@.", responseObject]}];
         }
         if (save_handler)
         {
-            save_handler(self, saveRequest.error);
+            save_handler(self, error);
         }
-    };
-    [request startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
+        if (save_handler)
+        {
+            save_handler(self, error);
+        }
+    }];
 }
 
 @end
