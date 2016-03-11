@@ -31,6 +31,8 @@ typedef enum SHHostVersion SHHostVersion;
 
 #define SH_BODY  @"SH_BODY" //for string pass into post body, use this as key.
 
+#define SMART_PUSH_PAYLOAD  @"SMART_PUSH_PAYLOAD"
+
 /**
  All http requests used to communicate with server uses this class.
  */

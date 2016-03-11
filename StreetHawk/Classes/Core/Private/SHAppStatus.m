@@ -397,17 +397,13 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 #pragma mark - public functions
 
-- (void)sendAppStatusCheckRequest:(BOOL)force completeHandler:(SHRequestHandler)handler
+- (void)sendAppStatusCheckRequest:(BOOL)force
 {
     if (!force)
     {
         NSObject *lastCheckTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_CHECK_TIME];
         if (lastCheckTimeVal != nil/*fresh launch must check first*/ && self.streethawkEnabled/*No need to send request, as when StreetHawk is enabled, normal request are sent frequently*/)
         {
-            if (handler)
-            {
-                handler(nil);
-            }
             return;
         }
         double lastCheckTime = 0;
@@ -417,16 +413,10 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
         }
         if (lastCheckTime != 0 && [NSDate date].timeIntervalSinceReferenceDate - lastCheckTime < 60*60*24) //not check again once in a day, ticket https://bitbucket.org/shawk/streethawk/issue/379/app-status-reworked
         {
-            if (handler)
-            {
-                handler(nil);
-            }
             return;
         }
     }
-    SHRequest *request = [SHRequest requestWithPath:@"apps/status/" withParams:@[@"app_key", NONULL(StreetHawk.appKey)]];
-    request.requestHandler = handler;
-    [request startAsynchronously];
+    [[SHHTTPSessionManager sharedInstance] GET:@"apps/status/" hostVersion:SHHostVersion_V1 parameters:@{@"app_key": NONULL(StreetHawk.appKey)} success:nil failure:nil];
 }
 
 - (void)recordCheckTime

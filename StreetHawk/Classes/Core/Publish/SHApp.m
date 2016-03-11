@@ -291,7 +291,7 @@
     //1. It does NOT stop anything, streethawkEnabled is YES by default, and all other functions work, not wait for completeHandler.
     //2. It sends /apps/status request before all other request, but cannot put init as app_key is not known yet.
     //3. Not force so that second and later launch not send request.
-    [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO completeHandler:nil];
+    [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO];
     //do analytics for application first run/started
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"NumTimesAppUsed"] == 0)
     {
@@ -952,7 +952,7 @@
 - (void)applicationDidBecomeActiveNotificationHandler:(NSNotification *)notification
 {
     //check app status from background to foreground, most actually return because of "one day not call" limitation.
-    [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO completeHandler:nil];  //a chance to check if sdk was disabled, may be able to wake up again. Choose this instead of applicationWillEnterForeground because this is also called when App not launched, manually click to open.
+    [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO];  //a chance to check if sdk was disabled, may be able to wake up again. Choose this instead of applicationWillEnterForeground because this is also called when App not launched, manually click to open.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_SetBadge_Notification" object:nil userInfo:@{@"badge": @(0)}]; //clear badge when App open, for some user they don't like this number and would like to launch App to dismiss it.
     if (!streetHawkIsEnabled())
     {

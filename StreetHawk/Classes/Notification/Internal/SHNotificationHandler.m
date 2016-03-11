@@ -590,7 +590,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     {
         confirmAction = ^ {
             [pushData sendPushResult:SHResult_Accept withHandler:nil];
-            [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:YES/*8003 force to do check*/ completeHandler:nil];
+            [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:YES/*8003 force to do check*/];
         };
     }
     else if (pushData.action == SHAction_LaunchActivity || pushData.action == SHAction_UserRegistrationScreen || pushData.action == SHAction_UserLoginScreen)

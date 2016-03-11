@@ -16,7 +16,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SHRequest.h" //for enum SHHostVersion
+#import "SHHTTPSessionManager.h" //for enum SHHostVersion
 
 /**
  Notification sent when server returns `app_status` different from local. Its user info is empty, read singletone `[SHAppStatus sharedInstance]` to get current situation.
@@ -107,9 +107,8 @@ extern NSString * const SHAppStatusChangeNotification;
 /**
  App status could change for some reason, so the App needs to check current one in some situation, (start to run, from background to foreground, handle push message 8003), these are handled by StreetHawk automatically. This call is a utility function to do the check. Although all request may contain "app_status", this send "/apps/status" request.
  @param force If NO do not check for a. `streethawkEnabled`=YES as request send often; b. previous check in a day. If YES do check whatever.
- @param handler Handler is triggered when check complete. If not send request handler(nil), otherwise handler(request).
  */
-- (void)sendAppStatusCheckRequest:(BOOL)force completeHandler:(SHRequestHandler)handler;
+- (void)sendAppStatusCheckRequest:(BOOL)force;
 
 /**
  Save this check time to avoid frequent check. No matter any property changed or not, record the time.

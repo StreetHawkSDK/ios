@@ -26,7 +26,7 @@
  */
 typedef void (^SHRequestHandler)(SHRequest *request);
 
-#define SMART_PUSH_PAYLOAD  @"SMART_PUSH_PAYLOAD"
+
 
 /**
  All http requests used to communicate with server uses this class. It's a wrapper of NSURLConnection and easier to use by block callback.

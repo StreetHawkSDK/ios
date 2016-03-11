@@ -48,7 +48,7 @@
 {
     SHInstall *install = (aNotification.userInfo)[SHInstallNotification_kInstall];
     SHLog(@"Install register succeed with new id: %@", install.suid);
-    [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:YES completeHandler:nil/*mark it force so that make sure to contain install id and do again*/]; //first fresh install app/status/ does not have install id, thus submit_views is false; as long as register and get install id, need to refresh app/status/ again and do submit_views.
+    [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:YES/*mark it force so that make sure to contain install id and do again*/]; //first fresh install app/status/ does not have install id, thus submit_views is false; as long as register and get install id, need to refresh app/status/ again and do submit_views.
 }
 
 - (void)installRegistrationFailure:(NSNotification *)aNotification
