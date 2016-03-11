@@ -19,7 +19,6 @@
 //header from StreetHawk
 #import "SHApp.h" //for StreetHawk
 #import "SHLogger.h" //for sending logline
-#import "SHRequest.h" //for sending register request
 #import "SHUtils.h" //for shParseDate
 //header from Third-party
 #import "SHUIDevice-Hardware.h"

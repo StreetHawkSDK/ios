@@ -17,7 +17,7 @@
 
 #import "SHFeedbackQueue.h"
 //header from StreetHawk
-#import "SHRequest.h" //for sending request
+#import "SHHTTPSessionManager.h" //for sending request
 #import "PushDataForApplication.h" //for use pushData
 #import "SHUtils.h" //for format date utility
 #import "SHPresentDialog.h" //for present modal dialog
@@ -96,39 +96,37 @@
 {
     //pushresult traces user action, no matter request succeed or fail, here means agree to post feedback.
     [pushData sendPushResult:SHResult_Accept withHandler:nil];
-    NSArray *params = @[@"title", NONULL(feedbackTitle), @"feedback_type", @(feedbackType), @"contents", NONULL(feedbackContent), @"built_at", shFormatStreetHawkDate([NSDate date]), @"anonymous", @"no", @"installid", NONULL(StreetHawk.currentInstall.suid)];
+    NSDictionary *params = @{@"title": NONULL(feedbackTitle), @"feedback_type": @(feedbackType), @"contents": NONULL(feedbackContent), @"built_at": shFormatStreetHawkDate([NSDate date]), @"anonymous": @"no", @"installid": NONULL(StreetHawk.currentInstall.suid)};
     handler = [handler copy];
-    SHRequest *request = [SHRequest requestWithPath:@"feedback/submit/" withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:params];
-    request.requestHandler = ^(SHRequest *request)
+    [[SHHTTPSessionManager sharedInstance] POST:@"feedback/submit/" hostVersion:SHHostVersion_V1 body:params success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^
+           {
+               UIWindow *presentWindow = shGetPresentWindow();
+               MBProgressHUD *resultView = [MBProgressHUD showHUDAddedTo:presentWindow animated:YES];
+               resultView.mode = MBProgressHUDModeText; //only show result text, not show progress bar.
+               resultView.labelText = shLocalizedString(@"STREETHAWK_WINDOW_FEEDBACK_THANKS", @"Thanks for your feedback!");
+               [resultView hide:YES afterDelay:1.5];
+           });
+        if (handler)
+        {
+            handler(task.currentRequest, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
     {
         if (showError)
         {
-            shPresentErrorAlert(request.error, YES);
+            shPresentErrorAlert(error, YES);
         }
-        if (request.error == nil)
+        if (pushData != nil && pushData.msgID != 0)
         {
-            dispatch_async(dispatch_get_main_queue(), ^
-               {
-                   UIWindow *presentWindow = shGetPresentWindow();
-                   MBProgressHUD *resultView = [MBProgressHUD showHUDAddedTo:presentWindow animated:YES];
-                   resultView.mode = MBProgressHUDModeText; //only show result text, not show progress bar.
-                   resultView.labelText = shLocalizedString(@"STREETHAWK_WINDOW_FEEDBACK_THANKS", @"Thanks for your feedback!");
-                   [resultView hide:YES afterDelay:1.5];
-               });
-        }
-        else
-        {
-            if (pushData != nil && pushData.msgID != 0)
-            {
-                [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Send feedback meet error: %@. Push msgid: %ld.", request.error.localizedDescription, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
-            }
+            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Send feedback meet error: %@. Push msgid: %ld.", error.localizedDescription, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
         }
         if (handler)
         {
-            handler(request, request.error);
+            handler(task.currentRequest, error);
         }
-    };
-    [request startAsynchronously];
+    }];
 }
 
 #pragma mark - private functions

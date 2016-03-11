@@ -20,7 +20,7 @@
 #import "SHApp+Notification.h" //for SHApp extension
 #import "SHPushDataCallback.h" //for create instance
 #import "SHNotificationHandler.h" //for create instance
-#import "SHRequest.h" //for SMART_PUSH_PAYLOAD definition
+#import "SHHTTPSessionManager.h" //for SMART_PUSH_PAYLOAD definition
 
 @interface SHNotificationBridge ()
 
