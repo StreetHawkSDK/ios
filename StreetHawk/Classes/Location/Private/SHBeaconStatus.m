@@ -20,7 +20,7 @@
 #import "SHUtils.h" //for SHLog
 #import "SHApp.h" //for `StreetHawk.currentInstall`
 #import "SHLogger.h" //for sending logline
-#import "SHRequest.h" //for sending request
+#import "SHHTTPSessionManager.h" //for sending request
 #import "SHLocationManager.h"
 
 #define APPSTATUS_IBEACON_FETCH_TIME        @"APPSTATUS_IBEACON_FETCH_TIME"  //last successfully fetch iBeacon list time
@@ -167,129 +167,123 @@
                 //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setIBeaconTimestamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
                 [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:APPSTATUS_IBEACON_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                SHRequest *fetchRequest = [SHRequest requestWithPath:@"/ibeacons/"];
-                fetchRequest.requestHandler = ^(SHRequest *request)
+                [[SHHTTPSessionManager sharedInstance] GET:@"/ibeacons/" hostVersion:SHHostVersion_V1 parameters:nil success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
                 {
-                    if (request.error == nil)
+                    //successfully fetch server's iBeacon list. local cache time is already updated, store fetch list and active monitor.
+                    SHLog(@"Fetch server iBeacon list: %@.", responseObject);
+                    NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"Server return should be dictionary.");
+                    if ([responseObject isKindOfClass:[NSDictionary class]])
                     {
-                        //successfully fetch server's iBeacon list. local cache time is already updated, store fetch list and active monitor.
-                        SHLog(@"Fetch server iBeacon list: %@.", request.resultValue);
-                        NSAssert([request.resultValue isKindOfClass:[NSDictionary class]], @"Server return should be dictionary.");
-                        if ([request.resultValue isKindOfClass:[NSDictionary class]])
+                        NSMutableArray *arrayList = [NSMutableArray array];
+                        NSDictionary *dictList = (NSDictionary *)responseObject;
+                        for (NSObject *uuidValue in dictList.allKeys)
                         {
-                            NSMutableArray *arrayList = [NSMutableArray array];
-                            NSDictionary *dictList = (NSDictionary *)request.resultValue;
-                            for (NSObject *uuidValue in dictList.allKeys)
+                            NSAssert([uuidValue isKindOfClass:[NSString class]] && [dictList[uuidValue] isKindOfClass:[NSDictionary class]], @"UUID dictionary invalid: %@.", uuidValue);
+                            if ([uuidValue isKindOfClass:[NSString class]] && [dictList[uuidValue] isKindOfClass:[NSDictionary class]])
                             {
-                                NSAssert([uuidValue isKindOfClass:[NSString class]] && [dictList[uuidValue] isKindOfClass:[NSDictionary class]], @"UUID dictionary invalid: %@.", uuidValue);
-                                if ([uuidValue isKindOfClass:[NSString class]] && [dictList[uuidValue] isKindOfClass:[NSDictionary class]])
+                                NSDictionary *dictuuid = (NSDictionary *)dictList[uuidValue];
+                                for (NSObject *majorValue in dictuuid.allKeys)
                                 {
-                                    NSDictionary *dictuuid = (NSDictionary *)dictList[uuidValue];
-                                    for (NSObject *majorValue in dictuuid.allKeys)
+                                    NSAssert(([majorValue isKindOfClass:[NSNumber class]] || [majorValue isKindOfClass:[NSString class]]) && [dictuuid[majorValue] isKindOfClass:[NSDictionary class]], @"Major dictionary invalid: %@.", majorValue);
+                                    if (([majorValue isKindOfClass:[NSNumber class]] || [majorValue isKindOfClass:[NSString class]]) && [dictuuid[majorValue] isKindOfClass:[NSDictionary class]])
                                     {
-                                        NSAssert(([majorValue isKindOfClass:[NSNumber class]] || [majorValue isKindOfClass:[NSString class]]) && [dictuuid[majorValue] isKindOfClass:[NSDictionary class]], @"Major dictionary invalid: %@.", majorValue);
-                                        if (([majorValue isKindOfClass:[NSNumber class]] || [majorValue isKindOfClass:[NSString class]]) && [dictuuid[majorValue] isKindOfClass:[NSDictionary class]])
+                                        NSDictionary *dictMajor = (NSDictionary *)dictuuid[majorValue];
+                                        for (NSObject *minorValue in dictMajor.allKeys)
                                         {
-                                            NSDictionary *dictMajor = (NSDictionary *)dictuuid[majorValue];
-                                            for (NSObject *minorValue in dictMajor.allKeys)
+                                            NSAssert(([minorValue isKindOfClass:[NSNumber class]] || [minorValue isKindOfClass:[NSString class]]) && ([dictMajor[minorValue] isKindOfClass:[NSNumber class]] || [dictMajor[minorValue] isKindOfClass:[NSString class]]), @"Minor dictionary invalid: %@.", minorValue);
+                                            if (([minorValue isKindOfClass:[NSNumber class]] || [minorValue isKindOfClass:[NSString class]]) && ([dictMajor[minorValue] isKindOfClass:[NSNumber class]] || [dictMajor[minorValue] isKindOfClass:[NSString class]]))
                                             {
-                                                NSAssert(([minorValue isKindOfClass:[NSNumber class]] || [minorValue isKindOfClass:[NSString class]]) && ([dictMajor[minorValue] isKindOfClass:[NSNumber class]] || [dictMajor[minorValue] isKindOfClass:[NSString class]]), @"Minor dictionary invalid: %@.", minorValue);
-                                                if (([minorValue isKindOfClass:[NSNumber class]] || [minorValue isKindOfClass:[NSString class]]) && ([dictMajor[minorValue] isKindOfClass:[NSNumber class]] || [dictMajor[minorValue] isKindOfClass:[NSString class]]))
+                                                SHServeriBeacon *serveriBeacon = [[SHServeriBeacon alloc] init];
+                                                serveriBeacon.uuid = (NSString *)uuidValue;
+                                                if ([majorValue isKindOfClass:[NSNumber class]])
                                                 {
-                                                    SHServeriBeacon *serveriBeacon = [[SHServeriBeacon alloc] init];
-                                                    serveriBeacon.uuid = (NSString *)uuidValue;
-                                                    if ([majorValue isKindOfClass:[NSNumber class]])
-                                                    {
-                                                        serveriBeacon.major = [(NSNumber *)majorValue intValue];
-                                                    }
-                                                    else if ([majorValue isKindOfClass:[NSString class]])
-                                                    {
-                                                        serveriBeacon.major = [(NSString *)majorValue intValue];
-                                                    }
-                                                    if ([minorValue isKindOfClass:[NSNumber class]])
-                                                    {
-                                                        serveriBeacon.minor = [(NSNumber *)minorValue intValue];
-                                                    }
-                                                    else if ([minorValue isKindOfClass:[NSString class]])
-                                                    {
-                                                        serveriBeacon.minor = [(NSString *)minorValue intValue];
-                                                    }
-                                                    serveriBeacon.serverId = [dictMajor[minorValue] intValue];
-                                                    [arrayList addObject:serveriBeacon];
+                                                    serveriBeacon.major = [(NSNumber *)majorValue intValue];
                                                 }
+                                                else if ([majorValue isKindOfClass:[NSString class]])
+                                                {
+                                                    serveriBeacon.major = [(NSString *)majorValue intValue];
+                                                }
+                                                if ([minorValue isKindOfClass:[NSNumber class]])
+                                                {
+                                                    serveriBeacon.minor = [(NSNumber *)minorValue intValue];
+                                                }
+                                                else if ([minorValue isKindOfClass:[NSString class]])
+                                                {
+                                                    serveriBeacon.minor = [(NSString *)minorValue intValue];
+                                                }
+                                                serveriBeacon.serverId = [dictMajor[minorValue] intValue];
+                                                [arrayList addObject:serveriBeacon];
                                             }
                                         }
                                     }
                                 }
                             }
-                            //compare current memory's `arrayiBeaconFetchList` (same as cached APPSTATUS_IBEACON_FETCH_LIST), if not in new list, stop monitor; if find new, add monitor. Note: start/stop iBeacon region uses wild-match, that is ONLY uuid is used to create the region, major and minor not provided. This is because same identifier causes previous region removed, so must create unique identifier, the less region the better. CLLocationManager only supports 19 iBeacon regions. When find match, use major and minor to match to server id.
-                            NSMutableArray *serverUUids = [[NSMutableArray alloc] init];
-                            NSMutableArray *localUUids = [[NSMutableArray alloc] init];
-                            for (SHServeriBeacon *ibeacon in arrayList)
+                        }
+                        //compare current memory's `arrayiBeaconFetchList` (same as cached APPSTATUS_IBEACON_FETCH_LIST), if not in new list, stop monitor; if find new, add monitor. Note: start/stop iBeacon region uses wild-match, that is ONLY uuid is used to create the region, major and minor not provided. This is because same identifier causes previous region removed, so must create unique identifier, the less region the better. CLLocationManager only supports 19 iBeacon regions. When find match, use major and minor to match to server id.
+                        NSMutableArray *serverUUids = [[NSMutableArray alloc] init];
+                        NSMutableArray *localUUids = [[NSMutableArray alloc] init];
+                        for (SHServeriBeacon *ibeacon in arrayList)
+                        {
+                            if (![serverUUids containsObject:ibeacon.uuid])
                             {
-                                if (![serverUUids containsObject:ibeacon.uuid])
-                                {
-                                    [serverUUids addObject:ibeacon.uuid];
-                                }
+                                [serverUUids addObject:ibeacon.uuid];
                             }
-                            for (SHServeriBeacon *ibeacon in self.arrayiBeaconFetchList)
+                        }
+                        for (SHServeriBeacon *ibeacon in self.arrayiBeaconFetchList)
+                        {
+                            if (![localUUids containsObject:ibeacon.uuid])
                             {
-                                if (![localUUids containsObject:ibeacon.uuid])
-                                {
-                                    [localUUids addObject:ibeacon.uuid];
-                                }
+                                [localUUids addObject:ibeacon.uuid];
                             }
-                            for (NSString *serverUUid in serverUUids)
-                            {
-                                BOOL findInLocal = NO;
-                                for (NSString *localUUid in localUUids)
-                                {
-                                    if ([serverUUid compare:localUUid options:NSCaseInsensitiveSearch] == NSOrderedSame)  //only consider uuid, wild-match
-                                    {
-                                        findInLocal = YES;
-                                        break;
-                                    }
-                                }
-                                if (!findInLocal) //server return one not in local cache, start monitor.
-                                {
-                                    SHLog(@"Start monitor server's iBeacon region for UUid: %@.", serverUUid);
-                                    [StreetHawk.locationManager startMonitorRegion:[SHServeriBeacon getBeaconRegionForUUid:serverUUid]];
-                                }
-                            }
+                        }
+                        for (NSString *serverUUid in serverUUids)
+                        {
+                            BOOL findInLocal = NO;
                             for (NSString *localUUid in localUUids)
                             {
-                                BOOL findInServer = NO;
-                                for (NSString *serverUUid in serverUUids)
+                                if ([serverUUid compare:localUUid options:NSCaseInsensitiveSearch] == NSOrderedSame)  //only consider uuid, wild-match
                                 {
-                                    if ([serverUUid compare:localUUid options:NSCaseInsensitiveSearch] == NSOrderedSame)
-                                    {
-                                        findInServer = YES;
-                                        break;
-                                    }
-                                }
-                                if (!findInServer) //local has one not in server, stop monitor.
-                                {
-                                    CLBeaconRegion *stopRegion = [SHServeriBeacon getBeaconRegionForUUid:localUUid];
-                                    [StreetHawk.locationManager stopMonitorRegion:stopRegion];
-                                    NSArray *arrayStopMonitorServeriBeacons = [self findServeriBeaconsInsideRegion:stopRegion onlyWithDistance:NO/*all, not from inside to outside*/ needSetOutside:YES];
-                                    NSAssert(arrayStopMonitorServeriBeacons.count != 0, @"Fail to find matching server iBeacons for region %@.", stopRegion);
-                                    [self sendLogForiBeacons:arrayStopMonitorServeriBeacons isInside:NO]; //need this because "stop monitor" not trigger any delegate.
-                                    SHLog(@"Stop monitor server's iBeacon region for UUid: %@.", localUUid);
+                                    findInLocal = YES;
+                                    break;
                                 }
                             }
-                            //store server's list into local cache and update memory
-                            self.arrayiBeaconFetchList = arrayList;
-                            [[NSUserDefaults standardUserDefaults] setObject:[SHServeriBeacon serializeToStringArray:arrayList] forKey:APPSTATUS_IBEACON_FETCH_LIST];
-                            [[NSUserDefaults standardUserDefaults] synchronize];
+                            if (!findInLocal) //server return one not in local cache, start monitor.
+                            {
+                                SHLog(@"Start monitor server's iBeacon region for UUid: %@.", serverUUid);
+                                [StreetHawk.locationManager startMonitorRegion:[SHServeriBeacon getBeaconRegionForUUid:serverUUid]];
+                            }
                         }
-                    }
-                    else
-                    {
-                        [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_IBEACON_FETCH_TIME]; //make next fetch happen as this time fail.
+                        for (NSString *localUUid in localUUids)
+                        {
+                            BOOL findInServer = NO;
+                            for (NSString *serverUUid in serverUUids)
+                            {
+                                if ([serverUUid compare:localUUid options:NSCaseInsensitiveSearch] == NSOrderedSame)
+                                {
+                                    findInServer = YES;
+                                    break;
+                                }
+                            }
+                            if (!findInServer) //local has one not in server, stop monitor.
+                            {
+                                CLBeaconRegion *stopRegion = [SHServeriBeacon getBeaconRegionForUUid:localUUid];
+                                [StreetHawk.locationManager stopMonitorRegion:stopRegion];
+                                NSArray *arrayStopMonitorServeriBeacons = [self findServeriBeaconsInsideRegion:stopRegion onlyWithDistance:NO/*all, not from inside to outside*/ needSetOutside:YES];
+                                NSAssert(arrayStopMonitorServeriBeacons.count != 0, @"Fail to find matching server iBeacons for region %@.", stopRegion);
+                                [self sendLogForiBeacons:arrayStopMonitorServeriBeacons isInside:NO]; //need this because "stop monitor" not trigger any delegate.
+                                SHLog(@"Stop monitor server's iBeacon region for UUid: %@.", localUUid);
+                            }
+                        }
+                        //store server's list into local cache and update memory
+                        self.arrayiBeaconFetchList = arrayList;
+                        [[NSUserDefaults standardUserDefaults] setObject:[SHServeriBeacon serializeToStringArray:arrayList] forKey:APPSTATUS_IBEACON_FETCH_LIST];
                         [[NSUserDefaults standardUserDefaults] synchronize];
                     }
-                };
-                [fetchRequest startAsynchronously];
+                } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+                {
+                    [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_IBEACON_FETCH_TIME]; //make next fetch happen as this time fail.
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }];
             }
             return;
         }
