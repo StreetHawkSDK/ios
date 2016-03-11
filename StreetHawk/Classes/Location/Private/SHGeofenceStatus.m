@@ -20,7 +20,7 @@
 #import "SHUtils.h" //for SHLog
 #import "SHApp.h" //for `StreetHawk.currentInstall`
 #import "SHLogger.h" //for sending logline
-#import "SHRequest.h" //for sending request
+#import "SHHTTPSessionManager.h" //for sending request
 #import "SHLocationManager.h"
 
 #define APPSTATUS_GEOFENCE_FETCH_TIME       @"APPSTATUS_GEOFENCE_FETCH_TIME"  //last successfully fetch geofence list time
@@ -197,51 +197,45 @@
                 //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setGeofenceTimestamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
                 [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:APPSTATUS_GEOFENCE_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                SHRequest *fetchRequest = [SHRequest requestWithPath:@"/geofences/tree/"];
-                fetchRequest.requestHandler = ^(SHRequest *request)
+                [[SHHTTPSessionManager sharedInstance] GET:@"/geofences/tree/" hostVersion:SHHostVersion_V1 parameters:nil success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
                 {
-                    if (request.error == nil)
+                    //successfully fetch server's geofence list. local cache time is already updated, store fetch list and active monitor.
+                    SHLog(@"Fetch server geofence list: %@.", responseObject);
+                    NSAssert([responseObject isKindOfClass:[NSArray class]] || [responseObject isKindOfClass:[NSDictionary class]], @"Server return should be array or empty dictionary.");
+                    if ([responseObject isKindOfClass:[NSArray class]] || [responseObject isKindOfClass:[NSDictionary class]])
                     {
-                        //successfully fetch server's geofence list. local cache time is already updated, store fetch list and active monitor.
-                        SHLog(@"Fetch server geofence list: %@.", request.resultValue);
-                        NSAssert([request.resultValue isKindOfClass:[NSArray class]] || [request.resultValue isKindOfClass:[NSDictionary class]], @"Server return should be array or empty dictionary.");
-                        if ([request.resultValue isKindOfClass:[NSArray class]] || [request.resultValue isKindOfClass:[NSDictionary class]])
+                        //Geofence would monitor parent or child, and it's possible `id` not change but latitude/longitude/radius change. When timestamp change, stop monitor existing geofences and start to monitor from new list totally.
+                        [self stopMonitorPreviousGeofencesOnlyForOutside:NO parentCanKeepChild:NO]; //server's geofence change, stop monitor all.
+                        if ([responseObject isKindOfClass:[NSArray class]]) //array means there is new geofence list from server
                         {
-                            //Geofence would monitor parent or child, and it's possible `id` not change but latitude/longitude/radius change. When timestamp change, stop monitor existing geofences and start to monitor from new list totally.
-                            [self stopMonitorPreviousGeofencesOnlyForOutside:NO parentCanKeepChild:NO]; //server's geofence change, stop monitor all.
-                            if ([request.resultValue isKindOfClass:[NSArray class]]) //array means there is new geofence list from server
+                            NSMutableArray *arrayList = [NSMutableArray array];
+                            for (NSDictionary *dictParent in (NSArray *)responseObject)
                             {
-                                NSMutableArray *arrayList = [NSMutableArray array];
-                                for (NSDictionary *dictParent in (NSArray *)request.resultValue)
+                                SHServerGeofence *geofence = [SHServerGeofence parseGeofenceFromDict:dictParent];
+                                NSAssert(geofence != nil, @"Fail to parse geofence from %@.", dictParent);
+                                if (geofence != nil)
                                 {
-                                    SHServerGeofence *geofence = [SHServerGeofence parseGeofenceFromDict:dictParent];
-                                    NSAssert(geofence != nil, @"Fail to parse geofence from %@.", dictParent);
-                                    if (geofence != nil)
-                                    {
-                                        [arrayList addObject:geofence];
-                                    }
+                                    [arrayList addObject:geofence];
                                 }
-                                //Update local cache and memory, start monitor parent.
-                                self.arrayGeofenceFetchList = arrayList;
-                                [[NSUserDefaults standardUserDefaults] setObject:[SHServerGeofence serializeToArrayDict:arrayList] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];
-                                [[NSUserDefaults standardUserDefaults] synchronize];
-                                [self startMonitorGeofences:arrayList];
                             }
-                            else //dictionary means empty geofence list from server.
-                            {
-                                self.arrayGeofenceFetchList = [NSMutableArray array]; //cannot set to nil, as nil will read from NSUserDefaults again.
-                                [[NSUserDefaults standardUserDefaults] setObject:[NSArray array] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];  //clear local cache, not start when kill and launch App.
-                                [[NSUserDefaults standardUserDefaults] synchronize];
-                            }
+                            //Update local cache and memory, start monitor parent.
+                            self.arrayGeofenceFetchList = arrayList;
+                            [[NSUserDefaults standardUserDefaults] setObject:[SHServerGeofence serializeToArrayDict:arrayList] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];
+                            [[NSUserDefaults standardUserDefaults] synchronize];
+                            [self startMonitorGeofences:arrayList];
+                        }
+                        else //dictionary means empty geofence list from server.
+                        {
+                            self.arrayGeofenceFetchList = [NSMutableArray array]; //cannot set to nil, as nil will read from NSUserDefaults again.
+                            [[NSUserDefaults standardUserDefaults] setObject:[NSArray array] forKey:APPSTATUS_GEOFENCE_FETCH_LIST];  //clear local cache, not start when kill and launch App.
+                            [[NSUserDefaults standardUserDefaults] synchronize];
                         }
                     }
-                    else
-                    {
-                        [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_GEOFENCE_FETCH_TIME]; //make next fetch happen as this time fail.
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
-                };
-                [fetchRequest startAsynchronously];
+                } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+                {
+                    [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_GEOFENCE_FETCH_TIME]; //make next fetch happen as this time fail.
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }];
             }
             return;
         }

@@ -21,7 +21,6 @@
 #import "SHUtils.h" //for SHLog
 #import "SHApp.h" //for `StreetHawk.currentInstall`
 #import "SHLogger.h" //for sending logline
-#import "SHRequest.h" //for sending request
 
 @interface SHFeedBridge ()
 
