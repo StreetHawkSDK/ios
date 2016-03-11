@@ -20,7 +20,7 @@
 #import "SHApp.h" //for `StreetHawk.currentInstall`
 #import "SHInstall.h" //for `StreetHawk.currentInstall.suid`
 #import "SHTypes.h" //for NONULL
-#import "SHRequest.h" //for sending request
+#import "SHHTTPSessionManager.h" //for sending request
 #import "SHAlertView.h" //for choose channel
 #import "SHUtils.h" //for strIsEmpty
 #import "SHDeepLinking.h" //for handling deeplinking url
@@ -141,22 +141,39 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
         [dictParam setObject:NONULL(default_url.absoluteString) forKey:@"destination_url_default"];
     }
     handler = [handler copy];
-    SHRequest *request = [SHRequest requestWithPath:[NSString stringWithFormat:@"%@/originate_viral_share/", GrowthServer] withVersion:SHHostVersion_Unknown withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:dictParam];
-    request.requestHandler = ^(SHRequest *shareRequest)
+    [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"%@/originate_viral_share/", GrowthServer] hostVersion:SHHostVersion_Unknown body:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
         if (handler)
         {
             NSString *share_guid_url = nil;
-            if (shareRequest.error == nil)
+            NSError *error = nil;
+            NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"Expect NSDictionary for growth share guid, but get :%@.", responseObject);
+            if ([responseObject isKindOfClass:[NSDictionary class]])
             {
-                NSDictionary *dict = shParseObjectToDict(shareRequest.responseString);
+                NSDictionary *dict = (NSDictionary *)responseObject;
                 NSAssert([dict.allKeys containsObject:@"share_guid_url"], @"share_guid_url is not in %@.", dict);
-                share_guid_url = dict[@"share_guid_url"];
+                if ([dict.allKeys containsObject:@"share_guid_url"])
+                {
+                    share_guid_url = dict[@"share_guid_url"];
+                }
+                else
+                {
+                    error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"share_guid_url is not in %@.", dict]}];
+                }
             }
-            handler(share_guid_url, shareRequest.error);
+            else
+            {
+                error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Expect NSDictionary for growth share guid, but get :%@.", responseObject]}];
+            }
+            handler(share_guid_url, error);
         }
-    };
-    [request startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
+        if (handler)
+        {
+            handler(nil, error);
+        }
+    }];
 }
 
 - (void)originateShareWithCampaign:(NSString *)utm_campaign withMedium:(NSString *)utm_medium withContent:(NSString *)utm_content withTerm:(NSString *)utm_term shareUrl:(NSURL *)shareUrl withDefaultUrl:(NSURL *)default_url withMessage:(NSString *)message
@@ -335,30 +352,31 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
     [dictParam setObject:NONULL([UIDevice currentDevice].identifierForVendor.UUIDString) forKey:@"installid"];
     [dictParam setObject:NONULL(StreetHawk.currentInstall.suid) forKey:@"sh_cuid"];
     [dictParam setObject:@([[NSTimeZone localTimeZone] secondsFromGMT]/60) forKey:@"timezone"];
-    NSMutableString *baseUrl = [NSMutableString stringWithFormat:@"%@/i/", GrowthServer];
-    NSString *registerUrl = shAppendParamsDictToString(baseUrl, dictParam, NO);
     handler = [handler copy];
-    SHRequest *request = [SHRequest requestWithPath:registerUrl];
-    request.requestHandler = ^(SHRequest *registerRequest)
+    [[SHHTTPSessionManager sharedInstance] GET:[NSMutableString stringWithFormat:@"%@/i/", GrowthServer] hostVersion:SHHostVersion_Unknown parameters:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
-        if (registerRequest.error == nil)
+        if (handler)
         {
-            if (handler)
+            NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"Growth register expect NSDictionary, but get %@.", responseObject);
+            if ([responseObject isKindOfClass:[NSDictionary class]])
             {
-                NSDictionary *dict = shParseObjectToDict(registerRequest.responseString);
+                NSDictionary *dict = (NSDictionary *)responseObject;
                 handler(dict, nil);
             }
-        }
-        else
-        {
-            self.isGrowthRegistered = NO; //this time register fail, do it next time.
-            if (handler)
+            else
             {
-                handler(nil, registerRequest.error);
+                NSError *error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Growth register expect NSDictionary, but get %@.", responseObject]}];
+                handler(nil, error);
             }
         }
-    };
-    [request startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
+        self.isGrowthRegistered = NO; //this time register fail, do it next time.
+        if (handler)
+        {
+            handler(nil, error);
+        }
+    }];
 }
 
 - (void)increaseGrowth:(NSString *)shareUrlStr withHandler:(SHCallbackHandler)handler
@@ -408,15 +426,19 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
     [dictParam setObject:NONULL(uri) forKey:@"uri"];    
     handler = [handler copy];
     //Not need to consider offline mode. If device is offline short link cannot redirect to full link and will not pass above check.
-    SHRequest *request = [SHRequest requestWithPath:[NSString stringWithFormat:@"%@/increase_clicks/", GrowthServer] withVersion:SHHostVersion_Unknown withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:dictParam];
-    request.requestHandler = ^(SHRequest *increaseRequest)
+    [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"%@/increase_clicks/", GrowthServer] hostVersion:SHHostVersion_Unknown body:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
         if (handler)
         {
-            handler(increaseRequest.responseString, increaseRequest.error);
+            handler(responseObject, nil);
         }
-    };
-    [request startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
+        if (handler)
+        {
+            handler(nil, error);
+        }
+    }];
 }
 
 #pragma mark - private functions
