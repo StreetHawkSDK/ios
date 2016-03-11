@@ -748,66 +748,63 @@ enum
                 handler(nil, nil);
             return;
         }
-        SHRequest *request = [SHRequest requestWithPath:@"installs/log/" withVersion:SHHostVersion_V2 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:@[@"records", postBody]];
         handler = [handler copy];
-        request.requestHandler = ^(SHRequest *logRequest)
+        [[SHHTTPSessionManager sharedInstance] POST:@"installs/log/" hostVersion:SHHostVersion_V2 body:@{@"records": postBody} success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
+        {
+            //record last successfully post logs time.
+            BOOL postHeartbeat = NO;
+            BOOL postLocation = NO;
+            for (NSDictionary *logRecord in logRecords)
+            {
+                int code = [logRecord[@"code"] intValue];
+                if (code == LOG_CODE_HEARTBEAT)
+                {
+                    postHeartbeat = YES;
+                }
+                if (code == LOG_CODE_LOCATION_MORE || code == LOG_CODE_LOCATION_GEO)
+                {
+                    postLocation = YES;
+                }
+                if (postHeartbeat && postLocation)
+                {
+                    break;
+                }
+            }
+            if (postHeartbeat)
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:REGULAR_HEARTBEAT_LOGTIME];
+            }
+            if (postLocation)
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:REGULAR_LOCATION_LOGTIME];
+            }
+            if (postHeartbeat || postLocation)
+            {
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            [self clearLogRecords:logRecords];
+            dispatch_semaphore_signal(self.upload_semaphore);
+            //finish
+            if (handler)
+                handler(nil, nil);
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
         {
             //Since 2014-02-10, server save log in asynchronous way, so it does not return any error.
             //Update on 2015-02-27: dev returns error message for debugging, api return immediately.
-            if (logRequest.error != nil/* && error != [SHRequest requestCancelledError]*//*A running request still post data to server even it's canncelled, so still need to delete the logs from database to avoid sending duplicated logs.*/)
+            if (![error.domain isEqualToString:@"NSURLErrorDomain"] && StreetHawk.isDebugMode && shAppMode() != SHAppMode_AppStore && shAppMode() != SHAppMode_Enterprise)
             {
-                if (![logRequest.error.domain isEqualToString:@"NSURLErrorDomain"] && StreetHawk.isDebugMode && shAppMode() != SHAppMode_AppStore && shAppMode() != SHAppMode_Enterprise)
-                {
-                    //NSAssert(NO, @"Log meets error (%@) for records: %@.", logRequest.error, logRecords); //comment this as dev returns error and crash App, make it cannot continue.
-                }
-                if (logRequest.error.code == 404)
-                {
-                    StreetHawk.currentInstall = nil;
-                    [StreetHawk registerOrUpdateInstallWithHandler:nil];
-                }
-                dispatch_semaphore_signal(self.upload_semaphore);
+                //NSAssert(NO, @"Log meets error (%@) for records: %@.", logRequest.error, logRecords); //comment this as dev returns error and crash App, make it cannot continue.
             }
-            else
+            if (error.code == 404)
             {
-                //record last successfully post logs time.
-                BOOL postHeartbeat = NO;
-                BOOL postLocation = NO;
-                for (NSDictionary *logRecord in logRecords)
-                {
-                    int code = [logRecord[@"code"] intValue];
-                    if (code == LOG_CODE_HEARTBEAT)
-                    {
-                        postHeartbeat = YES;
-                    }
-                    if (code == LOG_CODE_LOCATION_MORE || code == LOG_CODE_LOCATION_GEO)
-                    {
-                        postLocation = YES;
-                    }
-                    if (postHeartbeat && postLocation)
-                    {
-                        break;
-                    }
-                }
-                if (postHeartbeat)
-                {
-                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:REGULAR_HEARTBEAT_LOGTIME];
-                }
-                if (postLocation)
-                {
-                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:REGULAR_LOCATION_LOGTIME];
-                }
-                if (postHeartbeat || postLocation)
-                {
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                }
-                [self clearLogRecords:logRecords];
-                dispatch_semaphore_signal(self.upload_semaphore);
+                StreetHawk.currentInstall = nil;
+                [StreetHawk registerOrUpdateInstallWithHandler:nil];
             }
+            dispatch_semaphore_signal(self.upload_semaphore);
             //finish
             if (handler)
-                handler(nil, logRequest.error);
-        };
-        [request startAsynchronously];
+                handler(nil, error);
+        }];
     }    
 }
 
