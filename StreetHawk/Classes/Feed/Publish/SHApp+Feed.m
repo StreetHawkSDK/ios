@@ -17,7 +17,7 @@
 
 #import "SHApp+Feed.h"
 //header from StreetHawk
-#import "SHRequest.h" //for sending request
+#import "SHHTTPSessionManager.h" //for sending request
 #import "SHFeedBridge.h" //for APPSTATUS_FEED_FETCH_TIME
 #import "SHUtils.h" //for streetHawkIsEnabled
 #import "SHLogger.h" //for sending logline
@@ -52,37 +52,40 @@
     [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate]) forKey:APPSTATUS_FEED_FETCH_TIME];
     [[NSUserDefaults standardUserDefaults] synchronize];
     handler = [handler copy];
-    SHRequest *fetchRequest = [SHRequest requestWithPath:@"/feed/" withParams:@[@"offset", @(offset)]];
-    fetchRequest.requestHandler = ^(SHRequest *request)
+    [[SHHTTPSessionManager sharedInstance] GET:@"/feed/" hostVersion:SHHostVersion_V1 parameters:@{@"offset": @(offset)} success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
         NSMutableArray *arrayFeeds = [NSMutableArray array];
-        if (request.error == nil)
+        NSError *error = nil;
+        NSAssert([responseObject isKindOfClass:[NSArray class]], @"Feed result should be array, got %@.", responseObject);
+        if ([responseObject isKindOfClass:[NSArray class]])
         {
-            NSAssert([request.resultValue isKindOfClass:[NSArray class]], @"Feed result should be array, got %@.", request.resultValue);
-            if ([request.resultValue isKindOfClass:[NSArray class]])
+            for (id obj in (NSArray *)responseObject)
             {
-                for (id obj in (NSArray *)request.resultValue)
+                NSAssert([obj isKindOfClass:[NSDictionary class]], @"Feed item should be dictionary, got %@.", obj);
+                if ([obj isKindOfClass:[NSDictionary class]])
                 {
-                    NSAssert([obj isKindOfClass:[NSDictionary class]], @"Feed item should be dictionary, got %@.", obj);
-                    if ([obj isKindOfClass:[NSDictionary class]])
-                    {
-                        SHFeedObject *feedObj = [SHFeedObject createFromDictionary:(NSDictionary *)obj];
-                        [arrayFeeds addObject:feedObj];
-                    }
+                    SHFeedObject *feedObj = [SHFeedObject createFromDictionary:(NSDictionary *)obj];
+                    [arrayFeeds addObject:feedObj];
                 }
             }
         }
         else
         {
-            [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_FEED_FETCH_TIME]; //make next fetch happen as this time fail.
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Feed result should be array, got %@.", responseObject]}];
         }
         if (handler)
         {
-            handler(arrayFeeds, request.error);
+            handler(arrayFeeds, error);
         }
-    };
-    [fetchRequest startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_FEED_FETCH_TIME]; //make next fetch happen as this time fail.
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        if (handler)
+        {
+            handler(nil, error);
+        }
+    }];
 }
 
 - (void)sendFeedAck:(NSInteger)feed_id
