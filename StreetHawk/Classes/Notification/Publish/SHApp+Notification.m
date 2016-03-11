@@ -21,7 +21,7 @@
 #import "SHFriendlyNameObject.h"
 #import "SHInstallHandler.h" //for registerForNotificationAndNotifyServer
 #import "SHUtils.h"  //for SHLog
-#import "SHRequest.h" //for sending request
+#import "SHHTTPSessionManager.h" //for sending request
 #import "SHAppStatus.h" //for appStatusChange
 //header from System
 #import <objc/runtime.h> //for associate object
@@ -361,22 +361,23 @@
         }
         return;
     }
-    SHRequest *request = [SHRequest requestWithPath:@"installs/alert_settings/" withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:nil withBodyOrStream:@[@"pause_minutes", @(pauseMinutes)]];
     handler = [handler copy];
-    request.requestHandler = ^(SHRequest *saveRequest)
+    [[SHHTTPSessionManager sharedInstance] POST:@"installs/alert_settings/" hostVersion:SHHostVersion_V1 body:@{@"pause_minutes": @(pauseMinutes)} success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
-        if (saveRequest.error == nil)
-        {
-            //save local cache
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:pauseMinutes] forKey:ALERTSETTINGS_MINUTES];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
+        //save local cache
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:pauseMinutes] forKey:ALERTSETTINGS_MINUTES];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         if (handler)
         {
-            handler(nil, saveRequest.error);
+            handler(nil, nil);
         }
-    };
-    [request startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
+        if (handler)
+        {
+            handler(nil, error);
+        }
+    }];
 }
 
 - (NSInteger)getAlertSettingMinutes
@@ -404,33 +405,34 @@
         return;
     }
     //server should have record, read calculated value from server.
-    SHRequest *request = [SHRequest requestWithPath:@"installs/alert_settings/"];
     handler = [handler copy];
-    request.requestHandler = ^(SHRequest *loadRequest)
+    [[SHHTTPSessionManager sharedInstance] GET:@"installs/alert_settings/" hostVersion:SHHostVersion_V1 parameters:nil success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
         NSDate *pauseUntil = nil;
-        NSError *error = loadRequest.error;
-        if (loadRequest.error == nil)
+        NSError *error = nil;
+        NSAssert(responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]], @"Load from server get wrong result value: %@.", responseObject);  //load request suppose to get json dictionary
+        if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]])
         {
-            NSAssert(loadRequest.resultValue != nil && [loadRequest.resultValue isKindOfClass:[NSDictionary class]], @"Load from server get wrong result value: %@.", loadRequest.resultValue);  //load request suppose to get json dictionary
-            if (loadRequest.resultValue != nil && [loadRequest.resultValue isKindOfClass:[NSDictionary class]])
-            {
-                pauseUntil = shParseDate(((NSDictionary *)loadRequest.resultValue)[@"pause_until"], 0);
-                //By the way, sync minute local cache
-                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:[((NSDictionary *)loadRequest.resultValue)[@"pause_minutes"] integerValue]] forKey:ALERTSETTINGS_MINUTES];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-            else
-            {
-                error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Load from server get wrong result value: %@.", loadRequest.resultValue]}];
-            }
+            pauseUntil = shParseDate(((NSDictionary *)responseObject)[@"pause_until"], 0);
+            //By the way, sync minute local cache
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:[((NSDictionary *)responseObject)[@"pause_minutes"] integerValue]] forKey:ALERTSETTINGS_MINUTES];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        else
+        {
+            error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Load from server get wrong result value: %@.", responseObject]}];
         }
         if (handler)
         {
             handler(pauseUntil, error);
         }
-    };
-    [request startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+    {
+        if (handler)
+        {
+            handler(nil, error);
+        }
+    }];
 }
 
 - (void)shSetCustomiseHandler:(id<ISHCustomiseHandler>)handler
