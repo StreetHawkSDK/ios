@@ -79,6 +79,20 @@
     return task;
 }
 
+- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion constructingBodyWithBlock:(nullable void (^)(id <SHAFMultipartFormData> formData))block success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure
+{
+    URLString = [self completeStreetHawkSpecialUrl:URLString withHostVersion:hostVersion];
+    NSURLSessionDataTask *task = [super POST:URLString parameters:nil constructingBodyWithBlock:block progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    {
+        [self processSuccessCallback:task withData:responseObject success:success failure:failure];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+    {
+        [self processFailureCallback:task withError:error failure:failure];
+    }];
+    SHLog(@"POST - %@", URLString);
+    return task;
+}
+
 #pragma mark - private functions
 
 - (NSString *)completeStreetHawkSpecialUrl:(NSString *)urlString withHostVersion:(SHHostVersion)hostVersion

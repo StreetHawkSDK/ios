@@ -56,7 +56,7 @@ typedef enum SHHostVersion SHHostVersion;
 - (nullable NSURLSessionDataTask *)GET:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
 
 /**
- Wrapper for `AFHTTPSessionManager` POST method.
+ Wrapper for `AFHTTPSessionManager` POST method for post json.
  @param URLString The path or complete url.
  @param hostVersion StreetHawk's request has version /v1, /v2 etc.
  @param body It will go to post body, and this body will be posted as content-type=application/x-www-form-urlencoded. The type must be NSDictionary as {key: value}. If it's not NSDictionary, for example a string, use {SH_BODY: <value>}.
@@ -64,6 +64,16 @@ typedef enum SHHostVersion SHHostVersion;
  @param failure Failure callback.
  */
 - (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion body:(nullable NSDictionary *)body success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
+
+/**
+ Wrapper for `AFHTTPSessionManager` POST method for uploading multiple form.
+ @param URLString The path or complete url.
+ @param hostVersion StreetHawk's request has version /v1, /v2 etc.
+ @param block It will go to post body, and this body will be posted as content-type=multipart/form-data.
+ @param success Success callback.
+ @param failure Failure callback.
+ */
+- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion constructingBodyWithBlock:(nullable void (^)(id <SHAFMultipartFormData> formData))block success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 
 @end
 

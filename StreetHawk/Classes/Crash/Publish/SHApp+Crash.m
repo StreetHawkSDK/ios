@@ -19,7 +19,7 @@
 //header from StreetHawk
 #import "SHCrashHandler.h" //for create instance
 #import "SHUtils.h" //for shFormatStreetHawkDate
-#import "SHRequest.h" //for sending request
+#import "SHHTTPSessionManager.h" //for sending request
 //header from System
 #import <objc/runtime.h> //for associate object
 
@@ -86,32 +86,26 @@
     if (self.isSendingCrashReport)
         return;
     self.isSendingCrashReport = YES;
-    NSString *upload_url = [NSString stringWithFormat:@"installs/%@/crash/", installId];
-    NSMutableData *body = [NSMutableData data];
-    NSMutableString *enclosingString = [NSMutableString string];
-    [enclosingString appendString:@"-----------------------------114896232643685925846960113\r\n"];
-    [enclosingString appendFormat:@"Content-Disposition: form-data; name=\"exception_file\"; filename=\"%@\"\r\n", @"Crash Report"];
-    [enclosingString appendString:@"Content-Type: text/text\r\n\r\n"];
-    [body appendData:[enclosingString dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[crashReportContent dataUsingEncoding:NSUTF8StringEncoding]];
-    enclosingString = [NSMutableString string];
-    [enclosingString appendString:@"-----------------------------114896232643685925846960113\r\n"];
-    [enclosingString appendString:@"Content-Disposition: form-data; name=\"created\"\r\n\r\n"];
-    [enclosingString appendString:shFormatStreetHawkDate(crashDate)];
-    [enclosingString appendString:@"\r\n-----------------------------114896232643685925846960113--"];
-    [body appendData:[enclosingString dataUsingEncoding:NSUTF8StringEncoding]];
-    NSDictionary *header = @{@"Accept": @"*/*", @"Content-Type": @"multipart/form-data; boundary=---------------------------114896232643685925846960113", @"Content-Length": [NSString stringWithFormat:@"%d", (int)body.length]};
-    SHRequest *request = [SHRequest requestWithPath:upload_url withVersion:SHHostVersion_V1 withParams:nil withMethod:@"POST" withHeaders:header withBodyOrStream:body];
     handler = [handler copy];
-    request.requestHandler = ^(SHRequest *request)
+    [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"installs/%@/crash/", installId] hostVersion:SHHostVersion_V1 constructingBodyWithBlock:^(id<SHAFMultipartFormData> formData)
+    {
+        [formData appendPartWithFileData:[crashReportContent dataUsingEncoding:NSUTF8StringEncoding] name:@"exception_file" fileName:@"Crash Report" mimeType:@"text/text"];
+        [formData appendPartWithFormData:[shFormatStreetHawkDate(crashDate) dataUsingEncoding:NSUTF8StringEncoding] name:@"created"];
+    } success:^(NSURLSessionDataTask *task, id  _Nullable responseObject)
     {
         self.isSendingCrashReport = NO;
         if (handler)
         {
-            handler(nil, request.error);
+            handler(nil, nil);
         }
-    };
-    [request startAsynchronously];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError *error)
+    {
+        self.isSendingCrashReport = NO;
+        if (handler)
+        {
+            handler(nil, error);
+        }
+    }];
 }
 
 @end
