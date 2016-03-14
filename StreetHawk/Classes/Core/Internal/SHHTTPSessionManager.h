@@ -73,7 +73,7 @@ typedef enum SHHostVersion SHHostVersion;
  @param success Success callback.
  @param failure Failure callback.
  */
-- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion constructingBodyWithBlock:(nullable void (^)(id <SHAFMultipartFormData> formData))block success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+- (nullable NSURLSessionDataTask *)POST:(nonnull NSString *)URLString hostVersion:(SHHostVersion)hostVersion constructingBodyWithBlock:(nullable void (^)(id <SHAFMultipartFormData> _Nullable formData))block success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
 
 @end
 
