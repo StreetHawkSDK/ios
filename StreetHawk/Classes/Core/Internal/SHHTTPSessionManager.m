@@ -145,6 +145,7 @@
 
 - (void)processSuccessCallback:(NSURLSessionDataTask *)task withData:(id)responseObject success:(void (^)(NSURLSessionDataTask * _Nullable, id _Nullable))success failure:(void (^)(NSURLSessionDataTask * _Nullable, NSError * _Nullable))failure
 {
+    NSAssert(![NSThread isMainThread], @"Successfual callback wait in main thread for request %@.", task.currentRequest);
     if ([task.response.URL.absoluteString.lowercaseString hasPrefix:@"https://api.streethawk.com"])
     {
         //whenever success process a request, do parser as it affects AppStatus.
@@ -283,6 +284,7 @@
 
 - (void)processFailureCallback:(NSURLSessionDataTask * _Nonnull)task withError:(NSError * _Nullable)error failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure
 {
+    NSAssert(![NSThread isMainThread], @"Failure callback wait in main thread for request %@.", task.currentRequest);
     if (failure)
     {
         failure(task, error);
