@@ -317,41 +317,47 @@ NSString * const SHNotificationActionId_Later = @"SHNotificationActionId_Later";
     return SHNotificationActionResult_Unknown;
 }
 
-const NSString *Push_Payload_Code = @"c";  //code
-const NSString *Push_Payload_MsgId = @"i";  //msgid
-const NSString *Push_Payload_Data = @"d";  //data
-const NSString *Push_Payload_Slide_Proportion = @"p";  //proportion (former: pixel)
-const NSString *Push_Payload_Slide_Orientation = @"o"; //orientation (former: direction)
-const NSString *Push_Payload_Slide_Speed = @"s";  //speed
-const NSString *Push_Payload_DialogTitleLength = @"l"; //title "t" and message "m" is deprecated now, use "l" as title lenght of "alert", left is message.
-const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardless of its value, not show confirm dialog.
+const NSString *Payload_Code = @"c";  //code
+const NSString *Payload_MsgId = @"i";  //msgid
+const NSString *Payload_Data = @"d";  //data
+const NSString *Payload_Title = @"t"; //title
+const NSString *Payload_Message = @"m"; //message
+const NSString *Payload_Slide_Proportion = @"p";  //proportion (former: pixel)
+const NSString *Payload_Slide_Orientation = @"o"; //orientation (former: direction)
+const NSString *Payload_Slide_Speed = @"s";  //speed
+const NSString *Payload_DialogTitleLength = @"l"; //title "t" and message "m" is deprecated now, use "l" as title lenght of "alert", left is message.
+const NSString *Payload_SupressDialog = @"n"; //if payload has "n", regardless of its value, not show confirm dialog.
+const NSString *Payload_Button1 = @"b1"; //button 1
+const NSString *Payload_Button2 = @"b2"; //button 2
+const NSString *Payload_Button3 = @"b3"; //button 3
 
 - (BOOL)isDefinedCode:(NSDictionary *)userInfo
 {
     int code = -1;
-    NSObject *msgcode = userInfo[Push_Payload_Code];
-    if (msgcode != nil && ([msgcode isKindOfClass:[NSNumber class]] || [msgcode isKindOfClass:[NSString class]]))
+    NSObject *codeStr = userInfo[Payload_Code];
+    if (codeStr != nil && ([codeStr isKindOfClass:[NSNumber class]] || [codeStr isKindOfClass:[NSString class]]))
     {
-        code = [((NSNumber *)msgcode) intValue];
+        code = [((NSNumber *)codeStr) intValue];
     }
     //But it's also possible that the push message is sent by other format without code. If it's not standard format, StreetHawk SDk ignores it and let other to handle.
     if (code == -1)
     {
         return NO;
     }
-    BOOL isKnownCode = (code == 8000 || code == 8003 || code == 8004 || code == 8005 || code == 8006 || code == 8007 || code == 8008 || code == 8009 || code == 8010 || code == 8011 || code == 8012 || code == 8013 || code == 8014 || code == 8042 || code == 8049);
+    BOOL isKnownCode = (code == 8000 || code == 8003 || code == 8004 || code == 8005 || code == 8006 || code == 8007 || code == 8008 || code == 8009 || code == 8010 || code == 8011 || code == 8012 || code == 8013 || code == 8014 || code == 8042 || code == 8049 || code == 8100);
     return isKnownCode;
 }
 
 - (BOOL)handleDefinedUserInfo:(NSDictionary *)userInfo withAction:(SHNotificationActionResult)action treatAppAs:(SHAppFGBG)appFGBG forNotificationType:(SHNotificationType)notificationType
 {
+    [StreetHawk setApplicationBadge:0]; //clear badge here too, as for Titanium StreetHawk is init after didBecomeActive, so first launch cannot clear badge.
     PushDataForApplication *pushData = [[PushDataForApplication alloc] init];
     NSAssert([self isDefinedCode:userInfo], @"Only work for defined code but pass in %@.", userInfo);
     if (![self isDefinedCode:userInfo])
     {
         return NO;
     }
-    pushData.code = [((NSNumber *)userInfo[Push_Payload_Code]) integerValue]; //checked above already
+    pushData.code = [((NSNumber *)userInfo[Payload_Code]) integerValue]; //checked above already
     if (pushData.action != SHAction_CheckAppStatus) //only check app status can reset enable/disable streethawk functions
     {
         if (!streetHawkIsEnabled())
@@ -359,22 +365,6 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
             return NO;
         }
     }
-    if ([userInfo.allKeys containsObject:@"aps"])
-    {
-        NSDictionary *dictAps = userInfo[@"aps"];
-        if ([dictAps isKindOfClass:[NSDictionary class]])
-        {
-            if ([dictAps.allKeys containsObject:@"sound"])
-            {
-                pushData.sound = dictAps[@"sound"];
-            }
-            if ([dictAps.allKeys containsObject:@"badge"])
-            {
-                pushData.badge = [dictAps[@"badge"] integerValue];
-            }
-        }
-    }
-    [StreetHawk setApplicationBadge:0]; //clear badge here too, as for Titanium StreetHawk is init after didBecomeActive, so first launch cannot clear badge.
     if (notificationType == SHNotificationType_SmartPush)
     {
         NSAssert([UIApplication sharedApplication].applicationState == UIApplicationStateActive, @"Smart push only trigger when App is active.");
@@ -396,10 +386,109 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
             break;
     }
     NSAssert(action == SHNotificationActionResult_Unknown || !pushData.isAppOnForeground, @"Action has decided must trigger from BG.");
-    //parse the userInfo dictionary's messages
-    pushData.msgID = [NONULL(userInfo[Push_Payload_MsgId]) integerValue];
-    NSAssert(pushData.msgID != 0, @"Fail to get msg id from %@.", userInfo);
-    pushData.data = userInfo[Push_Payload_Data];
+    if ([userInfo.allKeys containsObject:@"aps"])
+    {
+        NSDictionary *dictAps = userInfo[@"aps"];
+        NSAssert([dictAps isKindOfClass:[NSDictionary class]], @"aps is not a dictionary.");
+        if ([dictAps isKindOfClass:[NSDictionary class]])
+        {
+            if ([dictAps.allKeys containsObject:@"sound"])
+            {
+                pushData.sound = dictAps[@"sound"];
+            }
+            if ([dictAps.allKeys containsObject:@"badge"])
+            {
+                pushData.badge = [dictAps[@"badge"] integerValue];
+            }
+            if ([dictAps.allKeys containsObject:@"alert"])
+            {
+                NSString *alert = (NSString *)dictAps[@"alert"];
+                NSAssert([alert isKindOfClass:[NSString class]], @"alert is not a string.");
+                if (!shStrIsEmpty(alert))
+                {
+                    NSAssert([userInfo.allKeys containsObject:Payload_DialogTitleLength], @"Alert must have title length.");
+                    NSAssert(![userInfo.allKeys containsObject:Payload_Title], @"Title is set by alert, should not have this key.");
+                    NSAssert(![userInfo.allKeys containsObject:Payload_Message], @"Message is set by alert, should not have this key.");
+                    NSAssert(![userInfo.allKeys containsObject:Payload_Button1], @"Set button text cannot have alert.");
+                    NSAssert(![userInfo.allKeys containsObject:Payload_Button2], @"Set button text cannot have alert.");
+                    NSAssert(![userInfo.allKeys containsObject:Payload_Button3], @"Set button text cannot have alert.");
+                    if ([userInfo.allKeys containsObject:Payload_DialogTitleLength])
+                    {
+                        NSInteger titleLength = [NONULL(userInfo[Payload_DialogTitleLength]) integerValue];
+                        if (titleLength < 0)
+                        {
+                            titleLength = 0;
+                        }
+                        if (titleLength > alert.length)
+                        {
+                            titleLength = alert.length;
+                        }
+                        pushData.title = [Emojione shortnameToUnicode:[[alert substringToIndex:titleLength] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+                        pushData.message = [Emojione shortnameToUnicode:[[alert substringFromIndex:titleLength] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+                    }
+                }
+            }
+        }
+    }
+    if ([userInfo.allKeys containsObject:Payload_Title])
+    {
+        NSAssert(shStrIsEmpty(pushData.title), @"Title should set up by payload, not aps.");
+        NSString *title = userInfo[Payload_Title];
+        NSAssert([title isKindOfClass:[NSString class]], @"Title must be string.");
+        if ([title isKindOfClass:[NSString class]])
+        {
+            pushData.title = [Emojione shortnameToUnicode:[title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        }
+    }
+    if ([userInfo.allKeys containsObject:Payload_Message])
+    {
+        NSAssert(shStrIsEmpty(pushData.message), @"Message should set up by payload, not aps.");
+        NSString *message = userInfo[Payload_Message];
+        NSAssert([message isKindOfClass:[NSString class]], @"Message must be string.");
+        if ([message isKindOfClass:[NSString class]])
+        {
+            pushData.message = [Emojione shortnameToUnicode:[message stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        }
+    }
+    if ([userInfo.allKeys containsObject:Payload_Button1])
+    {
+        NSDictionary *dictButton1 = (NSDictionary *)userInfo[Payload_Button1];
+        NSAssert([dictButton1 isKindOfClass:[NSDictionary class]], @"Button 1 must be dictionary.");
+        NSString *button1 = dictButton1[@"t"];
+        NSAssert([button1 isKindOfClass:[NSString class]], @"Button 1 title must be string.");
+        if ([button1 isKindOfClass:[NSString class]])
+        {
+            NSAssert(!shStrIsEmpty(button1), @"Button 1 title must not empty string.");
+            pushData.button1Title = button1;
+        }
+    }
+    if ([userInfo.allKeys containsObject:Payload_Button2])
+    {
+        NSDictionary *dictButton2 = (NSDictionary *)userInfo[Payload_Button2];
+        NSAssert([dictButton2 isKindOfClass:[NSDictionary class]], @"Button 2 must be dictionary.");
+        NSString *button2 = dictButton2[@"t"];
+        NSAssert([button2 isKindOfClass:[NSString class]], @"Button 2 title must be string.");
+        if ([button2 isKindOfClass:[NSString class]])
+        {
+            NSAssert(!shStrIsEmpty(button2), @"Button 2 title must not empty string.");
+            pushData.button2Title = button2;
+        }
+    }
+    if ([userInfo.allKeys containsObject:Payload_Button3])
+    {
+        NSDictionary *dictButton3 = (NSDictionary *)userInfo[Payload_Button3];
+        NSAssert([dictButton3 isKindOfClass:[NSDictionary class]], @"Button 3 must be dictionary.");
+        NSString *button3 = dictButton3[@"t"];
+        NSAssert([button3 isKindOfClass:[NSString class]], @"Button 3 title must be string.");
+        if ([button3 isKindOfClass:[NSString class]])
+        {
+            NSAssert(!shStrIsEmpty(button3), @"Button 3 title must not empty string.");
+            pushData.button3Title = button3;
+        }
+    }
+    //Send pushack for remote notification. Since iOS SDK 1.7.8 enables background remote notification, so pushack is sent no matter App in FG or BG.
+    pushData.msgID = [NONULL(userInfo[Payload_MsgId]) integerValue];
+    pushData.data = userInfo[Payload_Data];
     if ([pushData.data isKindOfClass:[NSString class]])  //cannot assume data is string, as 8011, 8049 send dictionary
     {
         NSString *refinedStr = (NSString *)pushData.data;
@@ -414,8 +503,76 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     {
         pushData.data = nil;
     }
-    //write logs
-    [StreetHawk sendLogForCode:LOG_CODE_PUSH_ACK withComment:[NSString stringWithFormat:@"%@", pushData.data]/*treat data as string*/ forAssocId:pushData.msgID withResult:100/*ignore*/ withHandler:nil];
+    if (notificationType == SHNotificationType_Remote || notificationType == SHNotificationType_SmartPush) //these two are sent from server so must send pushack back
+    {
+        NSAssert(pushData.msgID != 0, @"Fail to get msg id from %@.", userInfo);
+        //Send pushack logline
+        [StreetHawk sendLogForCode:LOG_CODE_PUSH_ACK withComment:[NSString stringWithFormat:@"%@", pushData.data]/*treat data as string*/ forAssocId:pushData.msgID withResult:100/*ignore*/ withHandler:nil];
+        //If setup button text, it must re-register category and setup local notification to trigger it again when App in BG. Even for iOS 7 need local notification as the remote notification's aps/alert is empty so it's silent.
+        if (!shStrIsEmpty(pushData.button1Title) || !shStrIsEmpty(pushData.button2Title) || !shStrIsEmpty(pushData.button3Title))
+        {
+            //Change button text
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
+            {
+                NSMutableArray *arrayActions = [NSMutableArray array];
+                if (!shStrIsEmpty(pushData.button1Title))
+                {
+                    UIMutableUserNotificationAction *action1 = [[UIMutableUserNotificationAction alloc] init];
+                    action1.identifier = SHNotificationActionId_YesPlease; //button1's pushresult = 1
+                    action1.title = pushData.button1Title;
+                    action1.activationMode = UIUserNotificationActivationModeForeground; //pre-defined not change, 8100 all foreground.
+                    action1.destructive = NO;
+                    [arrayActions addObject:action1];
+                }
+                if (!shStrIsEmpty(pushData.button2Title))
+                {
+                    UIMutableUserNotificationAction *action2 = [[UIMutableUserNotificationAction alloc] init];
+                    action2.identifier = SHNotificationActionId_Cancel; //button2's pushresult = -1
+                    action2.title = pushData.button2Title;
+                    action2.activationMode = (pushData.action != SHAction_CustomAction) ? UIUserNotificationActivationModeBackground : UIUserNotificationActivationModeForeground;
+                    action2.authenticationRequired = NO;
+                    action2.destructive = NO;
+                    [arrayActions addObject:action2];
+                }
+                if (!shStrIsEmpty(pushData.button3Title))
+                {
+                    UIMutableUserNotificationAction *action3 = [[UIMutableUserNotificationAction alloc] init];
+                    action3.identifier = SHNotificationActionId_Later; //button3's pushresult = 0
+                    action3.title = pushData.button3Title;
+                    action3.activationMode = (pushData.action != SHAction_CustomAction) ? UIUserNotificationActivationModeBackground : UIUserNotificationActivationModeForeground;
+                    action3.authenticationRequired = NO;
+                    action3.destructive = NO;
+                    [arrayActions addObject:action3];
+                }
+                UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
+                category.identifier = [NSString stringWithFormat:@"%ld", (long)pushData.code];
+                [category setActions:arrayActions forContext:UIUserNotificationActionContextDefault];
+                [category setActions:arrayActions forContext:UIUserNotificationActionContextMinimal];
+                NSMutableSet *categories = [[NSMutableSet alloc] initWithSet:[UIApplication sharedApplication].currentUserNotificationSettings.categories];
+                [self addCategory:category toSet:categories];
+                UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:StreetHawk.notificationTypes categories:categories];
+                [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            }
+            //Register local notification when App in background and return. If App in foreground it continues process.
+            NSAssert(!shStrIsEmpty(pushData.title) || !shStrIsEmpty(pushData.message), @"Interactive push needs title or message.");
+            if (!pushData.isAppOnForeground && (!shStrIsEmpty(pushData.title) || !shStrIsEmpty(pushData.message)))
+            {
+                UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+                localNotification.alertTitle = pushData.title;
+                localNotification.alertBody = pushData.message;
+                localNotification.applicationIconBadgeNumber = pushData.badge;
+                localNotification.userInfo = userInfo;
+                if ([localNotification respondsToSelector:@selector(setCategory:)])
+                {
+                    localNotification.category = [NSString stringWithFormat:@"%ld", (long)pushData.code];
+                }
+                [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+                return YES; //Local notification will be triggered again to process
+            }
+        }
+    }
+    //Now process payload with UI or action.
     if (action == SHNotificationActionResult_NO || action == SHNotificationActionResult_Later)
     {
         SHResult pushResult = (action == SHNotificationActionResult_NO) ? SHResult_Decline : SHResult_Postpone;
@@ -442,45 +599,30 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         [self.backgroundQueue addOperation:op];
         return YES;
     }
-    if ([userInfo.allKeys containsObject:Push_Payload_DialogTitleLength])
-    {
-        NSInteger titleLength = [NONULL(userInfo[Push_Payload_DialogTitleLength]) integerValue];
-        NSString *alert = userInfo[@"aps"][@"alert"];
-        if (titleLength < 0)
-        {
-            titleLength = 0;
-        }
-        if (titleLength > alert.length)
-        {
-            titleLength = alert.length;
-        }
-        pushData.title = [Emojione shortnameToUnicode:[[alert substringToIndex:titleLength] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-        pushData.message = [Emojione shortnameToUnicode:[[alert substringFromIndex:titleLength] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-    }
     pushData.isInAppSlide = NO;
     pushData.orientation = SHSlideDirection_Up;
     pushData.speed = 0;
     pushData.portion = 1;
-    if ([userInfo.allKeys containsObject:Push_Payload_Slide_Proportion])
+    if ([userInfo.allKeys containsObject:Payload_Slide_Proportion])
     {
         pushData.isInAppSlide = YES;
-        pushData.portion = [NONULL(userInfo[Push_Payload_Slide_Proportion]) doubleValue];
+        pushData.portion = [NONULL(userInfo[Payload_Slide_Proportion]) doubleValue];
     }
-    if ([userInfo.allKeys containsObject:Push_Payload_Slide_Orientation])
+    if ([userInfo.allKeys containsObject:Payload_Slide_Orientation])
     {
         pushData.isInAppSlide = YES;
-        int direction = [NONULL(userInfo[Push_Payload_Slide_Orientation]) intValue];
+        int direction = [NONULL(userInfo[Payload_Slide_Orientation]) intValue];
         pushData.orientation = (direction >= 0 && direction < 4) ? direction : 0;
     }
-    if ([userInfo.allKeys containsObject:Push_Payload_Slide_Speed])
+    if ([userInfo.allKeys containsObject:Payload_Slide_Speed])
     {
         pushData.isInAppSlide = YES;
-        pushData.speed = [NONULL(userInfo[Push_Payload_Slide_Speed]) doubleValue];
+        pushData.speed = [NONULL(userInfo[Payload_Slide_Speed]) doubleValue];
     }
     pushData.isInAppSlide = pushData.isInAppSlide && (pushData.action == SHAction_OpenUrl)/*support slide type*/;
     if (pushData.isInAppSlide)
     {
-        pushData.displayWithoutDialog = [userInfo.allKeys containsObject:Push_Payload_SupressDialog]; //if payload has "n" no need to show confirm dialog. This is only used for in app slide. In all other cases it's NO.
+        pushData.displayWithoutDialog = [userInfo.allKeys containsObject:Payload_SupressDialog]; //if payload has "n" no need to show confirm dialog. This is only used for in app slide. In all other cases it's NO.
     }
     NSString *deeplinkingStr = nil;
     if ((pushData.action == SHAction_LaunchActivity || pushData.action == SHAction_UserRegistrationScreen || pushData.action == SHAction_UserLoginScreen) && (pushData.data == nil || [pushData.data isKindOfClass:[NSString class]]))

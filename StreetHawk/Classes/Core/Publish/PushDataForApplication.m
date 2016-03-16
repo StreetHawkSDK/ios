@@ -109,6 +109,10 @@
     {
         _action = SHAction_CustomJson;
     }
+    else if (code == 8100)
+    {
+        _action = SHAction_CustomAction;
+    }
     else
     {
         NSAssert(NO, @"Unknown code, cannot match to action.");
