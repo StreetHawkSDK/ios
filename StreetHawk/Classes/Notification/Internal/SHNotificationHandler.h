@@ -82,4 +82,19 @@ typedef enum SHNotificationType SHNotificationType;
  */
 - (BOOL)handleDefinedUserInfo:(NSDictionary *)userInfo withAction:(SHNotificationActionResult)action treatAppAs:(SHAppFGBG)appFGBG forNotificationType:(SHNotificationType)notificationType;
 
+/**
+ Store payload's button text to NSUserDefaults, it will be used since server payload happen and for ever.
+ @buttonText The button text.
+ @code The code of the push category.
+ @result The result matching button.
+ */
++ (void)setButtonText:(NSString *)buttonText forCategory:(NSInteger)code forButton:(SHNotificationActionResult)result;
+
+/**
+ Get payload's button text from NSUserDefaults or from resource string.
+ @code The code of the push category.
+ @result The result matching button.
+ */
++ (NSString *)getButtonTextForCategory:(NSInteger)code forButton:(SHNotificationActionResult)result;
+
 @end
