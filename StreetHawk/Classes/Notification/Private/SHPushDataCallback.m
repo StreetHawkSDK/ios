@@ -19,6 +19,7 @@
 //header from StreetHawk
 #import "SHUtils.h" //for appendString
 #import "SHAlertView.h" //for confirm dialog
+#import "SHNotificationHandler.h" //for get button text
 //header from System
 #import <UIKit/UIKit.h>
 
@@ -71,16 +72,15 @@
     {
         if (handler)
         {
-            NSString *positiveButton = shLocalizedString(@"STREETHAWK_YES", @"Yes Please!");
-            NSString *negativeButton = shLocalizedString(@"STREETHAWK_CANCEL", @"Cancel");
+            NSString *positiveButton = [SHNotificationHandler getButtonTextForCategory:pushData.code forButton:SHNotificationActionResult_Yes];
+            NSString *negativeButton =  nil;
             if (pushData.action == SHAction_RateApp)
             {
-                positiveButton = shLocalizedString(@"STREETHAWK_RATE", @"Rate");
-                negativeButton = shLocalizedString(@"STREETHAWK_LATER", @"Later");
+                negativeButton = [SHNotificationHandler getButtonTextForCategory:pushData.code forButton:SHNotificationActionResult_Later];
             }
-            else if (pushData.action == SHAction_LaunchActivity || pushData.action == SHAction_UserLoginScreen || pushData.action == SHAction_UserRegistrationScreen)
+            else
             {
-                positiveButton = shLocalizedString(@"STREETHAWK_OPEN", @"Open");
+                negativeButton = [SHNotificationHandler getButtonTextForCategory:pushData.code forButton:SHNotificationActionResult_NO];
             }
             SHAlertView *alertView = [[SHAlertView alloc] initWithTitle:pushData.title message:pushData.message withHandler:^(UIAlertView *view, NSInteger buttonIndex)
               {
