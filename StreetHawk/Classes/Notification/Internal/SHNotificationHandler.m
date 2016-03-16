@@ -948,182 +948,23 @@ const NSString *Payload_Button3 = @"b3"; //button 3
 
  + (NSString *)keyStringForCategory:(NSInteger)code forButton:(SHNotificationActionResult)result
 {
-    switch (code)
+    NSMutableString *key = [NSMutableString stringWithFormat:@"STREETHAWK_%ld_", (long)code];
+    switch (result)
     {
-        case 8000:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8000_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8000_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
+        case SHNotificationActionResult_Yes:
+            [key appendString:@"POSITIVE"];
             break;
-        case 8004:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8004_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8004_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
+        case SHNotificationActionResult_NO:
+            [key appendString:@"NEGATIVE"];
             break;
-        case 8005:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8005_POSITIVE";
-                case SHNotificationActionResult_Later:
-                    return @"STREETHAWK_8005_LATER";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
+        case SHNotificationActionResult_Later:
+            [key appendString:@"LATER"];
             break;
-        case 8008:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8008_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8008_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
-            break;
-        case 8009:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8009_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8009_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
-            break;
-        case 8010:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8010_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8010_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
-            break;
-        case 8011:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8011_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8011_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
-            break;
-        case 8012:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8012_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8012_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
-            break;
-        case 8013:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8013_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8013_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
-            break;
-        case 8014:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8014_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8014_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
-            break;
-        case 8049:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8049_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8049_NEGATIVE";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
-            break;
-        case 8100:
-        {
-            switch (result)
-            {
-                case SHNotificationActionResult_Yes:
-                    return @"STREETHAWK_8100_POSITIVE";
-                case SHNotificationActionResult_NO:
-                    return @"STREETHAWK_8100_NEGATIVE";
-                case SHNotificationActionResult_Later:
-                    return @"STREETHAWK_8100_LATER";
-                default:
-                    NSAssert(NO, @"Not expected here.");
-                    break;
-            }
-        }
         default:
             NSAssert(NO, @"Not expected here.");
             break;
     }
-    return nil;
+    return key;
 }
 
 @end
