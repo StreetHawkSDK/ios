@@ -332,7 +332,27 @@ const NSString *Payload_Button3 = @"b3"; //button 3
     {
         NSAssert(pushData.msgID != 0, @"Fail to get msg id from %@.", userInfo);
         //Send pushack logline
-        [StreetHawk sendLogForCode:LOG_CODE_PUSH_ACK withComment:[NSString stringWithFormat:@"%@", pushData.data]/*treat data as string*/ forAssocId:pushData.msgID withResult:100/*ignore*/ withHandler:nil];
+        //To send install/log successfully, begin a background task to gain 10 minutes to finish this. Otherwise the log cannot be sent till next launch to FG.
+        __block UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+         {
+             [self endBackgroundTask:backgroundTask];
+         }];
+        __block NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^
+        {
+            if (!op.isCancelled)
+            {
+                [StreetHawk sendLogForCode:LOG_CODE_PUSH_ACK withComment:[NSString stringWithFormat:@"%@", pushData.data]/*treat data as string*/ forAssocId:pushData.msgID withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
+                {
+                    //Once start not cancel the install/log request, there are 10 minutes so make sure it can finish. Call endBackgroundTask after it's done.
+                    [self endBackgroundTask:backgroundTask];
+                }];
+            }
+            else
+            {
+                [self endBackgroundTask:backgroundTask];
+            }
+        }];
+        [self.backgroundQueue addOperation:op];
         //If setup button text, it must re-register category and setup local notification to trigger it again when App in BG. Even for iOS 7 need local notification as the remote notification's aps/alert is empty so it's silent.
         if (!shStrIsEmpty(pushData.button1Title) || !shStrIsEmpty(pushData.button2Title) || !shStrIsEmpty(pushData.button3Title))
         {
@@ -380,7 +400,6 @@ const NSString *Payload_Button3 = @"b3"; //button 3
             }
         }
     }
-    //Now process payload with UI or action.
     if (action == SHNotificationActionResult_NO || action == SHNotificationActionResult_Later)
     {
         SHResult pushResult = (action == SHNotificationActionResult_NO) ? SHResult_Decline : SHResult_Postpone;
@@ -407,6 +426,11 @@ const NSString *Payload_Button3 = @"b3"; //button 3
         [self.backgroundQueue addOperation:op];
         return YES;
     }
+    if (!pushData.isAppOnForeground && (pushData.action != SHAction_CheckAppStatus))
+    {
+        return YES; //If App in background should not continue UI required actions.
+    }
+    //Now process payload with UI or action.
     pushData.isInAppSlide = NO;
     pushData.orientation = SHSlideDirection_Up;
     pushData.speed = 0;

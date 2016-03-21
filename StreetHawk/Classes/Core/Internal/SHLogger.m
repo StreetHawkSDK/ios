@@ -246,7 +246,7 @@ enum
             || (code == LOG_CODE_TAG_INCREMENT || code == LOG_CODE_TAG_DELETE || code == LOG_CODE_TAG_ADD)  //immediately send for add/remove/increment user tag
             || (code == LOG_CODE_TIMEOFFSET)  //immediately send for time utc offset change
             || (code == LOG_CODE_HEARTBEAT)  //immediately send for heart beat
-            || (code == LOG_CODE_PUSH_RESULT); //immediately send for pushresult
+            || (code == LOG_CODE_PUSH_RESULT || code == LOG_CODE_PUSH_ACK); //immediately send for pushresult and pushack
         }
         else
         {
