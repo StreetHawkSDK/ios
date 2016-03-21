@@ -446,7 +446,8 @@ const NSString *Payload_Button3 = @"b3"; //button 3
         [self.backgroundQueue addOperation:op];
         return YES;
     }
-    if (!pushData.isAppOnForeground && (pushData.action != SHAction_CheckAppStatus))
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground/*This is really in background execution, if wake from background it's inactive*/
+        && (pushData.action != SHAction_CheckAppStatus))
     {
         return YES; //If App in background should not continue UI required actions.
     }
