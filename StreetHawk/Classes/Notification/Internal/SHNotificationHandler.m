@@ -211,12 +211,23 @@ const NSString *Payload_Button3 = @"b3"; //button 3
             break;
     }
     NSAssert(action == SHNotificationActionResult_Unknown || !pushData.isAppOnForeground, @"Action has decided must trigger from BG.");
+    pushData.isBackgroundMode = NO;
     if ([userInfo.allKeys containsObject:@"aps"])
     {
         NSDictionary *dictAps = userInfo[@"aps"];
         NSAssert([dictAps isKindOfClass:[NSDictionary class]], @"aps is not a dictionary.");
         if ([dictAps isKindOfClass:[NSDictionary class]])
         {
+            pushData.isBackgroundMode = [dictAps.allKeys containsObject:@"content-available"]; //this payload will be executed at background, no entry left, must register local notification again.
+            if (pushData.isBackgroundMode && StreetHawk.isDebugMode && shAppMode() != SHAppMode_AppStore && shAppMode() != SHAppMode_Enterprise)
+            {
+                //check Info.plist must enable remote notification in background mode
+                NSArray *arrayBackgroundModes = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UIBackgroundModes"];
+                if ([arrayBackgroundModes isKindOfClass:[NSArray class]] && ![arrayBackgroundModes containsObject:@"remote-notification"])
+                {
+                    NSLog(@"WARNING: Use silent notification without enable UIBackgroundModes->remote-notification.");
+                }
+            }
             if ([dictAps.allKeys containsObject:@"sound"])
             {
                 pushData.sound = dictAps[@"sound"];
@@ -237,6 +248,7 @@ const NSString *Payload_Button3 = @"b3"; //button 3
                     NSAssert(![userInfo.allKeys containsObject:Payload_Button1], @"Set button text cannot have alert.");
                     NSAssert(![userInfo.allKeys containsObject:Payload_Button2], @"Set button text cannot have alert.");
                     NSAssert(![userInfo.allKeys containsObject:Payload_Button3], @"Set button text cannot have alert.");
+                    NSAssert(!pushData.isBackgroundMode, @"Alert and content-available should not use together"); //If contains `content-available` it will execute at background, causing no item stay in lock screen and notification list, even there is a banner show, nothing stays. Thus must use a local notification to register again.
                     if ([userInfo.allKeys containsObject:Payload_DialogTitleLength])
                     {
                         NSInteger titleLength = [NONULL(userInfo[Payload_DialogTitleLength]) integerValue];
@@ -257,6 +269,7 @@ const NSString *Payload_Button3 = @"b3"; //button 3
     }
     if ([userInfo.allKeys containsObject:Payload_Title])
     {
+        NSAssert(pushData.isBackgroundMode, @"Title should be used in background mode.");
         NSAssert(shStrIsEmpty(pushData.title), @"Title should set up by payload, not aps.");
         NSString *title = userInfo[Payload_Title];
         NSAssert([title isKindOfClass:[NSString class]], @"Title must be string.");
@@ -267,6 +280,7 @@ const NSString *Payload_Button3 = @"b3"; //button 3
     }
     if ([userInfo.allKeys containsObject:Payload_Message])
     {
+        NSAssert(pushData.isBackgroundMode, @"Message should be used in background mode.");
         NSAssert(shStrIsEmpty(pushData.message), @"Message should set up by payload, not aps.");
         NSString *message = userInfo[Payload_Message];
         NSAssert([message isKindOfClass:[NSString class]], @"Message must be string.");
@@ -277,6 +291,7 @@ const NSString *Payload_Button3 = @"b3"; //button 3
     }
     if ([userInfo.allKeys containsObject:Payload_Button1])
     {
+        NSAssert(pushData.isBackgroundMode, @"Button1 should be used in background mode.");
         NSDictionary *dictButton1 = (NSDictionary *)userInfo[Payload_Button1];
         NSAssert([dictButton1 isKindOfClass:[NSDictionary class]], @"Button 1 must be dictionary.");
         NSString *button1 = dictButton1[@"t"];
@@ -289,6 +304,7 @@ const NSString *Payload_Button3 = @"b3"; //button 3
     }
     if ([userInfo.allKeys containsObject:Payload_Button2])
     {
+        NSAssert(pushData.isBackgroundMode, @"Button2 should be used in background mode.");
         NSDictionary *dictButton2 = (NSDictionary *)userInfo[Payload_Button2];
         NSAssert([dictButton2 isKindOfClass:[NSDictionary class]], @"Button 2 must be dictionary.");
         NSString *button2 = dictButton2[@"t"];
@@ -301,6 +317,7 @@ const NSString *Payload_Button3 = @"b3"; //button 3
     }
     if ([userInfo.allKeys containsObject:Payload_Button3])
     {
+        NSAssert(pushData.isBackgroundMode, @"Button3 should be used in background mode.");
         NSDictionary *dictButton3 = (NSDictionary *)userInfo[Payload_Button3];
         NSAssert([dictButton3 isKindOfClass:[NSDictionary class]], @"Button 3 must be dictionary.");
         NSString *button3 = dictButton3[@"t"];
@@ -381,6 +398,9 @@ const NSString *Payload_Button3 = @"b3"; //button 3
                 UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:StreetHawk.notificationTypes categories:categories];
                 [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
             }
+        }
+        if (pushData.isBackgroundMode)
+        {
             //Register local notification when App in background and return. If App in foreground it continues process.
             NSAssert(!shStrIsEmpty(pushData.title) || !shStrIsEmpty(pushData.message), @"Interactive push needs title or message.");
             if (!pushData.isAppOnForeground && (!shStrIsEmpty(pushData.title) || !shStrIsEmpty(pushData.message)))

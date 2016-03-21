@@ -139,6 +139,11 @@ typedef enum SHAppFGBG SHAppFGBG;
 @property (nonatomic) BOOL isAppOnForeground;
 
 /**
+ Does the notification contains `content-available": 1` which makes it executes at background.
+ */
+@property (nonatomic) BOOL isBackgroundMode;
+
+/**
  The msg id from server inside this notification, used internally.
  */
 @property (nonatomic) NSInteger msgID;
