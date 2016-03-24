@@ -406,10 +406,21 @@ const NSString *Payload_Button3 = @"b3"; //button 3
             if (!pushData.isAppOnForeground && (!shStrIsEmpty(pushData.title) || !shStrIsEmpty(pushData.message)))
             {
                 UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+                localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
                 localNotification.alertTitle = pushData.title;
-                localNotification.alertBody = pushData.message;
+                localNotification.alertBody = shAppendString(pushData.title, pushData.message); //only alert body show in lock screen and top banner
                 localNotification.applicationIconBadgeNumber = pushData.badge;
+                if (!shStrIsEmpty(pushData.sound)) //If not set not sound
+                {
+                    if ([pushData.sound compare:@"default" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+                    {
+                        localNotification.soundName = UILocalNotificationDefaultSoundName; //it's string @"UILocalNotificationDefaultSoundName"
+                    }
+                    else
+                    {
+                        localNotification.soundName = pushData.sound;
+                    }
+                }
                 localNotification.userInfo = userInfo;
                 if ([localNotification respondsToSelector:@selector(setCategory:)])
                 {
