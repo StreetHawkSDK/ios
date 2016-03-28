@@ -151,7 +151,7 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void)
     {
-       [[NSNotificationCenter defaultCenter] postNotificationName:@"StreetHawkDelayLaunchOptionsNotification" object:notification.object userInfo:notification.userInfo];
+       [[NSNotificationCenter defaultCenter] postNotificationName:@"StreetHawkDelayLaunchOptionsNotification" object:notification.object userInfo:[notification.userInfo copy]/*Titanium modify launchOptions dictionary, and StreetHawk reads it in delay launch. To avoid crash "Collection <__NSDictionaryM: ..> was mutated while being enumerated" make this copy*/];
     });
 }
 
