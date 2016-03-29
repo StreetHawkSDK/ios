@@ -38,7 +38,8 @@ enum SHAction
     SHAction_CheckAppStatus = 13,
     SHAction_CustomJson = 14,
     SHAction_Ghost = 15,
-    SHAction_Undefined = 16,
+    SHAction_Undefined = 16, //cannot change, enum mapping to int and stored.
+    SHAction_CustomAction = 17,
 };
 typedef enum SHAction SHAction;
 
@@ -171,6 +172,11 @@ typedef enum SHAppFGBG SHAppFGBG;
  The badge number in notification payload. Normally no need to handle this in iOS, system set badge in App icon automatically when notification arrives.
  */
 @property (nonatomic) NSInteger badge;
+
+/**
+ The category string identifier for interactive buttons.
+ */
+@property (nonatomic, strong) NSString *category;
 
 /**
  Send result logline to StreetHawk server. It's used in case customer develop their own action handler instead of using `handler` to continue StreetHawk action. If use `handler`, no need to call this again as it's handled by StreetHawk SDK automatically.
