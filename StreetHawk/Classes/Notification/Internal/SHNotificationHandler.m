@@ -270,28 +270,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     {
         NSAssert(pushData.msgID != 0, @"Fail to get msg id from %@.", userInfo);
         //Send pushack logline
-        [StreetHawk sendLogForCode:LOG_CODE_PUSH_ACK withComment:[NSString stringWithFormat:@"%@", pushData.data]/*treat data as string*/ forAssocId:pushData.msgID withResult:100/*ignore*/ withHandler:nil];
-//        //To send install/log successfully, begin a background task to gain 10 minutes to finish this. Otherwise the log cannot be sent till next launch to FG.
-//        __block UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
-//         {
-//             [self endBackgroundTask:backgroundTask];
-//         }];
-//        __block NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^
-//        {
-//            if (!op.isCancelled)
-//            {
-//                [StreetHawk sendLogForCode:LOG_CODE_PUSH_ACK withComment:[NSString stringWithFormat:@"%@", pushData.data]/*treat data as string*/ forAssocId:pushData.msgID withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
-//                 {
-//                     //Once start not cancel the install/log request, there are 10 minutes so make sure it can finish. Call endBackgroundTask after it's done.
-//                     [self endBackgroundTask:backgroundTask];
-//                 }];
-//            }
-//            else
-//            {
-//                [self endBackgroundTask:backgroundTask];
-//            }
-//        }];
-//        [self.backgroundQueue addOperation:op];
+        [StreetHawk sendLogForCode:LOG_CODE_PUSH_ACK withComment:[NSString stringWithFormat:@"%@", pushData.data]/*treat data as string*/ forAssocId:pushData.msgID withResult:100/*ignore*/ withHandler:nil]; //Cannot send pushack immediately at background. In order to send at background must use background mode with "content-available:1" and let it execute in background, however once App execute in background, the badge and notification list entry is lost, causing user cannot find this notification any more. It cannot trigger local notification again to add the badge and entry as it will promote twice. Use silent remote notification and local notification does not work either, as silent remote notification cannot wake App when user kill App or device restart, causing lose message.
     }
     if (action == SHNotificationActionResult_NO || action == SHNotificationActionResult_Later)
     {
