@@ -57,31 +57,17 @@
 @property (nonatomic) NSUInteger notificationTypes;
 
 /**
- Property for customer to add their own interactive notification. It's same as iOS 8 defined categories set. Code snippet:
- 
- // Define an action for the category
- UIMutableUserNotificationAction *action = [[UIMutableUserNotificationAction alloc] init];
- action.destructive = NO;
- action.activationMode = UIUserNotificationActivationModeForeground;
- action.authenticationRequired = YES;
- action.title = @"Action!";
- action.identifier = @"custom_action";
- // Define the category
- UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
- [category setActions:@[action] forContext:UIUserNotificationActionContextMinimal];
- [category setActions:@[action] forContext:UIUserNotificationActionContextDefault];
- category.identifier = @"custom_category";
- // Set the custom categories
- StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];
- 
- Customer is free to add their own categories, make sure categories' `identifier` is not same as StreetHawk's pre-defined code such as 8000, 8004 etc. In case customer's category uses same `identifier` as StreetHawk's predefined code, StreetHawk's function will be override. Customer's categories, combined with StreetHawk's predefined categories, work side by side. Customer needs to handle their own category by their own code, usually needs to implement their own AppDelegate functions, check document http://api.streethawk.com/v1/docs/ios-manualsetup.html#ios-manualsetup. Make sure setting up this property before registering for remote notification, such as before calling [registerForInstall...].
- */
-@property (nonatomic, strong) NSSet *notificationCategories NS_AVAILABLE_IOS(8_0);
-
-/**
  Handler for notification stuff.
  */
 @property (nonatomic, strong) SHNotificationHandler *notificationHandler;
+
+/**
+ Submit notification's interactive button pairs to server. The button pairs will be used to create campaign, and result in notification's interactive buttons.
+ 
+ @param arrayPairs An array of `InteractivePush` objects.
+ @return If the format is correct, return YES; otherwise return NO, and error information can refer to console log output (withDebugMode:YES).
+ */
+- (BOOL)setInteractivePushBtnPairs:(NSArray *)arrayPairs;
 
 /**
  According to system and customer code's setting, call system API to register notification <both for remote notification and local notification> or update revoked.

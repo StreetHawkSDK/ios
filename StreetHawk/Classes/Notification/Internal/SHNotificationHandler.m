@@ -33,26 +33,14 @@
 
 @interface SHNotificationHandler ()
 
-@property (nonatomic, strong) NSDictionary *supportCodes; //The pre-defined supported codes and buttons, each item is {code: [action1, action2]};
-
 //background execution
 @property (nonatomic, strong) NSOperationQueue *backgroundQueue;  //Used for background execution. Enter background or foreground must be finished in 10 seconds, to finish send install/log request begin a background task which can run 10 minutes in another thread using operation queue.
 //End background task, must do this for started background task.
 - (void)endBackgroundTask:(UIBackgroundTaskIdentifier)backgroundTask;
 
-- (UIMutableUserNotificationCategory *)createCategoryForCode:(NSInteger)code withButtons:(NSArray *)buttons; //create a category;
-+ (NSString *)keyStringForCategory:(NSInteger)code forButton:(SHNotificationActionResult)result; //get store key such as STREETHAWK_8000_POSITIVE
-
 @end
 
 @implementation SHNotificationHandler
-
-// Action id for "Yes Please!" button, this result in `SHNotificationAction_Yes`. This is used for default context for most notifications.
-NSString * const SHNotificationActionId_Yes = @"SHNotificationActionId_Yes";
-//Action id for "Cancel" button, this result in `SHNotificationAction_NO`. This is used for most notifications.
-NSString * const SHNotificationActionId_No = @"SHNotificationActionId_No";
-//Action id for "Later" button, this result in `SHNotificationAction_Later`. This is used for rate (8005) notification.
-NSString * const SHNotificationActionId_Later = @"SHNotificationActionId_Later";
 
 #pragma mark - life cycle
 
@@ -62,86 +50,11 @@ NSString * const SHNotificationActionId_Later = @"SHNotificationActionId_Later";
     {
         self.backgroundQueue = [[NSOperationQueue alloc] init];
         self.backgroundQueue.maxConcurrentOperationCount = 1;
-        //Define StreetHawk supported codes and buttons.
-        NSMutableDictionary *dictCodes = [NSMutableDictionary dictionary];
-        dictCodes[@"8000"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8000 notification for launch web in app or open safari. Buttons: 1. Show; 2. Cancel
-        dictCodes[@"8003"] = @[]; //8003 notification for update app status. Not show button, this should be silent.
-        dictCodes[@"8004"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8004, 8006, 8007 notifications for launch page. SHNotificationActionId_Yes: 1. Open App; 2. Cancel
-        dictCodes[@"8006"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No];
-        dictCodes[@"8007"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No];
-        dictCodes[@"8005"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8005 notification for rate. Buttons: 1. Rate; 2. Later.
-        dictCodes[@"8008"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8008 notification for upgrade. Buttons: 1. Upgrade; 2. Cancel
-        dictCodes[@"8009"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8009 notification for call telephone. Buttons: 1. Call; 2. Cancel
-        dictCodes[@"8010"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8010 notification for simply show dialog to launch App. Buttons: 1. Read; 2. Cancel
-        dictCodes[@"8011"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8011 notification for feedback. Buttons: 1. Open; 2. Cancel
-        dictCodes[@"8012"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8012 notification for remind to turn on bluetooth. Buttons: 1. Enable; 2. Cancel
-        dictCodes[@"8013"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8013 notification for remind to turn on push permission. Buttons: 1. Enable; 2. Cancel
-        dictCodes[@"8014"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8014 notification for remind to turn on location permission. Buttons: 1. Enable; 2. Cancel
-        dictCodes[@"8042"] = @[]; //8042 notification for ghost push, no action buttons.
-        dictCodes[@"8049"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No]; //8049 notification for json. Buttons: 1. Yes please; 2. Cancel
-        dictCodes[@"8100"] = @[SHNotificationActionId_Yes, SHNotificationActionId_No, SHNotificationActionId_Later]; //8100 notification for custom action. Buttons: 1. Yes please; 2. Cancel; 3. Later
-        self.supportCodes = dictCodes;
     }
     return self;
 }
 
 #pragma mark - public functions
-
-- (NSMutableSet *)registerDefinedCategoryAndActions
-{
-    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Unity)
-    {
-        return [NSMutableSet set]; //Unity sample AngryBots: if App not launch, send push, click action button App will hang. It not happen if click banner, it not happen if App already launch and in BG. To avoid this stop working issue, Unity not have action button.
-    }
-    NSMutableSet *categories = [NSMutableSet set];
-    for (NSString *code in self.supportCodes.allKeys)
-    {
-        UIMutableUserNotificationCategory *category = [self createCategoryForCode:[code intValue] withButtons:self.supportCodes[code]];
-        [categories addObject:category];
-    }
-    return categories;
-}
-
-- (void)addCategory:(UIUserNotificationCategory *)category toSet:(NSMutableSet *)set
-{
-    NSAssert(category != nil, @"Cannot add nil category.");
-    NSAssert(set != nil, @"Cannot add category to nil set.");
-    NSAssert(category.identifier != nil && category.identifier.length > 0, @"Category's identifier cannot be empty.");
-    if (category != nil && set != nil && category.identifier.length > 0)
-    {
-        UIUserNotificationCategory *findCategory = nil;
-        for (UIUserNotificationCategory *item in set)
-        {
-            if ([item.identifier compare:category.identifier options:NSCaseInsensitiveSearch] == NSOrderedSame)
-            {
-                findCategory = item;
-                break;
-            }
-        }
-        if (findCategory != nil)  //remove existing and add new.
-        {
-            [set removeObject:findCategory];
-        }
-        [set addObject:category];
-    }
-}
-
-- (SHNotificationActionResult)actionResultFromId:(NSString *)actionId
-{
-    if ([actionId isEqualToString:SHNotificationActionId_Yes])
-    {
-        return SHNotificationActionResult_Yes;
-    }
-    if ([actionId isEqualToString:SHNotificationActionId_No])
-    {
-        return SHNotificationActionResult_NO;
-    }
-    if ([actionId isEqualToString:SHNotificationActionId_Later])
-    {
-        return SHNotificationActionResult_Later;
-    }
-    return SHNotificationActionResult_Unknown;
-}
 
 const NSString *Push_Payload_Code = @"c";  //code
 const NSString *Push_Payload_MsgId = @"i";  //msgid
@@ -165,7 +78,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     {
         return NO;
     }
-    return [self.supportCodes.allKeys containsObject:[NSString stringWithFormat:@"%ld", (long)code]];
+    return [[SHInteractiveButtons predefinedCodes] containsObject:@(code)];
 }
 
 - (BOOL)handleDefinedUserInfo:(NSDictionary *)userInfo withAction:(SHNotificationActionResult)action treatAppAs:(SHAppFGBG)appFGBG forNotificationType:(SHNotificationType)notificationType
@@ -776,66 +689,6 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
 {
     [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
     backgroundTask = UIBackgroundTaskInvalid;
-}
-
-- (UIMutableUserNotificationCategory *)createCategoryForCode:(NSInteger)code withButtons:(NSArray *)buttons
-{
-    UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
-    category.identifier = [NSString stringWithFormat:@"%ld", (long)code];
-    NSMutableArray *actions = [NSMutableArray array];
-    if ([buttons containsObject:SHNotificationActionId_Yes])
-    {
-        UIMutableUserNotificationAction *actionPositive = [[UIMutableUserNotificationAction alloc] init];
-        actionPositive.identifier = SHNotificationActionId_Yes;
-        actionPositive.title = @"YES TODO"; //[SHNotificationHandler getButtonTextForCategory:code forButton:SHNotificationActionResult_Yes]; TODO
-        actionPositive.activationMode = UIUserNotificationActivationModeForeground;
-        actionPositive.destructive = NO;
-        [actions addObject:actionPositive];
-    }
-    if ([buttons containsObject:SHNotificationActionId_No])
-    {
-        UIMutableUserNotificationAction *actionNegative = [[UIMutableUserNotificationAction alloc] init];
-        actionNegative.identifier = SHNotificationActionId_No;
-        actionNegative.title = @"NO TODO"; //[SHNotificationHandler getButtonTextForCategory:code forButton:SHNotificationActionResult_NO]; TODO
-        actionNegative.activationMode = (code != 8100) ? UIUserNotificationActivationModeBackground : UIUserNotificationActivationModeForeground;
-        actionNegative.authenticationRequired = NO;
-        actionNegative.destructive = NO;
-        [actions addObject:actionNegative];
-    }
-    if ([buttons containsObject:SHNotificationActionId_Later])
-    {
-        UIMutableUserNotificationAction *actionLater = [[UIMutableUserNotificationAction alloc] init];
-        actionLater.identifier = SHNotificationActionId_Later;
-        actionLater.title = @"Later TODO"; //[SHNotificationHandler getButtonTextForCategory:code forButton:SHNotificationActionResult_Later]; TODO
-        actionLater.activationMode = (code != 8100) ? UIUserNotificationActivationModeBackground : UIUserNotificationActivationModeForeground;
-        actionLater.authenticationRequired = NO;
-        actionLater.destructive = NO;
-        [actions addObject:actionLater];
-    }
-    [category setActions:actions forContext:UIUserNotificationActionContextDefault];
-    [category setActions:actions forContext:UIUserNotificationActionContextMinimal];
-    return category;
-}
-
-+ (NSString *)keyStringForCategory:(NSInteger)code forButton:(SHNotificationActionResult)result
-{
-    NSMutableString *key = [NSMutableString stringWithFormat:@"STREETHAWK_%ld_", (long)code];
-    switch (result)
-    {
-        case SHNotificationActionResult_Yes:
-            [key appendString:@"POSITIVE"];
-            break;
-        case SHNotificationActionResult_NO:
-            [key appendString:@"NEGATIVE"];
-            break;
-        case SHNotificationActionResult_Later:
-            [key appendString:@"LATER"];
-            break;
-        default:
-            NSAssert(NO, @"Not expected here.");
-            break;
-    }
-    return key;
 }
 
 @end

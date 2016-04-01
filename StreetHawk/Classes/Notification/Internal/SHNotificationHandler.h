@@ -17,21 +17,10 @@
 
 #import <UIKit/UIKit.h>
 #import "PushDataForApplication.h" //for enum SHAppFGBG
+#import "SHInteractiveButtons.h" //for SHNotificationActionResult
 
 #define PHONEGAP_8004_PAGE                  @"PHONEGAP_8004_PAGE"  //when Phonegap receive 8004 at background and launch, store this and it will read by [StreetHawk shGetViewName] when launch
 #define PHONEGAP_8004_PUSHDATA              @"PHONEGAP_8004_PUSHDATA" //together with PHONEGAP_8004_PAGE.
-
-/**
- An enum for notification action. Since iOS 8 user can directly reply on notification, and here is the pre-defined action.
- */
-enum SHNotificationActionResult
-{
-    SHNotificationActionResult_Unknown,
-    SHNotificationActionResult_Yes,
-    SHNotificationActionResult_NO,
-    SHNotificationActionResult_Later,
-};
-typedef enum SHNotificationActionResult SHNotificationActionResult;
 
 /**
  An enum for what kind of notification is triggered.
@@ -48,23 +37,6 @@ typedef enum SHNotificationType SHNotificationType;
  StreetHawk notification handler for dealing with remote or local notifications.
  */
 @interface SHNotificationHandler : NSObject
-
-/**
- System defined some code and actions, register by default. 
- */
-- (NSMutableSet *)registerDefinedCategoryAndActions;
-
-/**
- Add one category to a set. Note: if set has same category id already, remove existing category from set and add this new one. This is because only the first category id take effect, if want newly added category work, the set cannot have same category id ahead.
- @param category Newly added category, cannot be nil.
- @param set The modified set, cannot be nil.
- */
-- (void)addCategory:(UIUserNotificationCategory *)category toSet:(NSMutableSet *)set;
-
-/**
- App delegate for click button get action id, convert it to be action type.
- */
-- (SHNotificationActionResult)actionResultFromId:(NSString *)actionId;
 
 /**
  Check whether this push is from StreetHawk's defined code. If yes process StreetHawk's handling, if no should just return.

@@ -59,6 +59,33 @@
 "STREETHAWK_8049_POSITIVE" = "Yes please";
 "STREETHAWK_8049_NEGATIVE" = "Cancel";
 
+"STREETHAWK_Yes_No_1" = "Yes";
+"STREETHAWK_Yes_No_2" = "No";
+"STREETHAWK_Accept_Decline_1" = "Accept";
+"STREETHAWK_Accept_Decline_2" = "Decline";
+"STREETHAWK_Share_Download_1" = "Share";
+"STREETHAWK_Share_Download_2" = "Download";
+"STREETHAWK_Share_Remind_1" = "Share";
+"STREETHAWK_Share_Remind_2" = "Remind Me Later";
+"STREETHAWK_Share_Optin_1" = "Share";
+"STREETHAWK_Share_Optin_2" = "Opt-in";
+"STREETHAWK_Share_Optout_1" = "Share";
+"STREETHAWK_Share_Optout_2" = "Opt-out";
+"STREETHAWK_Share_Follow_1" = "Share";
+"STREETHAWK_Share_Follow_2" = "Follow";
+"STREETHAWK_Share_Unfollow_1" = "Share";
+"STREETHAWK_Share_Unfollow_2" = "Unfollow";
+"STREETHAWK_Share_ShopNow_1" = "Share";
+"STREETHAWK_Share_ShopNow_2" = "Shop Now";
+"STREETHAWK_Share_BuyNow_1" = "Share";
+"STREETHAWK_Share_BuyNow_2" = "Buy Now";
+"STREETHAWK_Share_Like_1" = "Share";
+"STREETHAWK_Share_Like_2" = "Like";
+"STREETHAWK_Like_Dislike_1" = "Like";
+"STREETHAWK_Like_Dislike_2" = "Dislike";
+"STREETHAWK_MoreLikeThis_LessLikeThis_1" = "More Like This";
+"STREETHAWK_MoreLikeThis_LessLikeThis_2" = "Less Like This";
+
 //Growth share channel
 "STREETHAWK_Growth_Channel_Title" = "Share content to which channel?";
 "STREETHAWK_Growth_Channel_Message" = "Please choose one channel from below to share the url.";
