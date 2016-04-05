@@ -1011,6 +1011,10 @@
     {
         [self submitFriendlyNames];
     }
+    if ([SHAppStatus sharedInstance].allowSubmitInteractiveButton)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_SetInteractivePairButtons_Notification" object:nil];
+    }
 }
 
 - (void)timeZoneChangeNotificationHandler:(NSNotification *)notification

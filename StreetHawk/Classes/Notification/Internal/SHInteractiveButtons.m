@@ -383,7 +383,62 @@
     }
 }
 
-+ (void)submitInteractivePairs
++ (NSMutableArray *)predefinedLocalPairs
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (SHInteractiveButtons *obj in [self predefinedPairs])
+    {
+        if (obj.isSubmitToServer)
+        {
+            NSMutableDictionary *dictPair = [NSMutableDictionary dictionary];
+            dictPair[SH_INTERACTIVEPUSH_PAIR] = NONULL(obj.categoryIdentifier);
+            dictPair[SH_INTERACTIVEPUSH_BUTTON1] = NONULL(obj.button1);
+            dictPair[SH_INTERACTIVEPUSH_BUTTON2] = NONULL(obj.button2);
+            [array addObject:dictPair];
+        }
+    }
+    return array;
+}
+
++ (BOOL)pairTitle:(NSString *)pairTitle andButton1:(NSString *)button1 andButton2:(NSString *)button2 isUsed:(NSArray *)arrayPairs
+{
+    BOOL isUsed = NO;
+    NSAssert(!shStrIsEmpty(pairTitle), @"Compare interactive pair buttons cannot use empty pair title.");
+    for (NSDictionary *dict in arrayPairs)
+    {
+        if ([dict[SH_INTERACTIVEPUSH_PAIR] compare:pairTitle] == NSOrderedSame) //TODO: case sensitive?
+        {
+            if (button1 == nil && button2 == nil) //here cannot use `shStrIsEmpty`, because if pass in "" it will compare.
+            {
+                return YES; //button 1 and button 2 are not used for compare, find the match pair title.
+            }
+            if ((button1 == nil || [dict[SH_INTERACTIVEPUSH_BUTTON1] compare:button1] == NSOrderedSame)
+                && (button2 == nil || [dict[SH_INTERACTIVEPUSH_BUTTON2] compare:button2] == NSOrderedSame)) //TODO: case sensitive?
+            {
+                return YES;
+            }
+        }
+    }
+    return isUsed;
+}
+
++ (BOOL)localPairChanged:(NSArray *)newArray withOldArray:(NSArray *)oldArray
+{
+    if (newArray.count != oldArray.count)
+    {
+        return YES;
+    }
+    for (NSDictionary *dictNew in newArray)
+    {
+        if (![self pairTitle:dictNew[SH_INTERACTIVEPUSH_PAIR] andButton1:dictNew[SH_INTERACTIVEPUSH_BUTTON1] andButton2:dictNew[SH_INTERACTIVEPUSH_BUTTON2] isUsed:oldArray])
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
++ (void)submitInteractivePairButtons
 {
     if (!shStrIsEmpty(StreetHawk.currentInstall.suid))
     {

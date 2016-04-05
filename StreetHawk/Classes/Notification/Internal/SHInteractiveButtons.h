@@ -107,8 +107,31 @@ typedef enum SHNotificationActionResult SHNotificationActionResult;
 + (void)addCustomisedButtonPairsToSet:(NSMutableSet *)set;
 
 /**
- Read local saved pairs and submit friendly names to StreetHawk server.
+ Fetch predefined pairs and format the array for saved locally.
  */
-+ (void)submitInteractivePairs;
++ (NSMutableArray *)predefinedLocalPairs;
+
+/**
+ Check whether a pair title optional button 1 and button 2 are already used in array.
+ @param pairTitle The pair title to compare. It's mandatory.
+ @param button1 Optional compare, if input nil ignore this.
+ @param button2 Optional compare, if input nil ignore this.
+ @param arrayPairs The local save array, each item is dictionary of `SH_INTERACTIVEPUSH_PAIR`, `SH_INTERACTIVEPUSH_BUTTON1`, `SH_INTERACTIVEPUSH_BUTTON2`.
+ @return If find match return YES; otherwise return NO. Compare is case sensitive TODO.
+ */
++ (BOOL)pairTitle:(NSString *)pairTitle andButton1:(NSString *)button1 andButton2:(NSString *)button2 isUsed:(NSArray *)arrayPairs;
+
+/**
+ Check whether pair is changed compared with local saved arrays.
+ @param newArray Current new array.
+ @param oldArray Local already saved old array.
+ @return If changed return YES; otherwise return NO.
+ */
++ (BOOL)localPairChanged:(NSArray *)newArray withOldArray:(NSArray *)oldArray;
+
+/**
+ Read local saved pairs and submit to StreetHawk server.
+ */
++ (void)submitInteractivePairButtons;
 
 @end

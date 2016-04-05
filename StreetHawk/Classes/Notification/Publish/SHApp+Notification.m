@@ -141,14 +141,19 @@
     {
         return NO;
     }
-    //clean and save a whole new one.
-    NSMutableArray *array = [NSMutableArray array];
+    //clean and save a whole new one, add pre-defined first.
+    NSMutableArray *array = [SHInteractiveButtons predefinedLocalPairs];
     for (InteractivePush *obj in arrayPairs)
     {
         NSAssert(!shStrIsEmpty(obj.pairTitle), @"pairTitle shouldn't be empty.");
         if (shStrIsEmpty(obj.pairTitle))
         {
             SHLog(@"pairTitle shouldn't be empty.");
+            return NO;
+        }
+        if ([SHInteractiveButtons pairTitle:obj.pairTitle andButton1:nil andButton2:nil isUsed:array])
+        {
+            SHLog(@"pairTitle %@ is already used, please choose another one.", obj.pairTitle);
             return NO;
         }
         NSAssert(!shStrIsEmpty(obj.b1Title) || !shStrIsEmpty(obj.b2Title), @"b1 and b2 cannot both empty.");
@@ -163,6 +168,10 @@
         dictPair[SH_INTERACTIVEPUSH_BUTTON2] = NONULL(obj.b2Title);
         [array addObject:dictPair];
     }
+    if ([SHInteractiveButtons localPairChanged:array withOldArray:[[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY]])
+    {
+        return YES; //nothing changed, no need to re-register category and submit interactive pair buttons.
+    }
     [[NSUserDefaults standardUserDefaults] setObject:array forKey:SH_INTERACTIVEPUSH_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
     //Re-register categories locally.
@@ -173,7 +182,7 @@
     {
         //In debug mode, each "setInteractivePushBtnPairs" do submit regardless "submit_interactive_button"; in production mode, only submit when "submit_interactive_button"=true.
         //By doing this, SDK user won't feel inconvenient when debugging App, because pair submitted without any condition; final release won't submit useless request (actually final release won't submit any request, because debug mode fill that client_version).
-        [SHInteractiveButtons submitInteractivePairs];
+        [SHInteractiveButtons submitInteractivePairButtons];
     }
     return YES;
 }

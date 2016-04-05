@@ -206,6 +206,10 @@
                     {
                         [SHAppStatus sharedInstance].allowSubmitFriendlyNames = [dictStatus[@"submit_views"] boolValue];
                     }
+                    if ([dictStatus.allKeys containsObject:@"submit_interactive_button"] && [dictStatus[@"submit_interactive_button"] respondsToSelector:@selector(boolValue)])
+                    {
+                        [SHAppStatus sharedInstance].allowSubmitInteractiveButton = [dictStatus[@"submit_interactive_button"] boolValue];
+                    }
                     //check "ibeacon"
                     if ([dictStatus.allKeys containsObject:@"ibeacon"])
                     {

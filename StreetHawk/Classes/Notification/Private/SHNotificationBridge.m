@@ -26,6 +26,7 @@
 
 + (void)setBadgeHandler:(NSNotification *)notification;  //Set Application badge. notification name: SH_PushBridge_SetBadge_Notification; user info: @{badge, <int_number>}.
 + (void)registerNotificationHandler:(NSNotification *)notification; //Register for Apple's notification. notification name: SH_PushBridge_Register_Notification; user info: empty.
++ (void)setInteractivePairButtonsNotificationHandler:(NSNotification *)notification; //Set and submit predefined interactive pair buttons. notification name: SH_PushBridge_SetInteractivePairButtons_Notification; user info: empty.
 + (void)smartPushHandler:(NSNotification *)notification; //for handle smart push. notification name: SH_PushBridge_Smart_Notification; user info: empty.
 + (void)didRegisterUserNotificationHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings`. notification name: SH_PushBridge_DidRegisterUserNotification; user info: @{notificationSettings: <value>}.
 + (void)didReceiveDeviceTokenHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken`. notification name: SH_PushBridge_ReceiveToken_Notification; user info: @{token: <NSData_token>}.
@@ -63,6 +64,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBadgeHandler:) name:@"SH_PushBridge_SetBadge_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerNotificationHandler:) name:SHInstallRegistrationSuccessNotification object:nil]; //first registerForRemoteNotification need be called after register install, because it needs to be updated to an install id.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerNotificationHandler:) name:@"SH_PushBridge_Register_Notification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setInteractivePairButtonsNotificationHandler:) name:SHInstallUpdateSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setInteractivePairButtonsNotificationHandler:) name:@"SH_PushBridge_SetInteractivePairButtons_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(smartPushHandler:) name:@"SH_PushBridge_Smart_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterUserNotificationHandler:) name:@"SH_PushBridge_DidRegisterUserNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveDeviceTokenHandler:) name:@"SH_PushBridge_ReceiveToken_Notification" object:nil];
@@ -86,6 +89,11 @@
 + (void)registerNotificationHandler:(NSNotification *)notification
 {
     [StreetHawk registerForNotificationAndNotifyServer];
+}
+
++ (void)setInteractivePairButtonsNotificationHandler:(NSNotification *)notification
+{
+    [StreetHawk setInteractivePushBtnPairs:nil];
 }
 
 + (void)smartPushHandler:(NSNotification *)notification

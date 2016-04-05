@@ -68,6 +68,11 @@ extern NSString * const SHAppStatusChangeNotification;
 @property (nonatomic) BOOL allowSubmitFriendlyNames;
 
 /**
+ Match to `app_status` dictionary's `submit_interactive_button`. If set to YES local can submit interactive pair button. Server set it to YES when a new client version uploaded, once accept interactive pair button for this client version, server return NO. Note: for debugging convenience, interactive pair button always submit when debugMode=YES regardless of this flag.
+ */
+@property (nonatomic) BOOL allowSubmitInteractiveButton;
+
+/**
  Match to `app_status` dictionary's `ibeacon`. It's a time stamp of server provided iBeacon list. If the time stamp is newer than client fetch time, client should fetch iBeacon list again and monitor new list; if the time stamp is NULL, client should clear cached iBeacon and stop monitor.
  */
 @property (nonatomic, strong) NSString *iBeaconTimestamp;
