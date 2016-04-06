@@ -168,7 +168,7 @@
         dictPair[SH_INTERACTIVEPUSH_BUTTON2] = NONULL(obj.b2Title);
         [array addObject:dictPair];
     }
-    if ([SHInteractiveButtons localPairChanged:array withOldArray:[[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY]])
+    if (![SHInteractiveButtons localPairChanged:array withOldArray:[[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY]])
     {
         return YES; //nothing changed, no need to re-register category and submit interactive pair buttons.
     }
@@ -252,7 +252,10 @@
                 //Add system predefined categories first
                 for (SHInteractiveButtons *obj in [SHInteractiveButtons predefinedPairs])
                 {
-                    [SHInteractiveButtons addCategory:[obj createNotificationCategory] toSet:categories];
+                    if (!obj.isSubmitToServer) //only add 8000 type, the out-of-box pairs will be added as `addCustomisedButtonPairsToSet`.
+                    {
+                        [SHInteractiveButtons addCategory:[obj createNotificationCategory] toSet:categories];
+                    }
                 }
                 //Read customized button pairs and add to categories too.
                 [SHInteractiveButtons addCustomisedButtonPairsToSet:categories];
