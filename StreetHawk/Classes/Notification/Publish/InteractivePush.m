@@ -32,7 +32,4 @@
     return self;
 }
 
-#pragma mark - public functions
-
-
 @end

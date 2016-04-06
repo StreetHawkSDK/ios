@@ -17,10 +17,21 @@
 
 #import <UIKit/UIKit.h>
 #import "PushDataForApplication.h" //for enum SHAppFGBG
-#import "SHInteractiveButtons.h" //for SHNotificationActionResult
 
 #define PHONEGAP_8004_PAGE                  @"PHONEGAP_8004_PAGE"  //when Phonegap receive 8004 at background and launch, store this and it will read by [StreetHawk shGetViewName] when launch
 #define PHONEGAP_8004_PUSHDATA              @"PHONEGAP_8004_PUSHDATA" //together with PHONEGAP_8004_PAGE.
+
+/**
+ An enum for notification action. Since iOS 8 user can directly reply on notification, and here is the pre-defined action.
+ */
+enum SHNotificationActionResult
+{
+    SHNotificationActionResult_Unknown = 0,
+    SHNotificationActionResult_Yes = 1,
+    SHNotificationActionResult_NO = 2,
+    SHNotificationActionResult_Later = 3,
+};
+typedef enum SHNotificationActionResult SHNotificationActionResult;
 
 /**
  An enum for what kind of notification is triggered.

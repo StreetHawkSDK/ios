@@ -16,23 +16,12 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "SHNotificationHandler.h" //for SHNotificationActionResult
 
 #define SH_INTERACTIVEPUSH_KEY      @"SH_INTERACTIVEPUSH_KEY" //key in user defaults for whole customized interactive push array, it get an array, with each one is a dictionary.
 #define SH_INTERACTIVEPUSH_PAIR     @"SH_INTERACTIVEPUSH_PAIR" //key for one pair's title
 #define SH_INTERACTIVEPUSH_BUTTON1  @"SH_INTERACTIVEPUSH_BUTTON1" //key for one pair's button1
 #define SH_INTERACTIVEPUSH_BUTTON2  @"SH_INTERACTIVEPUSH_BUTTON2" //key for one pair's button2
-
-/**
- An enum for notification action. Since iOS 8 user can directly reply on notification, and here is the pre-defined action.
- */
-enum SHNotificationActionResult
-{
-    SHNotificationActionResult_Unknown = 0,
-    SHNotificationActionResult_Yes = 1,
-    SHNotificationActionResult_NO = 2,
-    SHNotificationActionResult_Later = 3,
-};
-typedef enum SHNotificationActionResult SHNotificationActionResult;
 
 /**
  The whole information for creating a interactive category. In public API there is a class `InteractivePush`, which is only for customized pairs, and it does not contain full information as not want it to be too complicated.

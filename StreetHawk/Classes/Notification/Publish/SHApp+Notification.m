@@ -24,6 +24,7 @@
 #import "SHUtils.h"  //for SHLog
 #import "SHHTTPSessionManager.h" //for sending request
 #import "SHAppStatus.h" //for appStatusChange
+#import "SHInteractiveButtons.h" //for interactive pair buttons
 //header from System
 #import <objc/runtime.h> //for associate object
 

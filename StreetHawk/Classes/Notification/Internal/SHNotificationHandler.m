@@ -26,6 +26,7 @@
 #import "SHFeedbackQueue.h" //for 8010 feedback push
 #import "SHUtils.h" //for shLocalizedString
 #import "SHTypes.h" //for SH_BEACON_BLUETOOTH
+#import "SHInteractiveButtons.h" //for interactive pair buttons
 //header from System
 #import <CoreBluetooth/CoreBluetooth.h>
 //header from Third-party
