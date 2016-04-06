@@ -315,6 +315,11 @@
             NSString *postStr = [[[NSString alloc] initWithData:task.currentRequest.HTTPBody encoding:NSUTF8StringEncoding] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             comment = [comment stringByAppendingFormat:@"\nPost body: %@.", postStr];
         }
+        if (error.userInfo[@"com.alamofire.serialization.response.error.data"] != nil)
+        {
+            NSData *errorData = error.userInfo[@"com.alamofire.serialization.response.error.data"];
+            comment = [comment stringByAppendingFormat:@"\nError data: %@", [[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding]];
+        }
         SHLog(@"Add breakpoint here to know error request happen for %@.", comment);
     }
 }
