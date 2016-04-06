@@ -455,7 +455,9 @@
         //If has pairs to submit, do it.
         if (dictButtons.allKeys.count > 0)
         {
-            [[SHHTTPSessionManager sharedInstance] POST:@"apps/submit_interactive_button/" hostVersion:SHHostVersion_V2 body:@{@"installid": NONULL(StreetHawk.currentInstall.suid), @"button": dictButtons} success:nil failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+            SHHTTPSessionManager *sessionManager = [SHHTTPSessionManager sharedInstance];
+            sessionManager.requestSerializer = [SHAFJSONRequestSerializer serializer]; //Temp solution: this API must use JSON.
+            [sessionManager POST:@"apps/submit_interactive_button/" hostVersion:SHHostVersion_V2 body:@{@"installid": NONULL(StreetHawk.currentInstall.suid), @"button": dictButtons} success:nil failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
              {
                  [[NSUserDefaults standardUserDefaults] setObject:@[] forKey:SH_INTERACTIVEPUSH_KEY]; //clear for next submission, otherwise compare same will not submit again.
                  SHLog(@"Fail to submit button pairs: %@", error); //submit button pairs not show error dialog to bother customer.
