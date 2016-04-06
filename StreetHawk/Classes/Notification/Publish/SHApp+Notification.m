@@ -142,8 +142,8 @@
     {
         return NO;
     }
-    //clean and save a whole new one, add pre-defined first.
-    NSMutableArray *array = [SHInteractiveButtons predefinedLocalPairs];
+    //clean and save whole user customized pairs.
+    NSMutableArray *array = [NSMutableArray array];
     for (InteractivePush *obj in arrayPairs)
     {
         NSAssert(!shStrIsEmpty(obj.pairTitle), @"pairTitle shouldn't be empty.");
@@ -152,7 +152,7 @@
             SHLog(@"pairTitle shouldn't be empty.");
             return NO;
         }
-        if ([SHInteractiveButtons pairTitle:obj.pairTitle andButton1:nil andButton2:nil isUsed:array])
+        if ([SHInteractiveButtons pairTitle:obj.pairTitle andButton1:nil andButton2:nil isUsed:array] || [SHInteractiveButtons pairTitle:obj.pairTitle andButton1:nil andButton2:nil isUsed:[SHInteractiveButtons predefinedLocalPairs]])
         {
             SHLog(@"pairTitle %@ is already used, please choose another one.", obj.pairTitle);
             return NO;
@@ -169,12 +169,13 @@
         dictPair[SH_INTERACTIVEPUSH_BUTTON2] = NONULL(obj.b2Title);
         [array addObject:dictPair];
     }
-    if (![SHInteractiveButtons localPairChanged:array withOldArray:[[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY]])
+    //Not check whether it's changed, when upgrade client App version it must submit again whatever the pair is changed or not.
+    //A concern is submit too much. System predefined only submit when app_status/submit_interactive_button=1, client only submit in debug mode, so wide used production will not submit too much.
+    if (arrayPairs.count > 0) //system automatically submit should not override customer's.
     {
-        return YES; //nothing changed, no need to re-register category and submit interactive pair buttons.
+        [[NSUserDefaults standardUserDefaults] setObject:array forKey:SH_INTERACTIVEPUSH_KEY]; //remember customer's.
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    [[NSUserDefaults standardUserDefaults] setObject:array forKey:SH_INTERACTIVEPUSH_KEY];
-    [[NSUserDefaults standardUserDefaults] synchronize];
     //Re-register categories locally.
     [self registerForNotificationAndNotifyServer];
     //Following should NOT trigger on an Apple Store version, it should ONLY happen on debug.
@@ -253,10 +254,7 @@
                 //Add system predefined categories first
                 for (SHInteractiveButtons *obj in [SHInteractiveButtons predefinedPairs])
                 {
-                    if (!obj.isSubmitToServer) //only add 8000 type, the out-of-box pairs will be added as `addCustomisedButtonPairsToSet`.
-                    {
-                        [SHInteractiveButtons addCategory:[obj createNotificationCategory] toSet:categories];
-                    }
+                    [SHInteractiveButtons addCategory:[obj createNotificationCategory] toSet:categories];
                 }
                 //Read customized button pairs and add to categories too.
                 [SHInteractiveButtons addCustomisedButtonPairsToSet:categories];

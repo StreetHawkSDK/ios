@@ -18,7 +18,7 @@
 #import <UIKit/UIKit.h>
 #import "SHNotificationHandler.h" //for SHNotificationActionResult
 
-#define SH_INTERACTIVEPUSH_KEY      @"SH_INTERACTIVEPUSH_KEY" //key in user defaults for whole customized interactive push array, it get an array, with each one is a dictionary.
+#define SH_INTERACTIVEPUSH_KEY      @"SH_INTERACTIVEPUSH_KEY" //key in user defaults for whole customized interactive push array, it get an array, with each one is a dictionary. This is purely for customer's, not include predefined.
 #define SH_INTERACTIVEPUSH_PAIR     @"SH_INTERACTIVEPUSH_PAIR" //key for one pair's title
 #define SH_INTERACTIVEPUSH_BUTTON1  @"SH_INTERACTIVEPUSH_BUTTON1" //key for one pair's button1
 #define SH_INTERACTIVEPUSH_BUTTON2  @"SH_INTERACTIVEPUSH_BUTTON2" //key for one pair's button2
@@ -109,14 +109,6 @@
  @return If find match return YES; otherwise return NO. Compare is case sensitive TODO.
  */
 + (BOOL)pairTitle:(NSString *)pairTitle andButton1:(NSString *)button1 andButton2:(NSString *)button2 isUsed:(NSArray *)arrayPairs;
-
-/**
- Check whether pair is changed compared with local saved arrays.
- @param newArray Current new array.
- @param oldArray Local already saved old array.
- @return If changed return YES; otherwise return NO.
- */
-+ (BOOL)localPairChanged:(NSArray *)newArray withOldArray:(NSArray *)oldArray;
 
 /**
  Read local saved pairs and submit to StreetHawk server.

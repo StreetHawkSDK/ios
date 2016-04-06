@@ -365,7 +365,7 @@
 
 + (void)addCustomisedButtonPairsToSet:(NSMutableSet *)set
 {
-    NSArray *arrayPairs = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY];
+    NSArray *arrayPairs = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY]; //purely customer's, not include predefined.
     for (NSDictionary *dict in arrayPairs)
     {
         NSString *pairTitle = dict[SH_INTERACTIVEPUSH_PAIR];
@@ -422,29 +422,21 @@
     return isUsed;
 }
 
-+ (BOOL)localPairChanged:(NSArray *)newArray withOldArray:(NSArray *)oldArray
-{
-    if (newArray.count != oldArray.count)
-    {
-        return YES;
-    }
-    for (NSDictionary *dictNew in newArray)
-    {
-        if (![self pairTitle:dictNew[SH_INTERACTIVEPUSH_PAIR] andButton1:dictNew[SH_INTERACTIVEPUSH_BUTTON1] andButton2:dictNew[SH_INTERACTIVEPUSH_BUTTON2] isUsed:oldArray])
-        {
-            return YES;
-        }
-    }
-    return NO;
-}
-
 + (void)submitInteractivePairButtons
 {
     if (!shStrIsEmpty(StreetHawk.currentInstall.suid))
     {
-        //Read interactive pairs from local.
-        NSArray *arrayPairs = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY];
         NSMutableDictionary *dictButtons = [NSMutableDictionary dictionary];
+        //Read interactie pairs from predefined out-of-box.
+        for (NSDictionary *dict in [self predefinedLocalPairs])
+        {
+            NSString *pairTitle = dict[SH_INTERACTIVEPUSH_PAIR];
+            NSString *b1Title = dict[SH_INTERACTIVEPUSH_BUTTON1];
+            NSString *b2Title = dict[SH_INTERACTIVEPUSH_BUTTON2];
+            dictButtons[pairTitle] = @[b1Title, b2Title];
+        }
+        //Read interactive pairs from customer's.
+        NSArray *arrayPairs = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY];
         for (NSDictionary *dict in arrayPairs)
         {
             NSString *pairTitle = dict[SH_INTERACTIVEPUSH_PAIR];
@@ -459,8 +451,7 @@
             sessionManager.requestSerializer = [SHAFJSONRequestSerializer serializer]; //Temp solution: this API must use JSON.
             [sessionManager POST:@"apps/submit_interactive_button/" hostVersion:SHHostVersion_V2 body:@{@"installid": NONULL(StreetHawk.currentInstall.suid), @"button": dictButtons} success:nil failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
              {
-                 [[NSUserDefaults standardUserDefaults] setObject:@[] forKey:SH_INTERACTIVEPUSH_KEY]; //clear for next submission, otherwise compare same will not submit again.
-                 SHLog(@"Fail to submit button pairs: %@", error); //submit button pairs not show error dialog to bother customer.
+                 SHLog(@"Fail to submit interactive button pairs: %@", error); //submit button pairs not show error dialog to bother customer.
              }];
         }
     }

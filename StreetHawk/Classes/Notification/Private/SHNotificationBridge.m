@@ -64,7 +64,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBadgeHandler:) name:@"SH_PushBridge_SetBadge_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerNotificationHandler:) name:SHInstallRegistrationSuccessNotification object:nil]; //first registerForRemoteNotification need be called after register install, because it needs to be updated to an install id.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerNotificationHandler:) name:@"SH_PushBridge_Register_Notification" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setInteractivePairButtonsNotificationHandler:) name:SHInstallUpdateSuccessNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setInteractivePairButtonsNotificationHandler:) name:@"SH_PushBridge_SetInteractivePairButtons_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(smartPushHandler:) name:@"SH_PushBridge_Smart_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRegisterUserNotificationHandler:) name:@"SH_PushBridge_DidRegisterUserNotification" object:nil];
@@ -93,6 +92,7 @@
 
 + (void)setInteractivePairButtonsNotificationHandler:(NSNotification *)notification
 {
+    //This should only happen once to submit out-of-box pair buttons. It should not call again otherwise customer's pair button will be override, controlled by app_status/submit_interactive_button.
     [StreetHawk setInteractivePushBtnPairs:nil];
 }
 
