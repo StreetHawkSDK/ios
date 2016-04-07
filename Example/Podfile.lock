@@ -1,36 +1,36 @@
 PODS:
   - MBProgressHUD (0.9.2)
   - Reachability (3.2)
-  - streethawk (1.7.7):
-    - streethawk/Beacons (= 1.7.7)
-    - streethawk/Core (= 1.7.7)
-    - streethawk/Crash (= 1.7.7)
-    - streethawk/Feed (= 1.7.7)
-    - streethawk/Geofence (= 1.7.7)
-    - streethawk/Growth (= 1.7.7)
-    - streethawk/Locations (= 1.7.7)
-    - streethawk/Push (= 1.7.7)
-  - streethawk/Beacons (1.7.7):
+  - streethawk (1.7.8):
+    - streethawk/Beacons (= 1.7.8)
+    - streethawk/Core (= 1.7.8)
+    - streethawk/Crash (= 1.7.8)
+    - streethawk/Feed (= 1.7.8)
+    - streethawk/Geofence (= 1.7.8)
+    - streethawk/Growth (= 1.7.8)
+    - streethawk/Locations (= 1.7.8)
+    - streethawk/Push (= 1.7.8)
+  - streethawk/Beacons (1.7.8):
     - Reachability
     - streethawk/Core
-  - streethawk/Core (1.7.7):
+  - streethawk/Core (1.7.8):
     - MBProgressHUD
-    - streethawk/Core/no-arc (= 1.7.7)
-  - streethawk/Core/no-arc (1.7.7):
+    - streethawk/Core/no-arc (= 1.7.8)
+  - streethawk/Core/no-arc (1.7.8):
     - MBProgressHUD
-  - streethawk/Crash (1.7.7):
+  - streethawk/Crash (1.7.8):
     - streethawk/Core
-  - streethawk/Feed (1.7.7):
+  - streethawk/Feed (1.7.8):
     - streethawk/Core
-  - streethawk/Geofence (1.7.7):
+  - streethawk/Geofence (1.7.8):
     - Reachability
     - streethawk/Core
-  - streethawk/Growth (1.7.7):
+  - streethawk/Growth (1.7.8):
     - streethawk/Core
-  - streethawk/Locations (1.7.7):
+  - streethawk/Locations (1.7.8):
     - Reachability
     - streethawk/Core
-  - streethawk/Push (1.7.7):
+  - streethawk/Push (1.7.8):
     - streethawk/Core
 
 DEPENDENCIES:
@@ -43,6 +43,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  streethawk: 97c4a4ffdc2a303bd07dcb24450859a2598a8f3f
+  streethawk: 9d06294545ecf5d077ef717b744738e0922ebc49
 
 COCOAPODS: 0.39.0
