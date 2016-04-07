@@ -387,6 +387,18 @@ The application version and build version of current Application, formatted as @
 - (BOOL)tagCuid:(NSString *)uniqueId;
 
 /**
+ Internally call
+ 
+ `[StreetHawk tagString:language forKey:@"sh_language"];`
+ 
+ This is automatically called by SDK when App launch, and current device's language is submitted. Customer can also use this API to submit their own.
+ 
+ @param language The language of current device chosen, if pass nil it will automatically detect current device's settings.
+ @return If tag to server return YES; if fail to send to server return NO.
+ */
+- (BOOL)tagUserLanguage:(NSString *)language;
+
+/**
  Send log with code=8999. It's used for tagging a string value for user. For example, you can tag user's email as by:
  
  `[StreetHawk tagString:@"a@a.com" forKey:@"sh_email"];`

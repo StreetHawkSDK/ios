@@ -301,6 +301,12 @@
     {
         [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App started and engine initialized"];
     }
+    //send sh_language automatically only once for an install
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"TAG_SHLANGUAGE"] == 0)
+    {
+        [StreetHawk tagUserLanguage:nil];
+        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"TAG_SHLANGUAGE"];
+    }
     [[NSUserDefaults standardUserDefaults] synchronize];
     //check time zone and register for later change
     [self checkUtcOffsetUpdate];
@@ -1495,6 +1501,15 @@
 - (BOOL)tagCuid:(NSString *)uniqueId
 {
     return [self tagString:uniqueId forKey:@"sh_cuid"];
+}
+
+- (BOOL)tagUserLanguage:(NSString *)language
+{
+    if (shStrIsEmpty(language))
+    {
+        language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    }
+    return [self tagString:language forKey:@"sh_language"];
 }
 
 - (BOOL)tagString:(NSObject *)value forKey:(NSString *)key
