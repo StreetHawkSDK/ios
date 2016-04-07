@@ -39,8 +39,6 @@
 	
 	<option value="properties">Properties</option>
 	
-	<option value="//api/name/_0">&nbsp;&nbsp;&nbsp;&nbsp;_0</option>
-	
 	<option value="//api/name/advertisingIdentifier">&nbsp;&nbsp;&nbsp;&nbsp;advertisingIdentifier</option>
 	
 	<option value="//api/name/appKey">&nbsp;&nbsp;&nbsp;&nbsp;appKey</option>
@@ -175,6 +173,8 @@
 	
 	<option value="//api/name/setDefaultStartingUrl:">&nbsp;&nbsp;&nbsp;&nbsp;- setDefaultStartingUrl:</option>
 	
+	<option value="//api/name/setInteractivePushBtnPairs:">&nbsp;&nbsp;&nbsp;&nbsp;- setInteractivePushBtnPairs:</option>
+	
 	<option value="//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:">&nbsp;&nbsp;&nbsp;&nbsp;- setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</option>
 	
 	<option value="//api/name/shCustomActivityList:">&nbsp;&nbsp;&nbsp;&nbsp;- shCustomActivityList:</option>
@@ -206,6 +206,8 @@
 	<option value="//api/name/tagNumeric:forKey:">&nbsp;&nbsp;&nbsp;&nbsp;- tagNumeric:forKey:</option>
 	
 	<option value="//api/name/tagString:forKey:">&nbsp;&nbsp;&nbsp;&nbsp;- tagString:forKey:</option>
+	
+	<option value="//api/name/tagUserLanguage:">&nbsp;&nbsp;&nbsp;&nbsp;- tagUserLanguage:</option>
 	
 	
 	
@@ -248,8 +250,6 @@
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_0">_0</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/advertisingIdentifier">advertisingIdentifier</a></span></li>
 	
@@ -387,6 +387,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setDefaultStartingUrl:">setDefaultStartingUrl:</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setInteractivePushBtnPairs:">setInteractivePushBtnPairs:</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:">setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shCustomActivityList:">shCustomActivityList:</a></span></li>
@@ -418,6 +420,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/tagNumeric:forKey:">tagNumeric:forKey:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/tagString:forKey:">tagString:forKey:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/tagUserLanguage:">tagUserLanguage:</a></span></li>
 	
 </ul></li>
 
@@ -495,7 +499,13 @@
 
 <p>Call <code>registerOrUpdateInstallWithHandler:</code> to register or update install attributes.</p>
 
+<p>Extension for Feed API.</p>
+
+<p>Extension for Crash API.</p>
+
 <p>Extension for Notification API.</p>
+
+<p>Extension for Crash API.</p>
 
 <p><strong>Extension for logs:</strong></p>
 
@@ -514,12 +524,6 @@
 <p>[StreetHawk removeTag:@&ldquo;sh_email&rdquo;];</p>
 
 <p>Extension for Growth API.</p>
-
-<p>Extension for Feed API.</p>
-
-<p>Extension for Crash API.</p>
-
-<p>Extension for Crash API.</p>
 					</div>
 					
 					
@@ -795,6 +799,70 @@
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
+		<code><a href="#//api/name/newFeedHandler">&nbsp;&nbsp;newFeedHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/feed:withHandler:">&ndash;&nbsp;feed:withHandler:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sendFeedAck:">&ndash;&nbsp;sendFeedAck:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sendLogForFeed:withResult:">&ndash;&nbsp;sendLogForFeed:withResult:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isEnableCrashReport">&nbsp;&nbsp;isEnableCrashReport</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/crashHandler">&nbsp;&nbsp;crashHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isSendingCrashReport">&nbsp;&nbsp;isSendingCrashReport</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sendCrashReportForInstall:withContent:onCrashDate:withHandler:">&ndash;&nbsp;sendCrashReportForInstall:withContent:onCrashDate:withHandler:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
 		<code><a href="#//api/name/isDefaultNotificationEnabled">&nbsp;&nbsp;isDefaultNotificationEnabled</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
@@ -813,15 +881,15 @@
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_0">&nbsp;&nbsp;_0</a></code>
+		<code><a href="#//api/name/notificationHandler">&nbsp;&nbsp;notificationHandler</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/notificationHandler">&nbsp;&nbsp;notificationHandler</a></code>
+		<code><a href="#//api/name/setInteractivePushBtnPairs:">&ndash;&nbsp;setInteractivePushBtnPairs:</a></code>
 	</span>
-	<span class="task-item-suffix">property</span>
+	
 	
 </li><li>
 	<span class="tooltip">
@@ -953,7 +1021,57 @@
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
+		<code><a href="#//api/name/isDefaultLocationServiceEnabled">&nbsp;&nbsp;isDefaultLocationServiceEnabled</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isLocationServiceEnabled">&nbsp;&nbsp;isLocationServiceEnabled</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/reportWorkHomeLocationOnly">&nbsp;&nbsp;reportWorkHomeLocationOnly</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/locationManager">&nbsp;&nbsp;locationManager</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/systemPreferenceDisableLocation">&nbsp;&nbsp;systemPreferenceDisableLocation</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:">&ndash;&nbsp;setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
 		<code><a href="#//api/name/tagCuid:">&ndash;&nbsp;tagCuid:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/tagUserLanguage:">&ndash;&nbsp;tagUserLanguage:</a></code>
 	</span>
 	
 	
@@ -1016,114 +1134,6 @@
 </li>
 						</ul>
 						
-						
-						
-						<h3 class="subsubtitle task-title">Other Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/newFeedHandler">&nbsp;&nbsp;newFeedHandler</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/feed:withHandler:">&ndash;&nbsp;feed:withHandler:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/sendFeedAck:">&ndash;&nbsp;sendFeedAck:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/sendLogForFeed:withResult:">&ndash;&nbsp;sendLogForFeed:withResult:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						
-						<h3 class="subsubtitle task-title">Other Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/isEnableCrashReport">&nbsp;&nbsp;isEnableCrashReport</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/crashHandler">&nbsp;&nbsp;crashHandler</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/isSendingCrashReport">&nbsp;&nbsp;isSendingCrashReport</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/sendCrashReportForInstall:withContent:onCrashDate:withHandler:">&ndash;&nbsp;sendCrashReportForInstall:withContent:onCrashDate:withHandler:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						
-						<h3 class="subsubtitle task-title">Other Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/isDefaultLocationServiceEnabled">&nbsp;&nbsp;isDefaultLocationServiceEnabled</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/isLocationServiceEnabled">&nbsp;&nbsp;isLocationServiceEnabled</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/reportWorkHomeLocationOnly">&nbsp;&nbsp;reportWorkHomeLocationOnly</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/locationManager">&nbsp;&nbsp;locationManager</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/systemPreferenceDisableLocation">&nbsp;&nbsp;systemPreferenceDisableLocation</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:">&ndash;&nbsp;setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
 					</div>
 					
 					
@@ -1133,62 +1143,6 @@
 					<div class="section section-methods">
 						<a title="Properties" name="properties"></a>
 						<h2 class="subtitle subtitle-methods">Properties</h2>
-						
-						<div class="section-method">
-	<a name="//api/name/_0" title="_0"></a>
-	<h3 class="subsubtitle method-title">_0</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Property for customer to add their own interactive notification. It&rsquo;s same as iOS 8 defined categories set. Code snippet:</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSSet *NS_AVAILABLE_IOS ( 8 _0</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>// Define an action for the category
-UIMutableUserNotificationAction <em>action = [[UIMutableUserNotificationAction alloc] init];
-action.destructive = NO;
-action.activationMode = UIUserNotificationActivationModeForeground;
-action.authenticationRequired = YES;
-action.title = @&ldquo;Action!&rdquo;;
-action.identifier = @&ldquo;custom_action&rdquo;;
-// Define the category
-UIMutableUserNotificationCategory </em>category = [[UIMutableUserNotificationCategory alloc] init];
-[category setActions:@[action] forContext:UIUserNotificationActionContextMinimal];
-[category setActions:@[action] forContext:UIUserNotificationActionContextDefault];
-category.identifier = @&ldquo;custom_category&rdquo;;
-// Set the custom categories
-StreetHawk.notificationCategories = [NSSet setWithArray:@[category]];</p>
-
-<p>Customer is free to add their own categories, make sure categories' <code>identifier</code> is not same as StreetHawk&rsquo;s pre-defined code such as 8000, 8004 etc. In case customer&rsquo;s category uses same <code>identifier</code> as StreetHawk&rsquo;s predefined code, StreetHawk&rsquo;s function will be override. Customer&rsquo;s categories, combined with StreetHawk&rsquo;s predefined categories, work side by side. Customer needs to handle their own category by their own code, usually needs to implement their own AppDelegate functions, check document <a href="http://api.streethawk.com/v1/docs/ios-manualsetup.html">http://api.streethawk.com/v1/docs/ios-manualsetup.html</a>#ios-manualsetup. Make sure setting up this property before registering for remote notification, such as before calling [registerForInstall&hellip;].</p>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">SHApp+Notification.h</code><br />
-	</div>				
-	
-	
-</div>
 						
 						<div class="section-method">
 	<a name="//api/name/advertisingIdentifier" title="advertisingIdentifier"></a>
@@ -4050,6 +4004,57 @@ or
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/setInteractivePushBtnPairs:" title="setInteractivePushBtnPairs:"></a>
+	<h3 class="subsubtitle method-title">setInteractivePushBtnPairs:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Submit notification&rsquo;s interactive button pairs to server. The button pairs will be used to create campaign, and result in notification&rsquo;s interactive buttons.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)setInteractivePushBtnPairs:(NSArray *)<em>arrayPairs</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>arrayPairs</em></dt>
+			<dd><p>An array of <a href="../Classes/InteractivePush.html"><code>InteractivePush</code></a> objects.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>If the format is correct, return YES; otherwise return NO, and error information can refer to console log output (withDebugMode:YES).</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp+Notification.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:" title="setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:"></a>
 	<h3 class="subsubtitle method-title">setLocationUpdateFrequencyForFGInterval:forFGDistance:forBGInterval:forBGDistance:</h3>
 	
@@ -4969,6 +4974,64 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 	
 </div>
 						
+						<div class="section-method">
+	<a name="//api/name/tagUserLanguage:" title="tagUserLanguage:"></a>
+	<h3 class="subsubtitle method-title">tagUserLanguage:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Internally call</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)tagUserLanguage:(NSString *)<em>language</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>language</em></dt>
+			<dd><p>The language of current device chosen, if pass nil it will automatically detect current device&rsquo;s settings.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>If tag to server return YES; if fail to send to server return NO.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p><code>[StreetHawk tagString:language forKey:@"sh_language"];</code></p>
+
+<p>This is automatically called by SDK when App launch, and current device&rsquo;s language is submitted. Customer can also use this API to submit their own.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHApp.h</code><br />
+	</div>				
+	
+	
+</div>
+						
 					</div>
 					
 					
@@ -4984,7 +5047,7 @@ Note: if history has a page record, it sends exit log (8108) for the history. Th
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2016 StreetHawk. All rights reserved. (Last updated: 2016-03-09)</span><br />
+						<p><span class="copyright">&copy; 2016 StreetHawk. All rights reserved. (Last updated: 2016-04-07)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
