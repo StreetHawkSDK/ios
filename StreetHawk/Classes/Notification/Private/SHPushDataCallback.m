@@ -71,8 +71,8 @@
     {
         if (handler)
         {
-            NSString *positiveButton = shLocalizedString(@"STREETHAWK_YES", @"Yes Please!"); //TODO: read by category
-            NSString *negativeButton = shLocalizedString(@"STREETHAWK_CANCEL", @"Cancel"); //TODO: read by category
+            NSString *positiveButton = shLocalizedString(@"STREETHAWK_YES", @"Yes Please!");
+            NSString *negativeButton = shLocalizedString(@"STREETHAWK_CANCEL", @"Cancel");
             if (pushData.action == SHAction_RateApp)
             {
                 positiveButton = shLocalizedString(@"STREETHAWK_RATE", @"Rate");
