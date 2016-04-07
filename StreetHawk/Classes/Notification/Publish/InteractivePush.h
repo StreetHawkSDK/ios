@@ -23,7 +23,7 @@
 @interface InteractivePush : NSObject
 
 /**
-Title for given pair, it's the identifier of pairs. Note: customized pair identifier cannot same as pre-defined pairs, if overlap there is a warning message prints in console log when `- (BOOL)setInteractivePushBtnPairs:(NSArray *)arrayPairs;`, and this customized pair is ignored.
+ Title for given pair, it's the identifier of pairs, case sensitive. Note: customized pair identifier cannot same as pre-defined pairs, if overlap there is a warning message prints in console log when `- (BOOL)setInteractivePushBtnPairs:(NSArray *)arrayPairs;`, and this customized pair is ignored.
  */
 @property (nonatomic, strong) NSString * pairTitle;
 

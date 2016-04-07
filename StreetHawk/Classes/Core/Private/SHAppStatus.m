@@ -238,12 +238,10 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     if (![NSThread isMainThread])
     {
         dispatch_semaphore_wait(self.semaphore_allowSubmitFriendlyNames, DISPATCH_TIME_FOREVER);
-        if (self.allowSubmitFriendlyNames != allowSubmitFriendlyNames)
-        {
-            [[NSUserDefaults standardUserDefaults] setBool:allowSubmitFriendlyNames forKey:APPSTATUS_SUBMIT_FRIENDLYNAME];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];        
-        }
+        //not compare `if (self.allowSubmitFriendlyNames != allowSubmitFriendlyNames)` otherwise once submission failure cause following not submit.
+        [[NSUserDefaults standardUserDefaults] setBool:allowSubmitFriendlyNames forKey:APPSTATUS_SUBMIT_FRIENDLYNAME];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
         dispatch_semaphore_signal(self.semaphore_allowSubmitFriendlyNames);
     }
 }
@@ -259,12 +257,10 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     if (![NSThread isMainThread])
     {
         dispatch_semaphore_wait(self.semaphore_allowSubmitInteractiveButtons, DISPATCH_TIME_FOREVER);
-        if (self.allowSubmitInteractiveButton != allowSubmitInteractiveButton)
-        {
-            [[NSUserDefaults standardUserDefaults] setBool:allowSubmitInteractiveButton forKey:APPSTATUS_SUBMIT_INTERACTIVEBUTTONS];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
-        }
+        //not compare `if (self.allowSubmitInteractiveButton != allowSubmitInteractiveButton)` otherwise once submission failure cause following not submit.
+        [[NSUserDefaults standardUserDefaults] setBool:allowSubmitInteractiveButton forKey:APPSTATUS_SUBMIT_INTERACTIVEBUTTONS];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
         dispatch_semaphore_signal(self.semaphore_allowSubmitInteractiveButtons);
     }
 }

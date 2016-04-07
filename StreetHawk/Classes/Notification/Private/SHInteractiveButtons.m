@@ -349,7 +349,7 @@
         UIUserNotificationCategory *findCategory = nil;
         for (UIUserNotificationCategory *item in set)
         {
-            if ([item.identifier compare:category.identifier options:NSCaseInsensitiveSearch] == NSOrderedSame)
+            if ([item.identifier compare:category.identifier] == NSOrderedSame) //category is case sensitive
             {
                 findCategory = item;
                 break;
@@ -406,14 +406,14 @@
     NSAssert(!shStrIsEmpty(pairTitle), @"Compare interactive pair buttons cannot use empty pair title.");
     for (NSDictionary *dict in arrayPairs)
     {
-        if ([dict[SH_INTERACTIVEPUSH_PAIR] compare:pairTitle] == NSOrderedSame) //TODO: case sensitive?
+        if ([dict[SH_INTERACTIVEPUSH_PAIR] compare:pairTitle] == NSOrderedSame)
         {
             if (button1 == nil && button2 == nil) //here cannot use `shStrIsEmpty`, because if pass in "" it will compare.
             {
                 return YES; //button 1 and button 2 are not used for compare, find the match pair title.
             }
             if ((button1 == nil || [dict[SH_INTERACTIVEPUSH_BUTTON1] compare:button1] == NSOrderedSame)
-                && (button2 == nil || [dict[SH_INTERACTIVEPUSH_BUTTON2] compare:button2] == NSOrderedSame)) //TODO: case sensitive?
+                && (button2 == nil || [dict[SH_INTERACTIVEPUSH_BUTTON2] compare:button2] == NSOrderedSame))
             {
                 return YES;
             }

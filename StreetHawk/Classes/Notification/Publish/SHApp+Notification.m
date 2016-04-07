@@ -149,18 +149,18 @@
         NSAssert(!shStrIsEmpty(obj.pairTitle), @"pairTitle shouldn't be empty.");
         if (shStrIsEmpty(obj.pairTitle))
         {
-            SHLog(@"pairTitle shouldn't be empty.");
+            SHLog(@"WARNING: pairTitle shouldn't be empty.");
             return NO;
         }
         if ([SHInteractiveButtons pairTitle:obj.pairTitle andButton1:nil andButton2:nil isUsed:array] || [SHInteractiveButtons pairTitle:obj.pairTitle andButton1:nil andButton2:nil isUsed:[SHInteractiveButtons predefinedLocalPairs]])
         {
-            SHLog(@"pairTitle %@ is already used, please choose another one.", obj.pairTitle);
+            SHLog(@"WARNING: pairTitle \"%@\" is already used, please choose another one.", obj.pairTitle);
             return NO;
         }
         NSAssert(!shStrIsEmpty(obj.b1Title) || !shStrIsEmpty(obj.b2Title), @"b1 and b2 cannot both empty.");
         if (shStrIsEmpty(obj.b1Title) && shStrIsEmpty(obj.b2Title))
         {
-            SHLog(@"b1 and b2 cannot both empty.");
+            SHLog(@"WARNING: b1 and b2 cannot both empty.");
             return NO;
         }
         NSMutableDictionary *dictPair = [NSMutableDictionary dictionary];
