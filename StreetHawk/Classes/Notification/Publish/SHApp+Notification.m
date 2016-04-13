@@ -32,6 +32,9 @@
 #define ENABLE_PUSH_NOTIFICATION            @"ENABLE_PUSH_NOTIFICATION"  //key for record user manually set isNotificationEnabled. Although it's used for both remote and local, key not change name to be compatible with old version.
 #define ALERTSETTINGS_MINUTES   @"ALERTSETTINGS_MINUTES"  //Get and set alert settings is asynchronous, but need an synchronous API in SHApp. Store this locally. It's int value of pause minutes.
 
+NSString * const SHNMOtherPayloadNotification = @"SHNMOtherPayloadNotification";
+NSString * const SHNMNotification_kPayload = @"Payload";
+
 @implementation SHApp (NotificationExt)
 
 #pragma mark - properties
@@ -321,6 +324,10 @@
     {
         [StreetHawk.notificationHandler handleDefinedUserInfo:userInfo withAction:SHNotificationActionResult_Unknown treatAppAs:appFGBG forNotificationType:SHNotificationType_Remote];
     }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SHNMOtherPayloadNotification object:nil userInfo:@{SHNMNotification_kPayload: userInfo}];
+    }
     if (needComplete && completionHandler != nil)
     {
         completionHandler(UIBackgroundFetchResultNoData);
@@ -336,6 +343,10 @@
         NSAssert(action != SHNotificationActionResult_Unknown, @"Unknown action id for defined payload: %@.", userInfo);
         [StreetHawk.notificationHandler handleDefinedUserInfo:userInfo withAction:action treatAppAs:SHAppFGBG_BG/*this only trigger when App in BG, now app state is inactive*/ forNotificationType:SHNotificationType_Remote];
     }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SHNMOtherPayloadNotification object:nil userInfo:@{SHNMNotification_kPayload: userInfo}];
+    }
     if (needComplete && completionHandler != nil)
     {
         completionHandler();
@@ -350,6 +361,10 @@
         if (isDefinedCode)
         {
             [StreetHawk.notificationHandler handleDefinedUserInfo:notification.userInfo withAction:SHNotificationActionResult_Unknown treatAppAs:appFGBG forNotificationType:SHNotificationType_Local];
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:SHNMOtherPayloadNotification object:nil userInfo:@{SHNMNotification_kPayload: notification.userInfo}];
         }
     }
     if (needComplete && completionHandler != nil)
@@ -368,6 +383,10 @@
             SHNotificationActionResult action = [identifier intValue]; //defined code uses `action` as identifier.
             NSAssert(action != SHNotificationActionResult_Unknown, @"Unknown action id for defined payload: %@.", notification.userInfo);
             [StreetHawk.notificationHandler handleDefinedUserInfo:notification.userInfo withAction:action treatAppAs:SHAppFGBG_BG/*this only trigger when App in BG, now app state is inactive*/ forNotificationType:SHNotificationType_Local];
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:SHNMOtherPayloadNotification object:nil userInfo:@{SHNMNotification_kPayload: notification.userInfo}];
         }
         if (needComplete)
         {

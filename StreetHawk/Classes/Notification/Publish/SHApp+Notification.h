@@ -22,6 +22,16 @@
 @class SHNotificationHandler;
 
 /**
+ Notification sent when none StreetHawk notification payload received. The user information contains `SHNMNotification_kPayload` for payload dictionary.
+ */
+extern NSString * const SHNMOtherPayloadNotification;
+
+/**
+ Key for SHNMOtherPayloadNotification notifications.
+ */
+extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDictionary.
+
+/**
  Extension for Notification API.
  */
 @interface SHApp (NotificationExt)
