@@ -72,6 +72,12 @@
     //Doc: https://streethawk.freshdesk.com/solution/categories/5000158959/folders/5000254779/articles/5000609896-code-snippets#rawjson_ios_native
     MyHandler *handler = [[MyHandler alloc] init];
     [StreetHawk shSetCustomiseHandler:handler];
+    
+    //Sample code to set interactive pair buttons
+    InteractivePush *pair1 = [[InteractivePush alloc] initWithPairTitle:@"MyPair1" withButton1:@"Facebook" withButton2:@"Twitter"];
+    InteractivePush *pair2 = [[InteractivePush alloc] initWithPairTitle:@"MyPair2" withButton1:@"Invite" withButton2:@"Send Photo"];
+    InteractivePush *pair3 = [[InteractivePush alloc] initWithPairTitle:@"MyPair3" withButton1:@"Lost" withButton2:@"Found"];
+    [StreetHawk setInteractivePushBtnPairs:@[pair1, pair2, pair3]];
 
     return YES;
 }

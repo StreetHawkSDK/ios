@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name                = "streethawk"
   s.header_dir          = "StreetHawkCore"
-  s.version             = "1.7.8"
+  s.version             = "1.8.0"
   s.summary             = "Mobile Engagement Automation: Geofences campaign, Engage in right time via push message, Segment app user, analyse campaign performance."
   s.description         = <<-DESC
                             Streethawkis mobile engagement automation for your smartphone and tablet app user.
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
     sp.public_header_files = 'StreetHawk/Classes/Core/**/Publish/*.h'
     sp.exclude_files       = 'StreetHawk/Classes/Core/Private/SHPresentDialog.m', 'StreetHawk/Classes/Core/Private/SHCoverWindow.m'
     sp.resource_bundles    = {'streethawk' => ['StreetHawk/Assets/**/*']}
-    sp.frameworks          = 'CoreTelephony', 'Foundation', 'CoreGraphics', 'UIKit'
+    sp.frameworks          = 'CoreTelephony', 'Foundation', 'CoreGraphics', 'UIKit', 'CoreSpotlight'
     sp.libraries           = 'sqlite3'    
     sp.dependency            'MBProgressHUD'
     sp.subspec 'no-arc' do |ssp|
