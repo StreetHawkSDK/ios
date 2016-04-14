@@ -50,6 +50,7 @@
 
 //Notification
 #ifdef SH_FEATURE_NOTIFICATION
+#import "InteractivePush.h"
 #import "ISHCustomiseHandler.h"
 #import "ISHPhonegapObserver.h"
 #import "SHApp+Notification.h"
