@@ -16,7 +16,7 @@
  */
 
 #ifndef SH_Types_h
-#define StreetHawkCore_StreetHawkTypes_h
+#define SH_Types_h
 
 /**
  Callback handler with a result or an error.
