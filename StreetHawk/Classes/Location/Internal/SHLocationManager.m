@@ -101,10 +101,12 @@
 {
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
+#if !TARGET_IPHONE_SIMULATOR //pausesLocationUpdatesAutomatically cannot work in non-UI clients such as unit testing. As unit testing only run in simulator, add macro to avoid crash.
     if ([self.locationManager respondsToSelector:@selector(setPausesLocationUpdatesAutomatically:)])
     {
         self.locationManager.pausesLocationUpdatesAutomatically = NO;  //since iOS 6.0, if error happen whether pause location update to save battery? Set to NO so that retrying and keeping report.
     }
+#endif
     [self requestPermissionSinceiOS8];
     
     self.desiredAccuracy = kCLLocationAccuracyHundredMeters;
