@@ -1404,7 +1404,10 @@
         NSAssert(!needClear, @"Exit without page should used for App go to BG only, with needClear = NO");
         page = [[NSUserDefaults standardUserDefaults] objectForKey:ENTER_PAGE_HISTORY]; //for App go BG and log exit
     }
-    NSAssert(page != nil && page.length > 0, @"Try to really exit a page without page name. Stop now.");
+    if (needClear)
+    {
+        NSAssert(page != nil && page.length > 0, @"Try to really exit a page without page name. Stop now."); //only check this when normally exit a page. If needClear=NO it's from App go to BG, and if last seen page is not StreetHawk inherit page the record in ENTER_PAGE_HISTORY is empty.
+    }
     if (page != nil && page.length > 0)
     {
         page = [SHFriendlyNameObject tryFriendlyName:page]; //friendly name is used in notification scenario
