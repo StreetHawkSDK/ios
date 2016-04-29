@@ -148,7 +148,7 @@ static void SHAFNetworkReachabilityReleaseCallback(const void *info) {
     struct sockaddr_in6 address;
     bzero(&address, sizeof(address));
     address.sin6_len = sizeof(address);
-    address.sin6_family = SHAF_INET6;
+    address.sin6_family = AF_INET6;
 #else
     struct sockaddr_in address;
     bzero(&address, sizeof(address));
