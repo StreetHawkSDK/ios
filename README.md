@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/cocoapods/l/streethawk.svg?style=flat)](http://cocoadocs.org/docsets/streethawk)
 [![Platform](https://img.shields.io/cocoapods/p/streethawk.svg?style=flat)](http://cocoadocs.org/docsets/streethawk)
 
-## Installation
+## Cocopods Installation
 
 1. Install [CocoaPods](http://cocoapods.org).
 2. Add pod line into your Podfile and run "pod install". There are two ways:
@@ -25,6 +25,15 @@
     pod "streethawk/Feed"  # handle feed.
 
 Click [here](https://streethawk.freshdesk.com/support/solutions/articles/5000677092-introduction) for detailed documentation
+
+## Manual Installation
+
+1. Download the contents of repo and add files under "StreetHawk" folder into your project.
+2. In Project->Build Phases->Compile Sources, find SHPresentDialog.m, add compile flag "-fno-objc-arc".
+3. Download source code of [MBProgressHUD](https://github.com/jdg/MBProgressHUD), add MBProgressHUD.h and MBProgressHUD.m.
+4. Download source code of [Reachability](https://github.com/tonymillion/Reachability), add Reachability.h and Reachability.m.
+5. In Project->Build Settings->Other Linker Flags, add "-lsqlite3". 
+6. Add system frameworks: CoreTelephony, Foundation, CoreGraphics, UIKit, CoreSpotlight, CoreLocation.
 
 ## StreetHawk web console
 
