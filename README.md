@@ -4,19 +4,16 @@
 [![License](https://img.shields.io/cocoapods/l/streethawk.svg?style=flat)](http://cocoadocs.org/docsets/streethawk)
 [![Platform](https://img.shields.io/cocoapods/p/streethawk.svg?style=flat)](http://cocoadocs.org/docsets/streethawk)
 
-## Usage
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
-
 ## Installation
 
-The StreetHawk iOS SDK is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your Podfile:
+1. Install [CocoaPods](http://cocoapods.org).
+2. Add pod line into your Podfile. There are two ways:
+
+1) add whole StreetHawk iOS SDK.
 
     pod "streethawk"
-
-Above add whole StreetHawk iOS SDK. It's flexible to use part of StreetHawk iOS SDK as sub-module too. Available sub-module includes:
+    
+2) add sub-module as need. Available sub-modules include:
 
     pod "streethawk/Core"  #core component for register install, sending logs, tag, trace App status. Other sub-module depends on Core, it's automatically included in other sub-module, no need to specifically add. For example, use pod "streethawk/Growth" is enough, it will automatically sync pod "streethawk/Core".
     pod "streethawk/Growth"  #growth sharing.
@@ -26,6 +23,10 @@ Above add whole StreetHawk iOS SDK. It's flexible to use part of StreetHawk iOS 
     pod "streethawk/Beacons"  #trace user location by enter iBeacon region, usually work together with push notification.
     pod "streethawk/Crash"  #submit crash report.
     pod "streethawk/Feed"  # handle feed.
+  
+3. Add dependencies and configure project. 
+  
+Click [here](https://streethawk.freshdesk.com/support/solutions/articles/5000677092-introduction) for detailed documentation
 
 ## StreetHawk web console
 
