@@ -7,7 +7,7 @@
 ## Installation
 
 1. Install [CocoaPods](http://cocoapods.org).
-2. Add pod line into your Podfile. There are two ways:
+2. Add pod line into your Podfile and run "pod install". There are two ways:
 
 1) add whole StreetHawk iOS SDK.
 
