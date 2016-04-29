@@ -23,9 +23,7 @@
     pod "streethawk/Beacons"  #trace user location by enter iBeacon region, usually work together with push notification.
     pod "streethawk/Crash"  #submit crash report.
     pod "streethawk/Feed"  # handle feed.
-  
-3. Add dependencies and configure project. 
-  
+
 Click [here](https://streethawk.freshdesk.com/support/solutions/articles/5000677092-introduction) for detailed documentation
 
 ## StreetHawk web console
