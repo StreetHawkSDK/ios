@@ -534,6 +534,25 @@
     return shFormatStreetHawkDate([NSDate dateWithTimeIntervalSince1970:seconds]);
 }
 
+- (id)getAppDelegate
+{
+    id<UIApplicationDelegate> appDelegate = [UIApplication sharedApplication].delegate;
+    if (![appDelegate isKindOfClass:[SHInterceptor class]])
+    {
+        return appDelegate; //it's not wrappered by SHInterceptor
+    }
+    else
+    {
+        SHInterceptor *interceptor = (SHInterceptor *)appDelegate;
+        if (![interceptor.secondResponder isKindOfClass:[SHInterceptor class]] && ![interceptor.secondResponder isKindOfClass:[SHApp class]])
+        {
+            return interceptor.secondResponder;
+        }
+    }
+    NSAssert(NO, @"Cannot find real App delegate");
+    return nil;
+}
+
 - (void)shRegularTask:(void (^)(UIBackgroundFetchResult))completionHandler needComplete:(BOOL)needComplete
 {
     BOOL needHeartbeatLog = YES;

@@ -138,6 +138,11 @@ The application version and build version of current Application, formatted as @
 @property (nonatomic, readonly) SHDevelopmentPlatform developmentPlatform;
 
 /**
+ StreetHawk can use `AdvertisingIdentifier` to help trace end-user, however it requires customer's App is capable to use advertising function according to Apple's agreement. If customer's App can get this, pass into StreetHawk.
+ */
+@property (nonatomic, strong) NSString *advertisingIdentifier;
+
+/**
  StreetHawk requires AppDelegate has some common functions, if `autoIntegrateAppDelegate` is YES (by default), customer App does not need to manually implement any of the push-related UIApplicationDelegate protocol methods or pass notifications to the library. The library is able to do this by setting itself as the app delegate, intercepting messages and forwarding them to your original app delegate. This must be setup before register install. It's YES by default but if custome App set it to NO, customer App must implement these functions manually:
  
  `- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings  //since iOS 8.0
@@ -183,11 +188,25 @@ The application version and build version of current Application, formatted as @
  - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
  {
     return [StreetHawk openURL:url];
+ }
+ 
+ - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
+ {
+    return [StreetHawk continueUserActivity:userActivity];
  }`
  */
 @property (nonatomic) BOOL autoIntegrateAppDelegate;
 
 /** @name Handlers */
+
+/**
+ Callback to let customer App to handle deeplinking url.
+ Launch view controller in such scenarios:
+ 1. Click a link "<app_scheme://host/path?param=value>" in Email or social App, launch this App by `openURL`.
+ 2. Notification "Launch page activity" sends from StreetHawk campaign with deeplinking url "<app_scheme://host/path?param=value>", and host not equal "launchvc".
+ 3. Growth recommend friend to install a new App, after first launch Growth automatically match a deeplinking url "<app_scheme://host/path?param=value>" and launch view controller.
+ */
+@property (nonatomic, copy) SHOpenUrlHandler openUrlHandler;
 
 /**
  An instance to deal with log.
@@ -266,18 +285,10 @@ The application version and build version of current Application, formatted as @
 - (NSString *)getFormattedDateTime:(NSTimeInterval)seconds;
 
 /**
- Callback to let customer App to handle deeplinking url.
- Launch view controller in such scenarios:
- 1. Click a link "<app_scheme://host/path?param=value>" in Email or social App, launch this App by `openURL`.
- 2. Notification "Launch page activity" sends from StreetHawk campaign with deeplinking url "<app_scheme://host/path?param=value>", and host not equal "launchvc".
- 3. Growth recommend friend to install a new App, after first launch Growth automatically match a deeplinking url "<app_scheme://host/path?param=value>" and launch view controller.
+ Get real App's delegate. If `autoIntegrateAppDelegate = YES` which is by default, the [UIApplication sharedApplication].delegate is actually `SHInterceptor`. It works well in Object-C as it does not really check type when do type-cast `AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;`, and forward selector works; however it cause crash in Swift which force type check when downcast, thus `let shared = UIApplication.sharedApplication().delegate as! AppDelegate` crash because `SHInterceptor` cannot be casted to `AppDelegate`. To avoid public type `SHInterceptor` and to make Swift can get real App delegate, add this API to return the value.
+ @return Get real App delegate.
  */
-@property (nonatomic, copy) SHOpenUrlHandler openUrlHandler;
-
-/**
- StreetHawk can use `AdvertisingIdentifier` to help trace end-user, however it requires customer's App is capable to use advertising function according to Apple's agreement. If customer's App can get this, pass into StreetHawk.
- */
-@property (nonatomic, strong) NSString *advertisingIdentifier;
+- (id)getAppDelegate;
 
 /** @name Background Regular Task */
 
