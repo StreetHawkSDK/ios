@@ -534,6 +534,11 @@
     return shFormatStreetHawkDate([NSDate dateWithTimeIntervalSince1970:seconds]);
 }
 
+- (NSString *)getCurrentFormattedDateTime
+{
+    return shFormatStreetHawkDate([NSDate date]);
+}
+
 - (id)getAppDelegate
 {
     id<UIApplicationDelegate> appDelegate = [UIApplication sharedApplication].delegate;

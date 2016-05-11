@@ -285,6 +285,12 @@ The application version and build version of current Application, formatted as @
 - (NSString *)getFormattedDateTime:(NSTimeInterval)seconds;
 
 /**
+ Get current datetime string in Streethawk format (UTC and yyyy-MM-dd HH:mm:ss).
+ @return Streethawk formatted string in style `yyyy-MM-dd HH:mm:ss`, such as 2016-10-21 16:23:18.
+ */
+- (NSString *)getCurrentFormattedDateTime;
+
+/**
  Get real App's delegate. If `autoIntegrateAppDelegate = YES` which is by default, the [UIApplication sharedApplication].delegate is actually `SHInterceptor`. It works well in Object-C as it does not really check type when do type-cast `AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;`, and forward selector works; however it cause crash in Swift which force type check when downcast, thus `let shared = UIApplication.sharedApplication().delegate as! AppDelegate` crash because `SHInterceptor` cannot be casted to `AppDelegate`. To avoid public type `SHInterceptor` and to make Swift can get real App delegate, add this API to return the value.
  @return Get real App delegate.
  */
