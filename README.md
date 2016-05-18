@@ -34,7 +34,7 @@ Click [here](https://streethawk.freshdesk.com/support/solutions/articles/5000677
 2. In Project Settings -> Targets ->Build Phases->Compile Sources, find SHPresentDialog.m, add compile flag "-fno-objc-arc".
 3. Download source code of [MBProgressHUD](https://github.com/jdg/MBProgressHUD), add MBProgressHUD.h and MBProgressHUD.m.
 4. Download source code of [Reachability](https://github.com/tonymillion/Reachability), add Reachability.h and Reachability.m.
-5. In Project->Build Settings->Other Linker Flags, add "-lsqlite3". 
+5. In Project Settings -> Targets ->Build Settings->Other Linker Flags, add "-lsqlite3". 
 6. Add system frameworks: CoreTelephony, Foundation, CoreGraphics, UIKit, CoreSpotlight, CoreLocation.
 
 ## StreetHawk web console
