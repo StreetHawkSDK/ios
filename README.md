@@ -4,6 +4,8 @@
 [![License](https://img.shields.io/cocoapods/l/streethawk.svg?style=flat)](http://cocoadocs.org/docsets/streethawk)
 [![Platform](https://img.shields.io/cocoapods/p/streethawk.svg?style=flat)](http://cocoadocs.org/docsets/streethawk)
 
+Support iOS 7.0 and above.
+
 ## Cocopods Installation
 
 1. Install [CocoaPods](http://cocoapods.org).
@@ -28,8 +30,8 @@ Click [here](https://streethawk.freshdesk.com/support/solutions/articles/5000677
 
 ## Manual Installation
 
-1. Download the contents of repo and add files under "StreetHawk" folder into your project.
-2. In Project->Build Phases->Compile Sources, find SHPresentDialog.m, add compile flag "-fno-objc-arc".
+1. Download the repo and unzip. Right click your project -> Add Files, and select "StreetHawk" folder. This will add all the files inside "StreetHawk" folder into your project.
+2. In Project Settings -> Targets ->Build Phases->Compile Sources, find SHPresentDialog.m, add compile flag "-fno-objc-arc".
 3. Download source code of [MBProgressHUD](https://github.com/jdg/MBProgressHUD), add MBProgressHUD.h and MBProgressHUD.m.
 4. Download source code of [Reachability](https://github.com/tonymillion/Reachability), add Reachability.h and Reachability.m.
 5. In Project->Build Settings->Other Linker Flags, add "-lsqlite3". 
