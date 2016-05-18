@@ -23,7 +23,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"feed id = %d, title = %@, message = %@, campaign = %@, content = %@, activate on %@, expires on %@, created on %@, modified on %@, deleted on %@", self.feed_id, self.title, self.message, self.campaign, self.content, shFormatStreetHawkDate(self.activates), shFormatStreetHawkDate(self.expires), shFormatStreetHawkDate(self.created), shFormatStreetHawkDate(self.modified), shFormatStreetHawkDate(self.deleted)];
+    return [NSString stringWithFormat:@"feed id = %ld, title = %@, message = %@, campaign = %@, content = %@, activate on %@, expires on %@, created on %@, modified on %@, deleted on %@", (long)self.feed_id, self.title, self.message, self.campaign, self.content, shFormatStreetHawkDate(self.activates), shFormatStreetHawkDate(self.expires), shFormatStreetHawkDate(self.created), shFormatStreetHawkDate(self.modified), shFormatStreetHawkDate(self.deleted)];
 }
 
 + (SHFeedObject *)createFromDictionary:(NSDictionary *)dict
