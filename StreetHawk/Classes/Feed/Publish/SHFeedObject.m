@@ -59,7 +59,7 @@
             obj.content = data;
         }
     }
-    obj.campaign = dict[@"campaign"];
+    obj.campaign = [NSString stringWithFormat:@"%@", dict[@"campaign"]];
     obj.activates = shParseDate(dict[@"activates"], 0);
     obj.expires = shParseDate(dict[@"expires"], 0);
     obj.created = shParseDate(dict[@"created"], 0);
