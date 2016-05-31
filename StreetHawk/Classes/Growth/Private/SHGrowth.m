@@ -371,7 +371,7 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
     {
-        self.isGrowthRegistered = NO; //this time register fail, do it next time.
+        //self.isGrowthRegistered = NO; //this time register fail, do it next time. //Server side throw error when meet duplication, and client side cannot retry.
         if (handler)
         {
             handler(nil, error);
