@@ -627,7 +627,10 @@
     if (!handledBySDK && StreetHawk.openUrlHandler != nil)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_GrowthBridge_Increase_Notification" object:nil userInfo:@{@"url": NONULL(url.absoluteString)}]; //send Growth increase request
-        StreetHawk.openUrlHandler(url);
+        if (!shIsUniversalLinking(url.absoluteString))
+        {
+            StreetHawk.openUrlHandler(url); //if it's not universal linking, means it's real deeplinking url, suitable for returning to customer.
+        }
         return YES; //open url is handled by customer code.
     }
     return NO;
@@ -765,8 +768,7 @@
         if ([userActivity.activityType compare:NSUserActivityTypeBrowsingWeb] == NSOrderedSame)
         {
             NSURL *webURL = userActivity.webpageURL;
-            StreetHawk.openUrlHandler(webURL);
-            return YES; //for universal linking case
+            return [StreetHawk openURL:webURL]; //for universal linking case
         }
         else
         {

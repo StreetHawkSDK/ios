@@ -42,6 +42,7 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
 - (void)installRegistrationSucceededForGrowth:(NSNotification *)notification;
 - (void)installUpdateSucceededForGrowth:(NSNotification *)notification;
 - (void)handleGrowthRegister;
+- (NSString *)parseGrowthResult:(id)result withError:(NSError *)error;
 
 @end
 
@@ -417,17 +418,32 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
     NSMutableDictionary *dictParam = [NSMutableDictionary dictionary];
     [dictParam setObject:NONULL(StreetHawk.currentInstall.suid) forKey:@"sh_cuid"];
     [dictParam setObject:NONULL(share_guid_url) forKey:@"share_guid_url"];
-    [dictParam setObject:NONULL(shareUrl.scheme) forKey:@"scheme"];
-    NSString *uri =  shareUrl.resourceSpecifier;
-    if ([uri hasPrefix:@"//"])
+    if (!shIsUniversalLinking(shareUrlStr))
     {
-        uri = [uri substringFromIndex:2];
+        [dictParam setObject:NONULL(shareUrl.scheme) forKey:@"scheme"];
+        NSString *uri =  shareUrl.resourceSpecifier;
+        if ([uri hasPrefix:@"//"])
+        {
+            uri = [uri substringFromIndex:2];
+        }
+        [dictParam setObject:NONULL(uri) forKey:@"uri"];
     }
-    [dictParam setObject:NONULL(uri) forKey:@"uri"];    
     handler = [handler copy];
     //Not need to consider offline mode. If device is offline short link cannot redirect to full link and will not pass above check.
     [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"%@/increase_clicks/", GrowthServer] hostVersion:SHHostVersion_Unknown body:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
+        if (shIsUniversalLinking(shareUrlStr)) //universal linking get a chance to convert to real deeplinking url
+        {
+            SHLog(@"Growth increase click try to open: %@.", responseObject);
+            NSString *deeplinkingUrl = [self parseGrowthResult:responseObject withError:nil];
+            if (shStrIsEmpty(deeplinkingUrl)) //still fail to get real deeplinking url, give universal linking to customer
+            {
+                if (StreetHawk.openUrlHandler != nil)
+                {
+                    StreetHawk.openUrlHandler(shareUrl);
+                }
+            }
+        }
         if (handler)
         {
             handler(responseObject, nil);
@@ -462,47 +478,54 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
              return; //nothing to open, usually because have registered already.
          }
          SHLog(@"Growth register try to open: %@.", result);
-         if (error == nil && result != nil && [result isKindOfClass:[NSDictionary class]])
-         {
-             NSDictionary *dictResult = (NSDictionary *)result;
-             if ([dictResult.allKeys containsObject:@"message"] && [dictResult[@"message"] isKindOfClass:[NSDictionary class]])
-             {
-                 NSDictionary *dictMessage = dictResult[@"message"];
-                 if ([dictMessage.allKeys containsObject:@"scheme"] && [dictMessage[@"scheme"] isKindOfClass:[NSString class]] && [dictMessage.allKeys containsObject:@"uri"] && [dictMessage[@"uri"] isKindOfClass:[NSString class]])
-                 {
-                     NSString *deeplinkingUrl = [NSString stringWithFormat:@"%@://%@", dictMessage[@"scheme"], dictMessage[@"uri"]];
-                     dispatch_async(dispatch_get_main_queue(), ^
-                        {
-                            BOOL handledBySDK = NO;
-                            if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
-                            {
-                                NSString *command = [NSURL URLWithString:deeplinkingUrl].host;
-                                if (command != nil && [command compare:@"launchvc" options:NSCaseInsensitiveSearch] == NSOrderedSame)
-                                {
-                                    SHDeepLinking *deepLinkingObj = [[SHDeepLinking alloc] init];
-                                    handledBySDK = [deepLinkingObj launchDeepLinkingVC:deeplinkingUrl withPushData:nil increaseGrowthClick:NO];
-                                    if (handledBySDK)
-                                    {
-                                        SHLog(@"Growth launch %@ successfully by StreetHawk SDK.", deeplinkingUrl);
-                                        return;
-                                    }
-                                }
-                            }
-                            if (!handledBySDK && StreetHawk.openUrlHandler != nil)
-                            {
-                                //not increase Growth click in this case when Growth just registered.
-                                StreetHawk.openUrlHandler([NSURL URLWithString:deeplinkingUrl]);
-                                SHLog(@"Growth handle %@ by openUrlHandler.", deeplinkingUrl);
-                            }
-                            else
-                            {
-                                SHLog(@"Growth url %@ not find suitable way to launch.", deeplinkingUrl);
-                            }
-                        });
-                 }
-             }
-         }
+         [self parseGrowthResult:result withError:error];
      }];
+}
+
+- (NSString *)parseGrowthResult:(id)result withError:(NSError *)error
+{
+    if (error == nil && result != nil && [result isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *dictResult = (NSDictionary *)result;
+        if ([dictResult.allKeys containsObject:@"message"] && [dictResult[@"message"] isKindOfClass:[NSDictionary class]])
+        {
+            NSDictionary *dictMessage = dictResult[@"message"];
+            if ([dictMessage.allKeys containsObject:@"scheme"] && [dictMessage[@"scheme"] isKindOfClass:[NSString class]] && [dictMessage.allKeys containsObject:@"uri"] && [dictMessage[@"uri"] isKindOfClass:[NSString class]])
+            {
+                NSString *deeplinkingUrl = [NSString stringWithFormat:@"%@://%@", dictMessage[@"scheme"], dictMessage[@"uri"]];
+                dispatch_async(dispatch_get_main_queue(), ^
+                   {
+                       BOOL handledBySDK = NO;
+                       if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
+                       {
+                           NSString *command = [NSURL URLWithString:deeplinkingUrl].host;
+                           if (command != nil && [command compare:@"launchvc" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+                           {
+                               SHDeepLinking *deepLinkingObj = [[SHDeepLinking alloc] init];
+                               handledBySDK = [deepLinkingObj launchDeepLinkingVC:deeplinkingUrl withPushData:nil increaseGrowthClick:NO];
+                               if (handledBySDK)
+                               {
+                                   SHLog(@"Growth launch %@ successfully by StreetHawk SDK.", deeplinkingUrl);
+                                   return;
+                               }
+                           }
+                       }
+                       if (!handledBySDK && StreetHawk.openUrlHandler != nil)
+                       {
+                           //not increase Growth click in this case when Growth just registered.
+                           StreetHawk.openUrlHandler([NSURL URLWithString:deeplinkingUrl]);
+                           SHLog(@"Growth handle %@ by openUrlHandler.", deeplinkingUrl);
+                       }
+                       else
+                       {
+                           SHLog(@"Growth url %@ not find suitable way to launch.", deeplinkingUrl);
+                       }
+                   });
+                return deeplinkingUrl;
+            }
+        }
+    }
+    return nil;
 }
 
 #pragma mark - MFMessageComposeViewControllerDelegate

@@ -235,4 +235,11 @@ extern BOOL shStrIsEmpty(NSString *str);
  */
 extern BOOL shArrayIsSame(NSArray *array1, NSArray *array2);
 
+/**
+ Check whether an open url is from universal linking. Universal linking works on iOS 9+, starting with "http" or "https". If the url is universal linking, it needs to convert to real deeplinking url such as "hawk://...".
+ @param url The pass in url string. 
+ @return If the url is universal linking return YES; otherwise return NO.
+ */
+extern BOOL shIsUniversalLinking(NSString *url);
+
 #endif //SH__UTILS__H

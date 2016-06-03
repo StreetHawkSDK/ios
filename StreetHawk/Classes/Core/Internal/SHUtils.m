@@ -710,3 +710,21 @@ BOOL shArrayIsSame(NSArray *array1, NSArray *array2)
     }
     return YES;
 }
+
+BOOL shIsUniversalLinking(NSString *url)
+{
+    if (shStrIsEmpty(url))
+    {
+        return NO;
+    }
+    if ([[UIDevice currentDevice].systemVersion doubleValue] < 9.0)
+    {
+        return NO; //universal linking only works on iOS 9.0+.
+    }
+    NSURL *parseUrl = [NSURL URLWithString:url];
+    if ([parseUrl.scheme compare:@"http" options:NSCaseInsensitiveSearch] != NSOrderedSame && [parseUrl.scheme compare:@"https" options:NSCaseInsensitiveSearch] != NSOrderedSame)
+    {
+        return NO; //universal linking is normal http(s) scheme. not limited to hwk.io host.
+    }
+    return YES;
+}
