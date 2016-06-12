@@ -58,6 +58,7 @@ int const SHLocation_BG_Interval = 5;
 int const SHLocation_BG_Distance = 500;
 
 #define ENABLE_LOCATION_SERVICE             @"ENABLE_LOCATION_SERVICE"  //key for record user manually set isLocationServiceEnabled
+#define REPORT_WORKHOME_LOCATION_ONLY       @"REPORT_WORKHOME_LOCATION_ONLY" //key for only report work home location
 
 @implementation SHApp (LocationExt)
 
@@ -116,13 +117,18 @@ int const SHLocation_BG_Distance = 500;
 
 - (BOOL)reportWorkHomeLocationOnly
 {
-    NSNumber *value = objc_getAssociatedObject(self, @selector(reportWorkHomeLocationOnly));
-    return [value boolValue];
+    NSObject *value = [[NSUserDefaults standardUserDefaults] objectForKey:REPORT_WORKHOME_LOCATION_ONLY];
+    if (value != nil && [value isKindOfClass:[NSNumber class]])
+    {
+        return [(NSNumber *)value boolValue];
+    }
+    return NO;
 }
 
 - (void)setReportWorkHomeLocationOnly:(BOOL)reportWorkHomeLocationOnly
 {
-    objc_setAssociatedObject(self, @selector(reportWorkHomeLocationOnly), [NSNumber numberWithBool:reportWorkHomeLocationOnly], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [[NSUserDefaults standardUserDefaults] setBool:reportWorkHomeLocationOnly forKey:REPORT_WORKHOME_LOCATION_ONLY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
 }
 
