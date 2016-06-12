@@ -48,9 +48,10 @@ Pod::Spec.new do |s|
   
   s.subspec 'Push' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_NOTIFICATION' }
-    sp.source_files           = 'StreetHawk/Classes/Notification/**/*.{h,m}', 'StreetHawk/Classes/ThirdParty/CBAutoScrollLabel/*.{h,m}', 'StreetHawk/Classes/ThirdParty/Emojione/*.{h,m}'
+    sp.source_files           = 'StreetHawk/Classes/Notification/**/*.{h,m}', 'StreetHawk/Classes/ThirdParty/Emojione/*.{h,m}'
     sp.public_header_files    = 'StreetHawk/Classes/Notification/**/Publish/*.h'
     sp.dependency               'streethawk/Core'
+    sp.dependency               'AutoScrollLabel'
   end
   
   s.subspec 'Locations' do |sp|
