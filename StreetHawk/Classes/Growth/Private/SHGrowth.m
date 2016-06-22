@@ -401,18 +401,25 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
     }
     //parse for "share_guid_url" in url
     NSString *share_guid_url = nil;
-    NSDictionary *dictQuery = shParseGetParamStringToDict(shareUrl.query);  //it convert key and value to raw string from encoding too.
-    if (dictQuery != nil && [dictQuery isKindOfClass:[NSDictionary class]] && [dictQuery.allKeys containsObject:@"share_guid_url"])
+    if (!shIsUniversalLinking(shareUrlStr))
     {
-        share_guid_url = dictQuery[@"share_guid_url"];
-    }
-    if (![share_guid_url isKindOfClass:[NSString class]] || shStrIsEmpty(share_guid_url))
-    {
-        if (handler)
+        NSDictionary *dictQuery = shParseGetParamStringToDict(shareUrl.query);  //it convert key and value to raw string from encoding too.
+        if (dictQuery != nil && [dictQuery isKindOfClass:[NSDictionary class]] && [dictQuery.allKeys containsObject:@"share_guid_url"])
         {
-            handler(nil, nil);
+            share_guid_url = dictQuery[@"share_guid_url"];
         }
-        return; //not from Growth deeplinking, cannot find Growth identifier, just ignore.
+        if (![share_guid_url isKindOfClass:[NSString class]] || shStrIsEmpty(share_guid_url))
+        {
+            if (handler)
+            {
+                handler(nil, nil);
+            }
+            return; //not from Growth deeplinking, cannot find Growth identifier, just ignore.
+        }
+    }
+    else
+    {
+        share_guid_url = shareUrlStr;
     }
     NSAssert(StreetHawk.currentInstall.suid != nil && StreetHawk.currentInstall.suid.length > 0, @"Install id not ready for Growth increase.");
     NSMutableDictionary *dictParam = [NSMutableDictionary dictionary];
@@ -436,6 +443,7 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
         {
             SHLog(@"Growth increase click try to open: %@.", responseObject);
             NSString *deeplinkingUrl = [self parseGrowthResult:responseObject withError:nil];
+            NSAssert(!shStrIsEmpty(deeplinkingUrl), @"Growth increase click request fail to get real deeplinking url from universal linking.");
             if (shStrIsEmpty(deeplinkingUrl)) //still fail to get real deeplinking url, give universal linking to customer
             {
                 if (StreetHawk.openUrlHandler != nil)

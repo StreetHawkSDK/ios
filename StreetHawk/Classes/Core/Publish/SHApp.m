@@ -629,7 +629,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_GrowthBridge_Increase_Notification" object:nil userInfo:@{@"url": NONULL(url.absoluteString)}]; //send Growth increase request
         if (!shIsUniversalLinking(url.absoluteString))
         {
-            StreetHawk.openUrlHandler(url); //if it's not universal linking, means it's real deeplinking url, suitable for returning to customer.
+            StreetHawk.openUrlHandler(url); //if it's not universal linking, means it's real deeplinking url, suitable for returning to customer. Universal linking gets real scheme in growth increase request, and that will return to customer.
         }
         return YES; //open url is handled by customer code.
     }
