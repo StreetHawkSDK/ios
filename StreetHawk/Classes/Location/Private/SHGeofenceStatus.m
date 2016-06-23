@@ -52,6 +52,16 @@
 @property (nonatomic) double radius;
 
 /**
+ Internal unique id for object. Optional for leaf geofence, none for inner node.
+ */
+@property (nonatomic, strong) NSString *suid;
+
+/**
+ Web console input the title name for this latitude/longitude. Optional for leaf geofence, none for inner node.
+ */
+@property (nonatomic, strong) NSString *title;
+
+/**
  Whether device is inside this geofence.
  */
 @property (nonatomic) BOOL isInside;
@@ -278,6 +288,8 @@
         userInfo[@"latitude"] = @(geoFence.latitude);
         userInfo[@"longitude"] = @(geoFence.longitude);
         userInfo[@"radius"] = @(geoFence.radius);
+        userInfo[@"suid"] = NONULL(geoFence.suid);
+        userInfo[@"title"] = NONULL(geoFence.title);
         userInfo[@"isInside"] = @(isInside);
         [[NSNotificationCenter defaultCenter] postNotificationName:SHLMEnterExitGeofenceNotification object:nil userInfo:userInfo];
     }
@@ -510,7 +522,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"[%@](%f,%f)~%f. Is inside: %@. Nodes:%@", self.serverId, self.latitude, self.longitude, self.radius, shBoolToString(self.isInside), self.arrayNodes];
+    return [NSString stringWithFormat:@"%@: [%@](%f,%f)~%f. Is inside: %@. Nodes:%@", self.title, self.serverId, self.latitude, self.longitude, self.radius, shBoolToString(self.isInside), self.arrayNodes];
 }
 
 - (CLCircularRegion *)getGeoRegion
@@ -531,6 +543,8 @@
     dict[@"latitude"] = @(self.latitude);
     dict[@"longitude"] = @(self.longitude);
     dict[@"radius"] = @(self.radius);
+    dict[@"suid"] = NONULL(self.suid);
+    dict[@"title"] = NONULL(self.title);
     dict[@"inside"] = @(self.isInside);
     if (self.isLeaves)
     {
@@ -568,6 +582,14 @@
                 geofence.latitude = [dict[@"latitude"] doubleValue];
                 geofence.longitude = [dict[@"longitude"] doubleValue];
                 geofence.radius = [dict[@"radius"] doubleValue];
+                if ([dict.allKeys containsObject:@"suid"])
+                {
+                    geofence.suid = dict[@"suid"];
+                }
+                if ([dict.allKeys containsObject:@"title"])
+                {
+                    geofence.title = dict[@"title"];
+                }
                 if ([dict.allKeys containsObject:@"inside"])
                 {
                     geofence.isInside = [dict[@"inside"] boolValue];
