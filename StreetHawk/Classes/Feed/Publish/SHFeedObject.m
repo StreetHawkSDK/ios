@@ -42,7 +42,7 @@
             NSDictionary *apsDict = (NSDictionary *)apsVal;
             NSString *alert = apsDict[@"alert"];
             int length = [contentDict[@"l"] intValue];
-            if (length >= 0 && length < alert.length)
+            if (length >= 0 && length <= alert.length)
             {
                 obj.title = [[alert substringToIndex:length] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 obj.message = [[alert substringFromIndex:length] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
