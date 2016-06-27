@@ -242,4 +242,9 @@ extern BOOL shArrayIsSame(NSArray *array1, NSArray *array2);
  */
 extern BOOL shIsUniversalLinking(NSString *url);
 
+/**
+ Automatically capture advertising identifier if customer's App add AdSupport.framework. If not return nil.
+ */
+extern NSString *shCaptureAdvertisingIdentifier();
+
 #endif //SH__UTILS__H

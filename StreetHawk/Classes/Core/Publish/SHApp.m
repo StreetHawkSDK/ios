@@ -39,6 +39,7 @@
 #define EXIT_PAGE_HISTORY                   @"EXIT_PAGE_HISTORY"  //key for record send exit log history. It's set when send exit log and cleared when send enter log. This is to avoid send duplicated exit log.
 
 #define ADS_IDENTIFIER                      @"ADS_IDENTIFIER" //user pass in advertising identifier
+#define ADS_CUSTOMERSET                     @"ADS_CUSTOMERSET" //customer manually set so not do automatically capture
 
 #define SPOTLIGHT_DEEPLINKING_MAPPING      @"SPOTLIGHT_DEEPLINKING_MAPPING" //key for spotlight identifier to deeplinking mappig
 
@@ -108,8 +109,9 @@
 - (void)checkUtcOffsetUpdate;  //Check utc_offset: if not logged before or changed, log it immediately.
 - (void)timeZoneChangeNotificationHandler:(NSNotification *)notification;  //Notification handler called when time zone change
 
-//send module tags
+//send automatic tags
 - (void)sendModuleTags; //Send current build include what modules.
+- (void)autoCaptureAdvertisingIdentifierTags; //Automatically capture advertising identifier as long as customer add <AdSupport.framework>.
 
 //Log enter/exit page.
 @property (nonatomic, strong) SHViewActivity *currentView;
@@ -312,6 +314,8 @@
     [self checkUtcOffsetUpdate];
     //check current build include which modules and send tags.
     [self sendModuleTags];
+    //capture advertising identifier in case customer enables AdSupport.framework.
+    [self autoCaptureAdvertisingIdentifierTags];
     //setup intercept app delegate
     if (self.autoIntegrateAppDelegate)
     {
@@ -638,11 +642,20 @@
 
 - (void)setAdvertisingIdentifier:(NSString *)advertisingIdentifier
 {
-    NSString *refinedAds = NONULL(advertisingIdentifier);
-    if ([refinedAds compare:StreetHawk.advertisingIdentifier] != NSOrderedSame)
+    if (advertisingIdentifier != nil) //do set
     {
-        [StreetHawk tagString:refinedAds forKey:@"sh_advertising_identifier"];
-        [[NSUserDefaults standardUserDefaults] setObject:refinedAds forKey:ADS_IDENTIFIER];
+        NSString *refinedAds = NONULL(advertisingIdentifier);
+        if ([refinedAds compare:StreetHawk.advertisingIdentifier] != NSOrderedSame)
+        {
+            [StreetHawk tagString:refinedAds forKey:@"sh_advertising_identifier"];
+            [[NSUserDefaults standardUserDefaults] setObject:refinedAds forKey:ADS_IDENTIFIER];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:ADS_CUSTOMERSET];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+    else //do clear
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:ADS_CUSTOMERSET];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
@@ -1367,6 +1380,26 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     //other cross platform will be add when implement them.
+}
+
+- (void)autoCaptureAdvertisingIdentifierTags
+{
+    BOOL needCapture = YES; //only automatically capture when customer never set this property manually, but it cannot simply check StreetHawk.advertisingIdentifier is empty because automatically captured advertising identifier can change if end-user "Reset Advertising Identifier..." in preferences.
+    NSObject *customerValue = [[NSUserDefaults standardUserDefaults] objectForKey:ADS_CUSTOMERSET];
+    if (customerValue != nil && [customerValue isKindOfClass:[NSNumber class]])
+    {
+        needCapture = ![(NSNumber *)customerValue boolValue];
+    }
+    if (needCapture)
+    {
+        NSString *captureAdvertisingIdentifier = shCaptureAdvertisingIdentifier();
+        if (!shStrIsEmpty(captureAdvertisingIdentifier))
+        {
+            StreetHawk.advertisingIdentifier = captureAdvertisingIdentifier;
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:ADS_CUSTOMERSET]; //correct the flag
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
 }
 
 - (void)endBackgroundTask:(UIBackgroundTaskIdentifier)backgroundTask

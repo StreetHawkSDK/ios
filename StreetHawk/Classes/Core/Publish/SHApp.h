@@ -139,6 +139,22 @@ The application version and build version of current Application, formatted as @
 
 /**
  StreetHawk can use `AdvertisingIdentifier` to help trace end-user, however it requires customer's App is capable to use advertising function according to Apple's agreement. If customer's App can get this, pass into StreetHawk.
+ 
+ The steps is:
+ 
+ 1. Add framework AdSupport.framework.
+ 2. Add line: #import <AdSupport/ASIdentifierManager.h>.
+ 3. Add code from system to get advertising identifier and pass to StreetHawk SDK.
+ 
+    `if([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled])
+     {
+        NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+        StreetHawk.advertisingIdentifier = idfaString;
+     }`
+ 
+ Since iOS native version 1.8.3 it can automatically capture advertising identifier as long as you add framework AdSupport.framework, thus only step 1 is required.
+ 
+ If customer App set `StreetHawk.advertisingIdentifier = XXX` manually, this will be used at priority. In case SDK capture string is different from customer's, use customer's. Customer can also set ``StreetHawk.advertisingIdentifier = nil;` to give up his own and enable automatically capture.
  */
 @property (nonatomic, strong) NSString *advertisingIdentifier;
 
