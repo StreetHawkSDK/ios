@@ -731,6 +731,7 @@ BOOL shIsUniversalLinking(NSString *url)
 
 NSString *shCaptureAdvertisingIdentifier()
 {
+#ifndef DISABLE_ADVERTISING_IDENTIFIER
     Class ASIdentifierManagerClass = NSClassFromString(@"ASIdentifierManager");
     if (ASIdentifierManagerClass) //get nil until customer add AdSupport.framework.
     {
@@ -745,5 +746,6 @@ NSString *shCaptureAdvertisingIdentifier()
             return [uuid UUIDString];
         }
     }
+#endif
     return nil;
 }
