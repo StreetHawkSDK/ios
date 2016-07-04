@@ -310,7 +310,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         return isCustomisedHandled;
     }
     BOOL shouldShowConfirmDialog = [pushData shouldShowConfirmDialog];
-    if (pushData.action == SHAction_OpenUrl)  //data is supposed to be url, for example https://www.streethawk.com
+    if (pushData.action == SHAction_OpenUrl)  //data is supposed to be url, for example https://www.google.com
     {
         if (pushData.data == nil || ![pushData.data isKindOfClass:[NSString class]] || ((NSString *)pushData.data).length == 0)
         {
