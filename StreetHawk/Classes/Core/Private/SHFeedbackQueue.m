@@ -96,6 +96,20 @@
 {
     //pushresult traces user action, no matter request succeed or fail, here means agree to post feedback.
     [pushData sendPushResult:SHResult_Accept withHandler:nil];
+    if (shStrIsEmpty(StreetHawk.currentInstall.suid))
+    {
+        SHLog(@"Warning: Feedback submit must have install id.");
+        NSError *error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: @"Parameter installid needed to determine Install."}];
+        if (showError)
+        {
+            shPresentErrorAlert(error, YES);
+        }
+        if (handler)
+        {
+            handler(nil, error);
+        }
+        return;
+    }
     NSDictionary *params = @{@"title": NONULL(feedbackTitle), @"feedback_type": @(feedbackType), @"contents": NONULL(feedbackContent), @"built_at": shFormatStreetHawkDate([NSDate date]), @"anonymous": @"no", @"installid": NONULL(StreetHawk.currentInstall.suid)};
     handler = [handler copy];
     [[SHHTTPSessionManager sharedInstance] POST:@"feedback/submit/" hostVersion:SHHostVersion_V1 body:params success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)

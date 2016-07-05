@@ -48,6 +48,16 @@
     {
         return;
     }
+    if (shStrIsEmpty(StreetHawk.currentInstall.suid))
+    {
+        SHLog(@"Warning: Fetch feeds must have install id.");
+        if (handler)
+        {
+            NSError *error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: @"Parameter installid needed to determine Install."}];
+            handler(nil, error);
+        }
+        return;
+    }
     //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setFeedTimestamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
     [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate] + 60/*by testing server side is faster than client side time sometimes, add one minutes*/) forKey:APPSTATUS_FEED_FETCH_TIME];
     [[NSUserDefaults standardUserDefaults] synchronize];

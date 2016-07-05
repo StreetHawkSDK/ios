@@ -419,11 +419,13 @@ NSString * const SHNMNotification_kPayload = @"Payload";
 
 - (void)shSetAlertSetting:(NSInteger)pauseMinutes finish:(SHCallbackHandler)handler
 {
-    if (StreetHawk.currentInstall.suid == nil || StreetHawk.currentInstall.suid.length == 0)
+    if (shStrIsEmpty(StreetHawk.currentInstall.suid))
     {
+        SHLog(@"Warning: Set alert settings must have install id.");
         if (handler)
         {
-            handler(nil, [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: @"Not install to server."}]);
+            NSError *error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: @"Parameter installid needed to determine Install."}];
+            handler(nil, error);
         }
         return;
     }

@@ -436,6 +436,11 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             return;
         }
     }
+    if (shStrIsEmpty(StreetHawk.appKey))
+    {
+        SHLog(@"Warning: Please setup APP_KEY in Info.plist or pass in by parameter.");
+        return;
+    }
     [[SHHTTPSessionManager sharedInstance] GET:@"apps/status/" hostVersion:SHHostVersion_V1 parameters:@{@"app_key": NONULL(StreetHawk.appKey)} success:nil failure:nil];
 }
 

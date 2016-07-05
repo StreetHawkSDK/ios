@@ -263,6 +263,8 @@
         return; //ignore second and later call.
     }
     self.isRegisterInstallForAppCalled = YES;
+    //Do it first for SHLog to work.
+    self.isDebugMode = isDebugMode;
     NSString *registerAppKey = appKey; //first try this function pass in.
     if (shStrIsEmpty(registerAppKey)) //second try property StreetHawk.appKey set by code.
     {
@@ -272,7 +274,6 @@
     {
         registerAppKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"APP_KEY"];
     }
-    NSAssert(!shStrIsEmpty(registerAppKey), @"Not setup App key for this register.");
     if (!shStrIsEmpty(registerAppKey))
     {
         StreetHawk.appKey = registerAppKey;
@@ -281,9 +282,8 @@
     else
     {
         SHLog(@"Warning: Please setup APP_KEY in Info.plist or pass in by parameter.");
+        return; //without app key not need to continue, but each request still checkes mandatory parameters.
     }
-    //assign pass in parameters
-    self.isDebugMode = isDebugMode;
     //initialize handlers
     self.innerLogger = [[SHLogger alloc] init];  //this creates logs db, wait till user call `registerInstallForApp` to take action. logger must before location manager, because location manager create and start to send log, for example failure, and logger must be ready.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_CreateLocationManager" object:nil];
@@ -1838,6 +1838,16 @@ NSString *SentInstall_IBeacon = @"SentInstall_IBeacon";
 
 -(void)registerInstallWithHandler:(SHCallbackHandler)handler
 {
+    if (shStrIsEmpty(StreetHawk.appKey))
+    {
+        SHLog(@"Warning: Please setup APP_KEY in Info.plist or pass in by parameter.");
+        if (handler)
+        {
+            NSError *error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: @"app_key must be given."}];
+            handler(nil, error);
+        }
+        return;
+    }
     //create a fake SHInstall to get save body
     SHInstall *fakeInstall = [[SHInstall alloc] initWithSuid:@"fake_install"];
     handler = [handler copy];
