@@ -486,11 +486,11 @@ The application version and build version of current Application, formatted as @
 
 /**
  Send log with code=8997, comment={"key": "<key>", "numeric": <value>}.
- @param value The int value of how many the key should be increment.
+ @param value The numeric value of how many the key should be increment.
  @param key Key for existing tag. Cannot be empty.
  @return If tag to server return YES; if fail to send to server return NO.
  */
-- (BOOL)incrementTag:(int)value forKey:(NSString *)key;
+- (BOOL)incrementTag:(double)value forKey:(NSString *)key;
 
 @end
 

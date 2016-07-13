@@ -1636,7 +1636,7 @@
     return [self incrementTag:1 forKey:key];
 }
 
-- (BOOL)incrementTag:(int)value forKey:(NSString *)key
+- (BOOL)incrementTag:(double)value forKey:(NSString *)key
 {
     if (!shStrIsEmpty(key))
     {
