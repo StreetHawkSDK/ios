@@ -516,6 +516,10 @@ enum
             logRecord[@"log_id"] = @(logid);
             logRecord[@"session_id"] = (sessionid==0) ? [NSNull null] : @(sessionid);
             logRecord[@"created_on_client"] = shCstringToNSString(created);
+            NSDate *recordDate = shParseDate(shCstringToNSString(created), 0);
+            NSAssert(recordDate != nil, @"Fail to parse record date.");
+            NSDateFormatter *localDateFormatter = shGetDateFormatter(nil, [NSTimeZone localTimeZone], nil);
+            logRecord[@"created_local_time"] = [localDateFormatter stringFromDate:recordDate];
             logRecord[@"code"] = @(code);
             //Code: -1. Error
             if (code == LOG_CODE_ERROR)
@@ -541,10 +545,6 @@ enum
                 NSAssert(lat != 0 && lng != 0, @"Assert fail try to send 19 or 20 with location 0.");
                 logRecord[@"latitude"] = @(lat);
                 logRecord[@"longitude"] = @(lng);
-                NSDate *recordDate = shParseDate(shCstringToNSString(created), 0);
-                NSAssert(recordDate != nil, @"Fail to parse record date.");
-                NSDateFormatter *localDateFormatter = shGetDateFormatter(nil, [NSTimeZone localTimeZone], nil);
-                logRecord[@"created_local_time"] = [localDateFormatter stringFromDate:recordDate];
             }
             //Code: 21. Beacon Update
             else if (code == LOG_CODE_LOCATION_IBEACON)
@@ -552,10 +552,6 @@ enum
                 NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
                 NSAssert(dictComment != nil, @"Fail to parse code 21 iBeacon json.");
                 logRecord[@"json"] = dictComment;
-                NSDate *recordDate = shParseDate(shCstringToNSString(created), 0);
-                NSAssert(recordDate != nil, @"Fail to parse record date.");
-                NSDateFormatter *localDateFormatter = shGetDateFormatter(nil, [NSTimeZone localTimeZone], nil);
-                logRecord[@"created_local_time"] = [localDateFormatter stringFromDate:recordDate];
             }
             //Code: 22. Geofence Update
             else if (code == LOG_CODE_LOCATION_GEOFENCE)
@@ -563,10 +559,6 @@ enum
                 NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
                 NSAssert(dictComment != nil, @"Fail to parse code 22 geofence json.");
                 logRecord[@"json"] = dictComment;
-                NSDate *recordDate = shParseDate(shCstringToNSString(created), 0);
-                NSAssert(recordDate != nil, @"Fail to parse record date.");
-                NSDateFormatter *localDateFormatter = shGetDateFormatter(nil, [NSTimeZone localTimeZone], nil);
-                logRecord[@"created_local_time"] = [localDateFormatter stringFromDate:recordDate];
             }
             //Code: 8050. UTC Offset
             else if (code == LOG_CODE_TIMEOFFSET)
@@ -620,10 +612,6 @@ enum
                 {
                     logRecord[@"longitude"] = @(lng);
                 }
-                NSDate *recordDate = shParseDate(shCstringToNSString(created), 0);
-                NSAssert(recordDate != nil, @"Fail to parse record date.");
-                NSDateFormatter *localDateFormatter = shGetDateFormatter(nil, [NSTimeZone localTimeZone], nil);
-                logRecord[@"created_local_time"] = [localDateFormatter stringFromDate:recordDate];
             }
             //Code: 8105. Sessions
             else if (code == LOG_CODE_APP_COMPLETE)
