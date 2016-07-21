@@ -236,7 +236,7 @@
     }
     pushData.code = [dict[@"code"] integerValue];
     pushData.isAppOnForeground = [dict[@"isAppOnForeground"] boolValue];
-    pushData.msgID = dict[@"msgID"];
+    pushData.msgID = [NSString stringWithFormat:@"%@", dict[@"msgID"]]; //server returns is int actually, make sure client use a string.
     pushData.isInAppSlide = [dict[@"isInAppSlide"] boolValue];
     pushData.portion = [dict[@"portion"] floatValue];
     pushData.orientation = (SHSlideDirection)[dict[@"orientation"] integerValue];

@@ -164,7 +164,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         }
     }
     //Send pushack for remote notification when enable background mode. Pushack is sent no matter App in FG or BG as much as possible, although if a) user kill App b) device restart cannot wake App.
-    pushData.msgID = NONULL(userInfo[Push_Payload_MsgId]);
+    pushData.msgID = [NSString stringWithFormat:@"%@", userInfo[Push_Payload_MsgId]]; //server returns is int actually, make sure client use a string.
     pushData.data = userInfo[Push_Payload_Data];
     if ([pushData.data isKindOfClass:[NSString class]])  //cannot assume data is string, as 8011, 8049 send dictionary
     {

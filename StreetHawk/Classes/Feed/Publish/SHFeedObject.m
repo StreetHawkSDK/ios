@@ -29,7 +29,7 @@
 + (SHFeedObject *)createFromDictionary:(NSDictionary *)dict
 {
     SHFeedObject *obj = [[SHFeedObject alloc] init];
-    obj.feed_id = dict[@"id"];
+    obj.feed_id = [NSString stringWithFormat:@"%@", dict[@"id"]]; //server returns is int actually, make sure client use a string.
     NSObject *contentVal = dict[@"content"];
     NSAssert(contentVal != nil && [contentVal isKindOfClass:[NSDictionary class]], @"content should be dictionary.");
     if (contentVal != nil && [contentVal isKindOfClass:[NSDictionary class]])
