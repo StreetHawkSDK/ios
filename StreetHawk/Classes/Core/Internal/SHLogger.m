@@ -57,7 +57,7 @@ enum
 @property (nonatomic) NSInteger fgbgSession;  //When App start or go to FG, session+1; when App go to BG session ends.
 
 //Log the information into local sqlite database. Normal events are uploaded after enough number. Special events are logged and uploaded immediately. This function has the flexibility, however for convenience [StreetHawk sendLogForCode:withComment:] is recommended.
-- (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSInteger)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler;
+- (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSString *)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler;
 //Uploads local sqlite's log records to the server. This is automatically called if system determine needs to upload.
 - (void)uploadLogsToServerWithHandler:(SHCallbackHandler)handler;
 
@@ -116,7 +116,7 @@ enum
 
 #pragma mark - log and upload functions
 
-- (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSInteger)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler
+- (void)logComment:(NSString *)comment atTime:(NSDate *)created forCode:(NSInteger)code forAssocId:(NSString *)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler
 {
     if (!streetHawkIsEnabled())
     {
@@ -215,7 +215,7 @@ enum
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
         double lat_deprecate = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
         double lng_deprecate = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
-        NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, 0, %ld, '%ld'", (long)session, shFormatStreetHawkDate(created), (long)code, [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"], lat_deprecate, lng_deprecate, (long)assocId, (long)result];
+        NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, 0, '%@', '%ld'", (long)session, shFormatStreetHawkDate(created), (long)code, [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"], lat_deprecate, lng_deprecate, assocId, (long)result];
         NSString *sql_str = [NSString stringWithFormat:@"INSERT OR REPLACE INTO '%@' (%@) VALUES (%@)", tableName, columns, values];
         @synchronized(self)
         {
@@ -466,7 +466,7 @@ enum
     [create_sql appendString:@"'lat' FLOAT, "];
     [create_sql appendString:@"'lng' FLOAT, "];
     [create_sql appendString:@"'mloc' INTEGER, "];
-    [create_sql appendString:@"'msgid' INTEGER, "];
+    [create_sql appendString:@"'msgid' TEXT, "];
     [create_sql appendString:@"'pushresult' INTEGER)"];
     sqlite3_stmt *create_stmt = NULL;
     int create_result = sqlite3_prepare_v2(database, [create_sql UTF8String], -1, &create_stmt, NULL);
@@ -510,7 +510,8 @@ enum
             const char *comment = (const char *)sqlite3_column_text(select_sql, LOG_COL_COMMENT);
             double lat_deprecate = sqlite3_column_double(select_sql, LOG_COL_LAT);
             double lng_deprecate = sqlite3_column_double(select_sql, LOG_COL_LNG);
-            int assocId = sqlite3_column_int(select_sql, LOG_COL_MSGID);
+            const char * assocId = sqlite3_column_text(select_sql, LOG_COL_MSGID);
+            NSString *assocIdStr = shCstringToNSString(assocId);
             int result = sqlite3_column_int(select_sql, LOG_COL_PUSHRESULT);
             //mandatory parameters for each logline
             logRecord[@"log_id"] = @(logid);
@@ -652,28 +653,28 @@ enum
             //Code: 8200. Feed ACK
             else if (code == LOG_CODE_FEED_ACK)
             {
-                NSAssert(assocId != 0, @"Send feed ack without assocId.");
-                logRecord[@"feed_id"] = @(assocId);
+                NSAssert(!shStrIsEmpty(assocIdStr), @"Send feed ack without assocId.");
+                logRecord[@"feed_id"] = assocIdStr;
             }
             //Code: 8201. Feed Result
             else if (code == LOG_CODE_FEED_RESULT)
             {
-                NSAssert(assocId != 0, @"Send feed result without assocId.");
-                logRecord[@"feed_id"] = @(assocId);
+                NSAssert(!shStrIsEmpty(assocIdStr), @"Send feed result without assocId.");
+                logRecord[@"feed_id"] = assocIdStr;
                 NSAssert(result == LOG_RESULT_ACCEPT || result == LOG_RESULT_CANCEL || result == LOG_RESULT_LATER, @"Send feed result with improper result.");
                 logRecord[@"result"] = @(result);
             }
             //Code: 8202. Push ACK
             else if (code == LOG_CODE_PUSH_ACK)
             {
-                NSAssert(assocId != 0, @"Send push ack without assocId.");
-                logRecord[@"message_id"] = @(assocId);
+                NSAssert(!shStrIsEmpty(assocIdStr), @"Send push ack without assocId.");
+                logRecord[@"message_id"] = assocIdStr;
             }
             //Code: 8203. Push Result
             else if (code == LOG_CODE_PUSH_RESULT)
             {
-                NSAssert(assocId != 0, @"Send push result without assocId.");
-                logRecord[@"message_id"] = @(assocId);
+                NSAssert(!shStrIsEmpty(assocIdStr), @"Send push result without assocId.");
+                logRecord[@"message_id"] = assocIdStr;
                 NSAssert(result == LOG_RESULT_ACCEPT || result == LOG_RESULT_CANCEL || result == LOG_RESULT_LATER, @"Send push result with improper result.");
                 logRecord[@"result"] = @(result);
                 NSInteger pushCode = [shCstringToNSString(comment) integerValue];
@@ -888,10 +889,10 @@ enum
 
 - (void)sendLogForCode:(NSInteger)code withComment:(NSString *)comment
 {
-    [self sendLogForCode:code withComment:comment forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
+    [self sendLogForCode:code withComment:comment forAssocId:nil withResult:100/*ignore*/ withHandler:nil];
 }
 
--(void)sendLogForCode:(NSInteger)code withComment:(NSString *)comment forAssocId:(NSInteger)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler
+-(void)sendLogForCode:(NSInteger)code withComment:(NSString *)comment forAssocId:(NSString *)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler
 {
     BOOL mustContainAssocId = NO;
     if (code == LOG_CODE_PUSH_RESULT || code == LOG_CODE_FEED_RESULT)
@@ -909,11 +910,11 @@ enum
     }
     if (mustContainAssocId)
     {
-        NSAssert(assocId != 0, @"Try to do push or feed related log (%@) without assoc id.", comment);
+        NSAssert(!shStrIsEmpty(assocId), @"Try to do push or feed related log (%@) without assoc id.", comment);
     }
     else
     {
-        NSAssert(assocId == 0, @"Try to do none push or feed related log (%@) with assoc id (%ld).", comment, (long)assocId);
+        NSAssert(shStrIsEmpty(assocId), @"Try to do none push or feed related log (%@) with assoc id (%@).", comment, assocId);
     }
     NSAssert(shStrIsEmpty(StreetHawk.appKey)/*when app not setup, logger is not initialized on purpose*/ || self.logger != nil, @"Lose logline due to logger is not ready.");
     [self.logger logComment:comment atTime:[NSDate date] forCode:code forAssocId:assocId withResult:result withHandler:handler];

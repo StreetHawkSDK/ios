@@ -23,13 +23,13 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"feed id = %ld, title = %@, message = %@, campaign = %@, content = %@, activate on %@, expires on %@, created on %@, modified on %@, deleted on %@", (long)self.feed_id, self.title, self.message, self.campaign, self.content, shFormatStreetHawkDate(self.activates), shFormatStreetHawkDate(self.expires), shFormatStreetHawkDate(self.created), shFormatStreetHawkDate(self.modified), shFormatStreetHawkDate(self.deleted)];
+    return [NSString stringWithFormat:@"feed id = %@, title = %@, message = %@, campaign = %@, content = %@, activate on %@, expires on %@, created on %@, modified on %@, deleted on %@", self.feed_id, self.title, self.message, self.campaign, self.content, shFormatStreetHawkDate(self.activates), shFormatStreetHawkDate(self.expires), shFormatStreetHawkDate(self.created), shFormatStreetHawkDate(self.modified), shFormatStreetHawkDate(self.deleted)];
 }
 
 + (SHFeedObject *)createFromDictionary:(NSDictionary *)dict
 {
     SHFeedObject *obj = [[SHFeedObject alloc] init];
-    obj.feed_id = [dict[@"id"] integerValue];
+    obj.feed_id = dict[@"id"];
     NSObject *contentVal = dict[@"content"];
     NSAssert(contentVal != nil && [contentVal isKindOfClass:[NSDictionary class]], @"content should be dictionary.");
     if (contentVal != nil && [contentVal isKindOfClass:[NSDictionary class]])

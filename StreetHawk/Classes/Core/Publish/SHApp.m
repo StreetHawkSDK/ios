@@ -599,7 +599,7 @@
         }
         else //send heart beat
         {
-            [StreetHawk sendLogForCode:LOG_CODE_HEARTBEAT withComment:@"Heart beat." forAssocId:0 withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
+            [StreetHawk sendLogForCode:LOG_CODE_HEARTBEAT withComment:@"Heart beat." forAssocId:nil withResult:100/*ignore*/ withHandler:^(NSObject *result, NSError *error)
              {
                  if (needComplete && completionHandler != nil)
                  {
@@ -943,7 +943,7 @@
                 [dictComment setObject:@(lat) forKey:@"lat"];
                 [dictComment setObject:@(lng) forKey:@"lng"];
             }
-            [StreetHawk sendLogForCode:LOG_CODE_APP_INVISIBLE withComment:shSerializeObjToJson(dictComment) forAssocId:0 withResult:100/*ignore*/ withHandler:^(id result, NSError *error)
+            [StreetHawk sendLogForCode:LOG_CODE_APP_INVISIBLE withComment:shSerializeObjToJson(dictComment) forAssocId:nil withResult:100/*ignore*/ withHandler:^(id result, NSError *error)
             {
                 //Once start not cancel the install/log request, there are 10 minutes so make sure it can finish. Call endBackgroundTask after it's done.
                 [self endBackgroundTask:backgroundTask];
@@ -1301,7 +1301,7 @@
         {
             if (!op.isCancelled)
             {
-                [StreetHawk sendLogForCode:LOG_CODE_TIMEOFFSET withComment:[NSString stringWithFormat:@"%ld", (long)offset/60] forAssocId:0 withResult:100/*ignore*/ withHandler:^(id result, NSError *error)
+                [StreetHawk sendLogForCode:LOG_CODE_TIMEOFFSET withComment:[NSString stringWithFormat:@"%ld", (long)offset/60] forAssocId:nil withResult:100/*ignore*/ withHandler:^(id result, NSError *error)
                  {
                      [[NSUserDefaults standardUserDefaults] setObject:@(offset/60) forKey:SETTING_UTC_OFFSET];
                      [[NSUserDefaults standardUserDefaults] synchronize];

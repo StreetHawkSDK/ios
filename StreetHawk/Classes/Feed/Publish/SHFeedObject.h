@@ -37,7 +37,7 @@ typedef void (^SHFeedsFetchHandler)(NSArray *arrayFeeds, NSError *error);
 /**
  A unique identifier for the feed item.
  */
-@property (nonatomic) NSInteger feed_id;
+@property (nonatomic, strong) NSString *feed_id;
 
 /**
  Title of this feed.

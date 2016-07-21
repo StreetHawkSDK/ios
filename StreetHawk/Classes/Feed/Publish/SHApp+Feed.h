@@ -39,13 +39,13 @@
  Send no priority logline for feedack. Customer developer should call this when a feed is read. Server may receive multiple loglines if user read one feed many times.
  @param feed_id The feed id of reading feed.
  */
-- (void)sendFeedAck:(NSInteger)feed_id;
+- (void)sendFeedAck:(NSString *)feed_id;
 
 /**
  Send no priority logline for feed result.
  @param feed_id The feed id of result feed.
  @param result The result for accept, or postpone or decline.
  */
-- (void)sendLogForFeed:(NSInteger)feed_id withResult:(SHResult)result;
+- (void)sendLogForFeed:(NSString *)feed_id withResult:(SHResult)result;
 
 @end

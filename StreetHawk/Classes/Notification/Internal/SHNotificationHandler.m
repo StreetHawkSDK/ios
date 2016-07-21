@@ -164,7 +164,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         }
     }
     //Send pushack for remote notification when enable background mode. Pushack is sent no matter App in FG or BG as much as possible, although if a) user kill App b) device restart cannot wake App.
-    pushData.msgID = [NONULL(userInfo[Push_Payload_MsgId]) integerValue];
+    pushData.msgID = NONULL(userInfo[Push_Payload_MsgId]);
     pushData.data = userInfo[Push_Payload_Data];
     if ([pushData.data isKindOfClass:[NSString class]])  //cannot assume data is string, as 8011, 8049 send dictionary
     {
@@ -182,7 +182,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     }
     if (notificationType == SHNotificationType_Remote || notificationType == SHNotificationType_SmartPush) //these two are sent from server so must send pushack back
     {
-        NSAssert(pushData.msgID != 0, @"Fail to get msg id from %@.", userInfo);
+        NSAssert(!shStrIsEmpty(pushData.msgID), @"Fail to get msg id from %@.", userInfo);
         //Send pushack logline
         [StreetHawk sendLogForCode:LOG_CODE_PUSH_ACK withComment:[NSString stringWithFormat:@"%@", pushData.data]/*treat data as string*/ forAssocId:pushData.msgID withResult:100/*ignore*/ withHandler:nil]; //Cannot send pushack immediately at background. In order to send at background must use background mode with "content-available:1" and let it execute in background, however once App execute in background, the badge and notification list entry is lost, causing user cannot find this notification any more. It cannot trigger local notification again to add the badge and entry as it will promote twice. Use silent remote notification and local notification does not work either, as silent remote notification cannot wake App when user kill App or device restart, causing lose message.
     }
@@ -287,7 +287,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
             jsonString = shSerializeObjToJson(pushData.data);
             if (shStrIsEmpty(jsonString))
             {
-                [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Error: Meet error when serialize %@ to json. Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100 withHandler:nil];
+                [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Error: Meet error when serialize %@ to json. Push msgid: %@.", pushData.data, pushData.msgID] forAssocId:nil withResult:100 withHandler:nil];
                  jsonString = [NSString stringWithFormat:@"%@", pushData.data]; //still try to pass to customer handler.
             }            
         }
@@ -295,7 +295,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         {
             NSAssert(NO, @"data is not string or dictionary: %@.", pushData.data);
             //Although this error logline sent, it will continue to handle jsonString and send push result.
-            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"data is not string or dictionary: %@. Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100 withHandler:nil];
+            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"data is not string or dictionary: %@. Push msgid: %@.", pushData.data, pushData.msgID] forAssocId:nil withResult:100 withHandler:nil];
             jsonString = [NSString stringWithFormat:@"%@", pushData.data];
         }
         for (id<ISHCustomiseHandler> handler in StreetHawk.arrayCustomisedHandler)
@@ -314,7 +314,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     {
         if (pushData.data == nil || ![pushData.data isKindOfClass:[NSString class]] || ((NSString *)pushData.data).length == 0)
         {
-            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Open webpage with invalid url: %@. Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
+            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Open webpage with invalid url: %@. Push msgid: %@.", pushData.data, pushData.msgID] forAssocId:nil withResult:100/*ignore*/ withHandler:nil];
             pushData.isInAppSlide = NO; //wrong data cannot slide, just forcily make confirm dialog show, because if isInAppSlide=YES will show dialog when loading slide.
             //Notification data has error, App in BG sends pushresult=1; App in FG depends on confirm dialog.
             confirmAction = ^ {
@@ -381,7 +381,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
                         BOOL vcLaunched = [deepLinkingObj launchDeepLinkingVC:deeplinkingStr withPushData:pushData increaseGrowthClick:YES];
                         if (!vcLaunched)
                         {
-                            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Fail to create VC from \"%@\". Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
+                            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Fail to create VC from \"%@\". Push msgid: %@.", pushData.data, pushData.msgID] forAssocId:nil withResult:100/*ignore*/ withHandler:nil];
                             //Cannot launch vc, however still need to show confirm dialog in FG, and sends pushresult; in BG always sends pushresult=1.
                             if ([pushData shouldShowConfirmDialog])
                             {
@@ -486,7 +486,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
                 else
                 {
                     NSString *appDisplayName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-                    [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"App %@ try to open AppStore without setup itunes id. Push msgid: %ld.", appDisplayName, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
+                    [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"App %@ try to open AppStore without setup itunes id. Push msgid: %@.", appDisplayName, pushData.msgID] forAssocId:nil withResult:100/*ignore*/ withHandler:nil];
                     //Notification data has error, App in BG sends pushresult=1; App in FG depends on confirm dialog.
                     [pushData sendPushResult:SHResult_Accept withHandler:nil];
                     SHLog(@"WARNING: Please setup iTunes Id in web console -> App Details -> App Summary.");
@@ -498,7 +498,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     {
         if (pushData.data == nil || ![pushData.data isKindOfClass:[NSString class]] || ((NSString *)pushData.data).length == 0)
         {
-            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Call telephone with invalid number: %@. Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
+            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Call telephone with invalid number: %@. Push msgid: %@.", pushData.data, pushData.msgID] forAssocId:nil withResult:100/*ignore*/ withHandler:nil];
             //Notification data has error, App in BG sends pushresult=1; App in FG depends on confirm dialog.
             confirmAction = ^ {
                 [pushData sendPushResult:SHResult_Accept withHandler:nil];
@@ -548,7 +548,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         }
         else
         {
-            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Fail to parse feedback string: \"%@\". Push msgid: %ld.", pushData.data, (long)pushData.msgID] forAssocId:0 withResult:100/*ignored*/ withHandler:nil];
+            [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Fail to parse feedback string: \"%@\". Push msgid: %@.", pushData.data, pushData.msgID] forAssocId:nil withResult:100/*ignored*/ withHandler:nil];
             //Cannot show feedback list, however still need to show confirm dialog in FG, and sends pushresult; in BG always sends pushresult=1.
             if ([pushData shouldShowConfirmDialog])
             {

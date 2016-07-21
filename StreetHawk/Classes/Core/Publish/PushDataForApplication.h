@@ -141,7 +141,7 @@ typedef enum SHAppFGBG SHAppFGBG;
 /**
  The msg id from server inside this notification, used internally.
  */
-@property (nonatomic) NSInteger msgID;
+@property (nonatomic, strong) NSString *msgID;
 
 /**
  A flag indicate whether this notification is for slide.

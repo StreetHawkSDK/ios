@@ -33,7 +33,7 @@
         _action = SHAction_Undefined;
         _code = 0; //cannot use property, otherwise it triggers set action and cause assert.
         self.isAppOnForeground = YES;
-        self.msgID = 0;
+        self.msgID = nil;
         self.isInAppSlide = NO;
         self.portion = 0;
         self.orientation = SHSlideDirection_Up;
@@ -129,7 +129,7 @@
     [displayStr appendFormat:@"Display without dialog: %@\n", self.displayWithoutDialog ? @"Yes" : @"No"];
     [displayStr appendFormat:@"Data: %@\n", self.data];
     [displayStr appendFormat:@"Code: %ld\n", (long)self.code];
-    [displayStr appendFormat:@"MsgId: %ld\n", (long)self.msgID];
+    [displayStr appendFormat:@"MsgId: %@\n", self.msgID];
     [displayStr appendFormat:@"Portion: %f\n", self.portion];
     [displayStr appendFormat:@"Orientation: %u\n", self.orientation];
     [displayStr appendFormat:@"Speed: %f\n", self.speed];
@@ -140,9 +140,9 @@
 
 - (void)sendPushResult:(SHResult)result withHandler:(SHCallbackHandler)handler
 {
-    NSAssert(self.msgID != 0, @"Notification %@ without msg id.", self);
+    NSAssert(!shStrIsEmpty(self.msgID), @"Notification %@ without msg id.", self);
     NSAssert(self.code != 0, @"Notification %@ without code.", self);
-    if (self.msgID != 0 && self.code != 0)
+    if (!shStrIsEmpty(self.msgID) && self.code != 0)
     {
         int logResult;
         switch (result)
@@ -203,18 +203,18 @@
     {
         [dict setValue:self.data forKey:@"data"];
     }
-    [dict setValue:[NSNumber numberWithInteger:self.code] forKey:@"code"];
-    [dict setValue:[NSNumber numberWithBool:self.isAppOnForeground] forKey:@"isAppOnForeground"];
-    [dict setValue:[NSNumber numberWithInteger:self.msgID] forKey:@"msgID"];
-    [dict setValue:[NSNumber numberWithBool:self.isInAppSlide] forKey:@"isInAppSlide"];
-    [dict setValue:[NSNumber numberWithFloat:self.portion] forKey:@"portion"];
-    [dict setValue:[NSNumber numberWithInteger:self.orientation] forKey:@"orientation"];
-    [dict setValue:[NSNumber numberWithFloat:self.speed] forKey:@"speed"];
+    dict[@"code"] = @(self.code);
+    dict[@"isAppOnForeground"] = @(self.isAppOnForeground);
+    dict[@"msgID"] = NONULL(self.msgID);
+    dict[@"isInAppSlide"] = @(self.isInAppSlide);
+    dict[@"portion"] = @(self.portion);
+    dict[@"orientation"] = @(self.orientation);
+    dict[@"speed"] = @(self.speed);
     if (self.sound != nil)
     {
-        [dict setValue:self.sound forKey:@"sound"];
+        dict[@"sound"] = self.sound;
     }
-    [dict setValue:[NSNumber numberWithInteger:self.badge] forKey:@"badge"];
+    dict[@"badge"] = @(self.badge);
     return dict;
 }
 
@@ -236,7 +236,7 @@
     }
     pushData.code = [dict[@"code"] integerValue];
     pushData.isAppOnForeground = [dict[@"isAppOnForeground"] boolValue];
-    pushData.msgID = [dict[@"msgID"] integerValue];
+    pushData.msgID = dict[@"msgID"];
     pushData.isInAppSlide = [dict[@"isInAppSlide"] boolValue];
     pushData.portion = [dict[@"portion"] floatValue];
     pushData.orientation = (SHSlideDirection)[dict[@"orientation"] integerValue];

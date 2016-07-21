@@ -107,7 +107,7 @@
    * if only need to save to database according to rule, trigger this handler after save to database.
    * if need to upload to server according to rule, trigger this handler after request finish sending to server.
  */
--(void)sendLogForCode:(NSInteger)code withComment:(NSString *)comment forAssocId:(NSInteger)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler;
+-(void)sendLogForCode:(NSInteger)code withComment:(NSString *)comment forAssocId:(NSString *)assocId withResult:(NSInteger)result withHandler:(SHCallbackHandler)handler;
 
 /**
  Send log for tagging a user (add or remove). For example, you can send user's birthday as {"key": "sh_date_of_birth", "value": "2012-12-12 11:11:11", "type": "datetime"}.

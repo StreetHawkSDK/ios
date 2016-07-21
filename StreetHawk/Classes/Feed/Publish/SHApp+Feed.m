@@ -98,12 +98,12 @@
     }];
 }
 
-- (void)sendFeedAck:(NSInteger)feed_id
+- (void)sendFeedAck:(NSString *)feed_id
 {
-    [self sendLogForCode:LOG_CODE_FEED_ACK withComment:[NSString stringWithFormat:@"Read feed %ld.", (long)feed_id] forAssocId:feed_id withResult:100 withHandler:nil];
+    [self sendLogForCode:LOG_CODE_FEED_ACK withComment:[NSString stringWithFormat:@"Read feed %@.", feed_id] forAssocId:feed_id withResult:100 withHandler:nil];
 }
 
-- (void)sendLogForFeed:(NSInteger)feed_id withResult:(SHResult)result
+- (void)sendLogForFeed:(NSString *)feed_id withResult:(SHResult)result
 {
     NSString *resultStr = nil;
     NSInteger resultVal = 100;
@@ -131,7 +131,7 @@
             NSAssert(NO, @"Unkown feed result meet.");
             break;
     }
-    [self sendLogForCode:LOG_CODE_FEED_RESULT withComment:[NSString stringWithFormat:@"Result %@ for feed %ld.", resultStr, (long)feed_id] forAssocId:feed_id withResult:resultVal withHandler:nil];
+    [self sendLogForCode:LOG_CODE_FEED_RESULT withComment:[NSString stringWithFormat:@"Result %@ for feed %@.", resultStr, feed_id] forAssocId:feed_id withResult:resultVal withHandler:nil];
 }
 
 @end
