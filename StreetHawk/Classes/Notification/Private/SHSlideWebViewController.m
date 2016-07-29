@@ -16,6 +16,8 @@
  */
 
 #import "SHSlideWebViewController.h"
+//header from StreetHawk
+#import "SHUtils.h" //for SHLog
 
 @interface SHSlideWebViewController ()
 
@@ -116,6 +118,7 @@
             self.contentLoadFinishHandler(NO);
         }
     }
+    SHLog(@"Fail to show slide due to error: %@", error.localizedDescription);
 }
 
 @end
