@@ -12,9 +12,12 @@
 		CB7C7E831D53340A00EC3430 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB7C7E811D53340A00EC3430 /* Main.storyboard */; };
 		CB7C7E851D53340A00EC3430 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB7C7E841D53340A00EC3430 /* Assets.xcassets */; };
 		CB7C7E881D53340A00EC3430 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB7C7E861D53340A00EC3430 /* LaunchScreen.storyboard */; };
+		FD73930F57E1E7DA4A06EC2B /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC694808020CAFB8C54AE475 /* libPods-StreetHawkDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		421698C0D2467C748087266D /* Pods-StreetHawkDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		BC694808020CAFB8C54AE475 /* libPods-StreetHawkDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-StreetHawkDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB7C7E7A1D53340A00EC3430 /* StreetHawkDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StreetHawkDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB7C7E7D1D53340A00EC3430 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CB7C7E7F1D53340A00EC3430 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +25,8 @@
 		CB7C7E841D53340A00EC3430 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CB7C7E871D53340A00EC3430 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB7C7E891D53340A00EC3430 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB7C7E8F1D53409100EC3430 /* StreetHawkDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreetHawkDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		F45F2E952E93263D409E7589 /* Pods-StreetHawkDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +34,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD73930F57E1E7DA4A06EC2B /* libPods-StreetHawkDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		96794E9FD3648E2F1C5EE23C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				421698C0D2467C748087266D /* Pods-StreetHawkDemo.debug.xcconfig */,
+				F45F2E952E93263D409E7589 /* Pods-StreetHawkDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9AD341C64B4EBF4F1251D337 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BC694808020CAFB8C54AE475 /* libPods-StreetHawkDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CB7C7E711D53340900EC3430 = {
 			isa = PBXGroup;
 			children = (
+				CB7C7E8F1D53409100EC3430 /* StreetHawkDemo-Bridging-Header.h */,
 				CB7C7E7C1D53340A00EC3430 /* Demo */,
 				CB7C7E7B1D53340A00EC3430 /* Products */,
+				96794E9FD3648E2F1C5EE23C /* Pods */,
+				9AD341C64B4EBF4F1251D337 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,9 +97,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CB7C7E8C1D53340A00EC3430 /* Build configuration list for PBXNativeTarget "StreetHawkDemo" */;
 			buildPhases = (
+				02DE1B72A9F21127531C433C /* [CP] Check Pods Manifest.lock */,
 				CB7C7E761D53340900EC3430 /* Sources */,
 				CB7C7E771D53340900EC3430 /* Frameworks */,
 				CB7C7E781D53340900EC3430 /* Resources */,
+				FC5CD8D00058294D90227EED /* [CP] Embed Pods Frameworks */,
+				74419B1290ED157ADA29C760 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -129,6 +158,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		02DE1B72A9F21127531C433C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		74419B1290ED157ADA29C760 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FC5CD8D00058294D90227EED /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CB7C7E761D53340900EC3430 /* Sources */ = {
@@ -249,27 +326,33 @@
 		};
 		CB7C7E8D1D53340A00EC3430 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 421698C0D2467C748087266D /* Pods-StreetHawkDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.StreetHawkDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "StreetHawkDemo-Bridging-Header.h";
 			};
 			name = Debug;
 		};
 		CB7C7E8E1D53340A00EC3430 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F45F2E952E93263D409E7589 /* Pods-StreetHawkDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.StreetHawkDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "StreetHawkDemo-Bridging-Header.h";
 			};
 			name = Release;
 		};
