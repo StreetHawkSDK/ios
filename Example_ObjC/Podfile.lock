@@ -1,6 +1,6 @@
 PODS:
   - AutoScrollLabel (0.4.3)
-  - MBProgressHUD (0.9.2)
+  - MBProgressHUD (1.0.0)
   - Reachability (3.2)
   - streethawk (1.8.2):
     - streethawk/Beacons (= 1.8.2)
@@ -44,8 +44,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AutoScrollLabel: bee53a1d4532569b49cbecaf9b80ca003bed3767
-  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   streethawk: 2c41b34c92a8e901a42127d546c0cc97e587f166
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 6779d8f8296815b867f6f7fea42c5b090d3bed08
+
+COCOAPODS: 1.0.1
