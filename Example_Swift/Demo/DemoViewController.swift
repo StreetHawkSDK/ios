@@ -20,16 +20,11 @@ import UIKit
 class DemoViewController: StreetHawkBaseTableViewController
 {
     //Register sample cases.
-    var arraySampleCasesTitle : [String];
+    let arraySampleCasesTitle = ["Current Install", "Tag Sample", "Location Sample", "Push Notification Sample", "Growth"]
+    let arraySampleCasesVC = ["InstallViewController"]
     
     //life cycle
     
-    required init?(coder aDecoder: NSCoder)
-    {
-        self.arraySampleCasesTitle = ["Current Install", "Tag Sample", "Location Sample", "Push Notification Sample", "Growth"];
-        super.init(coder: aDecoder);
-    }
-
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -62,24 +57,17 @@ class DemoViewController: StreetHawkBaseTableViewController
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
-//        let className = self.arraySampleCasesVC[indexPath.row]
-//        let vcClass : AnyClass? = NSClassFromString(className)
-//        assert(vcClass != nil, "Fail to create view controller class.")
-//        var vc = vcClass!()
-        
-        
+        let appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as! String
+        let className = self.arraySampleCasesVC[indexPath.row]
+        let fullClassName = "\(appName).\(className)"
+        let anyClass : AnyClass? = NSClassFromString(fullClassName)
+        assert(anyClass != nil, "Unhandle test sample case")
+        if (anyClass != nil)
+        {
+            let vcClass = anyClass as! UIViewController.Type
+            let vc = vcClass.init()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
-    
-    
-//    
-//    - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//    {
-//    NSString *className = self.arraySampleCasesVC[indexPath.row];
-//    Class vcClass = NSClassFromString(className);
-//    NSAssert(vcClass != nil, @"Fail to create view controller class.");
-//    UIViewController *vc = [[vcClass alloc] init];
-//    vc.title = self.arraySampleCasesTitle[indexPath.row];
-//    [self.navigationController pushViewController:vc animated:YES];
-//    }
 }
 

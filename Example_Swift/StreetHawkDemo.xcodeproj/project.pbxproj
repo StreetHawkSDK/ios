@@ -12,6 +12,7 @@
 		CB7C7E831D53340A00EC3430 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB7C7E811D53340A00EC3430 /* Main.storyboard */; };
 		CB7C7E851D53340A00EC3430 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB7C7E841D53340A00EC3430 /* Assets.xcassets */; };
 		CB7C7E881D53340A00EC3430 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB7C7E861D53340A00EC3430 /* LaunchScreen.storyboard */; };
+		CB7C7EA01D59BC4700EC3430 /* InstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7C7E9F1D59BC4700EC3430 /* InstallViewController.swift */; };
 		FD73930F57E1E7DA4A06EC2B /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC694808020CAFB8C54AE475 /* libPods-StreetHawkDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,7 @@
 		CB7C7E871D53340A00EC3430 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB7C7E891D53340A00EC3430 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CB7C7E8F1D53409100EC3430 /* StreetHawkDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreetHawkDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		CB7C7E9F1D59BC4700EC3430 /* InstallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstallViewController.swift; sourceTree = "<group>"; };
 		F45F2E952E93263D409E7589 /* Pods-StreetHawkDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,8 +96,9 @@
 		CB7C7E9A1D59B63800EC3430 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				CB7C7E9F1D59BC4700EC3430 /* InstallViewController.swift */,
 			);
-			name = Core;
+			path = Core;
 			sourceTree = "<group>";
 		};
 		CB7C7E9B1D59B63F00EC3430 /* Growth */ = {
@@ -254,6 +257,7 @@
 			files = (
 				CB7C7E801D53340A00EC3430 /* DemoViewController.swift in Sources */,
 				CB7C7E7E1D53340A00EC3430 /* AppDelegate.swift in Sources */,
+				CB7C7EA01D59BC4700EC3430 /* InstallViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
