@@ -82,12 +82,52 @@
 			children = (
 				CB7C7E7D1D53340A00EC3430 /* AppDelegate.swift */,
 				CB7C7E7F1D53340A00EC3430 /* DemoViewController.swift */,
+				CB7C7E9A1D59B63800EC3430 /* Core */,
+				CB7C7E9B1D59B63F00EC3430 /* Growth */,
+				CB7C7E9C1D59B64700EC3430 /* Location */,
+				CB7C7E9D1D59B65000EC3430 /* Notification */,
+				CB7C7E9E1D59B66000EC3430 /* Supporting Files */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
+		CB7C7E9A1D59B63800EC3430 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		CB7C7E9B1D59B63F00EC3430 /* Growth */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Growth;
+			sourceTree = "<group>";
+		};
+		CB7C7E9C1D59B64700EC3430 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Location;
+			sourceTree = "<group>";
+		};
+		CB7C7E9D1D59B65000EC3430 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Notification;
+			sourceTree = "<group>";
+		};
+		CB7C7E9E1D59B66000EC3430 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
 				CB7C7E811D53340A00EC3430 /* Main.storyboard */,
 				CB7C7E841D53340A00EC3430 /* Assets.xcassets */,
 				CB7C7E861D53340A00EC3430 /* LaunchScreen.storyboard */,
 				CB7C7E891D53340A00EC3430 /* Info.plist */,
 			);
-			path = Demo;
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,7 +371,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Demo/Info.plist;
+				INFOPLIST_FILE = "Demo/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.streethawk.SHSampleProd;
@@ -347,7 +387,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Demo/Info.plist;
+				INFOPLIST_FILE = "Demo/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.streethawk.SHSampleProd;
