@@ -334,7 +334,7 @@
 				INFOPLIST_FILE = Demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.StreetHawkDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = co.streethawk.SHSampleProd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "StreetHawkDemo-Bridging-Header.h";
 			};
@@ -350,7 +350,7 @@
 				INFOPLIST_FILE = Demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.StreetHawkDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = co.streethawk.SHSampleProd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "StreetHawkDemo-Bridging-Header.h";
 			};
