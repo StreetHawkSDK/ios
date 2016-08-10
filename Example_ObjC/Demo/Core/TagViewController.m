@@ -38,7 +38,7 @@
 
 - (IBAction)buttonCuidClicked:(id)sender;
 - (IBAction)buttonNumericClicked:(id)sender;
-- (IBAction)buttonSringClicked:(id)sender;
+- (IBAction)buttonStringClicked:(id)sender;
 - (IBAction)buttonDatetimeClicked:(id)sender;
 - (IBAction)buttonIncrementClicked:(id)sender;
 - (IBAction)buttonDeleteClicked:(id)sender;
@@ -79,7 +79,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return self.arrayCells[indexPath.row];;
+    return self.arrayCells[indexPath.row];
 }
 
 #pragma mark - UITextFieldDelegate handler
@@ -130,7 +130,7 @@
     [self showDoneAlert:isSuccess];
 }
 
-- (IBAction)buttonSringClicked:(id)sender
+- (IBAction)buttonStringClicked:(id)sender
 {
     NSString *key = [self.textboxKeyString.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *value = [self.textboxValueString.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
