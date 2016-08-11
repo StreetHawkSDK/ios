@@ -15,7 +15,7 @@
  * License along with this library.
  */
 
-import Foundation
+import UIKit
 
 class InstallViewController: StreetHawkBaseTableViewController
 {
