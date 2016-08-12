@@ -258,11 +258,12 @@ void shPresentErrorAlert(NSError *error, BOOL announceNetworkError)
         else
         {
             NSString *errorTitle = error.localizedFailureReason;
-            if (errorTitle == nil || errorTitle.length == 0)
+            if (shStrIsEmpty(errorTitle))
             {
-                errorTitle = [error.domain isEqualToString:SHErrorDomain] ? @"Error" : error.domain;
+                NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+                errorTitle = [NSString stringWithFormat:@"%@ reports error", appName];
             }
-            NSString *errorMsg = (error.localizedDescription != nil && error.localizedDescription.length > 0) ? error.localizedDescription : @"No detail error message. Please contact App administrator.";
+            NSString *errorMsg = !shStrIsEmpty(error.localizedDescription) ? error.localizedDescription : @"No detail error message. Please contact App administrator.";
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:errorTitle message:errorMsg delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alertView show];
         }

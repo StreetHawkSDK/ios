@@ -477,7 +477,6 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
                     }
                     else
                     {
-                        
                         appLink = (pushData.action == SHAction_RateApp) ? [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", iTunesId] : [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%@&mt=8", iTunesId];
                     }
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appLink]];
