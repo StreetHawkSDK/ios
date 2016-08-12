@@ -79,6 +79,12 @@ class InstallViewController: StreetHawkBaseTableViewController
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.installNotificationHandler(_:)), name: SHInstallUpdateSuccessNotification, object: nil)
     }
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?)
+    {
+        //even this view controller does not have xib, and super.init call just use same nil as subclass, it still need to have this init. otherwise iOS 7 crash.
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()

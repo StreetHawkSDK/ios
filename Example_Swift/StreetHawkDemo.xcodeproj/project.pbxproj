@@ -15,6 +15,8 @@
 		CB7C7EA01D59BC4700EC3430 /* InstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7C7E9F1D59BC4700EC3430 /* InstallViewController.swift */; };
 		CB95E89E1D5B16510073EF53 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E89C1D5B16510073EF53 /* TagViewController.swift */; };
 		CB95E89F1D5B16510073EF53 /* TagViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E89D1D5B16510073EF53 /* TagViewController.xib */; };
+		CB95E8A21D5C7FC60073EF53 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8A01D5C7FC60073EF53 /* LocationViewController.swift */; };
+		CB95E8A31D5C7FC60073EF53 /* LocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E8A11D5C7FC60073EF53 /* LocationViewController.xib */; };
 		FD73930F57E1E7DA4A06EC2B /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC694808020CAFB8C54AE475 /* libPods-StreetHawkDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +34,8 @@
 		CB7C7E9F1D59BC4700EC3430 /* InstallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstallViewController.swift; sourceTree = "<group>"; };
 		CB95E89C1D5B16510073EF53 /* TagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		CB95E89D1D5B16510073EF53 /* TagViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagViewController.xib; sourceTree = "<group>"; };
+		CB95E8A01D5C7FC60073EF53 /* LocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
+		CB95E8A11D5C7FC60073EF53 /* LocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationViewController.xib; sourceTree = "<group>"; };
 		F45F2E952E93263D409E7589 /* Pods-StreetHawkDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,8 +121,10 @@
 		CB7C7E9C1D59B64700EC3430 /* Location */ = {
 			isa = PBXGroup;
 			children = (
+				CB95E8A01D5C7FC60073EF53 /* LocationViewController.swift */,
+				CB95E8A11D5C7FC60073EF53 /* LocationViewController.xib */,
 			);
-			name = Location;
+			path = Location;
 			sourceTree = "<group>";
 		};
 		CB7C7E9D1D59B65000EC3430 /* Notification */ = {
@@ -203,6 +209,7 @@
 				CB7C7E881D53340A00EC3430 /* LaunchScreen.storyboard in Resources */,
 				CB95E89F1D5B16510073EF53 /* TagViewController.xib in Resources */,
 				CB7C7E851D53340A00EC3430 /* Assets.xcassets in Resources */,
+				CB95E8A31D5C7FC60073EF53 /* LocationViewController.xib in Resources */,
 				CB7C7E831D53340A00EC3430 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB95E8A21D5C7FC60073EF53 /* LocationViewController.swift in Sources */,
 				CB7C7E801D53340A00EC3430 /* DemoViewController.swift in Sources */,
 				CB95E89E1D5B16510073EF53 /* TagViewController.swift in Sources */,
 				CB7C7E7E1D53340A00EC3430 /* AppDelegate.swift in Sources */,

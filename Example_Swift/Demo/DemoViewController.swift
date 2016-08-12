@@ -21,7 +21,7 @@ class DemoViewController: StreetHawkBaseTableViewController
 {
     //Register sample cases.
     let arraySampleCasesTitle = ["Current Install", "Tag Sample", "Location Sample", "Push Notification Sample", "Growth"]
-    let arraySampleCasesVC = ["InstallViewController", "TagViewController"]
+    let arraySampleCasesVC = ["InstallViewController", "TagViewController", "LocationViewController"]
     
     //life cycle
     

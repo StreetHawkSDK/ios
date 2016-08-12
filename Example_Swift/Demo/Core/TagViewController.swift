@@ -40,6 +40,21 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
     
     //life cycle
     
+    required init?(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+    }
+    
+    override init(style: UITableViewStyle)
+    {
+        super.init(style: .Plain)
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?)
+    {
+        super.init(nibName: "TagViewController"/*must explict write name, use nil not load correct xib in iOS 7*/, bundle: nibBundleOrNil)
+    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
