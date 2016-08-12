@@ -357,7 +357,7 @@ The application version and build version of current Application, formatted as @
  Show this App's preference settings page. Only available since iOS 8. In previous iOS nothing happen.
  @return YES if can show preference page since iOS 8; NO if called in previous iOS and nothing happen.
  */
-- (BOOL)launchSystemPreferenceSettings NS_AVAILABLE_IOS(8_0);
+- (BOOL)launchSystemPreferenceSettings;
 
 /** @name Spotlight and Search */
 
