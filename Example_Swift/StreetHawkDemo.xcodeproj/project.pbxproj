@@ -19,6 +19,9 @@
 		CB95E8A31D5C7FC60073EF53 /* LocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E8A11D5C7FC60073EF53 /* LocationViewController.xib */; };
 		CB95E8A81D61A4900073EF53 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8A61D61A4900073EF53 /* NotificationViewController.swift */; };
 		CB95E8A91D61A4900073EF53 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E8A71D61A4900073EF53 /* NotificationViewController.xib */; };
+		CB95E8AC1D61AAAC0073EF53 /* ChannelShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8AA1D61AAAC0073EF53 /* ChannelShareViewController.swift */; };
+		CB95E8AD1D61AAAC0073EF53 /* ChannelShareViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E8AB1D61AAAC0073EF53 /* ChannelShareViewController.xib */; };
+		CB95E8AF1D61B15E0073EF53 /* GrowthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8AE1D61B15E0073EF53 /* GrowthViewController.swift */; };
 		FD73930F57E1E7DA4A06EC2B /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC694808020CAFB8C54AE475 /* libPods-StreetHawkDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +43,9 @@
 		CB95E8A11D5C7FC60073EF53 /* LocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationViewController.xib; sourceTree = "<group>"; };
 		CB95E8A61D61A4900073EF53 /* NotificationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		CB95E8A71D61A4900073EF53 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
+		CB95E8AA1D61AAAC0073EF53 /* ChannelShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelShareViewController.swift; sourceTree = "<group>"; };
+		CB95E8AB1D61AAAC0073EF53 /* ChannelShareViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChannelShareViewController.xib; sourceTree = "<group>"; };
+		CB95E8AE1D61B15E0073EF53 /* GrowthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrowthViewController.swift; sourceTree = "<group>"; };
 		F45F2E952E93263D409E7589 /* Pods-StreetHawkDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,8 +124,11 @@
 		CB7C7E9B1D59B63F00EC3430 /* Growth */ = {
 			isa = PBXGroup;
 			children = (
+				CB95E8AA1D61AAAC0073EF53 /* ChannelShareViewController.swift */,
+				CB95E8AB1D61AAAC0073EF53 /* ChannelShareViewController.xib */,
+				CB95E8AE1D61B15E0073EF53 /* GrowthViewController.swift */,
 			);
-			name = Growth;
+			path = Growth;
 			sourceTree = "<group>";
 		};
 		CB7C7E9C1D59B64700EC3430 /* Location */ = {
@@ -215,6 +224,7 @@
 				CB7C7E881D53340A00EC3430 /* LaunchScreen.storyboard in Resources */,
 				CB95E89F1D5B16510073EF53 /* TagViewController.xib in Resources */,
 				CB7C7E851D53340A00EC3430 /* Assets.xcassets in Resources */,
+				CB95E8AD1D61AAAC0073EF53 /* ChannelShareViewController.xib in Resources */,
 				CB95E8A91D61A4900073EF53 /* NotificationViewController.xib in Resources */,
 				CB95E8A31D5C7FC60073EF53 /* LocationViewController.xib in Resources */,
 				CB7C7E831D53340A00EC3430 /* Main.storyboard in Resources */,
@@ -282,6 +292,8 @@
 				CB95E89E1D5B16510073EF53 /* TagViewController.swift in Sources */,
 				CB7C7E7E1D53340A00EC3430 /* AppDelegate.swift in Sources */,
 				CB7C7EA01D59BC4700EC3430 /* InstallViewController.swift in Sources */,
+				CB95E8AC1D61AAAC0073EF53 /* ChannelShareViewController.swift in Sources */,
+				CB95E8AF1D61B15E0073EF53 /* GrowthViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

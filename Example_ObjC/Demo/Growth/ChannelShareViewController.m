@@ -70,7 +70,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return self.arrayCells[indexPath.row];;
+    return self.arrayCells[indexPath.row];
 }
 
 #pragma mark - UITextFieldDelegate handler
