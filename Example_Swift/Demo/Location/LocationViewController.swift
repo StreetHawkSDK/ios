@@ -101,86 +101,129 @@ class LocationViewController: StreetHawkBaseViewController
     
     func updateFailNotificationHandler(notification : NSNotification)
     {
-        
+        let error = (notification.userInfo)![SHLMNotification_kError] as! NSError
+        NSLog("Update fail: \(error.localizedDescription).")
     }
     
     func enterRegionNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        NSLog("Enter region: \(region.description).");
     }
     
     func exitRegionNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        NSLog("Exit region: \(region.description).")
     }
     
     func regionStateChangeNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        let regionStateRaw = (notification.userInfo)![SHLMNotification_kRegionState]?.integerValue
+        let regionState = CLRegionState(rawValue: regionStateRaw!)
+        var strState : String
+        switch regionState!
+        {
+        case .Unknown:
+            strState = "\"unknown\""
+        case .Inside:
+            strState = "\"inside\""
+        case .Outside:
+            strState = "\"outside\""
+        }
+        NSLog("State change to \(strState) for region: \(region.description).")
     }
     
     func monitorRegionSuccessNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        NSLog("Successfully start monitoring region: \(region.description).")
     }
     
     func monitorRegionFailNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        let error = (notification.userInfo)![SHLMNotification_kError] as! NSError
+        NSLog("Fail to monitor region \(region.description) due to error: \(error.localizedDescription).")
     }
     
     func rangeiBeaconNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        let arrayBeacons = (notification.userInfo)![SHLMNotification_kBeacons] as! NSArray
+        NSLog("Found beacons in region \(region.description): \(arrayBeacons).")
     }
     
     func rangeiBeaconFailNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        let error = (notification.userInfo)![SHLMNotification_kError] as! NSError
+        NSLog("Fail to range iBeacon region \(region.description) due to error: \(error.localizedDescription).")
     }
     
     func authorizationStatusChangeNotificationHandler(notification : NSNotification)
     {
-        
+        let statusRaw = (notification.userInfo)![SHLMNotification_kAuthStatus]?.intValue
+        let status = CLAuthorizationStatus(rawValue: statusRaw!)
+        var authStatus : String
+        switch (status!)
+        {
+        case .NotDetermined:
+            authStatus = "Not determinded"
+        case .Restricted:
+            authStatus = "Restricted"
+        case .Denied:
+            authStatus = "Denied"
+        case .AuthorizedAlways: //equal kCLAuthorizationStatusAuthorized (3)
+            authStatus = "Always Authorized"
+        case .AuthorizedWhenInUse:
+            authStatus = "When in Use"
+        }
+        NSLog("Authorization status change to: \(authStatus).")
     }
     
     func startStandardLocationMonitorNotificationHandler(notification : NSNotification)
     {
-        
+        NSLog("Start monitoring standard geolocation change.")
     }
     
     func stopStandardLocationMonitorNotificationHandler(notification : NSNotification)
     {
-        
+        NSLog("Stop monitoring standard geolocation change.")
     }
     
     func startSignificantLocationMonitorNotificationHandler(notification : NSNotification)
     {
-        
+        NSLog("Start monitoring significant geolocation change.")
     }
     
     func stopSignificantLocationMonitorNotificationHandler(notification : NSNotification)
     {
-        
+        NSLog("Stop monitoring significant geolocation change.")
     }
     
     func startMonitorRegionNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        NSLog("Start to monitor region: \(region.description).")
     }
     
     func stopMonitorRegionNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        NSLog("Stop monitoring region: \(region.description).")
     }
     
     func startRangeiBeaconRegionNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        NSLog("Start to range one iBeacon region: \(region.description).", region.description)
     }
     
     func stopRangeiBeaconRegionNotificationHandler(notification : NSNotification)
     {
-        
+        let region = (notification.userInfo)![SHLMNotification_kRegion] as! CLRegion
+        NSLog("Stop ranging one iBeacon region: \(region.description).")
     }
 }
