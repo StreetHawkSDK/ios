@@ -17,6 +17,8 @@
 		CB95E89F1D5B16510073EF53 /* TagViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E89D1D5B16510073EF53 /* TagViewController.xib */; };
 		CB95E8A21D5C7FC60073EF53 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8A01D5C7FC60073EF53 /* LocationViewController.swift */; };
 		CB95E8A31D5C7FC60073EF53 /* LocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E8A11D5C7FC60073EF53 /* LocationViewController.xib */; };
+		CB95E8A81D61A4900073EF53 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8A61D61A4900073EF53 /* NotificationViewController.swift */; };
+		CB95E8A91D61A4900073EF53 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E8A71D61A4900073EF53 /* NotificationViewController.xib */; };
 		FD73930F57E1E7DA4A06EC2B /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC694808020CAFB8C54AE475 /* libPods-StreetHawkDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +38,8 @@
 		CB95E89D1D5B16510073EF53 /* TagViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagViewController.xib; sourceTree = "<group>"; };
 		CB95E8A01D5C7FC60073EF53 /* LocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		CB95E8A11D5C7FC60073EF53 /* LocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationViewController.xib; sourceTree = "<group>"; };
+		CB95E8A61D61A4900073EF53 /* NotificationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		CB95E8A71D61A4900073EF53 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
 		F45F2E952E93263D409E7589 /* Pods-StreetHawkDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,8 +134,10 @@
 		CB7C7E9D1D59B65000EC3430 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
+				CB95E8A61D61A4900073EF53 /* NotificationViewController.swift */,
+				CB95E8A71D61A4900073EF53 /* NotificationViewController.xib */,
 			);
-			name = Notification;
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		CB7C7E9E1D59B66000EC3430 /* Supporting Files */ = {
@@ -209,6 +215,7 @@
 				CB7C7E881D53340A00EC3430 /* LaunchScreen.storyboard in Resources */,
 				CB95E89F1D5B16510073EF53 /* TagViewController.xib in Resources */,
 				CB7C7E851D53340A00EC3430 /* Assets.xcassets in Resources */,
+				CB95E8A91D61A4900073EF53 /* NotificationViewController.xib in Resources */,
 				CB95E8A31D5C7FC60073EF53 /* LocationViewController.xib in Resources */,
 				CB7C7E831D53340A00EC3430 /* Main.storyboard in Resources */,
 			);
@@ -271,6 +278,7 @@
 			files = (
 				CB95E8A21D5C7FC60073EF53 /* LocationViewController.swift in Sources */,
 				CB7C7E801D53340A00EC3430 /* DemoViewController.swift in Sources */,
+				CB95E8A81D61A4900073EF53 /* NotificationViewController.swift in Sources */,
 				CB95E89E1D5B16510073EF53 /* TagViewController.swift in Sources */,
 				CB7C7E7E1D53340A00EC3430 /* AppDelegate.swift in Sources */,
 				CB7C7EA01D59BC4700EC3430 /* InstallViewController.swift in Sources */,
