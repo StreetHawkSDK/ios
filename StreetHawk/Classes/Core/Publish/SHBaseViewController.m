@@ -20,6 +20,33 @@
 #import "SHApp.h" //for `StreetHawk shNotifyPageEnter/Exit`
 #import "SHCoverWindow.h" //for cover window type check
 
+@interface NSString (SHEnterExitExt)
+
+//Before logline enter or exit the page name, do some refinement.
+- (NSString *)refinePageName;
+
+@end
+
+@implementation NSString (Private)
+
+- (NSString *)refinePageName
+{
+    NSString *page = self;
+    //Swift class name contains App name, remove it before logline.
+    if ([page rangeOfString:@"."].location != NSNotFound)
+    {
+        NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+        NSString *appPrefix = [NSString stringWithFormat:@"%@.", appName];
+        if ([page hasPrefix:appPrefix])
+        {
+            page = [page substringFromIndex:appPrefix.length];
+        }
+    }
+    return page;
+}
+
+@end
+
 @implementation StreetHawkBaseViewController
 
 - (void)viewDidLoad
@@ -48,7 +75,7 @@
     [super viewDidAppear:animated];
     if (![self.view.window isKindOfClass:[SHCoverWindow class]]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
-        [StreetHawk shNotifyPageEnter:self.class.description];
+        [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
 }
 
@@ -57,7 +84,7 @@
     [super viewWillDisappear:animated];
     if (![self.view.window isKindOfClass:[SHCoverWindow class]])  //If push two slides together, this happen.
     {
-        [StreetHawk shNotifyPageExit:self.class.description];
+        [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
     }
 }
 
@@ -86,7 +113,7 @@
     [super viewDidAppear:animated];
     if (![self.view.window isKindOfClass:[SHCoverWindow class]]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
-        [StreetHawk shNotifyPageEnter:self.class.description];
+        [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
 }
 
@@ -95,7 +122,7 @@
     [super viewWillDisappear:animated];
     if (![self.view.window isKindOfClass:[SHCoverWindow class]])  //If push two slides together, this happen.
     {
-        [StreetHawk shNotifyPageExit:self.class.description];
+        [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
     }
 }
 
