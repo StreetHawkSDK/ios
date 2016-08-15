@@ -18,7 +18,7 @@
 #import "GenericShareViewController.h"
 #import <MessageUI/MessageUI.h>
 
-@interface GenericShareViewController () <MFMailComposeViewControllerDelegate>
+@interface GenericShareViewController ()
 
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellID;
 @property (strong, nonatomic) IBOutlet UITextField *textboxID;
@@ -119,19 +119,8 @@
                if (error == nil)
                {
                    NSString *shareUrl = (NSString *)result;
-                   if ([MFMailComposeViewController canSendMail])
-                   {
-                       MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-                       mc.mailComposeDelegate = self;
-                       [mc setMessageBody:[NSString stringWithFormat:@"%@\n\n%@", self.textboxEmailBody.text, shareUrl] isHTML:NO];
-                       [mc setSubject:self.textboxEmailSubject.text];
-                       [self presentViewController:mc animated:YES completion:nil];
-                   }
-                   else
-                   {
-                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"share_guid_url" message:shareUrl delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                       [alert show];
-                   }
+                   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"share_guid_url" message:shareUrl delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                   [alert show];
                }
                else
                {
@@ -140,14 +129,6 @@
                }
            });
     }];
-}
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
-{
-    if (!error)
-    {
-        [controller dismissViewControllerAnimated:YES completion:nil];
-    }
 }
 
 @end
