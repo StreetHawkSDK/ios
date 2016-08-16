@@ -382,7 +382,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
                         if (!vcLaunched)
                         {
                             [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Fail to create VC from \"%@\". Push msgid: %@.", pushData.data, pushData.msgID] forAssocId:nil withResult:100/*ignore*/ withHandler:nil];
-                            //Cannot launch vc, however still need to show confirm dialog in FG, and sends pushresult; in BG always sends pushresult=1.
+                            //Cannot launch vc, however still need to show confirm dialog in FG, and sends pushresult; in BG always sends pushresult=1. There was a discussion that not hide confirm dialog to hide error in this case.
                             if ([pushData shouldShowConfirmDialog])
                             {
                                 NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];

@@ -723,11 +723,11 @@ BOOL shIsUniversalLinking(NSString *url)
         return NO; //universal linking only works on iOS 9.0+.
     }
     NSURL *parseUrl = [NSURL URLWithString:url];
-    if ([parseUrl.scheme compare:@"http" options:NSCaseInsensitiveSearch] != NSOrderedSame && [parseUrl.scheme compare:@"https" options:NSCaseInsensitiveSearch] != NSOrderedSame)
+    if (!shStrIsEmpty(parseUrl.scheme) && [parseUrl.scheme compare:@"http" options:NSCaseInsensitiveSearch] == NSOrderedSame && [parseUrl.scheme compare:@"https" options:NSCaseInsensitiveSearch] == NSOrderedSame)
     {
-        return NO; //universal linking is normal http(s) scheme. not limited to hwk.io host.
+        return YES; //universal linking is normal http(s) scheme. not limited to hwk.io host.
     }
-    return YES;
+    return NO;
 }
 
 NSString *shCaptureAdvertisingIdentifier()
