@@ -146,7 +146,20 @@
     Class vcClass = NSClassFromString(vcClassName);
     if (![vcClass isSubclassOfClass:[UIViewController class]]) //first make sure the vc can be created successfully
     {
-        return NO;
+        //Directly use class name fail, try Swift project way: AppName.VCClassName
+        NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+        NSString *fullName = [NSString stringWithFormat:@"%@.%@", appName, vcClassName];
+        vcClass = NSClassFromString(fullName);
+        if (![vcClass isSubclassOfClass:[UIViewController class]])
+        {
+            //Last try mixed Swift project way: _TtC[app name length][app name][class name length][class name]
+            fullName = [NSString stringWithFormat:@"_TtC%d%@%d%@", appName.length, appName, vcClassName.length, vcClassName];
+            vcClass = NSClassFromString(fullName);
+            if (![vcClass isSubclassOfClass:[UIViewController class]])
+            {
+                return NO;
+            }
+        }
     }
     //check this VC is already show. If not have parameter and already show, stop; if have parameter, check reuse to decide create new vc or not.
     UIViewController *visibleVC = nil;

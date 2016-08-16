@@ -21,7 +21,7 @@ class DeepLinkingViewController: StreetHawkBaseViewController
 {
     @IBOutlet var labelParam: UILabel!
     
-    var dictParam : NSDictionary = [:]
+    var dictParam : NSDictionary? = [:]
     
     //life cycle
     
@@ -51,6 +51,12 @@ class DeepLinkingViewController: StreetHawkBaseViewController
     
     override func displayDeepLinkingToUI()
     {
-        self.labelParam.text = "\(self.dictParam)"
+        if (self.isViewLoaded())
+        {
+            if (self.dictParam != nil)
+            {
+                self.labelParam.text = "\(self.dictParam)"
+            }
+        }
     }
 }
