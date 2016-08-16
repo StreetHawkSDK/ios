@@ -24,6 +24,8 @@
 		CB95E8AF1D61B15E0073EF53 /* GrowthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8AE1D61B15E0073EF53 /* GrowthViewController.swift */; };
 		CB95E8B21D61BB920073EF53 /* GenericShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8B01D61BB920073EF53 /* GenericShareViewController.swift */; };
 		CB95E8B31D61BB920073EF53 /* GenericShareViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E8B11D61BB920073EF53 /* GenericShareViewController.xib */; };
+		CB95E8B61D61C66D0073EF53 /* DeepLinkingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95E8B41D61C66D0073EF53 /* DeepLinkingViewController.swift */; };
+		CB95E8B71D61C66D0073EF53 /* DeepLinkingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB95E8B51D61C66D0073EF53 /* DeepLinkingViewController.xib */; };
 		FD73930F57E1E7DA4A06EC2B /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC694808020CAFB8C54AE475 /* libPods-StreetHawkDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		CB95E8AE1D61B15E0073EF53 /* GrowthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrowthViewController.swift; sourceTree = "<group>"; };
 		CB95E8B01D61BB920073EF53 /* GenericShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericShareViewController.swift; sourceTree = "<group>"; };
 		CB95E8B11D61BB920073EF53 /* GenericShareViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GenericShareViewController.xib; sourceTree = "<group>"; };
+		CB95E8B41D61C66D0073EF53 /* DeepLinkingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLinkingViewController.swift; sourceTree = "<group>"; };
+		CB95E8B51D61C66D0073EF53 /* DeepLinkingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeepLinkingViewController.xib; sourceTree = "<group>"; };
 		F45F2E952E93263D409E7589 /* Pods-StreetHawkDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,6 +153,8 @@
 		CB7C7E9D1D59B65000EC3430 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
+				CB95E8B41D61C66D0073EF53 /* DeepLinkingViewController.swift */,
+				CB95E8B51D61C66D0073EF53 /* DeepLinkingViewController.xib */,
 				CB95E8A61D61A4900073EF53 /* NotificationViewController.swift */,
 				CB95E8A71D61A4900073EF53 /* NotificationViewController.xib */,
 			);
@@ -235,6 +241,7 @@
 				CB95E8A31D5C7FC60073EF53 /* LocationViewController.xib in Resources */,
 				CB95E8B31D61BB920073EF53 /* GenericShareViewController.xib in Resources */,
 				CB7C7E831D53340A00EC3430 /* Main.storyboard in Resources */,
+				CB95E8B71D61C66D0073EF53 /* DeepLinkingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +305,7 @@
 				CB95E8A81D61A4900073EF53 /* NotificationViewController.swift in Sources */,
 				CB95E89E1D5B16510073EF53 /* TagViewController.swift in Sources */,
 				CB95E8B21D61BB920073EF53 /* GenericShareViewController.swift in Sources */,
+				CB95E8B61D61C66D0073EF53 /* DeepLinkingViewController.swift in Sources */,
 				CB7C7E7E1D53340A00EC3430 /* AppDelegate.swift in Sources */,
 				CB7C7EA01D59BC4700EC3430 /* InstallViewController.swift in Sources */,
 				CB95E8AC1D61AAAC0073EF53 /* ChannelShareViewController.swift in Sources */,
