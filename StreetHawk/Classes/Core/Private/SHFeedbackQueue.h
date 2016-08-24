@@ -38,6 +38,6 @@
 /**
  Submit feedback to StreetHawk server.
  */
-- (void)submitFeedbackForTitle:(NSString *)feedbackTitle withType:(NSInteger)feedbackType withContent:(NSString *)feedbackContent withPushData:(PushDataForApplication *)pushData withShowError:(BOOL)showError withHandler:(SHCallbackHandler)handler;
+- (void)submitFeedbackForTitle:(NSString *)feedbackTitle withType:(NSInteger)feedbackType withContent:(NSString *)feedbackContent withPushData:(PushDataForApplication *)pushData withHandler:(SHCallbackHandler)handler;
 
 @end

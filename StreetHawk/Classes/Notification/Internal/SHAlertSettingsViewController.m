@@ -52,7 +52,7 @@
     //Load alert settings from server and update UI
     [StreetHawk getAlertSettingPauseUntil:^(NSObject *result, NSError *error)
     {
-        shPresentErrorAlert(error, YES);
+        shPresentErrorAlertOrLog(error);
         if (error == nil)
         {
             self.pauseMinutes = [StreetHawk getAlertSettingMinutes];
@@ -111,7 +111,7 @@
     [StreetHawk shSetAlertSetting:self.pauseMinutes finish:^(NSObject *result, NSError *error)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            shPresentErrorAlert(error, YES);
+            shPresentErrorAlertOrLog(error);
             self.buttonSave.enabled = YES;
             self.buttonCancel.enabled = YES;
             if (error == nil)

@@ -110,11 +110,10 @@ extern NSString *shAppendString(NSString *str1, NSString *str2);
 /** @name UI Utility */
 
 /**
- A common way to present error by showing an alert view with error details.
+ A common way to present error by showing details in an alert view or XCode console log. It's only used in SHSampleDev and SHSampleProd to show alert, others show logline.
  @param error The error to present. If error is nil nothing happen.
- @param announceNetworkError If the error is network problem, this decides whether to show the alert view or not.
  */
-extern void shPresentErrorAlert(NSError *error, BOOL announceNetworkError);
+extern void shPresentErrorAlertOrLog(NSError *error);
 
 /**
  Get corresponding view controller for a view.

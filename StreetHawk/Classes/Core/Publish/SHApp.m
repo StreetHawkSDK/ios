@@ -487,7 +487,7 @@
     {
         return;
     }
-    [[SHFeedbackQueue shared] submitFeedbackForTitle:title withType:0/*discussed: this is not used now*/ withContent:content withPushData:nil withShowError:NO withHandler:handler];
+    [[SHFeedbackQueue shared] submitFeedbackForTitle:title withType:0/*discussed: this is not used now*/ withContent:content withPushData:nil withHandler:handler];
 }
 
 - (void)shNotifyPageEnter:(NSString *)page

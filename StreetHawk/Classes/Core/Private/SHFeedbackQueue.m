@@ -92,18 +92,14 @@
     [self handleFeedback];
 }
 
-- (void)submitFeedbackForTitle:(NSString *)feedbackTitle withType:(NSInteger)feedbackType withContent:(NSString *)feedbackContent withPushData:(PushDataForApplication *)pushData withShowError:(BOOL)showError withHandler:(SHCallbackHandler)handler
+- (void)submitFeedbackForTitle:(NSString *)feedbackTitle withType:(NSInteger)feedbackType withContent:(NSString *)feedbackContent withPushData:(PushDataForApplication *)pushData withHandler:(SHCallbackHandler)handler
 {
     //pushresult traces user action, no matter request succeed or fail, here means agree to post feedback.
     [pushData sendPushResult:SHResult_Accept withHandler:nil];
     if (shStrIsEmpty(StreetHawk.currentInstall.suid))
     {
-        SHLog(@"Warning: Feedback submit must have install id.");
         NSError *error = [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: @"Parameter installid needed to determine Install."}];
-        if (showError)
-        {
-            shPresentErrorAlert(error, YES);
-        }
+        shPresentErrorAlertOrLog(error);
         if (handler)
         {
             handler(nil, error);
@@ -128,10 +124,7 @@
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
     {
-        if (showError)
-        {
-            shPresentErrorAlert(error, YES);
-        }
+        shPresentErrorAlertOrLog(error);
         if (pushData != nil && pushData.msgID != 0)
         {
             [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Send feedback meet error: %@. Push msgid: %ld.", error.localizedDescription, (long)pushData.msgID] forAssocId:0 withResult:100/*ignore*/ withHandler:nil];
@@ -182,7 +175,7 @@
             {
                 if (isSubmit)
                 {
-                    [self submitFeedbackForTitle:title withType:0/*discussed: this is not used now*/ withContent:content withPushData:pushData withShowError:YES withHandler:nil];
+                    [self submitFeedbackForTitle:title withType:0/*discussed: this is not used now*/ withContent:content withPushData:pushData withHandler:nil];
                 }
                 else
                 {
@@ -298,7 +291,7 @@
                         feedbackTitle = feedbackChoice;
                     }
                     NSAssert(feedbackTitle != nil, @"Feedback title is mandatory.");
-                    [self submitFeedbackForTitle:feedbackTitle withType:0/*discussed: this is not used now*/ withContent:feedbackContent withPushData:pushData withShowError:YES withHandler:nil];
+                    [self submitFeedbackForTitle:feedbackTitle withType:0/*discussed: this is not used now*/ withContent:feedbackContent withPushData:pushData withHandler:nil];
                     [self checkNextFeedback];
                 }
             };

@@ -222,7 +222,7 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
                  dispatch_async(dispatch_get_main_queue(), ^
                     {
                         [MBProgressHUD hideAllHUDsForView:presentWindow animated:YES];
-                        shPresentErrorAlert(error, YES);
+                        shPresentErrorAlertOrLog(error);
                         if (error == nil)
                         {
                             NSString *share_guid_url = (NSString *)result;

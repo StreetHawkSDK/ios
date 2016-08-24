@@ -235,39 +235,33 @@ NSDictionary *shParseGetParamStringToDict(NSString *str)
 
 #pragma mark - UI Utility
 
-//Tells if the error is one that describes a no-connection to the internet and/or host.
-BOOL shIsNetworkError(NSError *error)
-{
-    return (error.domain == NSURLErrorDomain && (error.code == NSURLErrorNotConnectedToInternet || error.code == kCFURLErrorCannotConnectToHost || error.code == kCFURLErrorNetworkConnectionLost));
-}
-
-void shPresentErrorAlert(NSError *error, BOOL announceNetworkError)
+void shPresentErrorAlertOrLog(NSError *error)
 {
     if (error == nil)  //this checks error inside, so the caller can safely call it directly without checking error.
-        return;
-    dispatch_async(dispatch_get_main_queue(), ^
     {
-        if (shIsNetworkError(error))
-        {
-            if (announceNetworkError)
-            {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Network error" message:@"You are not currently connected to the internet. Please try again later." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [alertView show];
-            }
-        }
-        else
-        {
-            NSString *errorTitle = error.localizedFailureReason;
-            if (shStrIsEmpty(errorTitle))
-            {
-                NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
-                errorTitle = [NSString stringWithFormat:@"%@ reports error", appName];
-            }
-            NSString *errorMsg = !shStrIsEmpty(error.localizedDescription) ? error.localizedDescription : @"No detail error message. Please contact App administrator.";
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:errorTitle message:errorMsg delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alertView show];
-        }
-    });
+        return;
+    }
+    NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+    if ([bundleId rangeOfString:@"co.streethawk.SHSample"].location != NSNotFound)
+    {
+        //show error alert for StreetHawk SHSampleDev/Prod
+        dispatch_async(dispatch_get_main_queue(), ^
+           {
+               NSString *errorTitle = error.localizedFailureReason;
+               if (shStrIsEmpty(errorTitle))
+               {
+                   NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+                   errorTitle = [NSString stringWithFormat:@"%@ reports error", appName];
+               }
+               NSString *errorMsg = !shStrIsEmpty(error.localizedDescription) ? error.localizedDescription : @"No detail error message. Please contact App administrator.";
+               UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:errorTitle message:errorMsg delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+               [alertView show];
+           });
+    }
+    else
+    {
+        NSLog(@"StreetHawk report error: %@.", error);
+    }
 }
 
 //Go traverse to UIView's responder till get a UIViewController.
