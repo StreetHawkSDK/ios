@@ -165,7 +165,7 @@
             if (needFetch)
             {
                 //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setIBeaconTimestamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
-                [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate]) forKey:APPSTATUS_IBEACON_FETCH_TIME];
+                [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate] + 60/*avoid double accurate*/) forKey:APPSTATUS_IBEACON_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 [[SHHTTPSessionManager sharedInstance] GET:@"/ibeacons/" hostVersion:SHHostVersion_V1 parameters:nil success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
                 {

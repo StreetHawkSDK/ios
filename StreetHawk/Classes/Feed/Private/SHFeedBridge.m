@@ -74,7 +74,7 @@
             if (needFetch)
             {
                 //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setFeedTimestamp` again. Customer's code controls feed function, they can do fetch anytime want.
-                [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate]) forKey:APPSTATUS_FEED_FETCH_TIME];
+                [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate] + 60/*avoid double accurate*/) forKey:APPSTATUS_FEED_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 StreetHawk.newFeedHandler(); //just notice user, not do fetch actually.
             }
