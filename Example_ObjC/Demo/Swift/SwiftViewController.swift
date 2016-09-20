@@ -25,28 +25,28 @@ class SwiftViewController: StreetHawkBaseViewController
     }
     
     //override init to make sure load nib "SwiftViewController", as class name is "StreetHawkDemo.SwiftViewController", if not override fail to find right nib and cause black screen.
-    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!)
+    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: Bundle!)
     {
         super.init(nibName: "SwiftViewController", bundle: nil)
     }
     
-    @IBAction func buttonFeedbackClicked(sender: AnyObject)
+    @IBAction func buttonFeedbackClicked(_ sender: AnyObject)
     {
         let arrayChoice = ["Product not Available", "Wrong Address", "Description mismatch"]
         SHApp.sharedInstance().shFeedback(arrayChoice, needInputDialog: true, needConfirmDialog: false, withTitle: "What problem do you meet?", withMessage: "Your feedback will be very helpful!", withPushData: nil)
     }
     
-    @IBAction func buttonTagClicked(sender: AnyObject)
+    @IBAction func buttonTagClicked(_ sender: AnyObject)
     {
-        SHApp.sharedInstance().tagString("a@a.com", forKey: "sh_email")
+        SHApp.sharedInstance().tagString("a@a.com" as NSObject!, forKey: "sh_email")
         SHApp.sharedInstance().removeTag("sh_email")
-        SHApp.sharedInstance().tagDatetime(NSDate(), forKey: "visit_time")
+        SHApp.sharedInstance().tagDatetime(Date(), forKey: "visit_time")
         SHApp.sharedInstance().tagNumeric(100, forKey: "click_count")
         SHApp.sharedInstance().incrementTag("click_count")
-        SHApp.sharedInstance().tagString("+0123456789", forKey: "sh_phone")
+        SHApp.sharedInstance().tagString("+0123456789" as NSObject!, forKey: "sh_phone")
     }    
     
-    @IBAction func buttonFeedClicked(sender: AnyObject)
+    @IBAction func buttonFeedClicked(_ sender: AnyObject)
     {
         SHApp.sharedInstance().feed(0, withHandler: {arrayFeeds, error in
             if (error != nil)
@@ -55,10 +55,10 @@ class SwiftViewController: StreetHawkBaseViewController
             }
             else
             {
-                for feedObj in arrayFeeds
+                for feedObj in arrayFeeds!
                 {
-                    print("Feed obj <\(feedObj.feed_id)>: \(feedObj).")
-                    SHApp.sharedInstance().sendLogForFeed(feedObj.feed_id, withResult:SHResult_Accept)
+                    print("Feed obj <\((feedObj as AnyObject).feed_id)>: \(feedObj).")
+                    SHApp.sharedInstance().sendLog(forFeed: (feedObj as AnyObject).feed_id, with:SHResult_Accept)
                 }
             }
         })
