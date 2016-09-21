@@ -16,6 +16,26 @@
  */
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class GenericShareViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
 {
@@ -50,10 +70,10 @@ class GenericShareViewController: StreetHawkBaseTableViewController, UITextField
     
     override init(style: UITableViewStyle)
     {
-        super.init(style: .Plain)
+        super.init(style: .plain)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?)
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
         super.init(nibName: "GenericShareViewController"/*must explict write name, use nil not load correct xib in iOS 7*/, bundle: nibBundleOrNil)
     }
@@ -66,30 +86,30 @@ class GenericShareViewController: StreetHawkBaseTableViewController, UITextField
     
     //Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    override func numberOfSections(in tableView: UITableView) -> Int
     {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return self.arrayCells.count
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        let cell = self.arrayCells[indexPath.row]
+        let cell = self.arrayCells[(indexPath as NSIndexPath).row]
         return cell.bounds.size.height
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        return self.arrayCells[indexPath.row]
+        return self.arrayCells[(indexPath as NSIndexPath).row]
     }
     
     //UITextFieldDelegate handler
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
         return true
@@ -97,12 +117,12 @@ class GenericShareViewController: StreetHawkBaseTableViewController, UITextField
     
     //event handler
     
-    @IBAction func buttonShareClicked(sender: AnyObject)
+    @IBAction func buttonShareClicked(_ sender: AnyObject)
     {
-        var deeplinkingUrl : NSURL?
-        if (self.textboxUrl.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        var deeplinkingUrl : URL?
+        if (self.textboxUrl.text?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
-            deeplinkingUrl = NSURL(string: self.textboxUrl.text!)
+            deeplinkingUrl = URL(string: self.textboxUrl.text!)
             if !(deeplinkingUrl != nil)
             {
                 let alertView = UIAlertView(title: "Deeplinking url format is invalid. Correct it or delete it.", message: nil, delegate: nil, cancelButtonTitle: "OK")
@@ -110,10 +130,10 @@ class GenericShareViewController: StreetHawkBaseTableViewController, UITextField
                 return
             }
         }
-        var destinationUrl : NSURL?
-        if (self.textboxDestinationUrl.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        var destinationUrl : URL?
+        if (self.textboxDestinationUrl.text?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
-            destinationUrl = NSURL(string: self.textboxDestinationUrl.text!)
+            destinationUrl = URL(string: self.textboxDestinationUrl.text!)
             if !(destinationUrl != nil)
             {
                 let alertView = UIAlertView(title: "Destination url format is invalid. Correct it or delete it.", message: nil, delegate: nil, cancelButtonTitle: "OK")
@@ -121,9 +141,8 @@ class GenericShareViewController: StreetHawkBaseTableViewController, UITextField
                 return
             }
         }
-        SHApp.sharedInstance().originateShareWithCampaign(self.textboxID.text, withSource: self.textboxSource.text, withMedium: self.textboxMedium.text, withContent: self.textboxContent.text, withTerm: self.textboxTerm.text, shareUrl: deeplinkingUrl, withDefaultUrl: destinationUrl, streetHawkGrowth_object: { (result, error) in
-            dispatch_async(dispatch_get_main_queue(),
-            {
+        SHApp.sharedInstance().originateShare(withCampaign: self.textboxID.text, withSource: self.textboxSource.text, withMedium: self.textboxMedium.text, withContent: self.textboxContent.text, withTerm: self.textboxTerm.text, share: deeplinkingUrl, withDefaultUrl: destinationUrl, streetHawkGrowth_object: { (result, error) in
+            DispatchQueue.main.async(execute: {
                 if !(error != nil)
                 {
                     let shareUrl = result as! String
@@ -132,7 +151,7 @@ class GenericShareViewController: StreetHawkBaseTableViewController, UITextField
                 }
                 else
                 {
-                    let alert = UIAlertView(title: "Error", message: error.localizedDescription, delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: "Error", message: error?.localizedDescription, delegate: nil, cancelButtonTitle: "OK")
                     alert.show()
                 }
             })

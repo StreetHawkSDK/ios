@@ -29,7 +29,7 @@ class NotificationViewController: StreetHawkBaseViewController
         super.init(coder: aDecoder)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?)
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
         super.init(nibName: "NotificationViewController"/*must explict write name, use nil not load correct xib in iOS 7*/, bundle: nibBundleOrNil)
     }
@@ -37,18 +37,18 @@ class NotificationViewController: StreetHawkBaseViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.buttonSetEnabled.setTitle(SHApp.sharedInstance().isNotificationEnabled ? "SDK API enables Notification now" : "SDK API disables Notification now", forState: .Normal)
+        self.buttonSetEnabled.setTitle(SHApp.sharedInstance().isNotificationEnabled ? "SDK API enables Notification now" : "SDK API disables Notification now", for: UIControlState())
     }
     
     //event handler
     
-    @IBAction func buttonSetEnabledClicked(sender: AnyObject)
+    @IBAction func buttonSetEnabledClicked(_ sender: AnyObject)
     {
         SHApp.sharedInstance().isNotificationEnabled = !SHApp.sharedInstance().isNotificationEnabled
-        self.buttonSetEnabled.setTitle(SHApp.sharedInstance().isNotificationEnabled ? "SDK API enables Notification now" : "SDK API disables Notification now", forState: .Normal)
+        self.buttonSetEnabled.setTitle(SHApp.sharedInstance().isNotificationEnabled ? "SDK API enables Notification now" : "SDK API disables Notification now", for: UIControlState())
     }
     
-    @IBAction func buttonCheckNotificationPermissionClicked(sender: AnyObject)
+    @IBAction func buttonCheckNotificationPermissionClicked(_ sender: AnyObject)
     {
         if (SHApp.sharedInstance().systemPreferenceDisableNotification)
         {
@@ -65,7 +65,7 @@ class NotificationViewController: StreetHawkBaseViewController
         }
     }
 
-    @IBAction func buttonSetAlertClicked(sender: AnyObject)
+    @IBAction func buttonSetAlertClicked(_ sender: AnyObject)
     {
         self.textboxAlertSettings.resignFirstResponder()
         var pauseMinutes = NSInteger(self.textboxAlertSettings.text!)
@@ -76,11 +76,10 @@ class NotificationViewController: StreetHawkBaseViewController
         //pauseMinutes <= 0 means not pause
         //pauseMinutes >= StreetHawk_AlertSettings_Forever means pause forever
         SHApp.sharedInstance().shSetAlertSetting(pauseMinutes!, finish: { (result, error) in
-            dispatch_async(dispatch_get_main_queue(),
-            {
+            DispatchQueue.main.async(execute: {
                 if (error != nil)
                 {
-                    let alert = UIAlertView(title: "Fail to setup alert settings!", message: error.localizedDescription, delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: "Fail to setup alert settings!", message: error?.localizedDescription, delegate: nil, cancelButtonTitle: "OK")
                     alert.show()
                 }
                 else
@@ -92,7 +91,7 @@ class NotificationViewController: StreetHawkBaseViewController
         })
     }
     
-    @IBAction func buttonGetAlertSettingsClicked(sender: AnyObject)
+    @IBAction func buttonGetAlertSettingsClicked(_ sender: AnyObject)
     {
         self.textboxAlertSettings.resignFirstResponder()
         let pauseMinutes = SHApp.sharedInstance().getAlertSettingMinutes()

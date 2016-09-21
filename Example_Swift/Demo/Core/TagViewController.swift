@@ -16,6 +16,26 @@
  */
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
 {
@@ -47,10 +67,10 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
     
     override init(style: UITableViewStyle)
     {
-        super.init(style: .Plain)
+        super.init(style: .plain)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?)
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
         super.init(nibName: "TagViewController"/*must explict write name, use nil not load correct xib in iOS 7*/, bundle: nibBundleOrNil)
     }
@@ -63,30 +83,30 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
 
     //Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    override func numberOfSections(in tableView: UITableView) -> Int
     {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return self.arrayCells.count
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        let cell = self.arrayCells[indexPath.row]
+        let cell = self.arrayCells[(indexPath as NSIndexPath).row]
         return cell.bounds.size.height
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        return self.arrayCells[indexPath.row]
+        return self.arrayCells[(indexPath as NSIndexPath).row]
     }
     
     //UITextFieldDelegate handler
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
         return true
@@ -94,10 +114,10 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
     
     //event handler
     
-    @IBAction func buttonCuidClicked(sender: AnyObject)
+    @IBAction func buttonCuidClicked(_ sender: AnyObject)
     {
-        let value = self.textboxCuidValue.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if !(value != nil && value?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        let value = self.textboxCuidValue.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        if !(value != nil && value?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
             let alertView = UIAlertView(title: "Please input value.", message: nil, delegate: nil, cancelButtonTitle: "OK")
             alertView.show()
@@ -108,17 +128,17 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
         self.showDoneAlert(isSuccess)
     }    
 
-    @IBAction func buttonNumericClicked(sender: AnyObject)
+    @IBAction func buttonNumericClicked(_ sender: AnyObject)
     {
-        let key = self.textboxKeyNumeric.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        let value = self.textboxValueNumeric.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if !(key != nil && key?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        let key = self.textboxKeyNumeric.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        let value = self.textboxValueNumeric.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        if !(key != nil && key?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
             let alertView = UIAlertView(title: "Please input key.", message: nil, delegate: nil, cancelButtonTitle: "OK")
             alertView.show()
             return
         }
-        if !(value != nil && value?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        if !(value != nil && value?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
             let alertView = UIAlertView(title: "Please input value.", message: nil, delegate: nil, cancelButtonTitle: "OK")
             alertView.show()
@@ -131,50 +151,50 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
         self.showDoneAlert(isSuccess)
     }
     
-    @IBAction func buttonStringClicked(sender: AnyObject)
+    @IBAction func buttonStringClicked(_ sender: AnyObject)
     {
-        let key = self.textboxKeyString.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        let value = self.textboxValueString.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if !(key != nil && key?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        let key = self.textboxKeyString.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        let value = self.textboxValueString.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        if !(key != nil && key?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
             let alertView = UIAlertView(title: "Please input key.", message: nil, delegate: nil, cancelButtonTitle: "OK")
             alertView.show()
             return
         }
-        if !(value != nil && value?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        if !(value != nil && value?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
             let alertView = UIAlertView(title: "Please input value.", message: nil, delegate: nil, cancelButtonTitle: "OK")
             alertView.show()
             return
         }
-        let isSuccess = SHApp.sharedInstance().tagString(value, forKey: key)
+        let isSuccess = SHApp.sharedInstance().tagString(value as NSObject!, forKey: key)
         self.textboxKeyString.resignFirstResponder()
         self.textboxValueString.resignFirstResponder()
         self.showDoneAlert(isSuccess)
     }
     
-    @IBAction func buttonDatetimeClicked(sender: AnyObject)
+    @IBAction func buttonDatetimeClicked(_ sender: AnyObject)
     {
-        let key = self.textboxKeyDatetime.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        let value = self.textboxValueDatetime.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if !(key != nil && key?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        let key = self.textboxKeyDatetime.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        let value = self.textboxValueDatetime.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        if !(key != nil && key?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
             let alertView = UIAlertView(title: "Please input key.", message: nil, delegate: nil, cancelButtonTitle: "OK")
             alertView.show()
             return
         }
-        var valueDate : NSDate?
-        if !(value != nil && value?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        var valueDate : Date?
+        if !(value != nil && value?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
-            valueDate = NSDate()
+            valueDate = Date()
         }
         else
         {
-            let dateFormatter = NSDateFormatter()
+            let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            dateFormatter.timeZone = NSTimeZone(name: "UTC")
-            dateFormatter.locale = NSLocale(localeIdentifier: "en_US")
-            valueDate = dateFormatter.dateFromString(value!)
+            dateFormatter.timeZone = TimeZone(identifier: "UTC")
+            dateFormatter.locale = Locale(identifier: "en_US")
+            valueDate = dateFormatter.date(from: value!)
             if !(valueDate != nil)
             {
                 
@@ -189,10 +209,10 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
         self.showDoneAlert(isSuccess)
     }
     
-    @IBAction func buttonIncrementClicked(sender: AnyObject)
+    @IBAction func buttonIncrementClicked(_ sender: AnyObject)
     {
-        let key = self.textboxKeyIncrement.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if !(key != nil && key?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        let key = self.textboxKeyIncrement.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        if !(key != nil && key?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
             let alertView = UIAlertView(title: "Please input key.", message: nil, delegate: nil, cancelButtonTitle: "OK")
             alertView.show()
@@ -203,10 +223,10 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
         self.showDoneAlert(isSuccess)
     }
     
-    @IBAction func buttonDeleteClicked(sender: AnyObject)
+    @IBAction func buttonDeleteClicked(_ sender: AnyObject)
     {
-        let key = self.textboxKeyDelete.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if !(key != nil && key?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0)
+        let key = self.textboxKeyDelete.text?.trimmingCharacters(in: CharacterSet.whitespaces)
+        if !(key != nil && key?.lengthOfBytes(using: String.Encoding.utf8) > 0)
         {
             let alertView = UIAlertView(title: "Please input key.", message: nil, delegate: nil, cancelButtonTitle: "OK")
             alertView.show()
@@ -219,7 +239,7 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
     
     //private functions
     
-    func showDoneAlert(isSuccess: Bool)
+    func showDoneAlert(_ isSuccess: Bool)
     {
         let info = isSuccess ? "Tag sent to server." : "Cannot send tag to server, please check console log."
         let alertView = UIAlertView(title: info, message: nil, delegate: nil, cancelButtonTitle: "OK")

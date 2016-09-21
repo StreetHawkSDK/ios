@@ -30,7 +30,7 @@ class DeepLinkingViewController: StreetHawkBaseViewController
         super.init(coder: aDecoder)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?)
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
         super.init(nibName: "DeepLinkingViewController"/*must explict write name, use nil not load correct xib in iOS 7*/, bundle: nibBundleOrNil)
     }
@@ -43,15 +43,15 @@ class DeepLinkingViewController: StreetHawkBaseViewController
 
     //deeplinking handler
     
-    override func receiveDeepLinkingData(dictParam: [NSObject : AnyObject]!)
+    override func receiveData(_ dictParam: [AnyHashable: Any]!)
     {
-        self.dictParam = dictParam
-        self.displayDeepLinkingToUI()
+        self.dictParam = dictParam as NSDictionary?
+        self.displayToUI()
     }
     
-    override func displayDeepLinkingToUI()
+    override func displayToUI()
     {
-        if (self.isViewLoaded())
+        if (self.isViewLoaded)
         {
             if (self.dictParam != nil)
             {

@@ -33,32 +33,32 @@ class DemoViewController: StreetHawkBaseTableViewController
 
     //UITableViewController delegate
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    override func numberOfSections(in tableView: UITableView) -> Int
     {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return self.arraySampleCasesTitle.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cellIdentifier = "SampleCaseCell"
-        var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)
+        var cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
         if (cell == nil)
         {
-            cell = UITableViewCell(style: .Default, reuseIdentifier: cellIdentifier)
+            cell = UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
         }
-        cell?.textLabel?.text = self.arraySampleCasesTitle[indexPath.row]
+        cell?.textLabel?.text = self.arraySampleCasesTitle[(indexPath as NSIndexPath).row]
         return cell!
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        let appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as! String
-        let className = self.arraySampleCasesVC[indexPath.row]
+        let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
+        let className = self.arraySampleCasesVC[(indexPath as NSIndexPath).row]
         let fullClassName = "\(appName).\(className)"
         let anyClass : AnyClass? = NSClassFromString(fullClassName)
         assert(anyClass != nil, "Unhandle test sample case")
