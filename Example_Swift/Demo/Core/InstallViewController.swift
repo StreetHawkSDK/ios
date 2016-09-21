@@ -124,7 +124,7 @@ class InstallViewController: StreetHawkBaseTableViewController
             {
                 let alertView = UIAlertView(title: "Not install successfully.", message: nil, delegate: nil, cancelButtonTitle: "OK")
                 alertView.show()
-                return;
+                return
             }
             let arrayGeneralValue = self.arrayValues[0] as! NSMutableArray
             arrayGeneralValue[0] = "install id: \(SHApp.sharedInstance().currentInstall.suid)"

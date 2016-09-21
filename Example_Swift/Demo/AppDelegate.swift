@@ -26,6 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     {
         //Register install to StreetHawk server.
         SHApp.sharedInstance().registerInstall(forApp: "MyFirstApp", withDebugMode: true)
+        
+        //Register open url callback.
+        SHApp.sharedInstance().openUrlHandler = { openUrl in
+            let alertView = UIAlertView(title: "Open Url", message: openUrl?.absoluteString, delegate: nil, cancelButtonTitle: "OK")
+            alertView.show()
+        }
+        
         return true
     }
 
