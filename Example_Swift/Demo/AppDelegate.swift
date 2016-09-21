@@ -58,6 +58,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func foo()
+    {
+        let alertView = UIAlertView(title: "foo is called.", message: nil, delegate: nil, cancelButtonTitle: "OK")
+        alertView.show()
+    }
 
 }
 

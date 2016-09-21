@@ -20,7 +20,7 @@ import UIKit
 class DemoViewController: StreetHawkBaseTableViewController
 {
     //Register sample cases.
-    let arraySampleCasesTitle = ["Current Install", "Tag Sample", "Location Sample", "Push Notification Sample", "Growth"]
+    let arraySampleCasesTitle = ["Current Install", "Tag Sample", "Location Sample", "Push Notification Sample", "Growth", "Get AppDelegate"]
     let arraySampleCasesVC = ["InstallViewController", "TagViewController", "LocationViewController", "NotificationViewController", "GrowthViewController"]
     
     //life cycle
@@ -57,16 +57,24 @@ class DemoViewController: StreetHawkBaseTableViewController
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
-        let className = self.arraySampleCasesVC[(indexPath as NSIndexPath).row]
-        let fullClassName = "\(appName).\(className)"
-        let anyClass : AnyClass? = NSClassFromString(fullClassName)
-        assert(anyClass != nil, "Unhandle test sample case")
-        if (anyClass != nil)
+        if (indexPath.row < self.arraySampleCasesVC.count)
         {
-            let vcClass = anyClass as! UIViewController.Type
-            let vc = vcClass.init()
-            self.navigationController?.pushViewController(vc, animated: true)
+            let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
+            let className = self.arraySampleCasesVC[(indexPath as NSIndexPath).row]
+            let fullClassName = "\(appName).\(className)"
+            let anyClass : AnyClass? = NSClassFromString(fullClassName)
+            assert(anyClass != nil, "Unhandle test sample case")
+            if (anyClass != nil)
+            {
+                let vcClass = anyClass as! UIViewController.Type
+                let vc = vcClass.init()
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+        else if (indexPath.row == self.arraySampleCasesVC.count) /*Get AppDelegate*/
+        {
+            let appDelegate = SHApp.sharedInstance().getDelegate() as! AppDelegate
+            appDelegate.foo()
         }
     }
 }
