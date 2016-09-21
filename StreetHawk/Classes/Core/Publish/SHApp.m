@@ -1097,6 +1097,11 @@
     }
 }
 
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    SHLog(@"WARNING: Register remote notification failed: %@.", error);
+}
+
 //called when notification arrives and:
 //1. App in FG, directly call this.
 //2. App in BG notification banner show, click the banner (not the button) and call this.
