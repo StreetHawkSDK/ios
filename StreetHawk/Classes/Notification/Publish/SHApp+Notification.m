@@ -124,17 +124,8 @@ NSString * const SHNMNotification_kPayload = @"Payload";
 
 - (BOOL)systemPreferenceDisableNotification
 {
-    BOOL notificationDisabled;
     UIApplication *application = [UIApplication sharedApplication];
-    if ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0)
-    {
-        notificationDisabled = (!application.isRegisteredForRemoteNotifications || (application.currentUserNotificationSettings.types == UIUserNotificationTypeNone));
-    }
-    else
-    {
-        notificationDisabled = (application.enabledRemoteNotificationTypes == UIRemoteNotificationTypeNone || application.enabledRemoteNotificationTypes == UIRemoteNotificationTypeNewsstandContentAvailability/*this is not settable in UI*/);
-    }
-    return notificationDisabled;
+    return (!application.isRegisteredForRemoteNotifications || (application.currentUserNotificationSettings.types == UIUserNotificationTypeNone));
 }
 
 #pragma mark - public functions
@@ -201,14 +192,7 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     if (!notificationDisabled)
     {
         //customer not disable it, check system settings
-        if ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0)
-        {
-            notificationDisabled = (!application.isRegisteredForRemoteNotifications || (application.currentUserNotificationSettings.types == UIUserNotificationTypeNone));
-        }
-        else
-        {
-            notificationDisabled = (application.enabledRemoteNotificationTypes == UIRemoteNotificationTypeNone/*none type enabled means it's turn off. when App first launch, even enabled before and no permission dialog promote, it gets 0, but does not matter as next set access token clean it; and it never happen in next launch.*/ || application.enabledRemoteNotificationTypes == UIRemoteNotificationTypeNewsstandContentAvailability/*this is not settable in UI*/);
-        }
+        notificationDisabled = (!application.isRegisteredForRemoteNotifications || (application.currentUserNotificationSettings.types == UIUserNotificationTypeNone));
         if (notificationDisabled)
         {
             SHLog(@"Notification is disabled by system preferrence settings, or fail to configure in project.");
@@ -245,32 +229,24 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     if (StreetHawk.isNotificationEnabled)  //not call this for customer disable notification to avoid permission message, work both for remote and location notification.
     {
         //No matter system enabled or disabled, register it. For a fresh new App system is not enabled, if check `notificationDisabled` it will never register notification.
-        if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])  //iOS 8 uses totally new way to register remote notification.
+        if (StreetHawk.notificationTypes > (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound))
         {
-            if (StreetHawk.notificationTypes > (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound))
-            {
-                StreetHawk.notificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound); //compatible for pre-iOS 8 user settings.
-            }
-            NSMutableSet *categories = [NSMutableSet set];
-            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Unity) //Unity sample AngryBots: if App not launch, send push, click action button App will hang. It not happen if click banner, it not happen if App already launch and in BG. To avoid this stop working issue, Unity not have action button.
-            {
-                //Add system predefined categories first
-                for (SHInteractiveButtons *obj in [SHInteractiveButtons predefinedPairs])
-                {
-                    [SHInteractiveButtons addCategory:[obj createNotificationCategory] toSet:categories];
-                }
-                //Read customized button pairs and add to categories too.
-                [SHInteractiveButtons addCustomisedButtonPairsToSet:categories];
-            }
-            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:StreetHawk.notificationTypes categories:categories];
-            [application registerUserNotificationSettings:settings];
-            SHLog(@"Register user notification since iOS 8.");
+            StreetHawk.notificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound); //compatible for pre-iOS 8 user settings.
         }
-        else
+        NSMutableSet *categories = [NSMutableSet set];
+        if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Unity) //Unity sample AngryBots: if App not launch, send push, click action button App will hang. It not happen if click banner, it not happen if App already launch and in BG. To avoid this stop working issue, Unity not have action button.
         {
-            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:StreetHawk.notificationTypes];
-            SHLog(@"Register remote notification before iOS 8.");
+            //Add system predefined categories first
+            for (SHInteractiveButtons *obj in [SHInteractiveButtons predefinedPairs])
+            {
+                [SHInteractiveButtons addCategory:[obj createNotificationCategory] toSet:categories];
+            }
+            //Read customized button pairs and add to categories too.
+            [SHInteractiveButtons addCustomisedButtonPairsToSet:categories];
         }
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:StreetHawk.notificationTypes categories:categories];
+        [application registerUserNotificationSettings:settings];
+        SHLog(@"Register user notification since iOS 8.");
     }
 }
 

@@ -669,16 +669,9 @@
 
 - (BOOL)launchSystemPreferenceSettings
 {
-    if (&UIApplicationOpenSettingsURLString != NULL)
-    {
-        NSURL *appSettings = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-        [[UIApplication sharedApplication] openURL:appSettings];
-        return YES;
-    }
-    else
-    {
-        return NO;
-    }
+    NSURL *appSettings = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    [[UIApplication sharedApplication] openURL:appSettings];
+    return YES;
 }
 
 #pragma mark - Spotlight and Search

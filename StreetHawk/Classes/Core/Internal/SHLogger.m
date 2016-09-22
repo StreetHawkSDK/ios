@@ -510,7 +510,7 @@ enum
             const char *comment = (const char *)sqlite3_column_text(select_sql, LOG_COL_COMMENT);
             double lat_deprecate = sqlite3_column_double(select_sql, LOG_COL_LAT);
             double lng_deprecate = sqlite3_column_double(select_sql, LOG_COL_LNG);
-            const char * assocId = sqlite3_column_text(select_sql, LOG_COL_MSGID);
+            const char * assocId = (const char *)sqlite3_column_text(select_sql, LOG_COL_MSGID);
             NSString *assocIdStr = shCstringToNSString(assocId);
             int result = sqlite3_column_int(select_sql, LOG_COL_PUSHRESULT);
             //mandatory parameters for each logline

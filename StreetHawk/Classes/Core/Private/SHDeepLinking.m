@@ -153,7 +153,7 @@
         if (![vcClass isSubclassOfClass:[UIViewController class]])
         {
             //Last try mixed Swift project way: _TtC[app name length][app name][class name length][class name]
-            fullName = [NSString stringWithFormat:@"_TtC%d%@%d%@", appName.length, appName, vcClassName.length, vcClassName];
+            fullName = [NSString stringWithFormat:@"_TtC%lu%@%lu%@", (unsigned long)appName.length, appName, (unsigned long)vcClassName.length, vcClassName];
             vcClass = NSClassFromString(fullName);
             if (![vcClass isSubclassOfClass:[UIViewController class]])
             {

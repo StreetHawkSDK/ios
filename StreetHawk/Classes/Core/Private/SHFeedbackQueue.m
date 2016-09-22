@@ -115,8 +115,8 @@
                UIWindow *presentWindow = shGetPresentWindow();
                MBProgressHUD *resultView = [MBProgressHUD showHUDAddedTo:presentWindow animated:YES];
                resultView.mode = MBProgressHUDModeText; //only show result text, not show progress bar.
-               resultView.labelText = shLocalizedString(@"STREETHAWK_WINDOW_FEEDBACK_THANKS", @"Thanks for your feedback!");
-               [resultView hide:YES afterDelay:1.5];
+               resultView.label.text = shLocalizedString(@"STREETHAWK_WINDOW_FEEDBACK_THANKS", @"Thanks for your feedback!");
+               [resultView hideAnimated:YES afterDelay:1.5];
            });
         if (handler)
         {

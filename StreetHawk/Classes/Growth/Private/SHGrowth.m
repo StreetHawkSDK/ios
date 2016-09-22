@@ -216,12 +216,12 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
             NSAssert(!shStrIsEmpty(utm_source), @"Fail to find match utm_source in pre-defined channels.");
             UIWindow *presentWindow = shGetPresentWindow();
             MBProgressHUD *progressView = [MBProgressHUD showHUDAddedTo:presentWindow animated:YES];
-            progressView.detailsLabelText = shLocalizedString(@"STREETHAWK_Growth_Channel_GeneratingUrl", @"Generating share_guid_url...");
+            progressView.detailsLabel.text = shLocalizedString(@"STREETHAWK_Growth_Channel_GeneratingUrl", @"Generating share_guid_url...");
             [self originateShareWithCampaign:utm_campaign withSource:utm_source withMedium:utm_medium withContent:utm_content withTerm:utm_term shareUrl:shareUrl withDefaultUrl:default_url streetHawkGrowth_object:^(NSObject *result, NSError *error)
              {
                  dispatch_async(dispatch_get_main_queue(), ^
                     {
-                        [MBProgressHUD hideAllHUDsForView:presentWindow animated:YES];
+                        [MBProgressHUD hideHUDForView:presentWindow animated:YES];
                         shPresentErrorAlertOrLog(error);
                         if (error == nil)
                         {
@@ -271,16 +271,16 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
                                         switch (result)
                                         {
                                             case SLComposeViewControllerResultCancelled:
-                                                resultView.labelText = shLocalizedString(@"STREETHAWK_Growth_Channel_PostCancel", @"Post is cancelled.");
+                                                resultView.label.text = shLocalizedString(@"STREETHAWK_Growth_Channel_PostCancel", @"Post is cancelled.");
                                                 break;
                                             case SLComposeViewControllerResultDone:
-                                                resultView.labelText = shLocalizedString(@"STREETHAWK_Growth_Channel_PostDone", @"Post successfully!");
+                                                resultView.label.text = shLocalizedString(@"STREETHAWK_Growth_Channel_PostDone", @"Post successfully!");
                                                 break;
                                             default:
                                                 NSAssert(NO, @"Unexpected share result.");
                                                 break;
                                         }
-                                        [resultView hide:YES afterDelay:1.5];
+                                        [resultView hideAnimated:YES afterDelay:1.5];
                                     };
                                     [presentWindow.rootViewController presentViewController:shareVC animated:YES completion:nil];
                                 }
