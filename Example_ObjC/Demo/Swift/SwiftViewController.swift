@@ -38,12 +38,12 @@ class SwiftViewController: StreetHawkBaseViewController
     
     @IBAction func buttonTagClicked(_ sender: AnyObject)
     {
-        SHApp.sharedInstance().tagString("a@a.com" as NSObject!, forKey: "sh_email")
+        SHApp.sharedInstance().tagString("a@a.com", forKey: "sh_email")
         SHApp.sharedInstance().removeTag("sh_email")
         SHApp.sharedInstance().tagDatetime(Date(), forKey: "visit_time")
         SHApp.sharedInstance().tagNumeric(100, forKey: "click_count")
         SHApp.sharedInstance().incrementTag("click_count")
-        SHApp.sharedInstance().tagString("+0123456789" as NSObject!, forKey: "sh_phone")
+        SHApp.sharedInstance().tagString("+0123456789", forKey: "sh_phone")
     }    
     
     @IBAction func buttonFeedClicked(_ sender: AnyObject)

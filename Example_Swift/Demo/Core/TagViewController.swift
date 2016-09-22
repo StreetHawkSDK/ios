@@ -167,7 +167,7 @@ class TagViewController: StreetHawkBaseTableViewController, UITextFieldDelegate
             alertView.show()
             return
         }
-        let isSuccess = SHApp.sharedInstance().tagString(value as NSObject!, forKey: key)
+        let isSuccess = SHApp.sharedInstance().tagString(value, forKey: key)
         self.textboxKeyString.resignFirstResponder()
         self.textboxValueString.resignFirstResponder()
         self.showDoneAlert(isSuccess)

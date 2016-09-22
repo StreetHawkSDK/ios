@@ -442,7 +442,7 @@ The application version and build version of current Application, formatted as @
  @param key The key for tag to the user profile. Cannot be empty.
  @return If tag to server return YES; if fail to send to server return NO.
  */
-- (BOOL)tagString:(NSObject *)value forKey:(NSString *)key;
+- (BOOL)tagString:(NSString *)value forKey:(NSString *)key;
 
 /**
  Send log with code=8999. It's used for tagging a number value for user. For example, you can tag user's favourite product count by:

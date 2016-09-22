@@ -1572,9 +1572,9 @@
     return [self tagString:language forKey:@"sh_language"];
 }
 
-- (BOOL)tagString:(NSObject *)value forKey:(NSString *)key
+- (BOOL)tagString:(NSString *)value forKey:(NSString *)key
 {
-    if (value != nil && !shStrIsEmpty(key))
+    if (!shStrIsEmpty(value) && !shStrIsEmpty(key))
     {
         if ([self checkTagValue:value forKey:key])
         {
