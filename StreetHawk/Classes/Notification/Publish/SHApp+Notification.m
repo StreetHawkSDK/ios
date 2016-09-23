@@ -25,8 +25,10 @@
 #import "SHHTTPSessionManager.h" //for sending request
 #import "SHAppStatus.h" //for appStatusChange
 #import "SHInteractiveButtons.h" //for interactive pair buttons
+#import "SHInterceptor.h" //for delegate
 //header from System
 #import <objc/runtime.h> //for associate object
+#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10
 
 #define APNS_DEVICE_TOKEN                   @"APNS_DEVICE_TOKEN"
 #define ENABLE_PUSH_NOTIFICATION            @"ENABLE_PUSH_NOTIFICATION"  //key for record user manually set isNotificationEnabled. Although it's used for both remote and local, key not change name to be compatible with old version.
@@ -229,24 +231,69 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     if (StreetHawk.isNotificationEnabled)  //not call this for customer disable notification to avoid permission message, work both for remote and location notification.
     {
         //No matter system enabled or disabled, register it. For a fresh new App system is not enabled, if check `notificationDisabled` it will never register notification.
-        if (StreetHawk.notificationTypes > (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound))
+        if ([[UIDevice currentDevice].systemVersion doubleValue] < 10.0)
         {
-            StreetHawk.notificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound); //compatible for pre-iOS 8 user settings.
-        }
-        NSMutableSet *categories = [NSMutableSet set];
-        if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Unity) //Unity sample AngryBots: if App not launch, send push, click action button App will hang. It not happen if click banner, it not happen if App already launch and in BG. To avoid this stop working issue, Unity not have action button.
-        {
-            //Add system predefined categories first
-            for (SHInteractiveButtons *obj in [SHInteractiveButtons predefinedPairs])
+            if (StreetHawk.notificationTypes > (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound))
             {
-                [SHInteractiveButtons addCategory:[obj createNotificationCategory] toSet:categories];
+                StreetHawk.notificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound); //compatible for pre-iOS 8 user settings.
             }
-            //Read customized button pairs and add to categories too.
-            [SHInteractiveButtons addCustomisedButtonPairsToSet:categories];
+            NSMutableSet<UIUserNotificationCategory *> *categories = [NSMutableSet set];
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Unity) //Unity sample AngryBots: if App not launch, send push, click action button App will hang. It not happen if click banner, it not happen if App already launch and in BG. To avoid this stop working issue, Unity not have action button.
+            {
+                //Add system predefined categories first
+                for (SHInteractiveButtons *obj in [SHInteractiveButtons predefinedPairs])
+                {
+                    [SHInteractiveButtons addCategory:[obj createNotificationCategory] toSet:categories];
+                }
+                //Read customized button pairs and add to categories too.
+                [SHInteractiveButtons addCustomisedButtonPairsToSet:categories];
+            }
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:StreetHawk.notificationTypes categories:categories];
+            [application registerUserNotificationSettings:settings];
+            SHLog(@"Register user notification pre iOS 10.");
         }
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:StreetHawk.notificationTypes categories:categories];
-        [application registerUserNotificationSettings:settings];
-        SHLog(@"Register user notification since iOS 8.");
+        else
+        {
+            UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+            //setup intercept app delegate
+            //if (StreetHawk.autoIntegrateAppDelegate)
+            //{
+            //    self.appDelegateInterceptor = [[SHInterceptor alloc] init];  //strong property
+            //    self.appDelegateInterceptor.firstResponder = self;  //weak property
+            //    self.appDelegateInterceptor.secondResponder = [UIApplication sharedApplication].delegate;
+            //    self.originalAppDelegate = [UIApplication sharedApplication].delegate;  //must use a strong property to keep original AppDelegate, otherwise after next set t/o interceptor, original AppDelegate is null and cannot do StreetHawk first then forward to original AppDelegate.
+            //  [UIApplication sharedApplication].delegate = (id<UIApplicationDelegate>)self.appDelegateInterceptor;
+            //}
+            center.delegate = StreetHawk; //TODO: move before didfinishlaunch, but must in push module.
+            NSMutableSet<UNNotificationCategory *> *categories = [NSMutableSet set];
+            if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Unity) //Unity sample AngryBots: if App not launch, send push, click action button App will hang. It not happen if click banner, it not happen if App already launch and in BG. To avoid this stop working issue, Unity not have action button.
+            {
+                //Add system predefined categories first
+                for (SHInteractiveButtons *obj in [SHInteractiveButtons predefinedPairs])
+                {
+                    [SHInteractiveButtons addUNCategory:[obj createUNNotificationCategory] toSet:categories];
+                }
+                //Read customized button pairs and add to categories too.
+                [SHInteractiveButtons addUNCustomisedButtonPairsToSet:categories];
+            }
+            [center setNotificationCategories:categories];
+            if (StreetHawk.notificationTypes > (UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound))
+            {
+                StreetHawk.notificationTypes = (UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound); //compatible for pre-iOS 8 user settings.
+            }
+            [center requestAuthorizationWithOptions:(StreetHawk.notificationTypes) completionHandler:^(BOOL granted, NSError * _Nullable error)
+             {
+                 if(!error)
+                 {
+                     [application registerForRemoteNotifications];
+                     SHLog(@"Register remote notification since iOS 10.");
+                 }
+                 else
+                 {
+                     SHLog(@"Fail to register remote notification since iOS 10. Error: %@.", error);
+                 }  
+             }];  
+        }
     }
 }
 
@@ -255,7 +302,7 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     if (settings.types != UIUserNotificationTypeNone)
     {
         [[UIApplication sharedApplication] registerForRemoteNotifications];
-        SHLog(@"Register remote notification since iOS 8.");
+        SHLog(@"Register remote notification pre iOS 10.");
     }
 }
 

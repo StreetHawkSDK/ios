@@ -21,6 +21,8 @@
 #import "SHPushDataCallback.h" //for create instance
 #import "SHNotificationHandler.h" //for create instance
 #import "SHHTTPSessionManager.h" //for SMART_PUSH_PAYLOAD definition
+//header from System
+#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10
 
 @interface SHNotificationBridge ()
 
@@ -47,7 +49,7 @@
 {
     //initialise variables, move from SHApp's init.
     StreetHawk.isDefaultNotificationEnabled = YES;  //default value, user can change it by StreetHawk.isDefaultNotificationEnabled = NO. Default value only used to initialize isNotificationEnabled one time, once user manually set StreetHawk.isNotificationEnabled, default value is ignored.
-    StreetHawk.notificationTypes = UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
+    StreetHawk.notificationTypes = UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound;
     StreetHawk.arrayCustomisedHandler = [NSMutableArray array];
     [StreetHawk shSetCustomiseHandler:[[SHPushDataCallback alloc] init]]; //streethawk's add first, so customer's will insert before it.
     StreetHawk.arrayPGObservers = [NSMutableArray array];

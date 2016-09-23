@@ -339,7 +339,21 @@
     return category;
 }
 
-+ (void)addCategory:(UIUserNotificationCategory *)category toSet:(NSMutableSet *)set
+- (UNNotificationCategory *)createUNNotificationCategory
+{
+    NSString *identifier1 = [NSString stringWithFormat:@"%d", self.action1];
+    NSString *title1 = [Emojione shortnameToUnicode:[self.button1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+    UNNotificationActionOptions option1 = self.executeFg1 ? UNNotificationActionOptionForeground : UNNotificationActionOptionNone;
+    UNNotificationAction *action1 = [UNNotificationAction actionWithIdentifier:identifier1 title:title1 options:option1];
+    NSString *identifier2 = [NSString stringWithFormat:@"%d", self.action2];
+    NSString *title2 = [Emojione shortnameToUnicode:[self.button2 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+    UNNotificationActionOptions option2 = self.executeFg2 ? UNNotificationActionOptionForeground : UNNotificationActionOptionNone;
+    UNNotificationAction *action2 = [UNNotificationAction actionWithIdentifier:identifier2 title:title2 options:option2];
+    UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:self.categoryIdentifier actions:@[action1, action2] intentIdentifiers:@[] options:UNNotificationCategoryOptionCustomDismissAction]; //dismiss action also call delegate to send push result
+    return category;
+}
+
++ (void)addCategory:(UIUserNotificationCategory *)category toSet:(NSMutableSet<UIUserNotificationCategory *> *)set
 {
     NSAssert(category != nil, @"Cannot add nil category.");
     NSAssert(set != nil, @"Cannot add category to nil set.");
@@ -348,6 +362,30 @@
     {
         UIUserNotificationCategory *findCategory = nil;
         for (UIUserNotificationCategory *item in set)
+        {
+            if ([item.identifier compare:category.identifier] == NSOrderedSame) //category is case sensitive
+            {
+                findCategory = item;
+                break;
+            }
+        }
+        if (findCategory != nil)  //remove existing and add new.
+        {
+            [set removeObject:findCategory];
+        }
+        [set addObject:category];
+    }
+}
+
++ (void)addUNCategory:(UNNotificationCategory *)category toSet:(NSMutableSet<UNNotificationCategory *> *)set
+{
+    NSAssert(category != nil, @"Cannot add nil category.");
+    NSAssert(set != nil, @"Cannot add category to nil set.");
+    NSAssert(category.identifier != nil && category.identifier.length > 0, @"Category's identifier cannot be empty.");
+    if (category != nil && set != nil && category.identifier.length > 0)
+    {
+        UNNotificationCategory *findCategory = nil;
+        for (UNNotificationCategory *item in set)
         {
             if ([item.identifier compare:category.identifier] == NSOrderedSame) //category is case sensitive
             {
@@ -380,6 +418,26 @@
         pairCustomize.action2 = SHNotificationActionResult_NO;
         pairCustomize.executeFg2 = YES;
         [self addCategory:[pairCustomize createNotificationCategory] toSet:set];
+    }
+}
+
++ (void)addUNCustomisedButtonPairsToSet:(NSMutableSet<UNNotificationCategory *> *)set
+{
+    NSArray *arrayPairs = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INTERACTIVEPUSH_KEY]; //purely customer's, not include predefined.
+    for (NSDictionary *dict in arrayPairs)
+    {
+        NSString *pairTitle = dict[SH_INTERACTIVEPUSH_PAIR];
+        NSString *b1Title = dict[SH_INTERACTIVEPUSH_BUTTON1];
+        NSString *b2Title = dict[SH_INTERACTIVEPUSH_BUTTON2];
+        SHInteractiveButtons *pairCustomize = [[SHInteractiveButtons alloc] init];
+        pairCustomize.categoryIdentifier = pairTitle;
+        pairCustomize.button1 = b1Title;
+        pairCustomize.action1 = SHNotificationActionResult_Yes; //Hard code for button 1
+        pairCustomize.executeFg1 = YES; //customized button always execute in foreground
+        pairCustomize.button2 = b2Title;
+        pairCustomize.action2 = SHNotificationActionResult_NO;
+        pairCustomize.executeFg2 = YES;
+        [self addUNCategory:[pairCustomize createUNNotificationCategory] toSet:set];
     }
 }
 

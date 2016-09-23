@@ -28,6 +28,7 @@
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
+#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10 //TODO: move all to notification module
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -1093,6 +1094,21 @@
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     SHLog(@"WARNING: Register remote notification failed: %@.", error);
+}
+
+//since iOS 10 this function is called for both remote notification and local notification when App is in foreground. It hides all other delegate calls.
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+{
+    NSLog( @"Handle push from foreground" );
+    // custom code to handle push while app is in the foreground
+    NSLog(@"%@", notification.request.content.userInfo);
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
+{
+    NSLog( @"Handle push from background or closed" );
+    // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
+    NSLog(@"%@", response.notification.request.content.userInfo);
 }
 
 //called when notification arrives and:

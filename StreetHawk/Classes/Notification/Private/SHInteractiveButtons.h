@@ -17,6 +17,8 @@
 
 #import <UIKit/UIKit.h>
 #import "SHNotificationHandler.h" //for SHNotificationActionResult
+//header from System
+#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10
 
 #define SH_INTERACTIVEPUSH_KEY      @"SH_INTERACTIVEPUSH_KEY" //key in user defaults for whole customized interactive push array, it get an array, with each one is a dictionary. This is purely for customer's, not include predefined.
 #define SH_INTERACTIVEPUSH_PAIR     @"SH_INTERACTIVEPUSH_PAIR" //key for one pair's title
@@ -84,16 +86,33 @@
 - (UIUserNotificationCategory *)createNotificationCategory;
 
 /**
+ Create a UN notification category according to self's information.
+ */
+- (UNNotificationCategory *)createUNNotificationCategory;
+
+/**
  Add one category to a set. Note: if set has same category id already, remove existing category from set and add this new one. This is because only the first category id take effect, if want newly added category work, the set cannot have same category id ahead.
  @param category Newly added category, cannot be nil.
  @param set The modified set, cannot be nil.
  */
-+ (void)addCategory:(UIUserNotificationCategory *)category toSet:(NSMutableSet *)set;
++ (void)addCategory:(UIUserNotificationCategory *)category toSet:(NSMutableSet<UIUserNotificationCategory *> *)set;
+
+/**
+ Add one category to a set. Note: if set has same category id already, remove existing category from set and add this new one. This is because only the first category id take effect, if want newly added category work, the set cannot have same category id ahead.
+ @param category Newly added category, cannot be nil.
+ @param set The modified set, cannot be nil.
+ */
++ (void)addUNCategory:(UNNotificationCategory *)category toSet:(NSMutableSet<UNNotificationCategory *> *)set;
 
 /**
  Read from local and add customized button pairs.
  */
-+ (void)addCustomisedButtonPairsToSet:(NSMutableSet *)set;
++ (void)addCustomisedButtonPairsToSet:(NSMutableSet<UIUserNotificationCategory *> *)set;
+
+/**
+ Read from local and add customized button pairs.
+ */
++ (void)addUNCustomisedButtonPairsToSet:(NSMutableSet<UNNotificationCategory *> *)set;
 
 /**
  Fetch predefined pairs and format the array for saved locally.
