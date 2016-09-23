@@ -20,8 +20,6 @@
 #import "SHApp.h" //for StreetHawk
 #import "SHLogger.h" //for sending logline
 #import "SHUtils.h" //for shParseDate
-//header from Third-party
-#import "SHUIDevice-Hardware.h"
 
 NSString * const SHInstallRegistrationSuccessNotification = @"SHInstallRegistrationSuccessNotification";
 NSString * const SHInstallRegistrationFailureNotification = @"SHInstallRegistrationFailureNotification";
@@ -93,14 +91,13 @@ NSString * const SHInstallNotification_kError = @"Error";
 - (NSDictionary *)saveBody
 {
     NSMutableDictionary *dictParams = [NSMutableDictionary dictionary];
-    UIDevice *uiDevice = [UIDevice currentDevice];
-    SHUIDevice *shDevice = [[SHUIDevice alloc] init];
+    UIDevice *device = [UIDevice currentDevice];
     dictParams[@"app_key"] = NONULL(StreetHawk.appKey);
     dictParams[@"client_version"] = StreetHawk.clientVersion;
     dictParams[@"sh_version"] = StreetHawk.version;
-    dictParams[@"model"] = NONULL(shDevice.platformString); //rename class not use UIDevice extension, to avoid link to wrong obj
+    dictParams[@"model"] = NONULL(device.platformString); //rename class not use UIDevice extension, to avoid link to wrong obj
     dictParams[@"operating_system"] = @"ios";
-    dictParams[@"os_version"] = uiDevice.systemVersion;
+    dictParams[@"os_version"] = device.systemVersion;
     if ([shGetCarrierName() compare:@"Other"] != NSOrderedSame)
     {
         dictParams[@"carrier_name"] = shGetCarrierName();
@@ -159,9 +156,9 @@ NSString * const SHInstallNotification_kError = @"Error";
     {
         dictParams[@"macaddress"] = macAddress;
     }
-    if ([uiDevice respondsToSelector:@selector(identifierForVendor)])  //identifierForVendor available since iOS 6.0
+    if ([device respondsToSelector:@selector(identifierForVendor)])  //identifierForVendor available since iOS 6.0
     {
-        NSUUID *identifierForVendor = uiDevice.identifierForVendor;
+        NSUUID *identifierForVendor = device.identifierForVendor;
         if (identifierForVendor != nil && [identifierForVendor UUIDString] != nil && [identifierForVendor UUIDString].length > 0)
         {
             dictParams[@"identifier_for_vendor"] = [identifierForVendor UUIDString];

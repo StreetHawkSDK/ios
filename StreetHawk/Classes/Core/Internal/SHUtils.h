@@ -246,4 +246,17 @@ extern BOOL shIsUniversalLinking(NSString *url);
  */
 extern NSString *shCaptureAdvertisingIdentifier();
 
+/**
+ Extension to system UIDevice class.
+ */
+@interface UIDevice (SHExt)
+
+/**
+ Get platform string such as "iPhone 9.1". It will be mapping in server side to be readable model "iPhone 7".
+ @return Raw model string.
+ */
+- (NSString *)platformString;
+
+@end
+
 #endif //SH__UTILS__H
