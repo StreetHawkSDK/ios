@@ -38,7 +38,8 @@
 + (void)handleLocalNotificationActionHandler:(NSNotification *)notification; //for handle system delegate `- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler`. notification name: SH_PushBridge_HandleLocalActionButton; user info: @{@"notification": notification, @"actionid": identifier, @"needComplete": <bool>, @"completionHandler": completionHandler}.
 + (void)sendPushResultHandler:(NSNotification *)notification; //for using register callback to send push result. notification name: @"SH_PushBridge_SendResult_Notification"; user info: @{@"pushdata": self, @"result": @(result)};
 + (void)handlePushDataHandler:(NSNotification *)notification; //for handle push data. notification name: SH_PushBridge_HandlePushData; user info: @{@"pushdata": self, @"clickbutton": clickbuttonhandler}.
-+ (void)handleUserNotificationInFG:(NSNotification *)notification; //for handle user notification in FG since iOS 10. notification name: SH_PushBridge_HandleUserNotificationInFG; user info: @{@"notification": userNotification, @"needComplete": @(!customerAppResponse), @"completionHandler": completionHandler}
++ (void)handleUserNotificationInFG:(NSNotification *)notification; //for handle user notification in FG since iOS 10. notification name: SH_PushBridge_HandleUserNotificationInFG; user info: @{@"notification": userNotification, @"needComplete": @(!customerAppResponse), @"completionHandler": completionHandler}.
++ (void)handleUserNotificationInBG:(NSNotification *)notification; //for handle user notification in BG since iOS 10. notification name: SH_PushBridge_HandleUserNotificationInBG; user info: @{@"response": response, @"needComplete": @(!customerAppResponse), @"completionHandler": completionHandler}.
 
 @end
 
@@ -71,6 +72,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendPushResultHandler:) name:@"SH_PushBridge_SendResult_Notification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushDataHandler:) name:@"SH_PushBridge_HandlePushData" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserNotificationInFG:) name:@"SH_PushBridge_HandleUserNotificationInFG" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserNotificationInBG:) name:@"SH_PushBridge_HandleUserNotificationInBG" object:nil];
     //Post a notification to notify push module is ready. This is used in Titanium for adding customise handler and phonegap observer.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushModule_Ready" object:nil];
 }
@@ -185,9 +187,17 @@
 + (void)handleUserNotificationInFG:(NSNotification *)notification
 {
     UNNotification *userNotification = notification.userInfo[@"notification"];
-    NSAssert(userNotification != nil, @"\"notification\" in handleUserNotification should not be nil.");
+    NSAssert(userNotification != nil, @"\"notification\" in handleUserNotificationInFG should not be nil.");
     BOOL needComplete = [notification.userInfo[@"needComplete"] boolValue];
     [StreetHawk handleUserNotificationInFG:userNotification needComplete:needComplete completionHandler:notification.userInfo[@"completionHandler"]];
+}
+
++ (void)handleUserNotificationInBG:(NSNotification *)notification
+{
+    UNNotificationResponse *response = notification.userInfo[@"response"];
+    NSAssert(response != nil, @"\"response\" in handleUserNotificationInBG should not be nil.");
+    BOOL needComplete = [notification.userInfo[@"needComplete"] boolValue];
+    [StreetHawk handleUserNotificationInBG:response needComplete:needComplete completionHandler:notification.userInfo[@"completionHandler"]];
 }
 
 @end

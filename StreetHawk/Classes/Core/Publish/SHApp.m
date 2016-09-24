@@ -28,7 +28,7 @@
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
-#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10 //TODO: move all to notification module
+#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -1104,6 +1104,7 @@
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
     //iOS 10 new system delegates cover many other previous deprecated delegates (both remote and local, both click banner and click button etc), to make things simple it does not consider try calling the deprecated delegates any more. It only calls the corresponding delegates in customer App's code.
+    //TODO: it's not self.appDelegateInterceptor.
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(userNotificationCenter:willPresentNotification:withCompletionHandler:)];
     NSMutableDictionary *dictNotification = [NSMutableDictionary dictionary];
     dictNotification[@"notification"] = notification;
@@ -1121,9 +1122,19 @@
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
 {
-    NSLog( @"Handle push from background or closed" );
-    // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
-    NSLog(@"%@", response.notification.request.content.userInfo);
+    BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)];
+    NSMutableDictionary *dictNotification = [NSMutableDictionary dictionary];
+    dictNotification[@"response"] = response;
+    dictNotification[@"needComplete"] = @(!customerAppResponse);
+    if (completionHandler)
+    {
+        dictNotification[@"completionHandler"] = completionHandler;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandleUserNotificationInBG" object:nil userInfo:dictNotification];
+    if (customerAppResponse)
+    {
+        [self.appDelegateInterceptor.secondResponder userNotificationCenter:center didReceiveNotificationResponse:response withCompletionHandler:completionHandler];;
+    }
 }
 
 //called when notification arrives and:

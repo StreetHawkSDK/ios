@@ -365,6 +365,38 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     }
 }
 
+- (void)handleUserNotificationInBG:(UNNotificationResponse *)response needComplete:(BOOL)needComplete completionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+{
+    BOOL isDefinedCode = [StreetHawk.notificationHandler isDefinedCode:response.notification.request.content.userInfo];
+    if (isDefinedCode)
+    {
+        SHNotificationType notificationType;
+        if ([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]])
+        {
+            notificationType = SHNotificationType_Remote;
+        }
+        else
+        {
+            notificationType = SHNotificationType_Local;
+        }
+        SHNotificationActionResult actionResult = SHNotificationActionResult_Unknown;
+        if ([response.actionIdentifier compare:UNNotificationDefaultActionIdentifier] != NSOrderedSame
+            && [response.actionIdentifier compare:UNNotificationDismissActionIdentifier] != NSOrderedSame)
+        {
+            actionResult = [response.actionIdentifier intValue]; //defined code uses `action` as identifier.
+        }
+        [StreetHawk.notificationHandler handleDefinedUserInfo:response.notification.request.content.userInfo withAction:actionResult treatAppAs:SHAppFGBG_BG forNotificationType:notificationType];
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SHNMOtherPayloadNotification object:nil userInfo:@{SHNMNotification_kPayload: response.notification.request.content.userInfo}];
+    }
+    if (needComplete && completionHandler != nil)
+    {
+        completionHandler(UNNotificationPresentationOptionNone);
+    }
+}
+
 - (void)handleRemoteNotification:(NSDictionary *)userInfo treatAppAs:(SHAppFGBG)appFGBG needComplete:(BOOL)needComplete fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     BOOL isDefinedCode = [StreetHawk.notificationHandler isDefinedCode:userInfo];
