@@ -18,6 +18,8 @@
 #import "SHApp.h" //for extension SHApp
 #import "ISHCustomiseHandler.h" //for protocol
 #import "ISHPhonegapObserver.h" //for protocol
+//header from System
+#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10
 
 @class SHNotificationHandler;
 
@@ -113,6 +115,20 @@ extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDi
  Get current saved apns device token as NSString.
  */
 - (NSString *)apnsDeviceToken;
+
+/**
+ Customer Application should implement this in UIApplicationDelegate to forward handling to StreetHawk library if NOT auto-integrate. If `StreetHawk.autoIntegrateAppDelegate = YES;` make sure NOT call this otherwise cause dead loop. Code snippet:
+ 
+ `- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+  {
+    [StreetHawk handleUserNotificationInFG:notification needComplete:YES completionHandler:completionHandler];
+  }`
+ 
+ @param notification User notification received.
+ @param needComplete Whether need to call `completionHandler` when task finish. If `completionHandler`=nil this does not matter YES or NO.
+ @param completionHandler Pass in system's to finish when task is done.
+ */
+- (void)handleUserNotificationInFG:(UNNotification *)notification needComplete:(BOOL)needComplete completionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler;
 
 /**
  Customer Application should implement this in UIApplicationDelegate to forward handling to StreetHawk library if NOT auto-integrate. If `StreetHawk.autoIntegrateAppDelegate = YES;` make sure NOT call this otherwise cause dead loop. Code snippet:

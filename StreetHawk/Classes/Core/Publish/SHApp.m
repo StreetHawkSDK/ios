@@ -1093,15 +1093,30 @@
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
+    if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)])
+    {
+        [self.appDelegateInterceptor.secondResponder application:application didFailToRegisterForRemoteNotificationsWithError:error];
+    }
     SHLog(@"WARNING: Register remote notification failed: %@.", error);
 }
 
 //since iOS 10 this function is called for both remote notification and local notification when App is in foreground. It hides all other delegate calls.
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
-    NSLog( @"Handle push from foreground" );
-    // custom code to handle push while app is in the foreground
-    NSLog(@"%@", notification.request.content.userInfo);
+    //iOS 10 new system delegates cover many other previous deprecated delegates (both remote and local, both click banner and click button etc), to make things simple it does not consider try calling the deprecated delegates any more. It only calls the corresponding delegates in customer App's code.
+    BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(userNotificationCenter:willPresentNotification:withCompletionHandler:)];
+    NSMutableDictionary *dictNotification = [NSMutableDictionary dictionary];
+    dictNotification[@"notification"] = notification;
+    dictNotification[@"needComplete"] = @(!customerAppResponse);
+    if (completionHandler)
+    {
+        dictNotification[@"completionHandler"] = completionHandler;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_HandleUserNotificationInFG" object:nil userInfo:dictNotification];
+    if (customerAppResponse)
+    {
+        [self.appDelegateInterceptor.secondResponder userNotificationCenter:center willPresentNotification:notification withCompletionHandler:completionHandler];
+    }
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler

@@ -28,7 +28,6 @@
 #import "SHInterceptor.h" //for delegate
 //header from System
 #import <objc/runtime.h> //for associate object
-#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10
 
 #define APNS_DEVICE_TOKEN                   @"APNS_DEVICE_TOKEN"
 #define ENABLE_PUSH_NOTIFICATION            @"ENABLE_PUSH_NOTIFICATION"  //key for record user manually set isNotificationEnabled. Although it's used for both remote and local, key not change name to be compatible with old version.
@@ -338,6 +337,32 @@ NSString * const SHNMNotification_kPayload = @"Payload";
 - (NSString *)apnsDeviceToken
 {
     return [[NSUserDefaults standardUserDefaults] objectForKey:APNS_DEVICE_TOKEN];
+}
+
+- (void)handleUserNotificationInFG:(UNNotification *)notification needComplete:(BOOL)needComplete completionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+{
+    BOOL isDefinedCode = [StreetHawk.notificationHandler isDefinedCode:notification.request.content.userInfo];
+    if (isDefinedCode)
+    {
+        SHNotificationType notificationType;
+        if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]])
+        {
+            notificationType = SHNotificationType_Remote;
+        }
+        else
+        {
+            notificationType = SHNotificationType_Local;
+        }
+        [StreetHawk.notificationHandler handleDefinedUserInfo:notification.request.content.userInfo withAction:SHNotificationActionResult_Unknown treatAppAs:SHAppFGBG_FG forNotificationType:notificationType];
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SHNMOtherPayloadNotification object:nil userInfo:@{SHNMNotification_kPayload: notification.request.content.userInfo}];
+    }
+    if (needComplete && completionHandler != nil)
+    {
+        completionHandler(UNNotificationPresentationOptionNone);
+    }
 }
 
 - (void)handleRemoteNotification:(NSDictionary *)userInfo treatAppAs:(SHAppFGBG)appFGBG needComplete:(BOOL)needComplete fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
