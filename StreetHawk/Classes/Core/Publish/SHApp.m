@@ -828,7 +828,10 @@
         {
             [StreetHawk openURL:openUrl];
         }
-        //Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again.
+    }
+    if (isFromDelayLaunch //Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again.
+        || ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0)) //iOS 10 do [UNUserNotificationCenter currentNotificationCenter].delegate = StreetHawk after AppDidFinishLaunch, causing not launched App cannot handle remote notification. Fix it by handling here.
+    {
         NSDictionary *notificationInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
         if (notificationInfo != nil)
         {
@@ -838,6 +841,7 @@
             dictUserInfo[@"needComplete"] = @(NO);
             [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveRemoteNotification" object:nil userInfo:dictUserInfo];
         }
+        //local notification is not considered so far, and StreetHawk SDk doesn't use local notification now.
     }
     
     if (launchOptions[UIApplicationLaunchOptionsLocationKey] != nil)  //happen when significate location service wake up App, the value is a number such as 1
@@ -1525,7 +1529,8 @@
         [StreetHawk sendLogForCode:LOG_CODE_VIEW_EXIT withComment:page];
         if (logComplete)
         {
-            NSAssert(self.currentView != nil && [self.currentView.viewName isEqualToString:page], @"When complete enter (%@) different from exit (%@).", self.currentView.viewName, page);
+            NSAssert(self.currentView == nil/*if start page not inherit from SH vc, currentView can be nil*/
+                     || (self.currentView != nil && [self.currentView.viewName isEqualToString:page]), @"When complete enter (%@) different from exit (%@).", self.currentView.viewName, page);
             if (self.currentView != nil && [self.currentView.viewName isEqualToString:page])
             {
                 self.currentView.exitTime = [NSDate date];
