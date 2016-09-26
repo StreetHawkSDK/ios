@@ -36,7 +36,7 @@ extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDi
 /**
  Extension for Notification API.
  */
-@interface SHApp (NotificationExt)
+@interface SHApp (NotificationExt) <UNUserNotificationCenterDelegate>
 
 /**
  Default value to initialise `isNotificationEnabled`, it's called once when App first launch to set to `isNotificationEnabled`. A typical usage is to delay asking for notification permission:
