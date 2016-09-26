@@ -46,6 +46,16 @@
  @param feed_id The feed id of result feed.
  @param result The result for accept, or postpone or decline.
  */
-- (void)sendLogForFeed:(NSString *)feed_id withResult:(SHResult)result;
+- (void)notifyFeedResult:(NSString *)feed_id withResult:(SHResult)result;
+
+/**
+ Send priority logline for feed result.
+ @param feed_id The feed id of result feed.
+ @param result The result for accept, or postpone or decline.
+ @param stepId The ID or label about a step.
+ @param feedDelete Set to true if feed items should be deleted from server for the given install.
+ @param complete Set to true when tour complete.
+ */
+- (void)notifyFeedResult:(NSString *)feed_id withResult:(SHResult)result withStepId:(NSString *)stepId deleteFeed:(BOOL)feedDelete completed:(BOOL)complete;
 
 @end

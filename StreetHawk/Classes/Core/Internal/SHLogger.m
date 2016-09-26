@@ -246,7 +246,8 @@ enum
             || (code == LOG_CODE_TAG_INCREMENT || code == LOG_CODE_TAG_DELETE || code == LOG_CODE_TAG_ADD)  //immediately send for add/remove/increment user tag
             || (code == LOG_CODE_TIMEOFFSET)  //immediately send for time utc offset change
             || (code == LOG_CODE_HEARTBEAT)  //immediately send for heart beat
-            || (code == LOG_CODE_PUSH_RESULT); //immediately send for pushresult
+            || (code == LOG_CODE_PUSH_RESULT) //immediately send for pushresult
+            || (code == LOG_CODE_FEED_RESULT); //immediately send for feedresult
         }
         else
         {
@@ -661,8 +662,16 @@ enum
             {
                 NSAssert(!shStrIsEmpty(assocIdStr), @"Send feed result without assocId.");
                 logRecord[@"feed_id"] = assocIdStr;
-                NSAssert(result == LOG_RESULT_ACCEPT || result == LOG_RESULT_CANCEL || result == LOG_RESULT_LATER, @"Send feed result with improper result.");
-                logRecord[@"result"] = @(result);
+                NSDictionary *dictResult = shParseObjectToDict(shCstringToNSString(comment));
+                if (dictResult == nil) //old format
+                {
+                    NSAssert(result == LOG_RESULT_ACCEPT || result == LOG_RESULT_CANCEL || result == LOG_RESULT_LATER, @"Send feed result with improper result.");
+                    logRecord[@"result"] = @(result);
+                }
+                else
+                {
+                    logRecord[@"result"] = dictResult;
+                }
             }
             //Code: 8202. Push ACK
             else if (code == LOG_CODE_PUSH_ACK)
