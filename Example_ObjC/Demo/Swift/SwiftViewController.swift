@@ -58,7 +58,7 @@ class SwiftViewController: StreetHawkBaseViewController
                 for feedObj in arrayFeeds!
                 {
                     print("Feed obj <\((feedObj as AnyObject).feed_id)>: \(feedObj).")
-                    SHApp.sharedInstance().sendLog(forFeed: (feedObj as AnyObject).feed_id, with:SHResult_Accept)
+                    SHApp.sharedInstance().notifyFeedResult((feedObj as AnyObject).feed_id, with: SHResult_Accept)
                 }
             }
         })

@@ -2,36 +2,36 @@ PODS:
   - AutoScrollLabel (0.4.3)
   - MBProgressHUD (1.0.0)
   - Reachability (3.2)
-  - streethawk (1.8.2):
-    - streethawk/Beacons (= 1.8.2)
-    - streethawk/Core (= 1.8.2)
-    - streethawk/Crash (= 1.8.2)
-    - streethawk/Feed (= 1.8.2)
-    - streethawk/Geofence (= 1.8.2)
-    - streethawk/Growth (= 1.8.2)
-    - streethawk/Locations (= 1.8.2)
-    - streethawk/Push (= 1.8.2)
-  - streethawk/Beacons (1.8.2):
+  - streethawk (1.8.5):
+    - streethawk/Beacons (= 1.8.5)
+    - streethawk/Core (= 1.8.5)
+    - streethawk/Crash (= 1.8.5)
+    - streethawk/Feed (= 1.8.5)
+    - streethawk/Geofence (= 1.8.5)
+    - streethawk/Growth (= 1.8.5)
+    - streethawk/Locations (= 1.8.5)
+    - streethawk/Push (= 1.8.5)
+  - streethawk/Beacons (1.8.5):
     - Reachability
     - streethawk/Core
-  - streethawk/Core (1.8.2):
+  - streethawk/Core (1.8.5):
     - MBProgressHUD
-    - streethawk/Core/no-arc (= 1.8.2)
-  - streethawk/Core/no-arc (1.8.2):
+    - streethawk/Core/no-arc (= 1.8.5)
+  - streethawk/Core/no-arc (1.8.5):
     - MBProgressHUD
-  - streethawk/Crash (1.8.2):
+  - streethawk/Crash (1.8.5):
     - streethawk/Core
-  - streethawk/Feed (1.8.2):
+  - streethawk/Feed (1.8.5):
     - streethawk/Core
-  - streethawk/Geofence (1.8.2):
+  - streethawk/Geofence (1.8.5):
     - Reachability
     - streethawk/Core
-  - streethawk/Growth (1.8.2):
+  - streethawk/Growth (1.8.5):
     - streethawk/Core
-  - streethawk/Locations (1.8.2):
+  - streethawk/Locations (1.8.5):
     - Reachability
     - streethawk/Core
-  - streethawk/Push (1.8.2):
+  - streethawk/Push (1.8.5):
     - AutoScrollLabel
     - streethawk/Core
 
@@ -46,7 +46,7 @@ SPEC CHECKSUMS:
   AutoScrollLabel: bee53a1d4532569b49cbecaf9b80ca003bed3767
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  streethawk: 2c41b34c92a8e901a42127d546c0cc97e587f166
+  streethawk: c933c02696aa6b0b5e5cdba131ad03a8fa81093f
 
 PODFILE CHECKSUM: 6779d8f8296815b867f6f7fea42c5b090d3bed08
 
