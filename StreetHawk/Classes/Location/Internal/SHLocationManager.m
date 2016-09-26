@@ -168,15 +168,13 @@
     BOOL isEnabled;
     if (allowNotDetermined)
     {
-        isEnabled = ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized /*Individual App location service is enabled.*/
-                     || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways /*Sinc iOS 8, equal to kCLAuthorizationStatusAuthorized*/
+        isEnabled = ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways /*Sinc iOS 8, equal to kCLAuthorizationStatusAuthorized*/
                      || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse /*Since iOS 8, */
                      || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined/*Need this also, otherwise not ask for permission at first launch.*/);
     }
     else
     {
-        isEnabled = ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized /*Individual App location service is enabled.*/
-                     || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways /*Sinc iOS 8, equal to kCLAuthorizationStatusAuthorized*/
+        isEnabled = ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways /*Sinc iOS 8, equal to kCLAuthorizationStatusAuthorized*/
                      || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse /*Since iOS 8, */);
     }
     if (isEnabled)
