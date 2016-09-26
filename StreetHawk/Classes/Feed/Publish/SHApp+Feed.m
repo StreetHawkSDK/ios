@@ -139,13 +139,13 @@
         }
         case SHResult_Postpone:
         {
-            resultStr = @"later";
+            resultStr = @"postponed";
             resultVal = LOG_RESULT_LATER;
             break;
         }
         case SHResult_Decline:
         {
-            resultStr = @"declined";
+            resultStr = @"rejected";
             resultVal = LOG_RESULT_CANCEL;
             break;
         }
