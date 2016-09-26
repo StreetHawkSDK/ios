@@ -29,8 +29,6 @@
 #import "SHInteractiveButtons.h" //for interactive pair buttons
 //header from System
 #import <CoreBluetooth/CoreBluetooth.h>
-//header from Third-party
-#import "Emojione.h" //for convert emoji to unicode
 
 @interface SHNotificationHandler ()
 
@@ -156,8 +154,8 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
                         {
                             titleLength = alert.length;
                         }
-                        pushData.title = [Emojione shortnameToUnicode:[[alert substringToIndex:titleLength] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-                        pushData.message = [Emojione shortnameToUnicode:[[alert substringFromIndex:titleLength] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+                        pushData.title = [[alert substringToIndex:titleLength] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        pushData.message = [[alert substringFromIndex:titleLength] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                     }
                 }
             }

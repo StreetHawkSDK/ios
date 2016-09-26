@@ -20,8 +20,6 @@
 #import "SHUtils.h" //for shLocalizedString
 #import "SHApp+Notification.h" //for StreetHawk
 #import "SHHTTPSessionManager.h" //for send request
-//header from Third-party
-#import "Emojione.h" //for convert emoji to unicode
 
 @implementation SHInteractiveButtons
 
@@ -298,19 +296,19 @@
     [arrayPairs addObject:pairMoreLess];
     SHInteractiveButtons *pairSmileSad = [[SHInteractiveButtons alloc] init]; //Category: shpre_happysad. Buttons: 1. :smile:; 2. :disappointed:
     pairSmileSad.categoryIdentifier = @"shpre_happysad";
-    pairSmileSad.button1 = @":smile:";
+    pairSmileSad.button1 = @"\U0001F604";
     pairSmileSad.action1 = SHNotificationActionResult_Yes;
     pairSmileSad.executeFg1 = YES;
-    pairSmileSad.button2 = @":disappointed:";
+    pairSmileSad.button2 = @"\U0001F61E";
     pairSmileSad.action2 = SHNotificationActionResult_NO;
     pairSmileSad.executeFg2 = YES;
     [arrayPairs addObject:pairSmileSad];
     SHInteractiveButtons *pairThumbnailUpDown = [[SHInteractiveButtons alloc] init]; //Category: shpre_tutd. Buttons: 1. :thumbsup:; 2. :thumbsdown:
     pairThumbnailUpDown.categoryIdentifier = @"shpre_tutd";
-    pairThumbnailUpDown.button1 = @":thumbsup:";
+    pairThumbnailUpDown.button1 = @"\U0001F44D";
     pairThumbnailUpDown.action1 = SHNotificationActionResult_Yes;
     pairThumbnailUpDown.executeFg1 = YES;
-    pairThumbnailUpDown.button2 = @":thumbsdown:";
+    pairThumbnailUpDown.button2 = @"\U0001F44E";
     pairThumbnailUpDown.action2 = SHNotificationActionResult_NO;
     pairThumbnailUpDown.executeFg2 = YES;
     [arrayPairs addObject:pairThumbnailUpDown];
@@ -324,13 +322,13 @@
     category.identifier = self.categoryIdentifier;
     UIMutableUserNotificationAction *action1 = [[UIMutableUserNotificationAction alloc] init];
     action1.identifier = [NSString stringWithFormat:@"%d", self.action1];
-    action1.title = [Emojione shortnameToUnicode:[self.button1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+    action1.title = [self.button1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     action1.activationMode = self.executeFg1 ? UIUserNotificationActivationModeForeground : UIUserNotificationActivationModeBackground;
     action1.authenticationRequired = NO;
     action1.destructive = NO;
     UIMutableUserNotificationAction *action2 = [[UIMutableUserNotificationAction alloc] init];
     action2.identifier = [NSString stringWithFormat:@"%d", self.action2];
-    action2.title = [Emojione shortnameToUnicode:[self.button2 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+    action2.title = [self.button2 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     action2.activationMode = self.executeFg2 ? UIUserNotificationActivationModeForeground : UIUserNotificationActivationModeBackground;
     action2.authenticationRequired = NO;
     action2.destructive = NO;
@@ -342,11 +340,11 @@
 - (UNNotificationCategory *)createUNNotificationCategory
 {
     NSString *identifier1 = [NSString stringWithFormat:@"%d", self.action1];
-    NSString *title1 = [Emojione shortnameToUnicode:[self.button1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+    NSString *title1 = [self.button1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     UNNotificationActionOptions option1 = self.executeFg1 ? UNNotificationActionOptionForeground : UNNotificationActionOptionNone;
     UNNotificationAction *action1 = [UNNotificationAction actionWithIdentifier:identifier1 title:title1 options:option1];
     NSString *identifier2 = [NSString stringWithFormat:@"%d", self.action2];
-    NSString *title2 = [Emojione shortnameToUnicode:[self.button2 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+    NSString *title2 = [self.button2 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     UNNotificationActionOptions option2 = self.executeFg2 ? UNNotificationActionOptionForeground : UNNotificationActionOptionNone;
     UNNotificationAction *action2 = [UNNotificationAction actionWithIdentifier:identifier2 title:title2 options:option2];
     UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:self.categoryIdentifier actions:@[action1, action2] intentIdentifiers:@[] options:UNNotificationCategoryOptionCustomDismissAction]; //dismiss action also call delegate to send push result
