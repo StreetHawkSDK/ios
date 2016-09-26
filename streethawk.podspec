@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name                = "streethawk"
   s.header_dir          = "StreetHawkCore"
-  s.version             = "1.8.2"
+  s.version             = "1.8.5"
   s.summary             = "Mobile Engagement Automation: Geofences campaign, Engage in right time via push message, Segment app user, analyse campaign performance."
   s.description         = <<-DESC
                             Streethawkis mobile engagement automation for your smartphone and tablet app user.
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.documentation_url   = 'http://streethawksdk.github.io/ios/'
 
   s.source              = { :git => 'https://github.com/StreetHawkSDK/ios.git', :tag => s.version.to_s, :submodules => true }
-  s.platform            = :ios, '7.0'
+  s.platform            = :ios, '8.0'
   s.requires_arc        = true
   
   s.xcconfig            = { 'OTHER_LDFLAGS' => '$(inherited) -lObjC', 
