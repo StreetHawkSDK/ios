@@ -117,32 +117,18 @@ extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDi
 - (NSString *)apnsDeviceToken;
 
 /**
- Customer Application should implement this in UIApplicationDelegate to forward handling to StreetHawk library if NOT auto-integrate. If `StreetHawk.autoIntegrateAppDelegate = YES;` make sure NOT call this otherwise cause dead loop. Code snippet:
- 
- `- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
-  {
-    [StreetHawk handleUserNotificationInFG:notification needComplete:YES completionHandler:completionHandler];
-  }`
- 
+ Since iOS 10 notification handler when App in foreground. If customer want to change to his own, just switch [UNUserNotificationCenter currentNotificationCenter].delegate = <custoemr's_own_delegate>.
  @param notification User notification received.
- @param needComplete Whether need to call `completionHandler` when task finish. If `completionHandler`=nil this does not matter YES or NO.
  @param completionHandler Pass in system's to finish when task is done.
  */
-- (void)handleUserNotificationInFG:(UNNotification *)notification needComplete:(BOOL)needComplete completionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler;
+- (void)handleUserNotificationInFG:(UNNotification *)notification completionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler;
 
 /**
- Customer Application should implement this in UIApplicationDelegate to forward handling to StreetHawk library if NOT auto-integrate. If `StreetHawk.autoIntegrateAppDelegate = YES;` make sure NOT call this otherwise cause dead loop. Code snippet:
- 
- `- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
- {
-    [StreetHawk handleUserNotificationInBG:response needComplete:YES completionHandler:completionHandler];
- }`
- 
+ Since iOS 10 notification handler when App in background. If customer want to change to his own, just switch [UNUserNotificationCenter currentNotificationCenter].delegate = <custoemr's_own_delegate>.
  @param response User notification response received.
- @param needComplete Whether need to call `completionHandler` when task finish. If `completionHandler`=nil this does not matter YES or NO.
  @param completionHandler Pass in system's to finish when task is done.
  */
-- (void)handleUserNotificationInBG:(UNNotificationResponse *)response needComplete:(BOOL)needComplete completionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler;
+- (void)handleUserNotificationInBG:(UNNotificationResponse *)response completionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler;
 
 /**
  Customer Application should implement this in UIApplicationDelegate to forward handling to StreetHawk library if NOT auto-integrate. If `StreetHawk.autoIntegrateAppDelegate = YES;` make sure NOT call this otherwise cause dead loop. Code snippet:

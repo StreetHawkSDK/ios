@@ -27,7 +27,7 @@
 
 @end
 
-@implementation NSString (Private)
+@implementation NSString (private)
 
 - (NSString *)refinePageName
 {

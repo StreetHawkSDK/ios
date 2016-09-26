@@ -25,9 +25,9 @@
 #import "SHHTTPSessionManager.h" //for sending request
 #import "SHAppStatus.h" //for appStatusChange
 #import "SHInteractiveButtons.h" //for interactive pair buttons
-#import "SHInterceptor.h" //for delegate
 //header from System
 #import <objc/runtime.h> //for associate object
+#import <UserNotifications/UserNotifications.h>  //for notification since iOS 10
 
 #define APNS_DEVICE_TOKEN                   @"APNS_DEVICE_TOKEN"
 #define ENABLE_PUSH_NOTIFICATION            @"ENABLE_PUSH_NOTIFICATION"  //key for record user manually set isNotificationEnabled. Although it's used for both remote and local, key not change name to be compatible with old version.
@@ -254,16 +254,11 @@ NSString * const SHNMNotification_kPayload = @"Payload";
         else
         {
             UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-            //setup intercept app delegate
-            //if (StreetHawk.autoIntegrateAppDelegate)
-            //{
-            //    self.appDelegateInterceptor = [[SHInterceptor alloc] init];  //strong property
-            //    self.appDelegateInterceptor.firstResponder = self;  //weak property
-            //    self.appDelegateInterceptor.secondResponder = [UIApplication sharedApplication].delegate;
-            //    self.originalAppDelegate = [UIApplication sharedApplication].delegate;  //must use a strong property to keep original AppDelegate, otherwise after next set t/o interceptor, original AppDelegate is null and cannot do StreetHawk first then forward to original AppDelegate.
-            //  [UIApplication sharedApplication].delegate = (id<UIApplicationDelegate>)self.appDelegateInterceptor;
-            //}
-            center.delegate = StreetHawk; //TODO: move before didfinishlaunch, but must in push module.
+            //not use SHInterceptor here. As center.delegate is standalone from AppDelegate and specific for iOS 10 notification, if customer would like to use his own, he can do override; if customer not want to override, just keep same. It's not related to "StreetHawk.autoIntegrateAppDelegate" too.
+            if (center.delegate == nil)
+            {
+                center.delegate = StreetHawk; //in case customer not set, do it by StreetHawk.
+            }
             NSMutableSet<UNNotificationCategory *> *categories = [NSMutableSet set];
             if (StreetHawk.developmentPlatform != SHDevelopmentPlatform_Unity) //Unity sample AngryBots: if App not launch, send push, click action button App will hang. It not happen if click banner, it not happen if App already launch and in BG. To avoid this stop working issue, Unity not have action button.
             {
@@ -339,7 +334,7 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     return [[NSUserDefaults standardUserDefaults] objectForKey:APNS_DEVICE_TOKEN];
 }
 
-- (void)handleUserNotificationInFG:(UNNotification *)notification needComplete:(BOOL)needComplete completionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+- (void)handleUserNotificationInFG:(UNNotification *)notification completionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 {
     BOOL isDefinedCode = [StreetHawk.notificationHandler isDefinedCode:notification.request.content.userInfo];
     if (isDefinedCode)
@@ -359,13 +354,13 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:SHNMOtherPayloadNotification object:nil userInfo:@{SHNMNotification_kPayload: notification.request.content.userInfo}];
     }
-    if (needComplete && completionHandler != nil)
+    if (completionHandler != nil)
     {
         completionHandler(UNNotificationPresentationOptionNone);
     }
 }
 
-- (void)handleUserNotificationInBG:(UNNotificationResponse *)response needComplete:(BOOL)needComplete completionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+- (void)handleUserNotificationInBG:(UNNotificationResponse *)response completionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 {
     BOOL isDefinedCode = [StreetHawk.notificationHandler isDefinedCode:response.notification.request.content.userInfo];
     if (isDefinedCode)
@@ -391,7 +386,7 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:SHNMOtherPayloadNotification object:nil userInfo:@{SHNMNotification_kPayload: response.notification.request.content.userInfo}];
     }
-    if (needComplete && completionHandler != nil)
+    if (completionHandler != nil)
     {
         completionHandler(UNNotificationPresentationOptionNone);
     }
@@ -653,6 +648,22 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     {
         [observer shPGDisplayHtmlFileName:htmlFile];
     }
+}
+
+#pragma mark - UNUserNotificationCenterDelegate handler
+
+//since iOS 10 this function is called for both remote notification and local notification when App is in foreground. It hides all other delegate calls.
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+{
+    //center.delegate is standalone from AppDelegate, which user can choose to use his own or StreetHawk's. Not do interrupt.
+    //As it doesn't depend on StreetHawk.appDelegateInterceptor, it can move to Notification module directly.
+    //iOS 10 new system delegates cover many other previous deprecated delegates (both remote and local, both click banner and click button etc), to make things simple it does not consider try calling the deprecated delegates any more. It only calls the corresponding delegates in customer App's code.
+    [StreetHawk handleUserNotificationInFG:notification completionHandler:completionHandler];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
+{
+    [StreetHawk handleUserNotificationInBG:response completionHandler:completionHandler];
 }
 
 @end

@@ -171,16 +171,6 @@ The application version and build version of current Application, formatted as @
     [StreetHawk setApnsDeviceToken:deviceToken];
  }
  
- - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
- {
-    [StreetHawk handleUserNotificationInFG:notification needComplete:YES completionHandler:completionHandler];
- }
- 
- - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
- {
-    [StreetHawk handleUserNotificationInBG:response needComplete:YES completionHandler:completionHandler];
- }
- 
  - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
  {
     [StreetHawk handleRemoteNotification:userInfo];
