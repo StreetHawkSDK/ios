@@ -41,19 +41,23 @@
 	
 	<option value="//api/name/activates">&nbsp;&nbsp;&nbsp;&nbsp;activates</option>
 	
+	<option value="//api/name/campaign">&nbsp;&nbsp;&nbsp;&nbsp;campaign</option>
+	
+	<option value="//api/name/content">&nbsp;&nbsp;&nbsp;&nbsp;content</option>
+	
 	<option value="//api/name/created">&nbsp;&nbsp;&nbsp;&nbsp;created</option>
+	
+	<option value="//api/name/deleted">&nbsp;&nbsp;&nbsp;&nbsp;deleted</option>
 	
 	<option value="//api/name/expires">&nbsp;&nbsp;&nbsp;&nbsp;expires</option>
 	
 	<option value="//api/name/feed_id">&nbsp;&nbsp;&nbsp;&nbsp;feed_id</option>
 	
-	<option value="//api/name/isDeleted">&nbsp;&nbsp;&nbsp;&nbsp;isDeleted</option>
-	
-	<option value="//api/name/isPublic">&nbsp;&nbsp;&nbsp;&nbsp;isPublic</option>
+	<option value="//api/name/message">&nbsp;&nbsp;&nbsp;&nbsp;message</option>
 	
 	<option value="//api/name/modified">&nbsp;&nbsp;&nbsp;&nbsp;modified</option>
 	
-	<option value="//api/name/type">&nbsp;&nbsp;&nbsp;&nbsp;type</option>
+	<option value="//api/name/title">&nbsp;&nbsp;&nbsp;&nbsp;title</option>
 	
 	
 	
@@ -90,19 +94,23 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/activates">activates</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/campaign">campaign</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/content">content</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/created">created</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/deleted">deleted</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/expires">expires</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/feed_id">feed_id</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isDeleted">isDeleted</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isPublic">isPublic</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/message">message</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/modified">modified</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/type">type</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/title">title</a></span></li>
 	
 </ul></li>
 
@@ -151,7 +159,7 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>Base class for feed object.</p>
+						<p>Feed object definition.</p>
 					</div>
 					
 					
@@ -175,19 +183,25 @@
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/type">&nbsp;&nbsp;type</a></code>
+		<code><a href="#//api/name/title">&nbsp;&nbsp;title</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/isPublic">&nbsp;&nbsp;isPublic</a></code>
+		<code><a href="#//api/name/message">&nbsp;&nbsp;message</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/isDeleted">&nbsp;&nbsp;isDeleted</a></code>
+		<code><a href="#//api/name/campaign">&nbsp;&nbsp;campaign</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/content">&nbsp;&nbsp;content</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -212,6 +226,12 @@
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/modified">&nbsp;&nbsp;modified</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/deleted">&nbsp;&nbsp;deleted</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -271,6 +291,78 @@
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/campaign" title="campaign"></a>
+	<h3 class="subsubtitle method-title">campaign</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Campaign this feed belongs to.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSString *campaign</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHFeedObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/content" title="content"></a>
+	<h3 class="subsubtitle method-title">content</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Json content, parse to NSObject.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) id content</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHFeedObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/created" title="created"></a>
 	<h3 class="subsubtitle method-title">created</h3>
 	
@@ -283,6 +375,42 @@
     
 
 	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSDate *created</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">SHFeedObject.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/deleted" title="deleted"></a>
+	<h3 class="subsubtitle method-title">deleted</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>When the Feed item was deleted.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSDate *deleted</code></div>
 
     
 	
@@ -354,7 +482,7 @@
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic) NSInteger feed_id</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSString *feed_id</code></div>
 
     
 	
@@ -379,54 +507,18 @@
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/isDeleted" title="isDeleted"></a>
-	<h3 class="subsubtitle method-title">isDeleted</h3>
+	<a name="//api/name/message" title="message"></a>
+	<h3 class="subsubtitle method-title">message</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Indicates if this item has been removed.</p>
+		<p>Message of this feed.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL isDeleted</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">SHFeedObject.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/isPublic" title="isPublic"></a>
-	<h3 class="subsubtitle method-title">isPublic</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Whether the Feed item is public or not. Public items are visible to all users. Non-public Feed items (templates) can be used in Campaign Actions or be added via assigning feed items.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL isPublic</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSString *message</code></div>
 
     
 	
@@ -487,18 +579,18 @@
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/type" title="type"></a>
-	<h3 class="subsubtitle method-title">type</h3>
+	<a name="//api/name/title" title="title"></a>
+	<h3 class="subsubtitle method-title">title</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Type of the feed item.</p>
+		<p>Title of this feed.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic) SHFeedType type</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSString *title</code></div>
 
     
 	
@@ -537,7 +629,7 @@
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Create from dictionary with filled properties, according to <a href="#//api/name/type"><code>type</code></a> it can create concrete object.</p>
+		<p>Create from dictionary with filled properties.</p>
 	</div>		
 	
     
@@ -583,7 +675,7 @@
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2016 StreetHawk. All rights reserved. (Last updated: 2016-03-09)</span><br />
+						<p><span class="copyright">&copy; 2016 StreetHawk. All rights reserved. (Last updated: 2016-09-27)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
