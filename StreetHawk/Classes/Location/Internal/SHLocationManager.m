@@ -22,7 +22,6 @@
 #import "SHLogger.h" //for sending logline
 #import "SHUtils.h" //for streetHawkIsEnabled
 //header from System
-#import <CoreBluetooth/CoreBluetooth.h>
 #import <UIKit/UIKit.h> //for `[UIApplication sharedApplication]`
 //header from Third-party
 #import "Reachability.h"
@@ -48,9 +47,6 @@
 
 - (NSString *)formatBeaconRegion:(CLBeaconRegion *)region;  //format beacon region to a string in format UUID-major-minor-identifier.
 - (BOOL)isRegionSame:(CLRegion *)r1 with:(CLRegion *)r2;  //compare two iBeacon region is same.
-
-@property (nonatomic, strong) CBCentralManager *bluetoothManager; //report bluetooth status to detech iBeacon, only initialized for iOS 7.0 above.
-- (void)createBluetoothManager;
 
 @property (nonatomic, strong) Reachability *reachability;
 - (void)createNetworkMonitor; //create Reachability to monitor network status change.
@@ -91,7 +87,6 @@
     if ((self = [super init]))
     {
         [self createLocationManager];
-        [self createBluetoothManager];
         [self createNetworkMonitor];
     }
     return self;
@@ -122,14 +117,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_StartMonitorGeoLocation" object:nil];
     
     //no need to start monitor server care iBeacon list, because it start and no code to stop, means when App launch (iOS 7 need manual launch, iOS 7.1+ automatically launch), it continues to monitor region and all related delegate works. Test by monitor a region in SHSample, kill App, enter/exit region, notification happen and output prints.
-}
-
-- (void)createBluetoothManager
-{
-    if ([CBCentralManager instancesRespondToSelector:@selector(initWithDelegate:queue:options:)])  //`options` since iOS 7.0, must have this to depress system dialog
-    {
-        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey: @(0)}];
-    }
 }
 
 - (void)createNetworkMonitor
@@ -319,30 +306,6 @@
 }
 
 #pragma mark - detecting result
-
-- (SHiBeaconState)iBeaconSupportState
-{
-    if ([CLLocationManager respondsToSelector:@selector(isRangingAvailable)]) //since iOS 7.0
-    {
-        if ([SHLocationManager locationServiceEnabledForApp:NO] && [CLLocationManager isRangingAvailable] && [CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
-        {
-            if (self.bluetoothState == CBCentralManagerStatePoweredOn)  //bluetooth is turn on and ready for use
-            {
-                return SHiBeaconState_Support;
-            }
-            else if (self.bluetoothState == CBCentralManagerStateUnknown)  //bluetooth state is not determined yet, need to wait some time.
-            {
-                return SHiBeaconState_Unknown;
-            }
-        }
-    }
-    return SHiBeaconState_NotSupport;
-}
-
-- (NSInteger)bluetoothState
-{
-    return self.bluetoothManager.state;  //if not 7.0 self.bluetoothManager=nil because it's not alloc, return 0 as unknown.
-}
 
 - (NSArray *)monitoredRegions
 {
@@ -562,7 +525,9 @@
     {
         return NO;  //initialize CLLocationManager but cannot call any function to avoid promote.
     }
-    if (self.iBeaconSupportState == SHiBeaconState_NotSupport) //if support contine; if unknown that's caused by bluetooth, continue; if not support, means iOS version less than 7, stop to avoid crash.
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateiBeaconStatus" object:nil];
+    int iBeaconSupportStatus = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_iBEACON] intValue];
+    if (iBeaconSupportStatus == 2/*SHiBeaconState_NotSupport*/) //if support contine; if unknown that's caused by bluetooth, continue; if not support, means iOS version less than 7, stop to avoid crash.
     {
         return NO;
     }

@@ -27,8 +27,6 @@
 #import "SHUtils.h" //for shLocalizedString
 #import "SHTypes.h" //for SH_BEACON_BLUETOOTH
 #import "SHInteractiveButtons.h" //for interactive pair buttons
-//header from System
-#import <CoreBluetooth/CoreBluetooth.h>
 
 @interface SHNotificationHandler ()
 
@@ -567,7 +565,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateBluetoothStatus" object:nil];
         NSInteger bluetoothStatus = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_BEACON_BLUETOOTH] integerValue];
-        if ((pushData.isAppOnForeground/*is App from BG system setting maybe modified but bluetoothState is not updated on time yet. A good thing is it goes to direct action, and CBCentralManager can decide show dialog or not*/ && bluetoothStatus == CBCentralManagerStatePoweredOn/*if App in FG this is accurate*/))
+        if ((pushData.isAppOnForeground/*is App from BG system setting maybe modified but bluetoothState is not updated on time yet. A good thing is it goes to direct action, and CBCentralManager can decide show dialog or not*/ && bluetoothStatus == 5 /*CBCentralManagerStatePoweredOn, if App in FG this is accurate*/))
         {
             [pushData sendPushResult:SHResult_Accept withHandler:nil];
             return YES;  //stop handle
@@ -575,11 +573,7 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
         confirmAction = ^{
             [pushData sendPushResult:SHResult_Accept withHandler:nil];
             //show dialog which can direct to system's Bluetooth setting page
-            if ([CBCentralManager instancesRespondToSelector:@selector(initWithDelegate:queue:options:)])  //`options` since iOS 7.0, this push is to warning user to turn on Bluetooth for iBeacon, available since iOS 7.0.
-            {
-                CBCentralManager *tempManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey: @(1/*show setting*/)}];
-                tempManager = nil;
-            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_LaunchBluetoothSettings" object:nil];
         };
     }
     else if (pushData.action == SHAction_EnablePushMsg) //this also used for smart push, which can occur even when push is disabled.

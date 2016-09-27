@@ -39,30 +39,6 @@ enum SHGeoLocationMonitorState
 typedef enum SHGeoLocationMonitorState SHGeoLocationMonitorState;
 
 /**
- The status of current device's iBeacon support.
- */
-enum SHiBeaconState
-{
-    /**
-     Bluetooth state not determined yet, unknown at this moment.
-     */
-    SHiBeaconState_Unknown = 0,
-    /**
-     Current device is ready to use iBeacon, means it's iOS 7.0+, location service enabled, Bluetooth on.
-     */
-    SHiBeaconState_Support = 1,
-    /**
-     Current device not ready to use iBeacon, one condition not match.
-     */
-    SHiBeaconState_NotSupport = 2,
-    /**
-     Not have Beacon module, ignore this statue.
-     */
-    SHiBeaconState_Ignore = 3,
-};
-typedef enum SHiBeaconState SHiBeaconState;
-
-/**
 A core class to monitor location change. By default process of StreetHawk SDK, it works in the following way:
 
 - When the App is in foreground, it uses startUpdatingLocation to monitor location position and change. The SHLocationManagerUpdateLocation notification is sent after fgMinTimeBetweenEvents (default: 1 minute) and fgMinDistanceBetweenEvents (default: 100 meters).
@@ -136,16 +112,6 @@ A core class to monitor location change. By default process of StreetHawk SDK, i
  Background minimum distance between events, if last event to current location less than this, location update notification will not happen. default = 500.0 (metres)
  */
 @property (nonatomic) float bgMinDistanceBetweenEvents;
-
-/**
- iBeacon is supported by iOS 7.0 and above, device need have BLE 4.0 and turn Bluetooth on, location service must by enabled. This property determines whether current device support iBeacons.
- */
-@property (nonatomic, readonly) SHiBeaconState iBeaconSupportState;
-
-/**
- Get current status of bluetooth. Return is an enum refer to `CBCentralManagerState`.
- */
-@property (nonatomic, readonly) NSInteger bluetoothState;
 
 /**
  Current monitoring regions, either geo-location region or iBeacon region. This returns system internal `CLLocationManager.monitoredRegions`. When App re-launch previously monitored region recover, so only system knows what are the real monitored regions. Add it by `- (BOOL)startMonitorRegion:(CLRegion *)region` and removed by `- (void)stopmonitorRegion:(CLRegion *)region`.
