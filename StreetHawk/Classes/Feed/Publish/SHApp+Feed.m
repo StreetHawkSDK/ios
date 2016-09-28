@@ -133,7 +133,7 @@
     {
         case SHResult_Accept:
         {
-            resultStr = @"“accepted";
+            resultStr = @"accepted";
             resultVal = LOG_RESULT_ACCEPT;
             break;
         }
@@ -151,7 +151,7 @@
         }
         default:
             NSAssert(NO, @"Unkown feed result meet.");
-            resultStr = @"“accepted";
+            resultStr = @"accepted";
             resultVal = LOG_RESULT_ACCEPT;
             break;
     }
