@@ -89,4 +89,10 @@ typedef void (^SHFeedsFetchHandler)(NSArray *arrayFeeds, NSError *error);
  */
 + (SHFeedObject *)createFromDictionary:(NSDictionary *)dict;
 
+/**
+ Serialize self into a dictionary.
+ @return A dictionary with the feed information.
+ */
+- (NSDictionary *)serializeToDictionary;
+
 @end

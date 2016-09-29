@@ -18,6 +18,7 @@
 #import "SHFeedObject.h"
 //header from StreetHawk
 #import "SHUtils.h" //for shParseDate
+#import "SHTypes.h" //for NONULL
 
 @implementation SHFeedObject
 
@@ -66,6 +67,22 @@
     obj.modified = shParseDate(dict[@"modified"], 0);
     obj.deleted = shParseDate(dict[@"deleted"], 0);
     return obj;
+}
+
+- (NSDictionary *)serializeToDictionary
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[@"feed_id"] = NONULL(self.feed_id);
+    dict[@"title"] = NONULL(self.title);
+    dict[@"message"] = NONULL(self.message);
+    dict[@"campaign"] = NONULL(self.campaign);
+    dict[@"content"] = self.content;
+    dict[@"activates"] = shFormatStreetHawkDate(self.activates);
+    dict[@"expires"] = shFormatStreetHawkDate(self.expires);
+    dict[@"created"] = shFormatStreetHawkDate(self.created);
+    dict[@"modified"] = shFormatStreetHawkDate(self.modified);
+    dict[@"deleted"] = shFormatStreetHawkDate(self.deleted);
+    return dict;
 }
 
 @end
