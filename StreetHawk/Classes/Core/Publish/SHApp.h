@@ -505,7 +505,7 @@ The application version and build version of current Application, formatted as @
 
 /**
  Update the current install or create a new one if one does not exist.
- @param save_handler Callback for result.
+ @param handler Callback for result.
  */
 - (void)registerOrUpdateInstallWithHandler:(SHCallbackHandler)handler;
 

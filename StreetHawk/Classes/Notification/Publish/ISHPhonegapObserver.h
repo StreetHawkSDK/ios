@@ -30,7 +30,7 @@
 
 /**
  Phonegap Only! Function returns name of the html file which needs to be displayed in application. 
- @param html_fileName
+ @param html_fileName The html file name.
  */
 - (void)shPGDisplayHtmlFileName:(NSString *)html_fileName;
 

@@ -61,7 +61,7 @@
  1. Send request to StreetHawk server, formatted by `serverLoadURL`.
  2. Get the request's response, process it. If meet error call `load_handler` to return; if not call `loadFromDictionary:` to fill properties and then call `load_handler` to return.
  
- @param loadhandler Asynchronous callback for handling.
+ @param load_handler Asynchronous callback for handling.
  */
 - (void)loadFromServer:(SHCallbackHandler)load_handler;
 
@@ -71,8 +71,7 @@
 - (NSString *)serverSaveURL;
 
 /**
- The content post to server for saving this object.
- @param savePostBody The content for posting to server, it must be an NSDictionary.
+ The content post to server for saving this object, it must be an NSDictionary.
  */
 - (NSDictionary *)saveBody;
 
