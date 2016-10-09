@@ -51,7 +51,7 @@
 /**
  Send priority logline for feed result.
  @param feed_id The feed id of result feed.
- @param result The result for accept, or postpone or decline.
+ @param result The result for accept, or postpone or decline. String must be accepted|postponed|rejected.
  @param stepId The ID or label about a step.
  @param feedDelete Set to true if feed items should be deleted from server for the given install.
  @param complete Set to true when tour complete.
