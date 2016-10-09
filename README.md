@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/cocoapods/l/streethawk.svg?style=flat)](http://cocoadocs.org/docsets/streethawk)
 [![Platform](https://img.shields.io/cocoapods/p/streethawk.svg?style=flat)](http://cocoadocs.org/docsets/streethawk)
 
-Support iOS 7.0 and above.
+Support iOS 8.0 and above.
 
 ## Cocopods Installation
 
