@@ -135,14 +135,14 @@ extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDi
  
  `-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
  {
- [StreetHawk handleRemoteNotification:userInfo needComplete:YES fetchCompletionHandler:nil];
+    [StreetHawk handleRemoteNotification:userInfo treatAppAs:SHAppFGBG_Unknown needComplete:YES fetchCompletionHandler:nil];
  }`
  
  or
  
  `-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
  {
- [StreetHawk handleRemoteNotification:userInfo needComplete:YES fetchCompletionHandler:completionHandler];
+    [StreetHawk handleRemoteNotification:userInfo treatAppAs:SHAppFGBG_Unknown needComplete:YES fetchCompletionHandler:completionHandler];
  }`
  
  @param userInfo Payload passed in by remote notification.
@@ -157,7 +157,7 @@ extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDi
  
  `- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
  {
- [StreetHawk handleRemoteNotification:userInfo withActionId:identifier needComplete:YES completionHandler:completionHandler];
+    [StreetHawk handleRemoteNotification:userInfo withActionId:identifier needComplete:YES completionHandler:completionHandler];
  }`
  
  @param userInfo Payload passed in by remote notification.
@@ -172,7 +172,7 @@ extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDi
  
  `- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification`
  {
- [StreetHawk handleLocalNotification:notification needComplete:YES fetchCompletionHandler:nil];
+    [StreetHawk handleLocalNotification:notification treatAppAs:SHAppFGBG_Unknown needComplete:YES fetchCompletionHandler:nil];
  }`
  
  @param notification Object passed in by local notification.
@@ -187,7 +187,7 @@ extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDi
  
  `- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
  {
- [StreetHawk handleLocalNotification:notification withActionId:identifier needComplete:YES completionHandler:completionHandler];
+    [StreetHawk handleLocalNotification:notification withActionId:identifier needComplete:YES completionHandler:completionHandler];
  }`
  
  @param notification Object passed in by local notification.
