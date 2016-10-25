@@ -21,8 +21,11 @@
 #import "SHLocationManager.h"
 #import "SHTypes.h" //for SH_BEACON_BLUETOOTH
 #import "SHBeaconStatus.h"
+#import "SHUtils.h" //for SHLog
 //header from System
+#ifdef SH_FEATURE_IBEACON
 #import <CoreBluetooth/CoreBluetooth.h>
+#endif
 
 @interface SHBeaconBridge ()
 
@@ -86,11 +89,16 @@
 
 + (void)launchBluetoothSettingsPreference:(NSNotification *)notification
 {
+#ifdef SH_FEATURE_IBEACON
     if ([CBCentralManager instancesRespondToSelector:@selector(initWithDelegate:queue:options:)])  //`options` since iOS 7.0, this push is to warning user to turn on Bluetooth for iBeacon, available since iOS 7.0.
     {
         CBCentralManager *tempManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey: @(1/*show setting*/)}];
         tempManager = nil;
     }
+#else
+    SHLog(@"Bluetooth is disabled. Please add preprocessor macro \"SH_FEATURE_IBEACON\" into target and \"NSBluetoothPeripheralUsageDescription\" into Info.plist.");
+    SHLog(@"No action for \"launchBluetoothSettingsPreference\".");
+#endif
 }
 
 @end

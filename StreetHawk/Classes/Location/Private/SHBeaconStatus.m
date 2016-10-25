@@ -23,7 +23,9 @@
 #import "SHHTTPSessionManager.h" //for sending request
 #import "SHLocationManager.h"
 //header from System
+#ifdef SH_FEATURE_IBEACON
 #import <CoreBluetooth/CoreBluetooth.h>
+#endif
 
 #define APPSTATUS_IBEACON_FETCH_TIME        @"APPSTATUS_IBEACON_FETCH_TIME"  //last successfully fetch iBeacon list time
 #define APPSTATUS_IBEACON_FETCH_LIST        @"APPSTATUS_IBEACON_FETCH_LIST"  //iBeacon list fetched from server, it contains array for object: UUID, major, minor, id. This is used as iBeacon monitor region.
@@ -88,7 +90,9 @@
 - (void)regionRangeNotificationHandler:(NSNotification *)notification; //when range a region to know exact iBeacons.
 - (void)regionStateChangeNotificationHandler:(NSNotification *)notification; //monitor when a region state change.
 
+#ifdef SH_FEATURE_IBEACON
 @property (nonatomic, strong) CBCentralManager *bluetoothManager; //report bluetooth status to detech iBeacon, only initialized for iOS 7.0 above.
+#endif
 - (void)createBluetoothManager;
 
 @end
@@ -144,8 +148,9 @@
     {
         return;
     }
-    //By testing even if install/details set "ibeacon=false", means client report this device not support iBeacon, server still returns iBeacon timestamp in app_status. Must avoid continue for not support iBeacon device. As for pre-iOS 7 following code try to create CLBeaconRegion and causes crash. Bluetooth undecided state is SHiBeaconState_Unknown, bypass it is OK as this will called again next response.
-    if (self.iBeaconSupportState != SHiBeaconState_Support)
+    //By testing even if install/details set "ibeacon=false", means client report this device not support iBeacon, server still returns iBeacon timestamp in app_status. Must avoid continue for not support iBeacon device. As for pre-iOS 7 following code try to create CLBeaconRegion and causes crash.
+    //Bluetooth undecided state is SHiBeaconState_Unknown, continue in this case if customer not set "SH_FEATURE_IBEACON" macro, the bluetooth status is unknown but iBeacon can still work.
+    if (self.iBeaconSupportState == SHiBeaconState_NotSupport)
     {
         return;
     }
@@ -463,10 +468,15 @@
 
 - (void)createBluetoothManager
 {
+#ifdef SH_FEATURE_IBEACON
     if ([CBCentralManager instancesRespondToSelector:@selector(initWithDelegate:queue:options:)])  //`options` since iOS 7.0, must have this to depress system dialog
     {
         self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey: @(0)}];
     }
+#else
+    SHLog(@"Bluetooth is disabled. Please add preprocessor macro \"SH_FEATURE_IBEACON\" into target and \"NSBluetoothPeripheralUsageDescription\" into Info.plist.");
+    SHLog(@"No action for \"createBluetoothManager\".");
+#endif
 }
 
 - (SHiBeaconState)iBeaconSupportState
@@ -475,11 +485,11 @@
     {
         if ([SHLocationManager locationServiceEnabledForApp:NO] && [CLLocationManager isRangingAvailable] && [CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
         {
-            if (self.bluetoothState == CBCentralManagerStatePoweredOn)  //bluetooth is turn on and ready for use
+            if (self.bluetoothState == 5/*CBCentralManagerStatePoweredOn*/)  //bluetooth is turn on and ready for use
             {
                 return SHiBeaconState_Support;
             }
-            else if (self.bluetoothState == CBCentralManagerStateUnknown)  //bluetooth state is not determined yet, need to wait some time.
+            else if (self.bluetoothState == 0/*CBCentralManagerStateUnknown*/)  //bluetooth state is not determined yet, need to wait some time.
             {
                 return SHiBeaconState_Unknown;
             }
@@ -490,7 +500,13 @@
 
 - (NSInteger)bluetoothState
 {
+#ifdef SH_FEATURE_IBEACON
     return self.bluetoothManager.state;  //if not 7.0 self.bluetoothManager=nil because it's not alloc, return 0 as unknown.
+#else
+    SHLog(@"Bluetooth is disabled. Please add preprocessor macro \"SH_FEATURE_IBEACON\" into target and \"NSBluetoothPeripheralUsageDescription\" into Info.plist.");
+    SHLog(@"Return unknown (0) for \"bluetoothState\".");
+    return 0/*CBCentralManagerStateUnknown*/;
+#endif
 }
 
 @end
