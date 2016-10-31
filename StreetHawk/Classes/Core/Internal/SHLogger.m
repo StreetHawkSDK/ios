@@ -178,7 +178,7 @@ enum
         }
         if (code == LOG_CODE_APP_INVISIBLE)
         {
-            NSAssert(previousVisible == LOG_CODE_APP_VISIBLE, @"App to invisible but previous is not visible.");
+            //NSAssert(previousVisible == LOG_CODE_APP_VISIBLE, @"App to invisible but previous is not visible."); //Disable this assert, as router's first launch not have visible, so cause crash.
             NSDate *visibleTime = nil;
             NSObject *visibleTimeObj = [[NSUserDefaults standardUserDefaults] objectForKey:@"Previous_Visible_Time"];
             if (visibleTimeObj != nil && [visibleTimeObj isKindOfClass:[NSNumber class]])
@@ -189,7 +189,7 @@ enum
                     visibleTime = [NSDate dateWithTimeIntervalSinceReferenceDate:visibleTimeVal];
                 }
             }
-            NSAssert(visibleTime != nil, @"Not have visible time for this invisible.");
+            //NSAssert(visibleTime != nil, @"Not have visible time for this invisible."); //Disable this assert, as router's first launch not have visible, so cause crash.
             if (visibleTime != nil)
             {
                 NSMutableDictionary *dictAppSession = [NSMutableDictionary dictionary];

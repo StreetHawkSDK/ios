@@ -98,11 +98,6 @@ typedef void (^SHOpenUrlHandler)(NSURL *openUrl);
 @property (nonatomic, strong) NSString *appKey;
 
 /**
- Only for internal usage. It's "https://api.streethawk.com".
- */
-- (void)setDefaultStartingUrl:(NSString *)defaultUrl;
-
-/**
  Decide whether need to show debug log in console.
  */
 @property (nonatomic) BOOL isDebugMode;

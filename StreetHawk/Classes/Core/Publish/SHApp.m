@@ -284,46 +284,64 @@
         SHLog(@"Warning: Please setup APP_KEY in Info.plist or pass in by parameter.");
         return; //without app key not need to continue, but each request still checkes mandatory parameters.
     }
-    //initialize handlers
-    self.innerLogger = [[SHLogger alloc] init];  //this creates logs db, wait till user call `registerInstallForApp` to take action. logger must before location manager, because location manager create and start to send log, for example failure, and logger must be ready.
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_CreateLocationManager" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_CrashBridge_CreateObject" object:nil];
-    //At first possible place check app/status (https://bitbucket.org/shawk/streethawk/issue/555/apps-status-should-be-called-before), note:
-    //1. It does NOT stop anything, streethawkEnabled is YES by default, and all other functions work, not wait for completeHandler.
-    //2. It sends /apps/status request before all other request, but cannot put init as app_key is not known yet.
-    //3. Not force so that second and later launch not send request.
-    [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO];
-    //do analytics for application first run/started
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"NumTimesAppUsed"] == 0)
+    //Get router for App's first launch
+    BOOL isAppFirstLaunch = ([[NSUserDefaults standardUserDefaults] integerForKey:@"NumTimesAppUsed"] == 0);
+    dispatch_block_t action = ^
     {
-        [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App first run"];
-        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"NumTimesAppUsed"];
+        //initialize handlers
+        self.innerLogger = [[SHLogger alloc] init];  //this creates logs db, wait till user call `registerInstallForApp` to take action. logger must before location manager, because location manager create and start to send log, for example failure, and logger must be ready.
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_CreateLocationManager" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_CrashBridge_CreateObject" object:nil];
+        //do analytics for application first run/started
+        if (isAppFirstLaunch)
+        {
+            [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App first run"];
+            [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"NumTimesAppUsed"];
+        }
+        else
+        {
+            [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App started and engine initialized"];
+        }
+        //send sh_language automatically only once for an install. Not put inside "isAppFirstLaunch" branch because this is newly added after "isAppFirstLaunch", so if it's inside above branch, it won't tag for existing Apps.
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:@"TAG_SHLANGUAGE"] == 0)
+        {
+            [StreetHawk tagUserLanguage:nil];
+            [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"TAG_SHLANGUAGE"];
+        }
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        //check time zone and register for later change
+        [self checkUtcOffsetUpdate];
+        //check current build include which modules and send tags.
+        [self sendModuleTags];
+        //capture advertising identifier in case customer enables AdSupport.framework.
+        [self autoCaptureAdvertisingIdentifierTags];
+        //setup intercept app delegate
+        if (self.autoIntegrateAppDelegate)
+        {
+            self.appDelegateInterceptor = [[SHInterceptor alloc] init];  //strong property
+            self.appDelegateInterceptor.firstResponder = self;  //weak property
+            self.appDelegateInterceptor.secondResponder = [UIApplication sharedApplication].delegate;
+            self.originalAppDelegate = [UIApplication sharedApplication].delegate;  //must use a strong property to keep original AppDelegate, otherwise after next set to interceptor, original AppDelegate is null and cannot do StreetHawk first then forward to original AppDelegate.
+            [UIApplication sharedApplication].delegate = (id<UIApplicationDelegate>)self.appDelegateInterceptor;
+        }
+    };
+    if (isAppFirstLaunch)
+    {
+        //Do route check for first launch, and must wait until this is done to continue.
+        [[SHAppStatus sharedInstance] checkRouteWithCompleteHandler:^(BOOL isEnabled, NSString *hostUrl)
+        {
+            if (isEnabled && !shStrIsEmpty(hostUrl))
+            {
+                dispatch_async(dispatch_get_main_queue(), ^
+                {
+                    action();
+                });
+            }
+        }];
     }
     else
     {
-        [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App started and engine initialized"];
-    }
-    //send sh_language automatically only once for an install
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"TAG_SHLANGUAGE"] == 0)
-    {
-        [StreetHawk tagUserLanguage:nil];
-        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"TAG_SHLANGUAGE"];
-    }
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    //check time zone and register for later change
-    [self checkUtcOffsetUpdate];
-    //check current build include which modules and send tags.
-    [self sendModuleTags];
-    //capture advertising identifier in case customer enables AdSupport.framework.
-    [self autoCaptureAdvertisingIdentifierTags];
-    //setup intercept app delegate
-    if (self.autoIntegrateAppDelegate)
-    {
-        self.appDelegateInterceptor = [[SHInterceptor alloc] init];  //strong property
-        self.appDelegateInterceptor.firstResponder = self;  //weak property
-        self.appDelegateInterceptor.secondResponder = [UIApplication sharedApplication].delegate;
-        self.originalAppDelegate = [UIApplication sharedApplication].delegate;  //must use a strong property to keep original AppDelegate, otherwise after next set to interceptor, original AppDelegate is null and cannot do StreetHawk first then forward to original AppDelegate.
-        [UIApplication sharedApplication].delegate = (id<UIApplicationDelegate>)self.appDelegateInterceptor;
+        action();
     }
 }
 
@@ -348,11 +366,6 @@
         _appKey = [[NSUserDefaults standardUserDefaults] objectForKey:APPKEY_KEY];
     }
     return _appKey;
-}
-
-- (void)setDefaultStartingUrl:(NSString *)defaultUrl
-{
-    [SHAppStatus sharedInstance].defaultHost = defaultUrl;
 }
 
 - (NSString *)itunesAppId

@@ -43,12 +43,7 @@ extern NSString * const SHAppStatusChangeNotification;
 @property (nonatomic) BOOL streethawkEnabled;
 
 /**
- Default host url. Set by `[StreetHawk setDefaultStartingUrl:]` if need to change. This url not contain version, for example "https://api.streethawk.com".
- */
-@property (nonatomic, strong) NSString *defaultHost;
-
-/**
- The current alive host url. It can be switched to other host at runtime by app_status. This function return the local cached alive host root url, if it's empty return default one `defaultHost`. It also contains version, for example @"https://api.streethawk.com/v1". Use `makeBaseUrlString([[SHAppStatus sharedInstance] aliveHostForVersion:SHHostVersion_V1], @"install/details/")` to create request path.
+ The current alive host url. It can be switched to other host at runtime by app_status. It also contains version, for example @"https://api.streethawk.com/v1". Use `makeBaseUrlString([[SHAppStatus sharedInstance] aliveHostForVersion:SHHostVersion_V1], @"install/details/")` to create request path.
  */
 - (NSString *)aliveHostForVersion:(SHHostVersion)hostVersion;
 
@@ -119,5 +114,11 @@ extern NSString * const SHAppStatusChangeNotification;
  Save this check time to avoid frequent check. No matter any property changed or not, record the time.
  */
 - (void)recordCheckTime;
+
+/**
+ Check route for the given App key. Must called for first launch App key.
+ @param handler The route result. 
+ */
+- (void)checkRouteWithCompleteHandler:(void(^)(BOOL isEnabled, NSString *hostUrl))handler;
 
 @end

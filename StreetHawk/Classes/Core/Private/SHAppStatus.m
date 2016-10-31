@@ -22,7 +22,6 @@
 #import "SHLogger.h" //for sending logline
 
 #define APPSTATUS_STREETHAWKENABLED         @"APPSTATUS_STREETHAWKENABLED" //whether enable library functions
-#define APPSTATUS_DEFAULT_HOST              @"APPSTATUS_DEFAULT_HOST" //default starting host url
 #define APPSTATUS_ALIVE_HOST                @"APPSTATUS_ALIVE_HOST" //currently used alive host url
 #define APPSTATUS_UPLOAD_LOCATION           @"APPSTATUS_UPLOAD_LOCATION" //whether send install/log for location update
 #define APPSTATUS_SUBMIT_FRIENDLYNAME       @"APPSTATUS_SUBMIT_FRIENDLYNAME"  //whether server allow submit friendly name
@@ -61,8 +60,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     if ([self class] == [SHAppStatus class])
 	{
         NSMutableDictionary *initialDefaults = [NSMutableDictionary dictionary];
-        initialDefaults[APPSTATUS_STREETHAWKENABLED] = @(YES);  //by default sdk is enabled
-        initialDefaults[APPSTATUS_DEFAULT_HOST] = @"https://api.streethawk.com";  //by default host is this
+        initialDefaults[APPSTATUS_STREETHAWKENABLED] = @(NO);  //by default sdk is disabled as host server is unknown
         initialDefaults[APPSTATUS_UPLOAD_LOCATION] = @(YES);  //by default allow upload location by install/log
         initialDefaults[APPSTATUS_SUBMIT_FRIENDLYNAME] = @(NO); //by default not allow submit friendly name
         initialDefaults[APPSTATUS_REREGISTER] = @(NO); //by default not need to reregister
@@ -126,34 +124,15 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     }
 }
 
-- (NSString *)defaultHost
-{
-    return [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_DEFAULT_HOST];
-}
-
-- (void)setDefaultHost:(NSString *)defaultHost
-{
-    if (defaultHost != nil && defaultHost.length > 0)
-    {
-        //user must guarantee host address is complete and correct, no check here.
-        if ([defaultHost hasSuffix:@"/"])
-        {
-            defaultHost = [defaultHost substringToIndex:defaultHost.length - 1];
-        }
-        [[NSUserDefaults standardUserDefaults] setObject:defaultHost forKey:APPSTATUS_DEFAULT_HOST];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
 - (NSString *)aliveHostForVersion:(SHHostVersion)hostVersion
 {
     //For sake of performance, keep a memory variable instead of fetch from NSUserDefaults each time.
-    if (self.aliveHostInner == nil || self.aliveHostInner.length == 0)
+    if (shStrIsEmpty(self.aliveHostInner))
     {
         self.aliveHostInner = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_ALIVE_HOST];
-        if (self.aliveHostInner == nil || self.aliveHostInner.length == 0)  //not setup yet, use default one.
+        if (shStrIsEmpty(self.aliveHostInner))  //not setup yet, return nil
         {
-            self.aliveHostInner = self.defaultHost;
+            return nil;
         }
     }
     if ([self.aliveHostInner hasSuffix:@"/"])
@@ -164,9 +143,11 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     {
         case SHHostVersion_V1:
             return [NSString stringWithFormat:@"%@/%@", self.aliveHostInner, @"v1"];
-            break;
         case SHHostVersion_V2:
             return [NSString stringWithFormat:@"%@/%@", self.aliveHostInner, @"v2"];
+        case SHHostVersion_Unknown:
+            return self.aliveHostInner; //some just for test
+            break;
         default:
             NSAssert(NO, @"Meet unknown host version;");
             break;
@@ -421,6 +402,10 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 {
     if (!force)
     {
+        if (!streetHawkIsEnabled())
+        {
+            return;
+        }
         NSObject *lastCheckTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_CHECK_TIME];
         if (lastCheckTimeVal != nil/*fresh launch must check first*/ && self.streethawkEnabled/*No need to send request, as when StreetHawk is enabled, normal request are sent frequently*/)
         {
@@ -448,6 +433,24 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 {
     [[NSUserDefaults standardUserDefaults] setObject:@([NSDate date].timeIntervalSinceReferenceDate) forKey:APPSTATUS_CHECK_TIME];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)checkRouteWithCompleteHandler:(void(^)(BOOL isEnabled, NSString *hostUrl))handler
+{
+    [[SHHTTPSessionManager sharedInstance] GET:@"https://route.streethawk.com/v1/apps/status" hostVersion:SHHostVersion_Unknown parameters:@{@"app_key": NONULL(StreetHawk.appKey)} success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
+     {
+         if (handler)
+         {
+             handler(self.streethawkEnabled, self.aliveHostInner);
+         }
+     }
+    failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+     {
+         if (handler)
+         {
+             handler(NO, nil);
+         }
+     }];
 }
 
 @end
