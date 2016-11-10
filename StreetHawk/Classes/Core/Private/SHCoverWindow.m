@@ -30,9 +30,16 @@
 
 -(void)drawRect:(CGRect) rect
 {
-    //draw light gray cover.
-    CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), [UIColor lightGrayColor].CGColor);
-    CGContextSetAlpha(UIGraphicsGetCurrentContext(), 0.4);
+    if (self.overlayColor == nil)
+    {
+        CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), [UIColor lightGrayColor].CGColor); //draw light gray cover.
+        CGContextSetAlpha(UIGraphicsGetCurrentContext(), 0.4);
+    }
+    else
+    {
+        CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), self.overlayColor.CGColor);
+        CGContextSetAlpha(UIGraphicsGetCurrentContext(), self.overlayAlpha);
+    }
     CGContextFillRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, self.frame.size.width, self.frame.size.height));
 }
 

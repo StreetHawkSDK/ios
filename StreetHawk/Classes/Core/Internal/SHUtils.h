@@ -259,4 +259,21 @@ extern NSString *shCaptureAdvertisingIdentifier();
 
 @end
 
+/**
+ Extension to system UIColor class.
+ */
+@interface UIColor (SHExt)
+
+/**
+ Convert hex string formatted as #RRGGBB or #AARRGGBB to UIColor. It must prefix "#" and only contains (A), R, G, B. If not in this format, return nil.
+ */
++ (UIColor *)colorFromHexString:(NSString *)hexString;
+
+/**
+ Convert color to hex string formatted as #AARRGGBB. If color is nil return nil.
+ */
++ (NSString *)hexStringFromColor:(UIColor *)color;
+
+@end
+
 #endif //SH__UTILS__H

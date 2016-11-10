@@ -217,6 +217,11 @@
         {
             [[NSNotificationCenter defaultCenter] addObserver:crashBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
         }
+        Class pointziBridge = NSClassFromString(@"SHPointziBridge");
+        if (pointziBridge)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:pointziBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
+        }
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
         //finally post notification to let bridge ready.
@@ -1382,6 +1387,14 @@
         {
             [StreetHawk tagString:feedsCurrent forKey:@"sh_module_feeds"];
             [[NSUserDefaults standardUserDefaults] setObject:feedsCurrent forKey:@"sh_module_feeds"];
+        }        
+        Class pointziBridge = NSClassFromString(@"SHPointziBridge");
+        NSString *pointziCurrent = (pointziBridge == nil) ? @"false" : @"true";
+        NSString *pointziSent = [[NSUserDefaults standardUserDefaults] objectForKey:@"sh_module_pointzi"];
+        if ([pointziCurrent compare:pointziSent] != NSOrderedSame)
+        {
+            [StreetHawk tagString:pointziCurrent forKey:@"sh_module_pointzi"];
+            [[NSUserDefaults standardUserDefaults] setObject:pointziCurrent forKey:@"sh_module_pointzi"];
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
     }

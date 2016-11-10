@@ -295,7 +295,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 - (void)setFeedTimestamp:(NSString *)feedTimestamp
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_SetFeedTimestamp" object:nil userInfo:@{@"timestamp": NONULL(feedTimestamp)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_FeedBridge_SetFeedTimestamp" object:nil userInfo:@{@"timestamp": NONULL(feedTimestamp)}];
 }
 
 - (BOOL)reregister

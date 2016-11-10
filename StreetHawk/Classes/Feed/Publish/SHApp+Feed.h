@@ -36,7 +36,7 @@
 - (void)feed:(NSInteger)offset withHandler:(SHFeedsFetchHandler)handler;
 
 /**
- Send no priority logline for feedack. Customer developer should call this when a feed is read. Server may receive multiple loglines if user read one feed many times.
+ Send priority logline for feedack. Customer developer should call this when a feed is read. Server may receive multiple loglines if user read one feed many times.
  @param feed_id The feed id of reading feed.
  */
 - (void)sendFeedAck:(NSString *)feed_id;

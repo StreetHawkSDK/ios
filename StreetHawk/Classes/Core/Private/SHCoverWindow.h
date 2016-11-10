@@ -22,4 +22,14 @@
  */
 @interface SHCoverWindow : UIWindow
 
+/**
+ The color of the overlay.
+ */
+@property (nonatomic, strong) UIColor *overlayColor;
+
+/**
+ The alpha of the overlay.
+ */
+@property (nonatomic) CGFloat overlayAlpha;
+
 @end

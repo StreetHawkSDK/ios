@@ -775,3 +775,64 @@ NSString *shCaptureAdvertisingIdentifier()
 }
 
 @end
+
+@implementation UIColor (SHExt)
+
++ (UIColor *)colorFromHexString:(NSString *)hexString
+{
+    if (![hexString isKindOfClass:[NSString class]])
+    {
+        return nil;
+    }
+    if (hexString.length != 7 && hexString.length != 9)
+    {
+        return nil;
+    }
+    if (![hexString hasPrefix:@"#"])
+    {
+        return nil;
+    }
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    unsigned rgbValue = 0;
+    [scanner scanHexInt:&rgbValue];
+    CGFloat red, green, blue, alpha;
+    red = ((rgbValue & 0xFF0000) >> 16)/255.0;
+    green = ((rgbValue & 0xFF00) >> 8)/255.0;
+    blue = (rgbValue & 0xFF)/255.0;
+    if (hexString.length == 7)
+    {
+        alpha = 1.0;
+    }
+    else
+    {
+        alpha = ((rgbValue & 0xFF000000) >> 24)/255.0;
+    }
+    if (red >= 0 && red <= 1 && green >= 0 && green <= 1 && blue >= 0 && blue <= 1 && alpha >= 0 && alpha <= 1)
+    {
+        return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
++ (NSString *)hexStringFromColor:(UIColor *)color
+{
+    if (color == nil)
+    {
+        return nil;
+    }
+    CGFloat red, green, blue, alpha;
+    if ([color getRed:&red green:&green blue:&blue alpha:&alpha])
+    {
+        return [NSString stringWithFormat:@"#%02X%02X%02X%02X", (int)(alpha * 255), (int)(red * 255), (int)(green * 255), (int)(blue * 255)];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+@end
