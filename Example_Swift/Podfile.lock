@@ -10,6 +10,7 @@ PODS:
     - streethawk/Geofence (= 1.8.5)
     - streethawk/Growth (= 1.8.5)
     - streethawk/Locations (= 1.8.5)
+    - streethawk/Pointzi (= 1.8.5)
     - streethawk/Push (= 1.8.5)
   - streethawk/Beacons (1.8.5):
     - Reachability
@@ -31,6 +32,8 @@ PODS:
   - streethawk/Locations (1.8.5):
     - Reachability
     - streethawk/Core
+  - streethawk/Pointzi (1.8.5):
+    - streethawk/Core
   - streethawk/Push (1.8.5):
     - AutoScrollLabel
     - streethawk/Core
@@ -46,7 +49,7 @@ SPEC CHECKSUMS:
   AutoScrollLabel: bee53a1d4532569b49cbecaf9b80ca003bed3767
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  streethawk: c933c02696aa6b0b5e5cdba131ad03a8fa81093f
+  streethawk: af4ac3aa1aa6224ae349be9f547b82fd13c0c4a9
 
 PODFILE CHECKSUM: 8b1fdc00709e2232d55179350bdf977dd1be44f9
 
