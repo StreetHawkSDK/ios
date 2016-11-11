@@ -56,4 +56,10 @@
 #import "SHApp+Notification.h"
 #endif
 
+//Pointzi
+#ifdef SH_FEATURE_POINTZI
+#import "SHApp+Pointzi.h"
+#import "SHTooltip.h"
+#endif
+
 #endif //SH__STREETHAWK__H

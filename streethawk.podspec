@@ -99,5 +99,12 @@ Pod::Spec.new do |s|
     sp.public_header_files    = 'StreetHawk/Classes/Feed/**/Publish/*.h'
     sp.dependency               'streethawk/Core'
   end
+  
+  s.subspec 'Pointzi' do |sp|
+    sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_POINTZI' }
+    sp.source_files           = 'StreetHawk/Classes/Pointzi/**/*.{h,a}'    
+    sp.public_header_files    = 'StreetHawk/Classes/Pointzi/Headers/*.h'
+    sp.dependency               'streethawk/Core'    
+  end
 
 end

@@ -1,6 +1,0 @@
-framework module StreetHawkCore_Pointzi {
-  umbrella header "StreetHawkCore_Pointzi.h"
-
-  export *
-  module * { export * }
-}
