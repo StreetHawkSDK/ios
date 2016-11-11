@@ -218,6 +218,7 @@
             [[NSNotificationCenter defaultCenter] addObserver:crashBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
         }
         Class pointziBridge = NSClassFromString(@"SHPointziBridge");
+        NSLog(@"Bridge for pointzi: %@.", pointziBridge);
         if (pointziBridge)
         {
             [[NSNotificationCenter defaultCenter] addObserver:pointziBridge selector:@selector(bridgeHandler:) name:SH_InitBridge_Notification object:nil];
