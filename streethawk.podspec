@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   
   s.subspec 'Core' do |sp|
     sp.source_files        = 'StreetHawk/Classes/Core/**/*.{h,m}', 'StreetHawk/Classes/ThirdParty/AFNetworking/*.{h,m}'
-    sp.public_header_files = 'StreetHawk/Classes/Core/**/Publish/*.h'
+    sp.public_header_files = 'StreetHawk/Classes/Core/Publish/*.h'
     sp.exclude_files       = 'StreetHawk/Classes/Core/Private/SHPresentDialog.m', 'StreetHawk/Classes/Core/Private/SHCoverWindow.m'
     sp.resource_bundles    = {'streethawk' => ['StreetHawk/Assets/**/*']}
     sp.frameworks          = 'CoreTelephony', 'Foundation', 'CoreGraphics', 'UIKit', 'CoreSpotlight'
@@ -42,14 +42,14 @@ Pod::Spec.new do |s|
   s.subspec 'Growth' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_GROWTH' }
     sp.source_files           = 'StreetHawk/Classes/Growth/**/*.{h,m}'
-    sp.public_header_files    = 'StreetHawk/Classes/Growth/**/Publish/*.h'
+    sp.public_header_files    = 'StreetHawk/Classes/Growth/Publish/*.h'
     sp.dependency               'streethawk/Core'
   end
   
   s.subspec 'Push' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_NOTIFICATION' }
     sp.source_files           = 'StreetHawk/Classes/Notification/**/*.{h,m}'
-    sp.public_header_files    = 'StreetHawk/Classes/Notification/**/Publish/*.h'
+    sp.public_header_files    = 'StreetHawk/Classes/Notification/Publish/*.h'
     sp.dependency               'streethawk/Core'
     sp.dependency               'AutoScrollLabel'
   end
@@ -57,7 +57,7 @@ Pod::Spec.new do |s|
   s.subspec 'Locations' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_LATLNG' }
     sp.source_files           = 'StreetHawk/Classes/Location/**/*.{h,m}'
-    sp.public_header_files    = 'StreetHawk/Classes/Location/**/Publish/*.h'
+    sp.public_header_files    = 'StreetHawk/Classes/Location/Publish/*.h'
     sp.exclude_files          = 'StreetHawk/Classes/Location/Private/SHBeaconBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHBeaconStatus.{h,m}', 'StreetHawk/Classes/Location/Private/SHGeofenceBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHGeofenceStatus.{h,m}'
     sp.frameworks             = 'CoreLocation'
     sp.dependency               'streethawk/Core'
@@ -67,7 +67,7 @@ Pod::Spec.new do |s|
   s.subspec 'Geofence' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_GEOFENCE' }
     sp.source_files           = 'StreetHawk/Classes/Location/**/*.{h,m}'
-    sp.public_header_files    = 'StreetHawk/Classes/Location/**/Publish/*.h'
+    sp.public_header_files    = 'StreetHawk/Classes/Location/Publish/*.h'
     sp.exclude_files          = 'StreetHawk/Classes/Location/Private/SHBeaconBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHBeaconStatus.{h,m}', 'StreetHawk/Classes/Location/Private/SHLocationBridge.{h,m}'
     sp.frameworks             = 'CoreLocation'
     sp.dependency               'streethawk/Core'
@@ -77,7 +77,7 @@ Pod::Spec.new do |s|
   s.subspec 'Beacons' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_IBEACON' }
     sp.source_files           = 'StreetHawk/Classes/Location/**/*.{h,m}'
-    sp.public_header_files    = 'StreetHawk/Classes/Location/**/Publish/*.h'
+    sp.public_header_files    = 'StreetHawk/Classes/Location/Publish/*.h'
     sp.exclude_files          = 'StreetHawk/Classes/Location/Private/SHLocationBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHGeofenceBridge.{h,m}', 'StreetHawk/Classes/Location/Private/SHGeofenceStatus.{h,m}'
     sp.frameworks             = 'CoreLocation'
     sp.dependency               'streethawk/Core'
@@ -87,7 +87,7 @@ Pod::Spec.new do |s|
   s.subspec 'Crash' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_CRASH' }
     sp.source_files           = 'StreetHawk/Classes/Crash/**/*.{h,m}'
-    sp.public_header_files    = 'StreetHawk/Classes/Crash/**/Publish/*.h'
+    sp.public_header_files    = 'StreetHawk/Classes/Crash/Publish/*.h'
     sp.frameworks             = 'CoreLocation'
     sp.dependency               'streethawk/Core'    
     sp.vendored_frameworks    = 'StreetHawk/Vendor/CrashReporter.framework'
@@ -96,7 +96,7 @@ Pod::Spec.new do |s|
   s.subspec 'Feed' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_FEED' }
     sp.source_files           = 'StreetHawk/Classes/Feed/**/*.{h,m}'
-    sp.public_header_files    = 'StreetHawk/Classes/Feed/**/Publish/*.h'
+    sp.public_header_files    = 'StreetHawk/Classes/Feed/Publish/*.h'
     sp.dependency               'streethawk/Core'
   end
   
