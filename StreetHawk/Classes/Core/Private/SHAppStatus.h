@@ -53,6 +53,11 @@ extern NSString * const SHAppStatusChangeNotification;
 - (void)setAliveHost:(NSString *)aliveHost;
 
 /**
+ Match to `app_status` dictionary's `growth_host`. It's the host server for growth share..
+ */
+@property (nonatomic, strong) NSString *growthHost;
+
+/**
  Match to `app_status` dictionary's `location_updates`. If set to NO install/log not upload location change, although location manager still works locally.
  */
 @property (nonatomic) BOOL uploadLocationChange;

@@ -23,6 +23,7 @@
 
 #define APPSTATUS_STREETHAWKENABLED         @"APPSTATUS_STREETHAWKENABLED" //whether enable library functions
 #define APPSTATUS_ALIVE_HOST                @"APPSTATUS_ALIVE_HOST" //currently used alive host url
+#define APPSTATUS_GROWTH_HOST               @"APPSTATUS_GROWTH_HOST" //currently used growth host url
 #define APPSTATUS_UPLOAD_LOCATION           @"APPSTATUS_UPLOAD_LOCATION" //whether send install/log for location update
 #define APPSTATUS_SUBMIT_FRIENDLYNAME       @"APPSTATUS_SUBMIT_FRIENDLYNAME"  //whether server allow submit friendly name
 #define APPSTATUS_SUBMIT_INTERACTIVEBUTTONS @"APPSTATUS_SUBMIT_INTERACTIVEBUTTONS" //whether server allow submit interactive pair buttons
@@ -42,6 +43,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 //make sure update happens in sequence for each property
 @property (nonatomic) dispatch_semaphore_t semaphore_streethawkEnabled;
 @property (nonatomic) dispatch_semaphore_t semaphore_aliveHost;
+@property (nonatomic) dispatch_semaphore_t semaphore_growthHost;
 @property (nonatomic) dispatch_semaphore_t semaphore_uploadLocationChange;
 @property (nonatomic) dispatch_semaphore_t semaphore_allowSubmitFriendlyNames;
 @property (nonatomic) dispatch_semaphore_t semaphore_allowSubmitInteractiveButtons;
@@ -86,6 +88,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     {
         self.semaphore_streethawkEnabled = dispatch_semaphore_create(1);
         self.semaphore_aliveHost = dispatch_semaphore_create(1);
+        self.semaphore_growthHost = dispatch_semaphore_create(1);
         self.semaphore_uploadLocationChange = dispatch_semaphore_create(1);
         self.semaphore_allowSubmitFriendlyNames = dispatch_semaphore_create(1);
         self.semaphore_allowSubmitInteractiveButtons = dispatch_semaphore_create(1);
@@ -157,7 +160,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 - (void)setAliveHost:(NSString *)aliveHost
 {
-    if (aliveHost != nil && aliveHost.length > 0)
+    if (!shStrIsEmpty(aliveHost))
     {
         //server must guarantee host address is complete and correct, no check here.
         if ([aliveHost hasSuffix:@"/"])
@@ -183,6 +186,38 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
                 SHLog(@"Host change from %@ to %@.", oldHost, self.aliveHostInner);
             }
             dispatch_semaphore_signal(self.semaphore_aliveHost);
+        }
+    }
+}
+
+- (NSString *)growthHost
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_GROWTH_HOST];
+}
+
+- (void)setGrowthHost:(NSString *)growthHost
+{
+    if (!shStrIsEmpty(growthHost))
+    {
+        //server must guarantee host address is complete and correct, no check here.
+        if ([growthHost hasSuffix:@"/"])
+        {
+            growthHost = [growthHost substringToIndex:growthHost.length - 1]; //remove last "/"
+        }
+        NSAssert(![NSThread isMainThread], @"setGrowthHost wait in main thread.");
+        if (![NSThread isMainThread])
+        {
+            dispatch_semaphore_wait(self.semaphore_growthHost, DISPATCH_TIME_FOREVER);
+            NSString *localGrowthHost = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_GROWTH_HOST];
+            if ([growthHost compare:localGrowthHost options:NSCaseInsensitiveSearch] != NSOrderedSame)
+            {
+                //change to new host
+                [[NSUserDefaults standardUserDefaults] setObject:growthHost forKey:APPSTATUS_GROWTH_HOST];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [[NSNotificationCenter defaultCenter] postNotificationName:SHAppStatusChangeNotification object:nil];
+                SHLog(@"Growth host change from %@ to %@.", localGrowthHost, growthHost);
+            }
+            dispatch_semaphore_signal(self.semaphore_growthHost);
         }
     }
 }

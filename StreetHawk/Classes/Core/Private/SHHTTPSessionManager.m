@@ -149,7 +149,7 @@
 {
     NSAssert(![NSThread isMainThread], @"Successfual callback wait in main thread for request %@.", task.currentRequest);
     if ([task.response.URL.absoluteString.lowercaseString containsString:@".streethawk.com"] //since route host server is flexible to change
-        && ![task.response.URL.absoluteString.lowercaseString hasPrefix:@"https://pointzi.streethawk.com"]) //pointzi is an exception
+        && ![task.response.URL.absoluteString.lowercaseString hasPrefix:NONULL([SHAppStatus sharedInstance].growthHost)]) //growth is an exception
     {
         //whenever success process a request, do parser as it affects AppStatus.
         int resultCode = CODE_OK;
@@ -198,6 +198,11 @@
                     if ([dictStatus.allKeys containsObject:@"host"] && [dictStatus[@"host"] isKindOfClass:[NSString class]])
                     {
                         [SHAppStatus sharedInstance].aliveHost = dictStatus[@"host"];
+                    }
+                    //check "growth_host"
+                    if ([dictStatus.allKeys containsObject:@"growth_host"] && [dictStatus[@"growth_host"] isKindOfClass:[NSString class]])
+                    {
+                        [SHAppStatus sharedInstance].growthHost = dictStatus[@"growth_host"];
                     }
                     //check "location_updates"
                     if ([dictStatus.allKeys containsObject:@"location_updates"] && [dictStatus[@"location_updates"] respondsToSelector:@selector(boolValue)])
