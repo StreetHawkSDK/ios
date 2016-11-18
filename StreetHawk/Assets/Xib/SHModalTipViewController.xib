@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,6 +15,7 @@
                 <outlet property="button1" destination="11X-TI-uky" id="F3S-N7-I9w"/>
                 <outlet property="button2" destination="fSK-HF-g6U" id="iga-oq-fQS"/>
                 <outlet property="buttonClose" destination="Uri-9x-BKo" id="LKs-DX-wKI"/>
+                <outlet property="labelContent" destination="9VL-dq-wHT" id="GMi-8G-ATY"/>
                 <outlet property="labelTitle" destination="2mW-pS-QVy" id="cnr-Ai-dg1"/>
                 <outlet property="view" destination="1" id="aOn-aJ-Vq7"/>
                 <outlet property="viewContainer" destination="V7w-fv-uoe" id="fE1-TS-aDr"/>
@@ -25,11 +29,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" misplaced="YES" id="V7w-fv-uoe" userLabel="viewContainer">
-                    <frame key="frameInset"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <webView contentMode="scaleToFill" id="p1i-TX-fXV" userLabel="webView">
-                            <frame key="frameInset" minX="10" minY="95" maxX="10" maxY="95"/>
+                            <rect key="frame" x="10" y="95" width="355" height="477"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
@@ -37,23 +41,30 @@
                             </connections>
                         </webView>
                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="b7f-Pj-Epc" userLabel="activityIndicator">
-                            <frame key="frameInset" minX="49.86%" minY="323" width="20" height="20"/>
+                            <rect key="frame" x="177" y="323" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
                         <view contentMode="scaleToFill" misplaced="YES" id="maO-66-cw2" userLabel="viewTitle">
-                            <frame key="frameInset" height="30"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2mW-pS-QVy" userLabel="labelTitle">
-                            <frame key="frameInset" minX="10" minY="318" height="30" maxX="10"/>
+                            <rect key="frame" x="10" y="318" width="355" height="30"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9VL-dq-wHT" userLabel="labelContent">
+                            <rect key="frame" x="10" y="318" width="355" height="30"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Uri-9x-BKo" userLabel="buttonClose">
-                            <frame key="frameInset" minY="318" width="30" height="30" maxX="173"/>
+                            <rect key="frame" x="172" y="318" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                             <state key="normal" title="X"/>
@@ -62,14 +73,14 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="11X-TI-uky" userLabel="button1">
-                            <frame key="frameInset" minX="147" width="80" height="30" maxY="319"/>
+                            <rect key="frame" x="147" y="318" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <connections>
                                 <action selector="button1Clicked:" destination="-1" eventType="touchUpInside" id="2Fe-jl-3wN"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fSK-HF-g6U" userLabel="button2">
-                            <frame key="frameInset" width="80" height="30" maxX="148" maxY="319"/>
+                            <rect key="frame" x="147" y="318" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <connections>
                                 <action selector="button2Clicked:" destination="-1" eventType="touchUpInside" id="wyW-Bs-Eqy"/>
