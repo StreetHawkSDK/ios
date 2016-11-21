@@ -49,7 +49,7 @@
     BOOL isPointziInclude = (pointziBridge != nil);
     if (StreetHawk.newFeedHandler == nil && !isPointziInclude)
     {
-        return; //no need to continue if user not setup fetch handler and no tooltip parse need it.
+        return; //no need to continue if user not setup fetch handler and no tip parse need it.
     }
     if (!streetHawkIsEnabled())
     {
@@ -81,10 +81,10 @@
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 if (isPointziInclude)
                 {
-                    //always do a fetch when new feeds available, because feeds is automatically displays as tooltip.
+                    //always do a fetch when new feeds available, because feeds is automatically displays as tip.
                     [StreetHawk feed:0 withHandler:^(NSArray *arrayFeeds, NSError *error)
                     {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ParseFeed_Notification" object:nil userInfo:@{@"feeds": arrayFeeds}]; //parse feeds to fill tooltip
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ParseFeed_Notification" object:nil userInfo:@{@"feeds": arrayFeeds}]; //parse feeds to fill tip
                     }];
                 }
                 if (StreetHawk.newFeedHandler != nil)
