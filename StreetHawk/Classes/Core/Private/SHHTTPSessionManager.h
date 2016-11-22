@@ -77,4 +77,14 @@ typedef enum SHHostVersion SHHostVersion;
 
 @end
 
+/**
+ SHHTTPSessionManager uses HTTP request and JSON response serializer, while SHJSONSessionManager uses JSON request and JSON response serializer.
+ */
+@interface SHJSONSessionManager : SHHTTPSessionManager
 
+/**
+ Singleton instance. Caller normally only needs to use [SHJSONSessionManager sharedInstance], which configures connection session to server.
+ */
++ (nonnull SHJSONSessionManager *)sharedInstance;
+
+@end
