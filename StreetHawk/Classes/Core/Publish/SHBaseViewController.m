@@ -74,7 +74,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (![self.view.window isKindOfClass:[SHCoverWindow class]]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    if (![self.view.window isKindOfClass:[SHCoverWindow class]]
+        && ![self.class.description isEqualToString:@"SHModalTipViewController"]
+        && ![self.class.description isEqualToString:@"SHPopTipViewController"]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
@@ -113,7 +115,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (![self.view.window isKindOfClass:[SHCoverWindow class]]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    if (![self.view.window isKindOfClass:[SHCoverWindow class]]
+        && ![self.class.description isEqualToString:@"SHModalTipViewController"]
+        && ![self.class.description isEqualToString:@"SHPopTipViewController"]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
