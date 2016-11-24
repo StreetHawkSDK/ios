@@ -46,8 +46,6 @@
           sharedHTTPSessionManager.completionQueue = dispatch_queue_create("com.streethawk.StreetHawk.network", NULL/*NULL attribute same as DISPATCH_QUEUE_SERIAL, means this queue is FIFO.*/); //set completionQueue otherwise completion callback runs in main thread.
       });
     //By default it uses HTTP request and JSON response serializer.
-    //Temp solution: some APIs are moving to /v2 and must use JSON request, but some old APIs are still using HTTP request. Currently still use HTTP and if special one needs to use JSON request, the one needs to set before call.
-    sharedHTTPSessionManager.requestSerializer = [SHAFHTTPRequestSerializer serializer]; //reset to HTTP. Later it should all use JSON.
     return sharedHTTPSessionManager;
 }
 
@@ -322,6 +320,24 @@
         }
         SHLog(@"Add breakpoint here to know error request happen for %@.", comment);
     }
+}
+
+@end
+
+@implementation SHJSONSessionManager
+
++ (SHJSONSessionManager *)sharedInstance
+{
+    static SHJSONSessionManager *sharedJSONSessionManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^
+      {
+          sharedJSONSessionManager = [[SHJSONSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+          sharedJSONSessionManager.completionQueue = dispatch_queue_create("com.streethawk.StreetHawk.network", NULL/*NULL attribute same as DISPATCH_QUEUE_SERIAL, means this queue is FIFO.*/); //set completionQueue otherwise completion callback runs in main thread.
+          //some APIs are moving to /v2 and must use JSON request, but some old APIs are still using HTTP request. Cannot switch requestSerializer otherwise cause random crash (https://streethawk.atlassian.net/browse/IOS-958). Keep individual singleton for each. Later when all server API moves to JSON, SHAFHTTPRequestSerializer can be removed.
+          sharedJSONSessionManager.requestSerializer = [SHAFJSONRequestSerializer serializer];
+      });
+    return sharedJSONSessionManager;
 }
 
 @end
