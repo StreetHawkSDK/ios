@@ -827,6 +827,19 @@
         {
             [StreetHawk openURL:openUrl];
         }
+        //UIApplicationLaunchOptionsURLKey works for scheme type url, however it doesn't work for universal linking url. If launch by universal url, it uses UIApplicationLaunchOptionsUserActivityDictionaryKey.
+        NSDictionary *userActivityDictionary = launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey];
+        if (userActivityDictionary)
+        {
+            [userActivityDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop)
+             {
+                 if ([obj isKindOfClass:[NSUserActivity class]])
+                 {
+                     [StreetHawk continueUserActivity:(NSUserActivity *)obj];
+                     *stop = YES;
+                 }
+             }];
+        }
     }
     if (isFromDelayLaunch //Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again.
         || ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0)) //iOS 10 do [UNUserNotificationCenter currentNotificationCenter].delegate = StreetHawk after AppDidFinishLaunch, causing not launched App cannot handle remote notification. Fix it by handling here.
@@ -840,7 +853,7 @@
             dictUserInfo[@"needComplete"] = @(NO);
             [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveRemoteNotification" object:nil userInfo:dictUserInfo];
         }
-        //local notification is not considered so far, and StreetHawk SDk doesn't use local notification now.
+        //local notification is not considered so far, and StreetHawk SDK doesn't use local notification now.
     }
     
     if (launchOptions[UIApplicationLaunchOptionsLocationKey] != nil)  //happen when significate location service wake up App, the value is a number such as 1
