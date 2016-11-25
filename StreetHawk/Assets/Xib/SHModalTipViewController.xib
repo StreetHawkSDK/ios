@@ -20,7 +20,6 @@
                 <outlet property="view" destination="1" id="aOn-aJ-Vq7"/>
                 <outlet property="viewContainer" destination="V7w-fv-uoe" id="fE1-TS-aDr"/>
                 <outlet property="viewTitle" destination="maO-66-cw2" id="5YE-Mt-jB1"/>
-                <outlet property="webView" destination="p1i-TX-fXV" id="0SE-X7-ell"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -32,14 +31,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <webView contentMode="scaleToFill" id="p1i-TX-fXV" userLabel="webView">
-                            <rect key="frame" x="10" y="95" width="355" height="477"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <connections>
-                                <outlet property="delegate" destination="-1" id="Hf7-Ps-nQp"/>
-                            </connections>
-                        </webView>
                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="b7f-Pj-Epc" userLabel="activityIndicator">
                             <rect key="frame" x="177" y="323" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
