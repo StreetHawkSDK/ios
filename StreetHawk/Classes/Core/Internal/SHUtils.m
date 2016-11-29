@@ -287,6 +287,56 @@ UIViewController *shGetViewController(UIView *view)
     return (UIViewController *)shTraverseResponderChainForUIViewController(view);
 }
 
+CGSize shrinkControlSize(UIView *control)
+{
+    //for tip display at correct position, some control needs to get real size.
+    if ([control isKindOfClass:[UILabel class]])
+    {
+        //a label can be large, but the real display size is small.
+        UILabel *label = (UILabel *)control;
+        if (shStrIsEmpty(label.text))
+        {
+            return CGSizeMake(1.0, 1.0);
+        }
+        BOOL isOneLine = NO;
+        CGSize maximumLabelSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
+        if (label.lineBreakMode == NSLineBreakByClipping
+            || label.lineBreakMode == NSLineBreakByTruncatingHead
+            || label.lineBreakMode == NSLineBreakByTruncatingTail
+            || label.lineBreakMode == NSLineBreakByTruncatingMiddle)
+        {
+            //one line mode
+            maximumLabelSize = CGSizeMake(CGFLOAT_MAX, label.bounds.size.height);
+            isOneLine = YES;
+        }
+        else if (label.lineBreakMode == NSLineBreakByCharWrapping
+                 || label.lineBreakMode == NSLineBreakByWordWrapping)
+        {
+            //multiple line mode
+            maximumLabelSize = CGSizeMake(label.bounds.size.width, CGFLOAT_MAX);
+        }
+        else
+        {
+            assert(NO && "Meet unexpected line break mode.");
+        }
+        NSMutableParagraphStyle *textParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+        textParagraphStyle.alignment = label.textAlignment;
+        textParagraphStyle.lineBreakMode = label.lineBreakMode;
+        CGRect rect = [label.text boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin| NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:label.font, NSParagraphStyleAttributeName:textParagraphStyle} context:nil];
+        CGFloat width = rect.size.width <= label.bounds.size.width ? rect.size.width : label.bounds.size.width;
+        CGFloat height = rect.size.height <= label.bounds.size.height ? rect.size.height : label.bounds.size.height;
+        if (isOneLine)
+        {
+            return CGSizeMake(width, label.bounds.size.height); //still keep label's height, otherwise pointer move a little bit upper.
+        }
+        else
+        {
+            return CGSizeMake(label.bounds.size.width, height);
+        }
+    }
+    return control.bounds.size;
+}
+
 //Recrusively close views.
 void shDismissMessageViewForSubviews(NSArray *subViews)
 {

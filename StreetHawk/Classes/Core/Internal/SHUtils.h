@@ -121,6 +121,11 @@ extern void shPresentErrorAlertOrLog(NSError *error);
 extern UIViewController *shGetViewController(UIView *view);
 
 /**
+ Get real display name for some controls such as UILabel.
+ */
+extern CGSize shrinkControlSize(UIView *control);
+
+/**
  Dismiss all message views, including UIAlertView, UIActionSheet, UIModalView.
  */
 extern void shDismissAllMessageView();
