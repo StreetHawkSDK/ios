@@ -415,7 +415,19 @@ NSBundle *shFindBundleForResource(NSString *resourceName, NSString *type, BOOL m
     else if (StreetHawkCoreRES_EmbeddedFull_BUNDLE != nil && [[NSFileManager defaultManager] fileExistsAtPath:[StreetHawkCoreRES_EmbeddedFull_BUNDLE pathForResource:resourceName ofType:type]])  //check Embedded binary framework
     {
         bundle = StreetHawkCoreRES_EmbeddedFull_BUNDLE;
-    }    
+    }
+    //For png image, it might append @3x or @2x in file name. Try in case not find suitable.
+    if (bundle == nil && [type compare:@"png" options:NSCaseInsensitiveSearch] == NSOrderedSame && ![resourceName containsString:@"@"])
+    {
+        if (![resourceName hasSuffix:@"@3x"])
+        {
+            bundle  = shFindBundleForResource([resourceName stringByAppendingString:@"@3x"], type, mandatory);
+        }
+        if (bundle == nil && ![resourceName hasSuffix:@"@2x"])
+        {
+            bundle  = shFindBundleForResource([resourceName stringByAppendingString:@"@2x"], type, mandatory);
+        }
+    }
     if (mandatory)
     {
         assert(bundle != nil && "Cannot find suitable bundle");
