@@ -62,7 +62,7 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     if ([self class] == [SHAppStatus class])
 	{
         NSMutableDictionary *initialDefaults = [NSMutableDictionary dictionary];
-        initialDefaults[APPSTATUS_STREETHAWKENABLED] = @(NO);  //by default sdk is disabled as host server is unknown
+        initialDefaults[APPSTATUS_STREETHAWKENABLED] = @(YES);  //although host server is unknown enable SDK as server will report error in case fail
         initialDefaults[APPSTATUS_UPLOAD_LOCATION] = @(YES);  //by default allow upload location by install/log
         initialDefaults[APPSTATUS_SUBMIT_FRIENDLYNAME] = @(NO); //by default not allow submit friendly name
         initialDefaults[APPSTATUS_REREGISTER] = @(NO); //by default not need to reregister
