@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
                             Streethawk supports iOS and Android devices. Chek out Getting started section for integrating Streethawk into your iOS and Android application or check out detailed document at Streethawk Documents.
                             DESC
-  s.homepage            = "https://streethawk.freshdesk.com/helpdesk"
+  s.homepage            = "http://www.streethawk.com"
   s.screenshots         = [ ]
   s.license             = 'LGPL'
   s.author              = { 'Christine' => 'christine@streethawk.com', 'Supporter' => 'support@streethawk.com' }
