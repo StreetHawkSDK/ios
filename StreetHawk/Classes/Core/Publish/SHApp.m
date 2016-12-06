@@ -283,9 +283,7 @@
     {
         SHLog(@"Warning: Please setup APP_KEY in Info.plist or pass in by parameter.");
         return; //without app key not need to continue, but each request still checkes mandatory parameters.
-    }
-    //Get router for App's first launch
-    BOOL isAppFirstLaunch = ([[NSUserDefaults standardUserDefaults] integerForKey:@"NumTimesAppUsed"] == 0);
+    }    
     dispatch_block_t action = ^
     {
         //initialize handlers
@@ -293,6 +291,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_CreateLocationManager" object:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_CrashBridge_CreateObject" object:nil];
         //do analytics for application first run/started
+        BOOL isAppFirstLaunch = ([[NSUserDefaults standardUserDefaults] integerForKey:@"NumTimesAppUsed"] == 0);
         if (isAppFirstLaunch)
         {
             [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App first run"];
@@ -325,11 +324,16 @@
             [UIApplication sharedApplication].delegate = (id<UIApplicationDelegate>)self.appDelegateInterceptor;
         }
     };
-    if (isAppFirstLaunch)
+    //Get router for App's first launch. Must use another key instead of "NumTimesAppUsed", which is already used by previous launch.
+    //When upgrade to multiple server SDK version, must do router check once.
+    BOOL routeChecked = [[NSUserDefaults standardUserDefaults] boolForKey:@"RouteChecked"];
+    if (!routeChecked)
     {
         //Do route check for first launch, and must wait until this is done to continue.
         [[SHAppStatus sharedInstance] checkRouteWithCompleteHandler:^(BOOL isEnabled, NSString *hostUrl)
         {
+            [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"RouteChecked"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             if (isEnabled && !shStrIsEmpty(hostUrl))
             {
                 dispatch_async(dispatch_get_main_queue(), ^

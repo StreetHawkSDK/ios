@@ -850,6 +850,7 @@ enum
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"INSTALL_SUID_KEY"]; //clear local install id, next will register a new one. This is most important, otherwise logs cannot submit due to conflict logid.
     [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:@"APPSTATUS_REREGISTER"];  //clear reregister flag
     [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:@"NumTimesAppUsed"]; //report "App first run" instead of "App started and engine initialized".
+    [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:@"RouteChecked"]; //re-flag route check for new install
     [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:@"TAG_SHLANGUAGE"]; //re-tag sh_language for new install
     [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:MAX_LOGID]; //local SQLite will be delete and rebuild, sent record reset to 0.
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"SETTING_UTC_OFFSET"]; //make new install submit utc offset for first time.
