@@ -718,6 +718,11 @@ BOOL streetHawkIsEnabled()
         NSLog(@"This App is disabled, please contact Administrator to enable it.");
         return NO;
     }
+    else if (shStrIsEmpty([[SHAppStatus sharedInstance] aliveHostForVersion:SHHostVersion_Unknown]))
+    {
+        NSLog(@"No host server, please contact Administrator to enable it.");
+        return NO;
+    }
     else
     {
         return YES;

@@ -289,47 +289,69 @@
     {
         SHLog(@"Warning: Please setup APP_KEY in Info.plist or pass in by parameter.");
         return; //without app key not need to continue, but each request still checkes mandatory parameters.
-    }
-    //initialize handlers
-    self.innerLogger = [[SHLogger alloc] init];  //this creates logs db, wait till user call `registerInstallForApp` to take action. logger must before location manager, because location manager create and start to send log, for example failure, and logger must be ready.
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_CreateLocationManager" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_CrashBridge_CreateObject" object:nil];
-    //At first possible place check app/status (https://bitbucket.org/shawk/streethawk/issue/555/apps-status-should-be-called-before), note:
-    //1. It does NOT stop anything, streethawkEnabled is YES by default, and all other functions work, not wait for completeHandler.
-    //2. It sends /apps/status request before all other request, but cannot put init as app_key is not known yet.
-    //3. Not force so that second and later launch not send request.
-    [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO];
-    //do analytics for application first run/started
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"NumTimesAppUsed"] == 0)
+    }    
+    dispatch_block_t action = ^
     {
-        [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App first run"];
-        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"NumTimesAppUsed"];
+        //initialize handlers
+        self.innerLogger = [[SHLogger alloc] init];  //this creates logs db, wait till user call `registerInstallForApp` to take action. logger must before location manager, because location manager create and start to send log, for example failure, and logger must be ready.
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_CreateLocationManager" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_CrashBridge_CreateObject" object:nil];
+        //do analytics for application first run/started
+        BOOL isAppFirstLaunch = ([[NSUserDefaults standardUserDefaults] integerForKey:@"NumTimesAppUsed"] == 0);
+        if (isAppFirstLaunch)
+        {
+            [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App first run"];
+            [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"NumTimesAppUsed"];
+        }
+        else
+        {
+            [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App started and engine initialized"];
+        }
+        //send sh_language automatically only once for an install. Not put inside "isAppFirstLaunch" branch because this is newly added after "isAppFirstLaunch", so if it's inside above branch, it won't tag for existing Apps.
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:@"TAG_SHLANGUAGE"] == 0)
+        {
+            [StreetHawk tagUserLanguage:nil];
+            [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"TAG_SHLANGUAGE"];
+        }
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        //check time zone and register for later change
+        [self checkUtcOffsetUpdate];
+        //check current build include which modules and send tags.
+        [self sendModuleTags];
+        //capture advertising identifier in case customer enables AdSupport.framework.
+        [self autoCaptureAdvertisingIdentifierTags];
+        //setup intercept app delegate
+        if (self.autoIntegrateAppDelegate)
+        {
+            self.appDelegateInterceptor = [[SHInterceptor alloc] init];  //strong property
+            self.appDelegateInterceptor.firstResponder = self;  //weak property
+            self.appDelegateInterceptor.secondResponder = [UIApplication sharedApplication].delegate;
+            self.originalAppDelegate = [UIApplication sharedApplication].delegate;  //must use a strong property to keep original AppDelegate, otherwise after next set to interceptor, original AppDelegate is null and cannot do StreetHawk first then forward to original AppDelegate.
+            [UIApplication sharedApplication].delegate = (id<UIApplicationDelegate>)self.appDelegateInterceptor;
+        }
+    };
+    //Get router for App's first launch. Must use another key instead of "NumTimesAppUsed", which is already used by previous launch.
+    //When upgrade to multiple server SDK version, must do router check once.
+    BOOL routeChecked = [[NSUserDefaults standardUserDefaults] boolForKey:@"RouteChecked"];
+    if (!routeChecked)
+    {
+        //Do route check for first launch, and must wait until this is done to continue.
+        [[SHAppStatus sharedInstance] checkRouteWithCompleteHandler:^(BOOL isEnabled, NSString *hostUrl)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"RouteChecked"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            if (isEnabled && !shStrIsEmpty(hostUrl))
+            {
+                dispatch_async(dispatch_get_main_queue(), ^
+                {
+                    action();
+                });
+            }
+        }];
     }
     else
     {
-        [StreetHawk sendLogForCode:LOG_CODE_APP_LAUNCH withComment:@"App started and engine initialized"];
-    }
-    //send sh_language automatically only once for an install
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"TAG_SHLANGUAGE"] == 0)
-    {
-        [StreetHawk tagUserLanguage:nil];
-        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"TAG_SHLANGUAGE"];
-    }
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    //check time zone and register for later change
-    [self checkUtcOffsetUpdate];
-    //check current build include which modules and send tags.
-    [self sendModuleTags];
-    //capture advertising identifier in case customer enables AdSupport.framework.
-    [self autoCaptureAdvertisingIdentifierTags];
-    //setup intercept app delegate
-    if (self.autoIntegrateAppDelegate)
-    {
-        self.appDelegateInterceptor = [[SHInterceptor alloc] init];  //strong property
-        self.appDelegateInterceptor.firstResponder = self;  //weak property
-        self.appDelegateInterceptor.secondResponder = [UIApplication sharedApplication].delegate;
-        self.originalAppDelegate = [UIApplication sharedApplication].delegate;  //must use a strong property to keep original AppDelegate, otherwise after next set to interceptor, original AppDelegate is null and cannot do StreetHawk first then forward to original AppDelegate.
-        [UIApplication sharedApplication].delegate = (id<UIApplicationDelegate>)self.appDelegateInterceptor;
+        action();
     }
 }
 
@@ -356,11 +378,6 @@
     return _appKey;
 }
 
-- (void)setDefaultStartingUrl:(NSString *)defaultUrl
-{
-    [SHAppStatus sharedInstance].defaultHost = defaultUrl;
-}
-
 - (NSString *)itunesAppId
 {
     return [SHAppStatus sharedInstance].appstoreId;
@@ -383,7 +400,7 @@
 {
     //Framework version is upgraded by StreetHawkCore-Info.plist and StreetHawkCoreRes-Info.plist, but the version number is not accessible by code. StreetHawkCore-Info.plist is built as binrary in main App, StreetHawkCoreRes-Info.plist may be contained in main App but not guranteed. To make sure this version work, add a method with hard-coded version number.
     //Format: X.Y.Z, make sure X and Y and Z are from >= 0  and < 1000.
-    return @"1.8.6";
+    return @"1.8.8";
 }
 
 - (SHInstall *)currentInstall
@@ -833,6 +850,19 @@
         {
             [StreetHawk openURL:openUrl];
         }
+        //UIApplicationLaunchOptionsURLKey works for scheme type url, however it doesn't work for universal linking url. If launch by universal url, it uses UIApplicationLaunchOptionsUserActivityDictionaryKey.
+        NSDictionary *userActivityDictionary = launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey];
+        if (userActivityDictionary)
+        {
+            [userActivityDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop)
+             {
+                 if ([obj isKindOfClass:[NSUserActivity class]])
+                 {
+                     [StreetHawk continueUserActivity:(NSUserActivity *)obj];
+                     *stop = YES;
+                 }
+             }];
+        }
     }
     if (isFromDelayLaunch //Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again.
         || ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0)) //iOS 10 do [UNUserNotificationCenter currentNotificationCenter].delegate = StreetHawk after AppDidFinishLaunch, causing not launched App cannot handle remote notification. Fix it by handling here.
@@ -846,7 +876,7 @@
             dictUserInfo[@"needComplete"] = @(NO);
             [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveRemoteNotification" object:nil userInfo:dictUserInfo];
         }
-        //local notification is not considered so far, and StreetHawk SDk doesn't use local notification now.
+        //local notification is not considered so far, and StreetHawk SDK doesn't use local notification now.
     }
     
     if (launchOptions[UIApplicationLaunchOptionsLocationKey] != nil)  //happen when significate location service wake up App, the value is a number such as 1

@@ -178,7 +178,7 @@ enum
         }
         if (code == LOG_CODE_APP_INVISIBLE)
         {
-            NSAssert(previousVisible == LOG_CODE_APP_VISIBLE, @"App to invisible but previous is not visible.");
+            //NSAssert(previousVisible == LOG_CODE_APP_VISIBLE, @"App to invisible but previous is not visible."); //Disable this assert, as router's first launch not have visible, so cause crash.
             NSDate *visibleTime = nil;
             NSObject *visibleTimeObj = [[NSUserDefaults standardUserDefaults] objectForKey:@"Previous_Visible_Time"];
             if (visibleTimeObj != nil && [visibleTimeObj isKindOfClass:[NSNumber class]])
@@ -189,7 +189,7 @@ enum
                     visibleTime = [NSDate dateWithTimeIntervalSinceReferenceDate:visibleTimeVal];
                 }
             }
-            NSAssert(visibleTime != nil, @"Not have visible time for this invisible.");
+            //NSAssert(visibleTime != nil, @"Not have visible time for this invisible."); //Disable this assert, as router's first launch not have visible, so cause crash.
             if (visibleTime != nil)
             {
                 NSMutableDictionary *dictAppSession = [NSMutableDictionary dictionary];
@@ -850,6 +850,7 @@ enum
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"INSTALL_SUID_KEY"]; //clear local install id, next will register a new one. This is most important, otherwise logs cannot submit due to conflict logid.
     [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:@"APPSTATUS_REREGISTER"];  //clear reregister flag
     [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:@"NumTimesAppUsed"]; //report "App first run" instead of "App started and engine initialized".
+    [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:@"RouteChecked"]; //re-flag route check for new install
     [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:@"TAG_SHLANGUAGE"]; //re-tag sh_language for new install
     [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:MAX_LOGID]; //local SQLite will be delete and rebuild, sent record reset to 0.
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"SETTING_UTC_OFFSET"]; //make new install submit utc offset for first time.
@@ -868,7 +869,7 @@ enum
     //Module bridge: SH_GEOLOCATION_LAT, SH_GEOLOCATION_LNG, SH_BEACON_BLUETOOTH, SH_BEACON_iBEACON. They are reset after launch.
     //Crash report: CrashLog_MD5. Make sure not sent duplicate crash report again in new install.
     //Customer setting: ENABLE_LOCATION_SERVICE, ENABLE_PUSH_NOTIFICATION, FRIENDLYNAME_KEY, SH_INTERACTIVEPUSH_KEY. Cannot reset, must keep same setting as previous install.
-    //Keep old version and adjust by App itself: APPKEY_KEY, NETWORK_RECOVER_TIME, APPSTATUS_STREETHAWKENABLED, APPSTATUS_DEFAULT_HOST, APPSTATUS_ALIVE_HOST, APPSTATUS_UPLOAD_LOCATION, APPSTATUS_SUBMIT_FRIENDLYNAME, APPSTATUS_SUBMIT_INTERACTIVEBUTTONS, APPSTATUS_CHECK_TIME, APPSTATUS_APPSTOREID, APPSTATUS_DISABLECODES, APPSTATUS_PRIORITYCODES, REGULAR_HEARTBEAT_LOGTIME, REGULAR_LOCATION_LOGTIME, SMART_PUSH_PAYLOAD, SH_GEOFENCE_LATLNG_SENTTIME. These will be updated automatically by App, keep old version till next App update them.
+    //Keep old version and adjust by App itself: APPKEY_KEY, NETWORK_RECOVER_TIME, APPSTATUS_STREETHAWKENABLED, APPSTATUS_DEFAULT_HOST, APPSTATUS_ALIVE_HOST, APPSTATUS_GROWTH_HOST, APPSTATUS_UPLOAD_LOCATION, APPSTATUS_SUBMIT_FRIENDLYNAME, APPSTATUS_SUBMIT_INTERACTIVEBUTTONS, APPSTATUS_CHECK_TIME, APPSTATUS_APPSTOREID, APPSTATUS_DISABLECODES, APPSTATUS_PRIORITYCODES, REGULAR_HEARTBEAT_LOGTIME, REGULAR_LOCATION_LOGTIME, SMART_PUSH_PAYLOAD, SH_GEOFENCE_LATLNG_SENTTIME. These will be updated automatically by App, keep old version till next App update them.
     //APPSTATUS_GEOFENCE_FETCH_LIST: cannot reset to empty, otherwise when change cannot find previous fence so not stop monitor.
     //User pass in: ADS_IDENTIFIER, ADS_CUSTOMERSET. Should not delete, move to next install.
     //SPOTLIGHT_DEEPLINKING_MAPPING: cannot reset to empty, otherwise when spotlight search cannot find mapping.

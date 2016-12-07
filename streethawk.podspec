@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name                = "streethawk"
   s.header_dir          = "StreetHawkCore"
-  s.version             = "1.8.6"
+  s.version             = "1.8.8"
   s.summary             = "Mobile Engagement Automation: Geofences campaign, Engage in right time via push message, Segment app user, analyse campaign performance."
   s.description         = <<-DESC
                             Streethawkis mobile engagement automation for your smartphone and tablet app user.
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
                             Streethawk supports iOS and Android devices. Chek out Getting started section for integrating Streethawk into your iOS and Android application or check out detailed document at Streethawk Documents.
                             DESC
-  s.homepage            = "https://streethawk.freshdesk.com/helpdesk"
+  s.homepage            = "http://www.streethawk.com"
   s.screenshots         = [ ]
   s.license             = 'LGPL'
   s.author              = { 'Christine' => 'christine@streethawk.com', 'Supporter' => 'support@streethawk.com' }

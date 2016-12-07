@@ -30,8 +30,6 @@
 //header from Third-party
 #import "MBProgressHUD.h" //for progress view
 
-static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
-
 #define GROWTH_REGISTERED   @"GROWTH_REGISTERED" //key for flag indicate growth is registered
 
 @interface SHGrowth() <MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate>
@@ -141,8 +139,19 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
     {
         [dictParam setObject:NONULL(default_url.absoluteString) forKey:@"destination_url_default"];
     }
+    NSString *growthHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"APPSTATUS_GROWTH_HOST"]; //SHAppStatus is private
+    NSAssert(!shStrIsEmpty(growthHost), @"Fail to share because cannot find growth host in app status.");
+    if (shStrIsEmpty(growthHost))
+    {
+        if (handler)
+        {
+            NSError *error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: @"Fail to share because cannot find growth host in app status."}];
+            handler(nil, error);
+        }
+        return;
+    }
     handler = [handler copy];
-    [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"%@/originate_viral_share/", GrowthServer] hostVersion:SHHostVersion_Unknown body:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
+    [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"%@/originate_viral_share/", growthHost] hostVersion:SHHostVersion_Unknown body:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
         if (handler)
         {
@@ -353,8 +362,20 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
     [dictParam setObject:NONULL([UIDevice currentDevice].identifierForVendor.UUIDString) forKey:@"installid"];
     [dictParam setObject:NONULL(StreetHawk.currentInstall.suid) forKey:@"sh_cuid"];
     [dictParam setObject:@([[NSTimeZone localTimeZone] secondsFromGMT]/60) forKey:@"timezone"];
+    NSString *growthHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"APPSTATUS_GROWTH_HOST"]; //SHAppStatus is private
+    NSAssert(!shStrIsEmpty(growthHost), @"Fail to register because cannot find growth host in app status.");
+    if (shStrIsEmpty(growthHost))
+    {
+        self.isGrowthRegistered = NO; //it's sure not register
+        if (handler)
+        {
+            NSError *error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: @"Fail to register because cannot find growth host in app status."}];
+            handler(nil, error);
+        }
+        return;
+    }
     handler = [handler copy];
-    [[SHHTTPSessionManager sharedInstance] GET:[NSMutableString stringWithFormat:@"%@/i/", GrowthServer] hostVersion:SHHostVersion_Unknown parameters:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
+    [[SHHTTPSessionManager sharedInstance] GET:[NSMutableString stringWithFormat:@"%@/i/", growthHost] hostVersion:SHHostVersion_Unknown parameters:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
         if (handler)
         {
@@ -435,9 +456,20 @@ static const NSString *GrowthServer = @"https://pointzi.streethawk.com";
         }
         [dictParam setObject:NONULL(uri) forKey:@"uri"];
     }
+    NSString *growthHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"APPSTATUS_GROWTH_HOST"]; //SHAppStatus is private
+    NSAssert(!shStrIsEmpty(growthHost), @"Fail to increase because cannot find growth host in app status.");
+    if (shStrIsEmpty(growthHost))
+    {
+        if (handler)
+        {
+            NSError *error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: @"Fail to increase because cannot find growth host in app status."}];
+            handler(nil, error);
+        }
+        return;
+    }
     handler = [handler copy];
     //Not need to consider offline mode. If device is offline short link cannot redirect to full link and will not pass above check.
-    [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"%@/increase_clicks/", GrowthServer] hostVersion:SHHostVersion_Unknown body:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
+    [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"%@/increase_clicks/", growthHost] hostVersion:SHHostVersion_Unknown body:dictParam success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
         if (shIsUniversalLinking(shareUrlStr)) //universal linking get a chance to convert to real deeplinking url
         {
