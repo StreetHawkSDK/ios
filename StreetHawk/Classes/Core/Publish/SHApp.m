@@ -858,8 +858,7 @@
              }];
         }
     }
-    if (isFromDelayLaunch //Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again.
-        || ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0)) //iOS 10 do [UNUserNotificationCenter currentNotificationCenter].delegate = StreetHawk after AppDidFinishLaunch, causing not launched App cannot handle remote notification. Fix it by handling here.
+    if (isFromDelayLaunch /*Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again */)
     {
         NSDictionary *notificationInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
         if (notificationInfo != nil)
