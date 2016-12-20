@@ -864,8 +864,7 @@
              }];
         }
     }
-    if (isFromDelayLaunch //Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again.
-        || ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0)) //iOS 10 do [UNUserNotificationCenter currentNotificationCenter].delegate = StreetHawk after AppDidFinishLaunch, causing not launched App cannot handle remote notification. Fix it by handling here.
+    if (isFromDelayLaunch /*Phonegap handle remote notification happen before StreetHawk library get ready, so remote notification cannot be handled. Check delay launch options, if from remote notification, give it second chance to trigger again */)
     {
         NSDictionary *notificationInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
         if (notificationInfo != nil)
@@ -890,15 +889,7 @@
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground)/*avoid send visible log when App wake up in background. Here cannot use Active, its status is InActive for normal launch, Background for location launch.*/
     {
         NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
-        [dictComment setObject:@"App launch from not running." forKey:@"action"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
-        double lat = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
-        double lng = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
-        if (lat != 0 && lng != 0)
-        {
-            [dictComment setObject:@(lat) forKey:@"lat"];
-            [dictComment setObject:@(lng) forKey:@"lng"];
-        }
+        [dictComment setObject:@"App launch from not running." forKey:@"action"];        
         [StreetHawk sendLogForCode:LOG_CODE_APP_VISIBLE withComment:shSerializeObjToJson(dictComment)];
     }
 
@@ -967,15 +958,7 @@
         if (!op.isCancelled)
         {
             NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
-            [dictComment setObject:@"App to BG." forKey:@"action"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
-            double lat = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
-            double lng = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
-            if (lat != 0 && lng != 0)
-            {
-                [dictComment setObject:@(lat) forKey:@"lat"];
-                [dictComment setObject:@(lng) forKey:@"lng"];
-            }
+            [dictComment setObject:@"App to BG." forKey:@"action"];            
             [StreetHawk sendLogForCode:LOG_CODE_APP_INVISIBLE withComment:shSerializeObjToJson(dictComment) forAssocId:nil withResult:100/*ignore*/ withHandler:^(id result, NSError *error)
             {
                 //Once start not cancel the install/log request, there are 10 minutes so make sure it can finish. Call endBackgroundTask after it's done.
@@ -1007,14 +990,6 @@
     //Log here instead of applicationDidBecomeActive when interrupt by phone or permission dialog or control center or notification center, this is not called.
     NSMutableDictionary *dictComment = [NSMutableDictionary dictionary];
     [dictComment setObject:@"App opened from BG." forKey:@"action"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
-    double lat = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
-    double lng = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
-    if (lat != 0 && lng != 0)
-    {
-        [dictComment setObject:@(lat) forKey:@"lat"];
-        [dictComment setObject:@(lng) forKey:@"lng"];
-    }
     [StreetHawk sendLogForCode:LOG_CODE_APP_VISIBLE withComment:shSerializeObjToJson(dictComment)];
     [StreetHawk shNotifyPageEnter:nil/*not know previoius page, but can get from history*/ sendEnter:YES sendExit:NO/*Not send exit for App go to FG*/];
 }

@@ -561,6 +561,15 @@ enum
                 NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
                 NSAssert(dictComment != nil, @"Fail to parse code 22 geofence json.");
                 logRecord[@"json"] = dictComment;
+                //Geofence requires latitude/longitude now, as server wants to calculate geofence by itself.
+                if (lat_deprecate != 0/*automatical location not allow 0 as it means not detected*/)
+                {
+                    logRecord[@"latitude"] = @(lat_deprecate);
+                }
+                if (lng_deprecate != 0)
+                {
+                    logRecord[@"longitude"] = @(lng_deprecate);
+                }
             }
             //Code: 8050. UTC Offset
             else if (code == LOG_CODE_TIMEOFFSET)
@@ -586,33 +595,14 @@ enum
             //Codes: 8103, 8104. App FG and BG
             else if (code == LOG_CODE_APP_VISIBLE || code == LOG_CODE_APP_INVISIBLE)
             {
-                NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
-                NSAssert(dictComment != nil, @"Fail to parse App visible/invisible comment.");
-                double lat = 0;
-                if ([dictComment.allKeys containsObject:@"lat"])
+                //comment is not useful, just read line comment.
+                if (lat_deprecate != 0/*automatical location not allow 0 as it means not detected*/)
                 {
-                    lat = [dictComment[@"lat"] doubleValue];
+                    logRecord[@"latitude"] = @(lat_deprecate);
                 }
-                if (lat == 0)
+                if (lng_deprecate != 0)
                 {
-                    lat = lat_deprecate;
-                }
-                double lng = 0;
-                if ([dictComment.allKeys containsObject:@"lng"])
-                {
-                    lng = [dictComment[@"lng"] doubleValue];
-                }
-                if (lng == 0)
-                {
-                    lng = lng_deprecate;
-                }
-                if (lat != 0/*automatical location not allow 0 as it means not detected*/)
-                {
-                    logRecord[@"latitude"] = @(lat);
-                }
-                if (lng != 0)
-                {
-                    logRecord[@"longitude"] = @(lng);
+                    logRecord[@"longitude"] = @(lng_deprecate);
                 }
             }
             //Code: 8105. Sessions
