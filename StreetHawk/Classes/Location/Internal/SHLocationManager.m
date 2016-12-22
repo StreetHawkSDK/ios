@@ -818,7 +818,11 @@
     //If iBeacon inside region, previous launch is inside region, this time will not trigger delegate until cross border. To not igore this time, forcibily to trigger status delegate.
     if ([self.locationManager respondsToSelector:@selector(requestStateForRegion:)])
     {
-        [self.locationManager requestStateForRegion:region];
+        double delayInSeconds = 1; //If request state immediately, it might return error 5 or unknown status. Solution is delay.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void)
+        {
+            [self.locationManager requestStateForRegion:region];
+        });
     }
 }
 
