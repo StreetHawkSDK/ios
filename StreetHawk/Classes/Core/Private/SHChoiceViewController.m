@@ -16,17 +16,6 @@
  */
 
 #import "SHChoiceViewController.h"
-//header from StreetHawk
-#import "SHCoverWindow.h"
-
-@interface SHChoiceViewController ()
-
-@property (nonatomic, strong) UIWindow *windowCover;  //ARC: add this strong property to keep window, otherwise window is dealloc in `showSlide` and nothing show; Note: this property is set nil in `dismissSlide` to break retain.
-
-//arrange control and dialog frame.
-- (void)arrangeControls;
-
-@end
 
 @implementation SHChoiceViewController
 
@@ -46,47 +35,19 @@
     self.tableChoice.dataSource = nil;
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [self arrangeControls];
-}
+//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+//{
+//    [self arrangeControls:CGRectZero];
+//}
 
 #pragma mark - public functions
 
-- (void)showChoiceList
-{
-    self.windowCover = [[SHCoverWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]; //cannot release window otherwise nothing get show, this window will be manually release when closeChoiceList, so ARC add strong property to keep this window.
-    self.windowCover.rootViewController = self;  //set rootViewController so that it can rotate
-    [self.windowCover makeKeyAndVisible];  //must use [windowCover makeKeyAndVisible] self.view.window is nil until the window show, and now window.rootViewController is setup.
-    [self arrangeControls];
-}
-
-- (void)closeChoiceList
-{
-    self.view.window.hidden = YES;
-    self.windowCover = nil; //self's dealloc is called after this
-}
-
-#pragma mark - event handler
-
-- (IBAction)buttonCancelClicked:(id)sender
-{
-    if (self.choiceHandler)
-    {
-        self.choiceHandler(YES, -1);
-    }
-    [self closeChoiceList];
-}
-
-#pragma mark - private functions
-
-- (void)arrangeControls
+- (void)arrangeControls:(CGRect)fullScreenRect
 {
     float horizontalMargin = 10;
     float verticalMargin = 10;
     float viewMargin = 30;
-    CGRect screenRect = [self.view.window.rootViewController.view convertRect:[UIScreen mainScreen].bounds fromView:nil];
-    float viewWidth = screenRect.size.width - 2 * viewMargin;
+    float viewWidth = fullScreenRect.size.width - 2 * viewMargin;
     CGSize constraintSize = CGSizeMake(viewWidth - 2 * horizontalMargin, 1000);
     float usedHeight = 0;
     CGRect frameTitle = CGRectZero;
@@ -121,7 +82,7 @@
     }
     //table required height
     float tableContentHeight = [self tableView:self.tableChoice heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] * [self tableView:self.tableChoice numberOfRowsInSection:0];
-    float viewHeight = screenRect.size.height - 2 * viewMargin;
+    float viewHeight = fullScreenRect.size.height - 2 * viewMargin;
     if (usedHeight + verticalMargin + tableContentHeight + verticalMargin + self.buttonCancel.bounds.size.height + verticalMargin > viewHeight)
     {
         tableContentHeight = viewHeight - (usedHeight + verticalMargin + verticalMargin + self.buttonCancel.bounds.size.height + verticalMargin);
@@ -142,11 +103,22 @@
     [self.buttonCancel setTitle:self.displayCancelButton forState:UIControlStateNormal];
     frameCancel = CGRectMake((viewWidth - rectSize.size.width) / 2, frameTable.origin.y + frameTable.size.height + verticalMargin, rectSize.size.width, self.buttonCancel.frame.size.height);
     //whole view
-    self.viewDialog.frame = CGRectMake(viewMargin, (screenRect.size.height - viewHeight) / 2, viewWidth, viewHeight);
+    self.view.frame = CGRectMake(viewMargin, (fullScreenRect.size.height - viewHeight) / 2, viewWidth, viewHeight);
     self.labelTitle.frame = frameTitle;
     self.labelMessage.frame = frameMessage;
     self.tableChoice.frame = frameTable;
     self.buttonCancel.frame = frameCancel;
+}
+
+#pragma mark - event handler
+
+- (IBAction)buttonCancelClicked:(id)sender
+{
+    if (self.choiceHandler)
+    {
+        self.choiceHandler(YES, -1);
+    }
+    [self dismissOnTop];
 }
 
 #pragma mark - UITableView delegate and datasource
@@ -188,7 +160,7 @@
     {
         self.choiceHandler(NO, indexPath.row);
     }
-    [self closeChoiceList];
+    [self dismissOnTop];
 }
 
 @end

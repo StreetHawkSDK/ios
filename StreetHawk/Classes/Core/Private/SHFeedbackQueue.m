@@ -299,7 +299,10 @@
             choiceVC.arrayChoices = arrayChoiceRefine;
             choiceVC.displayTitle = alertTitle;
             choiceVC.displayMessage = infoMessage;
-            [choiceVC showChoiceList];
+            [choiceVC presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withCoverTouchHandler:nil withAnimationHandler:^(CGRect fullScreenRect)
+             {
+                 [choiceVC arrangeControls:fullScreenRect];
+             }];
         }
     }
 }

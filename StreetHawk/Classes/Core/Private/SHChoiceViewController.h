@@ -44,7 +44,6 @@ typedef void (^SHChoiceHandler)(BOOL isCancel, NSInteger choiceIndex);
 @property (strong, nonatomic) IBOutlet UILabel *labelMessage;
 @property (strong, nonatomic) IBOutlet UIButton *buttonCancel;
 @property (strong, nonatomic) IBOutlet UITableView *tableChoice;
-@property (strong, nonatomic) IBOutlet UIView *viewDialog;
 
 - (IBAction)buttonCancelClicked:(id)sender;
 
@@ -69,13 +68,8 @@ typedef void (^SHChoiceHandler)(BOOL isCancel, NSInteger choiceIndex);
 @property (nonatomic, strong) NSString *displayCancelButton;
 
 /**
- Show this choice list in a window. Must use a special function instead of `presentModalDialogViewController:`, because need to set this view controller as rootViewController for rotating. 
+ Arrange control and dialog frame.
  */
-- (void)showChoiceList;
-
-/**
- Close choice list from window.
- */
-- (void)closeChoiceList;
+- (void)arrangeControls:(CGRect)fullScreenRect;
 
 @end
