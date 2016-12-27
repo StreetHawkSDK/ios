@@ -94,9 +94,8 @@
     {
         self.displayCancelButton = @"Cancel";
     }
-    CGRect rectSize = [self.displayCancelButton boundingRectWithSize:constraintSize options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) attributes:@{NSFontAttributeName:self.buttonCancel.titleLabel.font} context:nil];
     [self.buttonCancel setTitle:self.displayCancelButton forState:UIControlStateNormal];
-    frameCancel = CGRectMake((viewWidth - rectSize.size.width) / 2, frameTable.origin.y + frameTable.size.height + verticalMargin, rectSize.size.width, self.buttonCancel.frame.size.height);
+    frameCancel = CGRectMake(0, frameTable.origin.y + frameTable.size.height + verticalMargin, viewWidth, self.buttonCancel.frame.size.height);
     //whole view
     self.view.frame = CGRectMake(viewMargin, (fullScreenRect.size.height - viewHeight) / 2, viewWidth, viewHeight);
     self.labelTitle.frame = frameTitle;
