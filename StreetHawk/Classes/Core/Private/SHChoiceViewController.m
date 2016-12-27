@@ -35,11 +35,6 @@
     self.tableChoice.dataSource = nil;
 }
 
-//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-//{
-//    [self arrangeControls:CGRectZero];
-//}
-
 #pragma mark - public functions
 
 - (void)arrangeControls:(CGRect)fullScreenRect
