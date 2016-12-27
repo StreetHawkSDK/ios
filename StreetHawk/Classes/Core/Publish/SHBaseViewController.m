@@ -241,8 +241,8 @@
     [self.view removeFromSuperview];
     if (self.coverView != nil)
     {
-        self.coverView.contentVC = nil; //break loop retain to make self dealloc
         [self.coverView removeFromSuperview];
+        self.coverView.contentVC = nil; //break loop retain to make self dealloc
     }
 }
 
