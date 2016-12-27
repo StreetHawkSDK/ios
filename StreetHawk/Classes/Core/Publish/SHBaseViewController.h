@@ -50,3 +50,25 @@
 @interface StreetHawkBaseTableViewController : UITableViewController <ISHDeepLinking>
 
 @end
+
+/**
+ Category extension of UIViewController.
+ */
+@interface UIViewController (SHViewExt)
+
+/**
+ Show self VC's view on top.
+ @param needCover When showing self's view, whether need a cover view behide it. Sometimes it needs a light transparanet color cover. 
+ @param coverColor Optional, only take effect when needCover = YES; It has default value `lightGrayColor` when it's nil.
+ @param coverAlpha Optional, only take effect when needCover = YES; It has default value 0.5 when it's 0. If it's really want to be 0, set needCover = NO.
+ @param coverTouchHandler Callback when touch cover.
+ @param animationHandler Callback when need caller to show by changing self view's frame. The pass in rect is orientated root rect.
+ */
+- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect))animationHandler;
+
+/**
+ Dismiss self VC's view from top.
+ */
+- (void)dismissOnTop;
+
+@end

@@ -19,6 +19,8 @@
 //header from StreetHawk
 #import "SHApp.h" //for `StreetHawk shNotifyPageEnter/Exit`
 #import "SHCoverWindow.h" //for cover window type check
+//header from System
+#import <objc/runtime.h> //for associate object
 
 @interface NSString (SHEnterExitExt)
 
@@ -135,3 +137,111 @@
 }
 
 @end
+
+/**
+ Transparent light color cover view.
+ */
+@interface SHCoverView : UIView
+
+@property (nonatomic, strong) UIViewController *contentVC;
+
+/**
+ The color of the overlay.
+ */
+@property (nonatomic, strong) UIColor *overlayColor;
+
+/**
+ The alpha of the overlay.
+ */
+@property (nonatomic) CGFloat overlayAlpha;
+
+@end
+
+@implementation SHCoverView
+
+-(id)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame])
+    {
+        self.backgroundColor = [UIColor clearColor];
+    }
+    return self;
+}
+
+-(void)drawRect:(CGRect)rect
+{
+    //must use draw to avoid the subview's alpha not affected.
+    if (self.overlayColor == nil)
+    {
+        CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), [UIColor lightGrayColor].CGColor); //draw light gray cover.
+        CGContextSetAlpha(UIGraphicsGetCurrentContext(), 0.5);
+    }
+    else
+    {
+        CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), self.overlayColor.CGColor);
+        CGContextSetAlpha(UIGraphicsGetCurrentContext(), self.overlayAlpha);
+    }
+    CGContextFillRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, self.frame.size.width, self.frame.size.height));
+}
+
+@end
+
+@interface UIViewController (SHViewExt_private)
+
+@property (nonatomic, strong) SHCoverView *coverView; //if it has cover view required, assign to this property.
+
+@end
+
+@implementation UIViewController(SHViewExt)
+
+- (SHCoverView *)coverView
+{
+    return objc_getAssociatedObject(self, @selector(coverView));
+}
+
+- (void)setCoverView:(SHCoverView *)coverView
+{
+    objc_setAssociatedObject(self, @selector(coverView), coverView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect))animationHandler
+{
+    UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+    CGRect rootRect = rootVC.view.bounds; //this has orientation included. when rotate it can get the real CGRect accoriding to orientation.
+    self.view.frame = CGRectOffset(self.view.frame, -1000, -1000); //make it out of screen, but not change size.
+    if (needCover)
+    {
+        self.coverView = [[SHCoverView alloc] initWithFrame:rootVC.view.bounds];
+        self.coverView.contentVC = self; //must have someone retain self as VC. Because it only added view and VC is dealloc, causing keyboard notification cannot trigger. Here has cover view to retain it. This only needed for keyboard input view controller, such as feedback input VC.
+        self.coverView.overlayColor = coverColor;
+        self.coverView.overlayAlpha = coverAlpha;
+        //TODO: touch event
+        [rootVC.view addSubview:self.coverView];
+        [self.coverView addSubview:self.view];
+    }
+    else
+    {
+        [rootVC.view addSubview:self.view];
+    }
+    if (animationHandler != nil)
+    {
+        animationHandler(rootRect); //allow customer code to animation show.
+    }
+    else
+    {
+        //directly add, not need animation. by default, put the content vc in middle of screen.
+        self.view.frame = CGRectMake((rootRect.size.width - self.view.frame.size.width) / 2, (rootRect.size.height - self.view.frame.size.height) / 2, self.view.frame.size.width, self.view.frame.size.height);
+    }
+}
+
+- (void)dismissOnTop
+{
+    [self.view removeFromSuperview];
+    if (self.coverView != nil)
+    {
+        [self.coverView removeFromSuperview];
+    }
+}
+
+@end
+

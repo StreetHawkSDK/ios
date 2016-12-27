@@ -20,7 +20,6 @@
 #import "SHHTTPSessionManager.h" //for sending request
 #import "PushDataForApplication.h" //for use pushData
 #import "SHUtils.h" //for format date utility
-#import "SHPresentDialog.h" //for present modal dialog
 #import "SHInstall.h" //for `StreetHawk.currentInstall.suid`
 #import "SHLogger.h" //for send logline
 #import "SHFeedbackViewController.h" //for input feedback comment
@@ -186,7 +185,7 @@
             SHFeedbackViewController *feedbackVC = [[SHFeedbackViewController alloc] initWithNibName:nil bundle:nil];
             feedbackVC.inputHandler = inputHandler;
             feedbackVC.feedbackTitle = feedbackChoice;
-            [self presentModalDialogViewController:feedbackVC];
+            [feedbackVC presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withCoverTouchHandler:nil withAnimationHandler:nil];
         };
         //arrayChoice may contain none string, or empty string, need to filter out otherwise cause crash.
         NSMutableArray *arrayChoiceRefine = [NSMutableArray array];
