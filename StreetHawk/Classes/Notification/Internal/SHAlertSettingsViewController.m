@@ -116,7 +116,7 @@
             self.buttonCancel.enabled = YES;
             if (error == nil)
             {
-                [self dismissModalDialogViewController];
+                [self dismissOnTop];
             }
         });
     }];
@@ -124,7 +124,7 @@
 
 - (IBAction)buttonCancelClicked:(id)sender
 {
-    [self dismissModalDialogViewController];
+    [self dismissOnTop];
 }
 
 #pragma mark - private functions
