@@ -18,7 +18,7 @@
 #import "SHBaseViewController.h"
 //header from StreetHawk
 #import "SHApp.h" //for `StreetHawk shNotifyPageEnter/Exit`
-#import "SHCoverWindow.h" //for cover window type check
+#import "SHViewController.h" //for checking internal vc to avoid enter/exit log
 //header from System
 #import <objc/runtime.h> //for associate object
 
@@ -71,15 +71,14 @@
 }
 
 //tricky: Here must use `viewDidAppear` and `viewWillDisappear`.
-//if use `viewWillAppear`, two issues: 1) Launch App `viewWillAppear` is called before `didFinishLaunchingWithOptions`, making home page not logged; 2) `viewWillAppear` cannot get self.view.window, always null, making it's unknown to check `SHCoverWindow`.
+//if use `viewWillAppear`, two issues: 1) Launch App `viewWillAppear` is called before `didFinishLaunchingWithOptions`, making home page not logged; 2) `viewWillAppear` cannot get self.view.window, always null, making it's unknown to check `SHCoverWindow`(deprecated).
 //if use `viewDidDisappear`, present modal view controller has problem. For example, A present modal B, first call B `viewDidAppear` then call A `viewDidDisappear`, making the order wrong, expecting A disappear first and then B appear. Use `viewWillDisappear` solve this problem.
 //the mix just match requirement: disappear first and appear.
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (![self.view.window isKindOfClass:[SHCoverWindow class]]
-        && ![self.class.description isEqualToString:@"SHModalTipViewController"]
-        && ![self.class.description isEqualToString:@"SHPopTipViewController"]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    if (![self isKindOfClass:[SHBaseViewController class]]
+        && ![self isKindOfClass:[SHBaseTableViewController class]]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
@@ -88,7 +87,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (![self.view.window isKindOfClass:[SHCoverWindow class]])  //If push two slides together, this happen.
+    if (![self isKindOfClass:[SHBaseViewController class]]
+        && ![self isKindOfClass:[SHBaseTableViewController class]]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
     }
@@ -119,9 +119,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (![self.view.window isKindOfClass:[SHCoverWindow class]]
-        && ![self.class.description isEqualToString:@"SHModalTipViewController"]
-        && ![self.class.description isEqualToString:@"SHPopTipViewController"]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    if (![self isKindOfClass:[SHBaseViewController class]]
+        && ![self isKindOfClass:[SHBaseTableViewController class]]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
@@ -130,7 +129,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (![self.view.window isKindOfClass:[SHCoverWindow class]])  //If push two slides together, this happen.
+    if (![self isKindOfClass:[SHBaseViewController class]]
+        && ![self isKindOfClass:[SHBaseTableViewController class]]) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
     }
