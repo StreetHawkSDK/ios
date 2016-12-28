@@ -121,11 +121,6 @@
     [super viewDidLoad];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [self rotateSlide];
-}
-
 #pragma mark - private functions
 
 static const float SlideTitle_Height = 28;
