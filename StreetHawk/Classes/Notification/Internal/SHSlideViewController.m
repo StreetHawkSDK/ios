@@ -67,7 +67,7 @@
 //Dismiss window and release self. Note: this can be called only once because self is dealloc. Second call cause crash. Match to `showSlide`.
 - (void)dismissSlide;
 //Calculate after rotate, adjust container view, title and close button.
-- (void)rotateSlide;
+- (void)rotateSlide:(CGRect)fullScreenRect;
 //Call `dismissSlideView`.
 - (void)buttonCloseClicked:(id)sender;
 
@@ -201,6 +201,9 @@ static const float SlideTitle_Height = 28;
                       [pushData sendPushResult:SHResult_Accept withHandler:nil];
                   }
               }];
+         } withOrientationChangedHandler:^(CGRect fullScreenRect)
+         {
+             [self rotateSlide:fullScreenRect];
          }];
     };
     dispatch_block_t actionDismissSlide = ^{
@@ -283,15 +286,12 @@ static const float SlideTitle_Height = 28;
     [[SHSlideContainer shared] removeSlide:self];  //keep this at end so above self.view not cause deallocated object.
 }
 
-- (void)rotateSlide
+- (void)rotateSlide:(CGRect)fullScreenRect
 {
-//    if (!CGRectIsEmpty(self.viewContainer.frame)) //if alert view show and not adjust rotated position.
-    {
-        //        CGRect endRect = [self calculateEndRect];
-        //        self.viewContainer.frame = endRect;
-        //        self.viewTitle.frame = CGRectMake(endRect.origin.x, endRect.origin.y - SlideTitle_Height, endRect.size.width, SlideTitle_Height);
-        //        [self.contentVC contentViewAdjustUI];  //adjust content view's subview after rotation.
-    }
+    CGRect endRect = [self calculateEndRect:fullScreenRect];
+    self.view.frame = endRect;
+    self.viewTitle.frame = CGRectMake(0, 0, endRect.size.width, SlideTitle_Height);
+    [self.contentVC contentViewAdjustUI];  //adjust content view's subview after rotation.
 }
 
 - (void)buttonCloseClicked:(id)sender

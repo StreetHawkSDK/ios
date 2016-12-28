@@ -138,6 +138,8 @@
 
 @end
 
+typedef void(^SHCoverViewOrientationChanged)();
+
 /**
  Transparent light color cover view.
  */
@@ -155,6 +157,13 @@
  */
 @property (nonatomic) CGFloat overlayAlpha;
 
+/**
+ Callback when orientation changes.
+ */
+@property (nonatomic, copy) SHCoverViewOrientationChanged orientationChangedHandler;
+
+- (void)orientationChanged:(NSNotification *)notification;
+
 @end
 
 @implementation SHCoverView
@@ -164,8 +173,17 @@
     if (self = [super initWithFrame:frame])
     {
         self.backgroundColor = [UIColor clearColor];
+        //add rotation notificaton observer
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)drawRect:(CGRect)rect
@@ -182,6 +200,14 @@
         CGContextSetAlpha(UIGraphicsGetCurrentContext(), self.overlayAlpha);
     }
     CGContextFillRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, self.frame.size.width, self.frame.size.height));
+}
+
+- (void)orientationChanged:(NSNotification *)notification
+{
+    if (self.orientationChangedHandler)
+    {
+        self.orientationChangedHandler();
+    }
 }
 
 @end
@@ -204,14 +230,14 @@
     objc_setAssociatedObject(self, @selector(coverView), coverView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler
+- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler withOrientationChangedHandler:(void (^)(CGRect))orientationChangedHandler
 {
     double delayInSeconds = 1; //delay for one second, otherwise if previous is an alert view, the rootVC is UIAlertShimPresentingViewController.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void)
     {
         UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
         CGRect rootRect = rootVC.view.bounds; //this has orientation included. when rotate it can get the real CGRect accoriding to orientation.
-        self.view.frame = CGRectOffset(self.view.frame, -1000, -1000); //make it out of screen, but not change size.
+        self.view.frame = CGRectOffset(self.view.frame, INT_MAX, INT_MAX); //make it out of screen, but not change size.
         if (needCover)
         {
             self.coverView = [[SHCoverView alloc] initWithFrame:rootVC.view.bounds];
@@ -223,6 +249,13 @@
             [rootVC.view addSubview:self.coverView];
             self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin; //content vc by default always in center, not affected by rotatation.
             [self.coverView addSubview:self.view];
+            if (orientationChangedHandler != nil)
+            {
+                self.coverView.orientationChangedHandler = ^
+                {
+                    orientationChangedHandler(rootVC.view.bounds); //get root rect after orientation.
+                };
+            }
         }
         else
         {

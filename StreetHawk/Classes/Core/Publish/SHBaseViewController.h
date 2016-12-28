@@ -63,8 +63,9 @@
  @param coverAlpha Optional, only take effect when needCover = YES; It has default value 0.5 when it's 0. If it's really want to be 0, set needCover = NO.
  @param coverTouchHandler Callback when touch cover.
  @param animationHandler Callback when need caller to show by changing self view's frame. The pass in rect is orientated root rect.
+ @param orientationChangedHandler Callback when orientation changed. Must have needCover=YES to work.
  */
-- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler;
+- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler withOrientationChangedHandler:(void (^)(CGRect fullScreenRect))orientationChangedHandler;
 
 /**
  Dismiss self VC's view from top.
