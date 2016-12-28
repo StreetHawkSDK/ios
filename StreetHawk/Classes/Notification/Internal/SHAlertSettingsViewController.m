@@ -20,7 +20,6 @@
 #import "SHApp+Notification.h" //for `StreetHawk`
 #import "SHAlertView.h" //for confirm dialog
 #import "SHUtils.h" //for shPresentErrorAlert
-#import "SHPresentDialog.h" //for present modal dialog
 
 @interface SHAlertSettingsViewController ()
 
