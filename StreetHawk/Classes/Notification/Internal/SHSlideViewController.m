@@ -17,7 +17,6 @@
 
 #import "SHSlideViewController.h"
 //header from StreetHawk
-#import "SHCoverWindow.h" //for cover window
 #import "SHAlertView.h" //for confirm dialog
 #import "SHSlideWebViewController.h" //for content web view
 #import "SHUtils.h" //for shLocalizedString
@@ -58,9 +57,7 @@
 @property (nonatomic, strong) NSString *alertMessage;
 @property (nonatomic) BOOL needShowDialog;
 
-@property (nonatomic, strong) UIWindow *windowCover;  //ARC: add this strong property to keep window, otherwise window is dealloc in `showSlide` and nothing show; Note: this property is set nil in `dismissSlide` to break retain. Test: window, slide vc and content vc are all dealloc.
-@property (nonatomic, strong) UIView *viewContainer;  //a container view to host detail slide content. cannot use rootViewController.view because it covers whole screen, and there are other controls such as close button.
-@property (nonatomic, strong) UIView *viewTitle;  //title banner, contains close button.
+@property (nonatomic, strong) UIView *viewTitle;  //title banner, contains title label and close button.
 
 //Initialise and assign the properties.
 - (id)initForContent:(UIViewController<SHSlideContentViewController> *)contentVC withDirection:(SHSlideDirection)direction withSpeed:(double)speed withCoverPercentage:(double)percentage withAlertTitle:(NSString *)alertTitle withAlertMessage:(NSString *)alertMessage withNeedShowDialog:(BOOL)needShowDialog;
@@ -76,8 +73,8 @@
 
 //Calculate rect position for a certain orientation.
 - (CGFloat)statusBarHeight;
-- (CGRect)calculateStartRect;
-- (CGRect)calculateEndRect;
+- (CGRect)calculateStartRect:(CGRect)fullScreenRect;
+- (CGRect)calculateEndRect:(CGRect)fullScreenRect;
 
 @end
 
@@ -122,7 +119,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor clearColor];  //The background VC is invisible, show light gray window.
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -142,75 +138,74 @@ static const float SlideTitle_Height = 28;
     }
     //animate show slide
     dispatch_block_t actionShowSlide = ^{
-        //Move add window to inside actionShowSlide, unless click Yes button not create cover window. This is to fix in case customer not implement clickHandler(SHResult).
-        self.viewContainer = [[UIView alloc] initWithFrame:CGRectZero];  //not show it now, out of screen
-        [self.view addSubview:self.viewContainer];
-        //Add content VC so that content VC is loaded out of screen
-        self.contentVC.view.frame = self.viewContainer.bounds;
-        self.contentVC.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;;
-        [self.viewContainer addSubview:self.contentVC.view];
-        self.windowCover = [[SHCoverWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]; //cannot release window otherwise nothing get show, this window will be manually release when dismissSlideView, so ARC add strong property to keep this window.
-        self.windowCover.rootViewController = self;  //set rootViewController so that it can rotate
-        [self.windowCover makeKeyAndVisible];  //must use [windowCover makeKeyAndVisible] self.view.window is nil until the window show, and now window.rootViewController is setup.
-        self.viewContainer.frame = [self calculateStartRect];
-        [self.contentVC contentViewAdjustUI];  //first time know view size.
-        __block CGRect endRect = [self calculateEndRect];
-        [UIView animateWithDuration:self.speed animations:^
+        //Move present top to inside actionShowSlide, unless click Yes button not add the top view. This is to fix in case customer not implement clickHandler(SHResult).
+        self.contentVC.view.frame = CGRectMake(0, SlideTitle_Height, self.view.bounds.size.width, self.view.bounds.size.height - SlideTitle_Height);
+        self.contentVC.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.view addSubview:self.contentVC.view];
+        [self presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withCoverTouchHandler:nil withAnimationHandler:^(CGRect fullScreenRect)
          {
-             self.viewContainer.frame = endRect;
-             [self.contentVC contentViewAdjustUI];  //first time show and animation finished.
-         } completion:^(BOOL finished)
-         {
-             endRect = [self calculateEndRect]; //after complete must calculate it again, because show slide can take a while, and device may rotate. If rotate the endRect is changed when finish.
-             //create close button and title
-             self.viewTitle = [[UIView alloc] initWithFrame:CGRectMake(endRect.origin.x, endRect.origin.y - SlideTitle_Height, endRect.size.width, SlideTitle_Height)];
-             self.viewTitle.backgroundColor = [UIColor whiteColor];
-             self.viewTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-             [self.view addSubview:self.viewTitle];
-             UIButton *buttonClose = [UIButton buttonWithType:UIButtonTypeCustom];
-             [buttonClose setTitle:@"Close" forState:UIControlStateNormal];
-             [buttonClose setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-             [buttonClose setBackgroundColor:[UIColor grayColor]];
-             buttonClose.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-             [buttonClose addTarget:self action:@selector(buttonCloseClicked:) forControlEvents:UIControlEventTouchUpInside];
-             buttonClose.frame = CGRectMake(endRect.size.width - 65, 3, 62, SlideTitle_Height-6);  //always keep in container view's right top cornor
-             buttonClose.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
-             [self.viewTitle addSubview:buttonClose];
-             if ((self.alertTitle != nil && self.alertTitle.length > 0) || (self.alertMessage != nil && self.alertMessage.length > 0))
-             {
-                 NSString *displayText = nil;
-                 if ((self.alertTitle != nil && self.alertTitle.length > 0) && (self.alertMessage != nil && self.alertMessage.length > 0))
-                 {
-                     displayText = [NSString stringWithFormat:@"%@ %@", self.alertTitle, self.alertMessage];
-                 }
-                 else if (self.alertTitle != nil && self.alertTitle.length > 0)
-                 {
-                     displayText = self.alertTitle;
-                 }
-                 else
-                 {
-                     displayText = self.alertMessage;
-                 }
-                 CBAutoScrollLabel *labelInfo = [[CBAutoScrollLabel alloc] initWithFrame:CGRectMake(0, 0, endRect.size.width-65, SlideTitle_Height)];
-                 labelInfo.text = displayText;
-                 labelInfo.textAlignment = NSTextAlignmentLeft;
-                 labelInfo.backgroundColor = [UIColor clearColor];
-                 labelInfo.font = [UIFont systemFontOfSize:15];
-                 labelInfo.textColor = [UIColor darkTextColor];
-                 labelInfo.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-                 labelInfo.labelSpacing = 50; //distance between start and end labels
-                 labelInfo.pauseInterval = 1; //seconds of pause before scrolling starts again
-                 labelInfo.scrollSpeed = 39; //pixels per second
-                 labelInfo.scrollDirection = CBAutoScrollDirectionLeft;
-                 [labelInfo observeApplicationNotifications];
-                 [self.viewTitle addSubview:labelInfo];
-             }
-             //Send push result log if this is from notification.
-             if ([self.contentVC respondsToSelector:@selector(pushData)])
-             {
-                 PushDataForApplication *pushData = self.contentVC.pushData;
-                 [pushData sendPushResult:SHResult_Accept withHandler:nil];
-             }
+             self.view.frame = [self calculateStartRect:fullScreenRect];
+             [self.contentVC contentViewAdjustUI];  //first time know view size.
+             __block CGRect endRect = [self calculateEndRect:fullScreenRect];
+             [UIView animateWithDuration:self.speed animations:^
+              {
+                  self.view.frame = endRect;
+                  [self.contentVC contentViewAdjustUI];  //first time show and animation finished.
+              } completion:^(BOOL finished)
+              {
+                  CGRect fullScreenRectEnd = self.view.window.rootViewController.view.bounds;
+                  endRect = [self calculateEndRect:fullScreenRectEnd]; //after complete must calculate it again, because show slide can take a while, and device may rotate. If rotate the endRect is changed when finish.
+                  self.view.frame = endRect;
+                  //create close button and title
+                  self.viewTitle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SlideTitle_Height)];
+                  self.viewTitle.backgroundColor = [UIColor whiteColor];
+                  self.viewTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+                  [self.view addSubview:self.viewTitle];
+                  UIButton *buttonClose = [UIButton buttonWithType:UIButtonTypeCustom];
+                  [buttonClose setTitle:@"Close" forState:UIControlStateNormal];
+                  [buttonClose setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                  [buttonClose setBackgroundColor:[UIColor grayColor]];
+                  buttonClose.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+                  [buttonClose addTarget:self action:@selector(buttonCloseClicked:) forControlEvents:UIControlEventTouchUpInside];
+                  buttonClose.frame = CGRectMake(endRect.size.width - 65, 3, 62, SlideTitle_Height-6);  //always keep in container view's right top cornor
+                  buttonClose.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
+                  [self.viewTitle addSubview:buttonClose];
+                  if ((self.alertTitle != nil && self.alertTitle.length > 0) || (self.alertMessage != nil && self.alertMessage.length > 0))
+                  {
+                      NSString *displayText = nil;
+                      if ((self.alertTitle != nil && self.alertTitle.length > 0) && (self.alertMessage != nil && self.alertMessage.length > 0))
+                      {
+                          displayText = [NSString stringWithFormat:@"%@ %@", self.alertTitle, self.alertMessage];
+                      }
+                      else if (self.alertTitle != nil && self.alertTitle.length > 0)
+                      {
+                          displayText = self.alertTitle;
+                      }
+                      else
+                      {
+                          displayText = self.alertMessage;
+                      }
+                      CBAutoScrollLabel *labelInfo = [[CBAutoScrollLabel alloc] initWithFrame:CGRectMake(0, 0, endRect.size.width-65, SlideTitle_Height)];
+                      labelInfo.text = displayText;
+                      labelInfo.textAlignment = NSTextAlignmentLeft;
+                      labelInfo.backgroundColor = [UIColor clearColor];
+                      labelInfo.font = [UIFont systemFontOfSize:15];
+                      labelInfo.textColor = [UIColor darkTextColor];
+                      labelInfo.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+                      labelInfo.labelSpacing = 50; //distance between start and end labels
+                      labelInfo.pauseInterval = 1; //seconds of pause before scrolling starts again
+                      labelInfo.scrollSpeed = 39; //pixels per second
+                      labelInfo.scrollDirection = CBAutoScrollDirectionLeft;
+                      [labelInfo observeApplicationNotifications];
+                      [self.viewTitle addSubview:labelInfo];
+                  }
+                  //Send push result log if this is from notification.
+                  if ([self.contentVC respondsToSelector:@selector(pushData)])
+                  {
+                      PushDataForApplication *pushData = self.contentVC.pushData;
+                      [pushData sendPushResult:SHResult_Accept withHandler:nil];
+                  }
+              }];
          }];
     };
     dispatch_block_t actionDismissSlide = ^{
@@ -289,22 +284,18 @@ static const float SlideTitle_Height = 28;
     {
         self.contentVC.contentLoadFinishHandler = nil;  //to avoid later show content after load successfully; although contentVC dealloc should set this, do it again here to avoid crash.
     }
-    if (self.windowCover != nil)
-    {
-        self.view.window.hidden = YES;
-        self.windowCover = nil; //self's dealloc is called after this
-    }
+    [self dismissOnTop];
     [[SHSlideContainer shared] removeSlide:self];  //keep this at end so above self.view not cause deallocated object.
 }
 
 - (void)rotateSlide
 {
-    if (!CGRectIsEmpty(self.viewContainer.frame)) //if alert view show and not adjust rotated position.
+//    if (!CGRectIsEmpty(self.viewContainer.frame)) //if alert view show and not adjust rotated position.
     {
-        CGRect endRect = [self calculateEndRect];
-        self.viewContainer.frame = endRect;
-        self.viewTitle.frame = CGRectMake(endRect.origin.x, endRect.origin.y - SlideTitle_Height, endRect.size.width, SlideTitle_Height);
-        [self.contentVC contentViewAdjustUI];  //adjust content view's subview after rotation.
+        //        CGRect endRect = [self calculateEndRect];
+        //        self.viewContainer.frame = endRect;
+        //        self.viewTitle.frame = CGRectMake(endRect.origin.x, endRect.origin.y - SlideTitle_Height, endRect.size.width, SlideTitle_Height);
+        //        [self.contentVC contentViewAdjustUI];  //adjust content view's subview after rotation.
     }
 }
 
@@ -325,34 +316,33 @@ static const float SlideTitle_Height = 28;
     }
 }
 
-- (CGRect)calculateStartRect
+- (CGRect)calculateStartRect:(CGRect)fullScreenRect
 {
     CGRect startRect = CGRectZero;
-    CGRect fullScreenRect = [self.view.window.rootViewController.view convertRect:[UIScreen mainScreen].bounds fromView:nil]; //key
     switch (self.direction)
     {
         case SHSlideDirection_Up:
         {
-            float height = self.percentage * (fullScreenRect.size.height - [self statusBarHeight] - SlideTitle_Height);
+            float height = self.percentage * (fullScreenRect.size.height - [self statusBarHeight]);
             startRect = CGRectMake(0, fullScreenRect.size.height, fullScreenRect.size.width, height);
         }
             break;
         case SHSlideDirection_Down:
         {
-            float height = self.percentage * (fullScreenRect.size.height - [self statusBarHeight] - SlideTitle_Height);
+            float height = self.percentage * (fullScreenRect.size.height - [self statusBarHeight]);
             startRect = CGRectMake(0, 0 - height, fullScreenRect.size.width, height);
         }
             break;
         case SHSlideDirection_Left:
         {
             float width = self.percentage * fullScreenRect.size.width;
-            startRect = CGRectMake(fullScreenRect.size.width, [self statusBarHeight] + SlideTitle_Height, width, fullScreenRect.size.height);
+            startRect = CGRectMake(fullScreenRect.size.width, [self statusBarHeight], width, fullScreenRect.size.height - [self statusBarHeight]);
         }
             break;
         case SHSlideDirection_Right:
         {
             float width = self.percentage * fullScreenRect.size.width;
-            startRect = CGRectMake(0 - width, [self statusBarHeight] + SlideTitle_Height, width, fullScreenRect.size.height);
+            startRect = CGRectMake(0 - width, [self statusBarHeight], width, fullScreenRect.size.height - [self statusBarHeight]);
         }
             break;
         default:
@@ -362,34 +352,33 @@ static const float SlideTitle_Height = 28;
     return startRect;
 }
 
-- (CGRect)calculateEndRect
+- (CGRect)calculateEndRect:(CGRect)fullScreenRect
 {
     CGRect endRect = CGRectZero;
-    CGRect fullScreenRect = [self.view.window.rootViewController.view convertRect:[UIScreen mainScreen].bounds fromView:nil]; //key
     switch (self.direction)
     {
         case SHSlideDirection_Up:
         {
-            float height = self.percentage * (fullScreenRect.size.height - [self statusBarHeight] - SlideTitle_Height);
+            float height = self.percentage * (fullScreenRect.size.height - [self statusBarHeight]);
             endRect = CGRectMake(0, fullScreenRect.size.height - height, fullScreenRect.size.width, height);
         }
             break;
         case SHSlideDirection_Down:
         {
-            float height = self.percentage * (fullScreenRect.size.height - [self statusBarHeight] - SlideTitle_Height);
-            endRect = CGRectMake(0, [self statusBarHeight] + SlideTitle_Height, fullScreenRect.size.width, height);
+            float height = self.percentage * (fullScreenRect.size.height - [self statusBarHeight]);
+            endRect = CGRectMake(0, [self statusBarHeight], fullScreenRect.size.width, height);
         }
             break;
         case SHSlideDirection_Left:
         {
             float width = self.percentage * fullScreenRect.size.width;
-            endRect = CGRectMake(fullScreenRect.size.width - width, [self statusBarHeight] + SlideTitle_Height, width, fullScreenRect.size.height);
+            endRect = CGRectMake(fullScreenRect.size.width - width, [self statusBarHeight], width, fullScreenRect.size.height - [self statusBarHeight]);
         }
             break;
         case SHSlideDirection_Right:
         {
             float width = self.percentage * fullScreenRect.size.width;
-            endRect = CGRectMake(0, [self statusBarHeight] + SlideTitle_Height, width, fullScreenRect.size.height);
+            endRect = CGRectMake(0, [self statusBarHeight], width, fullScreenRect.size.height - [self statusBarHeight]);
         }
             break;
         default:

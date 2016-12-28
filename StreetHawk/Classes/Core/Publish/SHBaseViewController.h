@@ -64,7 +64,7 @@
  @param coverTouchHandler Callback when touch cover.
  @param animationHandler Callback when need caller to show by changing self view's frame. The pass in rect is orientated root rect.
  */
-- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect))animationHandler;
+- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler;
 
 /**
  Dismiss self VC's view from top.
