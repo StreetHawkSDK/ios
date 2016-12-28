@@ -206,34 +206,38 @@
 
 - (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler
 {
-    UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-    CGRect rootRect = rootVC.view.bounds; //this has orientation included. when rotate it can get the real CGRect accoriding to orientation.
-    self.view.frame = CGRectOffset(self.view.frame, -1000, -1000); //make it out of screen, but not change size.
-    if (needCover)
+    double delayInSeconds = 1; //delay for one second, otherwise if previous is an alert view, the rootVC is UIAlertShimPresentingViewController.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void)
     {
-        self.coverView = [[SHCoverView alloc] initWithFrame:rootVC.view.bounds];
-        self.coverView.contentVC = self; //must have someone retain self as VC. Because it only added view and VC is dealloc, causing keyboard notification cannot trigger. Here has cover view to retain it. This only needed for keyboard input view controller, such as feedback input VC.
-        self.coverView.overlayColor = coverColor;
-        self.coverView.overlayAlpha = coverAlpha;
-        self.coverView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight; //make cover always full screen during rotation.
-        //TODO: touch event
-        [rootVC.view addSubview:self.coverView];
-        self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin; //content vc by default always in center, not affected by rotatation.
-        [self.coverView addSubview:self.view];
-    }
-    else
-    {
-        [rootVC.view addSubview:self.view];
-    }
-    if (animationHandler != nil)
-    {
-        animationHandler(rootRect); //allow customer code to animation show.
-    }
-    else
-    {
-        //directly add, not need animation. by default, put the content vc in middle of screen.
-        self.view.frame = CGRectMake((rootRect.size.width - self.view.frame.size.width) / 2, (rootRect.size.height - self.view.frame.size.height) / 2, self.view.frame.size.width, self.view.frame.size.height);
-    }
+        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+        CGRect rootRect = rootVC.view.bounds; //this has orientation included. when rotate it can get the real CGRect accoriding to orientation.
+        self.view.frame = CGRectOffset(self.view.frame, -1000, -1000); //make it out of screen, but not change size.
+        if (needCover)
+        {
+            self.coverView = [[SHCoverView alloc] initWithFrame:rootVC.view.bounds];
+            self.coverView.contentVC = self; //must have someone retain self as VC. Because it only added view and VC is dealloc, causing keyboard notification cannot trigger. Here has cover view to retain it. This only needed for keyboard input view controller, such as feedback input VC.
+            self.coverView.overlayColor = coverColor;
+            self.coverView.overlayAlpha = coverAlpha;
+            self.coverView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight; //make cover always full screen during rotation.
+            //TODO: touch event
+            [rootVC.view addSubview:self.coverView];
+            self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin; //content vc by default always in center, not affected by rotatation.
+            [self.coverView addSubview:self.view];
+        }
+        else
+        {
+            [rootVC.view addSubview:self.view];
+        }
+        if (animationHandler != nil)
+        {
+            animationHandler(rootRect); //allow customer code to animation show.
+        }
+        else
+        {
+            //directly add, not need animation. by default, put the content vc in middle of screen.
+            self.view.frame = CGRectMake((rootRect.size.width - self.view.frame.size.width) / 2, (rootRect.size.height - self.view.frame.size.height) / 2, self.view.frame.size.width, self.view.frame.size.height);
+        }
+    });
 }
 
 - (void)dismissOnTop
