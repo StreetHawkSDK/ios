@@ -138,7 +138,8 @@
 
 @end
 
-typedef void(^SHCoverViewOrientationChanged)();
+typedef void (^SHCoverViewOrientationChanged) ();
+typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
 
 /**
  Transparent light color cover view.
@@ -161,6 +162,11 @@ typedef void(^SHCoverViewOrientationChanged)();
  Callback when orientation changes.
  */
 @property (nonatomic, copy) SHCoverViewOrientationChanged orientationChangedHandler;
+
+/**
+ Callback when full screen cover view is touched.
+ */
+@property (nonatomic, copy) SHCoverViewTouched touchedHandler;
 
 - (void)orientationChanged:(NSNotification *)notification;
 
@@ -210,6 +216,17 @@ typedef void(^SHCoverViewOrientationChanged)();
     }
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    if (self.touchedHandler)
+    {
+        UITouch *touch = [[event allTouches] anyObject];
+        CGPoint touchLocation = [touch locationInView:self];
+        self.touchedHandler(touchLocation);
+    }
+}
+
 @end
 
 @interface UIViewController (SHViewExt_private)
@@ -230,7 +247,7 @@ typedef void(^SHCoverViewOrientationChanged)();
     objc_setAssociatedObject(self, @selector(coverView), coverView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)())coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler withOrientationChangedHandler:(void (^)(CGRect))orientationChangedHandler
+- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)(CGPoint touchPoint))coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler withOrientationChangedHandler:(void (^)(CGRect))orientationChangedHandler
 {
     double delayInMilliSeconds = 500; //delay, otherwise if previous is an alert view, the rootVC is UIAlertShimPresentingViewController. Test this is minimum time.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliSeconds * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^(void)
@@ -249,6 +266,13 @@ typedef void(^SHCoverViewOrientationChanged)();
             [rootVC.view addSubview:self.coverView];
             self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin; //content vc by default always in center, not affected by rotatation.
             [self.coverView addSubview:self.view];
+            if (coverTouchHandler != nil)
+            {
+                self.coverView.touchedHandler = ^ (CGPoint touchPoint)
+                {
+                    coverTouchHandler(touchPoint);
+                };
+            }
             if (orientationChangedHandler != nil)
             {
                 self.coverView.orientationChangedHandler = ^
