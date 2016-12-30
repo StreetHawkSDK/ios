@@ -148,6 +148,8 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
             return [NSString stringWithFormat:@"%@/%@", self.aliveHostInner, @"v1"];
         case SHHostVersion_V2:
             return [NSString stringWithFormat:@"%@/%@", self.aliveHostInner, @"v2"];
+        case SHHostVersion_V3:
+            return [NSString stringWithFormat:@"%@/%@", self.aliveHostInner, @"v3"];
         case SHHostVersion_Unknown:
             return self.aliveHostInner; //some just for test
             break;

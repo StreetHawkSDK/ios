@@ -26,6 +26,7 @@ enum SHHostVersion
     SHHostVersion_Unknown,
     SHHostVersion_V1,
     SHHostVersion_V2,
+    SHHostVersion_V3,
 };
 typedef enum SHHostVersion SHHostVersion;
 
