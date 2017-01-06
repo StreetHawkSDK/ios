@@ -147,7 +147,8 @@
 {
     NSAssert(![NSThread isMainThread], @"Successfual callback wait in main thread for request %@.", task.currentRequest);
     if ([task.response.URL.absoluteString.lowercaseString containsString:@".streethawk.com"] //since route host server is flexible to change
-        && ![task.response.URL.absoluteString.lowercaseString hasPrefix:NONULL([SHAppStatus sharedInstance].growthHost)]) //growth is an exception
+        && ![task.response.URL.absoluteString.lowercaseString hasPrefix:NONULL([SHAppStatus sharedInstance].growthHost)] //growth is an exception
+        && ![task.response.URL.absoluteString.lowercaseString containsString:@"/v3"]) //v3 endpoint doesn't have code-value format
     {
         //whenever success process a request, do parser as it affects AppStatus.
         int resultCode = CODE_OK;
@@ -283,7 +284,7 @@
             }
         }
     }
-    else //not StreetHawk case, directly give to handler
+    else //directly give to handler
     {
         if (success)
         {
