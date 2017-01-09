@@ -140,6 +140,15 @@
     //Background fetch must be finished in 30 seconds, however when testing found `[UIApplication sharedApplication].backgroundTimeRemaining` sometimes is more than 30 seconds, for example if just enter background it's 180 seconds, if start background task it's 10 minutes. Thus cannot depend on `[UIApplication sharedApplication].backgroundTimeRemaining` to calculate timeout.
     //To be safe and simple, if in background, timeout is 13 seconds(sometimes heartbeat follow by location update), if in foreground, timeout is 60 seconds.
     [self.requestSerializer setTimeoutInterval:([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) ? 13 : 60];
+    //Add install token for /v3 request.
+    if (hostVersion == SHHostVersion_V3)
+    {
+        NSString *installToken = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INSTALL_TOKEN];
+        if (!shStrIsEmpty(installToken))
+        {
+            [self.requestSerializer setValue:installToken forHTTPHeaderField:@"X-Install-Token"];
+        }
+    }
     return completeUrl;
 }
 

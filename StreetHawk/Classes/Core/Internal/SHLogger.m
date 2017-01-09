@@ -856,7 +856,7 @@ enum
     //These not need to update
     //Remote notification: APNS_DISABLE_TIMESTAMP, APNS_SENT_DISABLE_TIMESTAMP, APNS_DEVICE_TOKEN. Because old data is correct when register new install, and old data is passed in install/register to server. Note: if revoked=timestamp, this will make revoked earlier than created, it's correct as revoked means first time when notification is disabled.
     //Sent history: SentInstall_AppKey, SentInstall_ClientVersion, SentInstall_ShVersion, SentInstall_Mode, SentInstall_Carrier, SentInstall_OSVersion, SentInstall_IBeacon. They are reset after install/register.
-    //Module bridge: SH_GEOLOCATION_LAT, SH_GEOLOCATION_LNG, SH_BEACON_BLUETOOTH, SH_BEACON_iBEACON. They are reset after launch.
+    //Module bridge: SH_GEOLOCATION_LAT, SH_GEOLOCATION_LNG, SH_BEACON_BLUETOOTH, SH_BEACON_iBEACON, SH_INSTALL_TOKEN. They are reset after launch.
     //Crash report: CrashLog_MD5. Make sure not sent duplicate crash report again in new install.
     //Customer setting: ENABLE_LOCATION_SERVICE, ENABLE_PUSH_NOTIFICATION, FRIENDLYNAME_KEY, SH_INTERACTIVEPUSH_KEY. Cannot reset, must keep same setting as previous install.
     //Keep old version and adjust by App itself: APPKEY_KEY, NETWORK_RECOVER_TIME, APPSTATUS_STREETHAWKENABLED, APPSTATUS_DEFAULT_HOST, APPSTATUS_ALIVE_HOST, APPSTATUS_GROWTH_HOST, APPSTATUS_UPLOAD_LOCATION, APPSTATUS_SUBMIT_FRIENDLYNAME, APPSTATUS_SUBMIT_INTERACTIVEBUTTONS, APPSTATUS_CHECK_TIME, APPSTATUS_APPSTOREID, APPSTATUS_DISABLECODES, APPSTATUS_PRIORITYCODES, REGULAR_HEARTBEAT_LOGTIME, REGULAR_LOCATION_LOGTIME, SMART_PUSH_PAYLOAD, SH_GEOFENCE_LATLNG_SENTTIME. These will be updated automatically by App, keep old version till next App update them.
