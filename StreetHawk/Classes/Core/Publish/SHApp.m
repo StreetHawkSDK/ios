@@ -666,6 +666,11 @@
             }
             [[NSUserDefaults standardUserDefaults] synchronize];
             UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+            if ([topVC isKindOfClass:[UINavigationController class]])
+            {
+                UINavigationController *navigationVC = (UINavigationController *)topVC;
+                topVC = navigationVC.topViewController;
+            }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": topVC}];
             return YES;
         }
