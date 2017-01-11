@@ -637,10 +637,10 @@
 
 - (BOOL)openURL:(NSURL *)url
 {
+    NSString *command = url.host;
     BOOL handledBySDK = NO;
     if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
     {
-        NSString *command = url.host;
         if (command != nil && [command compare:@"launchvc" options:NSCaseInsensitiveSearch] == NSOrderedSame)
         {
             SHDeepLinking *deepLinking = [[SHDeepLinking alloc] init];
@@ -649,6 +649,25 @@
             {
                 return YES; //launchvc deeplinking is handled by StreetHawk
             }
+        }
+    }
+    if (command != nil && [command compare:@"pointzi" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+    {
+        //TODO: do a simple quick one. This would be optimized into SHDeepLinking. The format is not decided yet.
+        NSDictionary *dictPointzi = shParseGetParamStringToDict(url.query);
+        NSString *installId = dictPointzi[@"installid"];
+        NSString *token = dictPointzi[@"token"];
+        if ([StreetHawk.currentInstall.suid compare:installId] == NSOrderedSame)
+        {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SH_POINTZI_AUTHOR_MODE];
+            if (!shStrIsEmpty(token))
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:token forKey:SH_INSTALL_TOKEN];
+            }
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": topVC}];
+            return YES;
         }
     }
     if (!handledBySDK && StreetHawk.openUrlHandler != nil)
