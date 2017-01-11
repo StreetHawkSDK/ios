@@ -305,9 +305,22 @@
 - (void)processFailureCallback:(NSURLSessionDataTask * _Nonnull)task withError:(NSError * _Nullable)error failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure
 {
     NSAssert(![NSThread isMainThread], @"Failure callback wait in main thread for request %@.", task.currentRequest);
+    NSString *detailError = nil; //if the detail error is inside error data, use it instead
+    if (error.userInfo[@"com.alamofire.serialization.response.error.data"] != nil)
+    {
+        NSData *errorData = error.userInfo[@"com.alamofire.serialization.response.error.data"];
+        detailError = [[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding];
+    }
     if (failure)
     {
-        failure(task, error);
+        if (shStrIsEmpty(detailError))
+        {
+            failure(task, error);
+        }
+        else
+        {
+            failure(task, [NSError errorWithDomain:SHErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: detailError}]);
+        }
     }
     //Show error on console when debug
     if (StreetHawk.isDebugMode && shAppMode() != SHAppMode_AppStore && shAppMode() != SHAppMode_Enterprise)
@@ -329,10 +342,9 @@
             NSString *postStr = [[[NSString alloc] initWithData:task.currentRequest.HTTPBody encoding:NSUTF8StringEncoding] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             comment = [comment stringByAppendingFormat:@"\nPost body: %@.", postStr];
         }
-        if (error.userInfo[@"com.alamofire.serialization.response.error.data"] != nil)
+        if (!shStrIsEmpty(detailError))
         {
-            NSData *errorData = error.userInfo[@"com.alamofire.serialization.response.error.data"];
-            comment = [comment stringByAppendingFormat:@"\nError data: %@", [[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding]];
+            comment = [comment stringByAppendingFormat:@"\nError data: %@", detailError];
         }
         SHLog(@"Add breakpoint here to know error request happen for %@.", comment);
     }
