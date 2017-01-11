@@ -59,7 +59,6 @@
         [self performSelector:@selector(displayDeepLinkingToUI)];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
 //tricky: Record `viewWillAppear` as backup, become in canceled pop up `viewDidAppear` is not called.
@@ -82,6 +81,7 @@
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -106,7 +106,6 @@
         [self performSelector:@selector(displayDeepLinkingToUI)];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -124,6 +123,7 @@
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
