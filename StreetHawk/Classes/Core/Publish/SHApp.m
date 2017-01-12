@@ -332,8 +332,11 @@
         //Do route check for first launch, and must wait until this is done to continue.
         [[SHAppStatus sharedInstance] checkRouteWithCompleteHandler:^(BOOL isEnabled, NSString *hostUrl)
         {
-            [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"RouteChecked"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            if (!shStrIsEmpty(hostUrl)) //in case fail to get host url, give another try later.
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"RouteChecked"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
             if (isEnabled && !shStrIsEmpty(hostUrl))
             {
                 dispatch_async(dispatch_get_main_queue(), ^
