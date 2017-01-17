@@ -654,12 +654,12 @@
             }
         }
     }
-    if (command != nil && [command compare:@"pointzi" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+    if (command != nil && [command compare:@"pointzi_author" options:NSCaseInsensitiveSearch] == NSOrderedSame)
     {
         //TODO: do a simple quick one. This would be optimized into SHDeepLinking. The format is not decided yet.
         NSDictionary *dictPointzi = shParseGetParamStringToDict(url.query);
         NSString *installId = dictPointzi[@"installid"];
-        NSString *token = dictPointzi[@"token"];
+        NSString *token = dictPointzi[@"device_token"];
         if ([StreetHawk.currentInstall.suid compare:installId] == NSOrderedSame)
         {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SH_POINTZI_AUTHOR_MODE];
