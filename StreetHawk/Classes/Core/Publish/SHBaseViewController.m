@@ -92,6 +92,7 @@
     {
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
 @end
@@ -134,6 +135,7 @@
     {
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
 @end
