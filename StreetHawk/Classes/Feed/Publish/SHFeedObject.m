@@ -45,8 +45,8 @@
             int length = [contentDict[@"l"] intValue];
             if (length >= 0 && length <= alert.length)
             {
-                obj.title = [[alert substringToIndex:length] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                obj.message = [[alert substringFromIndex:length] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                obj.title = [[alert substringToIndex:length] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                obj.message = [[alert substringFromIndex:length] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             }
         }
         NSObject *data = contentDict[@"d"];
