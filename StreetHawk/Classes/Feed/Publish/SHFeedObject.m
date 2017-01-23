@@ -57,7 +57,7 @@
         }
         else
         {
-            obj.content = data;
+            obj.content = @{@"value": [NSString stringWithFormat:@"%@", data]};
         }
     }
     obj.campaign = [NSString stringWithFormat:@"%@", dict[@"campaign"]];
@@ -76,7 +76,10 @@
     dict[@"title"] = NONULL(self.title);
     dict[@"message"] = NONULL(self.message);
     dict[@"campaign"] = NONULL(self.campaign);
-    dict[@"content"] = self.content;
+    if (self.content != nil)
+    {
+        dict[@"content"] = self.content;
+    }
     dict[@"activates"] = shFormatStreetHawkDate(self.activates);
     dict[@"expires"] = shFormatStreetHawkDate(self.expires);
     dict[@"created"] = shFormatStreetHawkDate(self.created);

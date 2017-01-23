@@ -39,9 +39,9 @@ typedef void(^ClickButtonHandler)(SHResult result);
  
  @param title Title of the payload.
  @param message Message of the payload.
- @param json Json string, usually parse to NSDicationary. Use system API `NSJSONSerialization`, or use StreetHawk utility function `NSDictionary *dict = shParseObjectToDict(json)`.
+ @param json Json dictionary.`.
  */
-- (void)shRawJsonCallbackWithTitle:(NSString *)title withMessage:(NSString *)message withJson:(NSString *)json;
+- (void)shRawJsonCallbackWithTitle:(NSString *)title withMessage:(NSString *)message withJson:(NSDictionary *)json;
 
 /**
  Streethawk calls [ISHCustomiseHandler onReceive:clickButton:] function when needs to display confirm dialog UI. Default it will display a UIAlertView, and customer is capable to override this confirm dialog UI with their own code:
