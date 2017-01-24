@@ -17,6 +17,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class SHFeedObject;
+
 /**
  Callback once detect new feeds.
  */
@@ -27,7 +29,7 @@ typedef void (^SHNewFeedsHandler)();
  @param arrayFeeds NSArray of SHFeedObject.
  @param error If fetch meet error, return here.
  */
-typedef void (^SHFeedsFetchHandler)(NSArray *arrayFeeds, NSError *error);
+typedef void (^SHFeedsFetchHandler)(NSArray<SHFeedObject *> *arrayFeeds, NSError *error);
 
 /**
  Feed object definition.
@@ -55,9 +57,9 @@ typedef void (^SHFeedsFetchHandler)(NSArray *arrayFeeds, NSError *error);
 @property (nonatomic, strong) NSString *campaign;
 
 /**
- Json content, parse to NSObject.
+ Json content, parse to NSDictionary.
  */
-@property (nonatomic, strong) id content;
+@property (nonatomic, strong) NSDictionary *content;
 
 /**
  A timestamp when the item activates (it will not be visible to clients before). It's possible to be nil.
