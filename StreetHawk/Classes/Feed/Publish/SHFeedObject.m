@@ -37,7 +37,7 @@
     {
         NSDictionary *contentDict = (NSDictionary *)contentVal;
         NSObject *apsVal = contentDict[@"aps"];
-        NSAssert(apsVal != nil && [apsVal isKindOfClass:[NSDictionary class]], @"aps should be dictionary.");
+        NSAssert(apsVal == nil/*tip feed created from dashboard will not have aps, as it doesn't save to campaign*/ || [apsVal isKindOfClass:[NSDictionary class]], @"aps should be dictionary.");
         if (apsVal != nil && [apsVal isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *apsDict = (NSDictionary *)apsVal;
