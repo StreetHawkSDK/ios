@@ -662,7 +662,7 @@
         NSString *token = dictPointzi[@"device_token"];
         if ([StreetHawk.currentInstall.suid compare:installId] == NSOrderedSame)
         {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SH_POINTZI_AUTHOR_MODE];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SH_POINTZI_AUTHOR_MODE]; //for passing module convenience, directly use NSUserDefaults.
             if (!shStrIsEmpty(token))
             {
                 [[NSUserDefaults standardUserDefaults] setObject:token forKey:SH_INSTALL_TOKEN];
