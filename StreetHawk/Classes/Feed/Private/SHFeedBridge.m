@@ -45,9 +45,7 @@
     {
         return; //not register yet, wait for next time.
     }
-    Class pointziBridge = NSClassFromString(@"SHPointziBridge");
-    BOOL isPointziInclude = (pointziBridge != nil);
-    if (StreetHawk.newFeedHandler == nil && !isPointziInclude)
+    if (StreetHawk.newFeedHandler == nil)
     {
         return; //no need to continue if user not setup fetch handler and no tip parse need it.
     }
@@ -79,14 +77,6 @@
                 //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setFeedTimestamp` again.
                 [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate] + 60/*avoid double accurate*/) forKey:APPSTATUS_FEED_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                if (isPointziInclude)
-                {
-                    //always do a fetch when new feeds available, because feeds is automatically displays as tip.
-                    [StreetHawk feed:0 withHandler:^(NSArray *arrayFeeds, NSError *error)
-                    {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ParseFeed_Notification" object:nil userInfo:@{@"feeds": arrayFeeds}]; //parse feeds to fill tip
-                    }];
-                }
                 if (StreetHawk.newFeedHandler != nil)
                 {
                     StreetHawk.newFeedHandler(); //just notice user, not do fetch actually.
