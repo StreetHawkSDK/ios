@@ -266,7 +266,6 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
             self.coverView.overlayColor = coverColor;
             self.coverView.overlayAlpha = coverAlpha;
             self.coverView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight; //make cover always full screen during rotation.
-            //TODO: touch event
             [rootVC.view addSubview:self.coverView];
             self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin; //content vc by default always in center, not affected by rotatation.
             [self.coverView addSubview:self.view];
