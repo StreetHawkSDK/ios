@@ -791,7 +791,13 @@ enum
             {
                 //NSAssert(NO, @"Log meets error (%@) for records: %@.", logRequest.error, logRecords); //comment this as dev returns error and crash App, make it cannot continue.
             }
-            if (error.code == 404)
+            NSInteger statusCode = 0;
+            if ([task.response isKindOfClass:[NSHTTPURLResponse class]])
+            {
+                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+                statusCode = httpResponse.statusCode;
+            }
+            if (error.code == 404 || statusCode == 404)
             {
                 StreetHawk.currentInstall = nil;
                 [StreetHawk registerOrUpdateInstallWithHandler:nil];
