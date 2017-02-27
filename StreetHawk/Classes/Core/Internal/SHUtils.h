@@ -96,6 +96,14 @@ extern NSString *shSerializeObjToJson(NSObject *obj);
 /** @name URL Process Utility */
 
 /**
+ /If need to set a string as paramter to URL, it needs to check some spefical characters 
+ (such as !*'();:@&=+$,/?%#[]) and convert them to URL encoding, for example "#" is encoded as "%23".
+ @param input The input raw string, such as "#".
+ @return The url encoded string, such as "%23".
+ */
+extern NSString *shUrlEncodeFull(NSString *input);
+
+/**
  Parse get request string's parameter string to NSDictionary. For example, param1=value1&param2=value2&param3=value3 is parsed to {param1:value1, param2:value2, param3=value3}.
  @param str Parameter string of a get request, formatted as: param1=value1&param2=value2&param3=value3...
  @return Dictionary parsed from the parameter string.
