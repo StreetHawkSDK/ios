@@ -77,7 +77,7 @@
             if (needFetch)
             {
                 //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setFeedTimestamp` again.
-                [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate] + 60/*avoid double accurate*/) forKey:APPSTATUS_FEED_FETCH_TIME];
+                [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate] + 10/*avoid double accurate*/) forKey:APPSTATUS_FEED_FETCH_TIME];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 if (isPointziInclude)
                 {
