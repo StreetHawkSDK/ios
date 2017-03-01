@@ -1604,6 +1604,8 @@
 
 //Some key requires value has some format, check here. It returns checking result and log warning.
 - (BOOL)checkTagValue:(NSObject *)value forKey:(NSString *)key;
+//Key has some rule, for example no more than 500 chars. Check and return suitable key, meantime log warning.
+- (NSString *)checkTagKey:(NSString *)key;
 
 @end
 
@@ -1631,6 +1633,7 @@
     {
         if ([self checkTagValue:value forKey:key])
         {
+            key = [self checkTagKey:key];
             NSDictionary *dict = @{@"key": key, @"string": value};
             [self sendLogForTag:dict withCode:LOG_CODE_TAG_ADD];
             return YES;
@@ -1645,6 +1648,7 @@
     {
         if ([self checkTagValue:@(value) forKey:key])
         {
+            key = [self checkTagKey:key];
             NSDictionary *dict = @{@"key": key, @"numeric": @(value)};
             [self sendLogForTag:dict withCode:LOG_CODE_TAG_ADD];
             return YES;
@@ -1659,6 +1663,7 @@
     {
         if ([self checkTagValue:value forKey:key])
         {
+            key = [self checkTagKey:key];
             NSDictionary *dict = @{@"key": key, @"datetime": value};
             [self sendLogForTag:dict withCode:LOG_CODE_TAG_ADD];
             return YES;
@@ -1671,6 +1676,7 @@
 {
     if (!shStrIsEmpty(key))
     {
+        key = [self checkTagKey:key];
         NSDictionary *dict = @{@"key": key};
         [self sendLogForTag:dict withCode:LOG_CODE_TAG_DELETE];
         return YES;
@@ -1687,6 +1693,7 @@
 {
     if (!shStrIsEmpty(key))
     {
+        key = [self checkTagKey:key];
         NSDictionary *dict = @{@"key": key, @"numeric": @(value)};
         [self sendLogForTag:dict withCode:LOG_CODE_TAG_INCREMENT];
         return YES;
@@ -1721,6 +1728,16 @@
         return isValid;
     }
     return YES;
+}
+
+- (NSString *)checkTagKey:(NSString *)key
+{
+    if (key.length > 500)
+    {
+        key = [key substringToIndex:500];
+        SHLog(@"WARNING: Tag key should be no more than 500 characters. Your key will be truncated as \"%@\".", key);
+    }
+    return key;
 }
 
 @end
