@@ -894,12 +894,31 @@ NSString *shCaptureAdvertisingIdentifier()
     CGFloat red, green, blue, alpha;
     if ([color getRed:&red green:&green blue:&blue alpha:&alpha])
     {
-        return [NSString stringWithFormat:@"#%02X%02X%02X%02X", (int)(alpha * 255), (int)(red * 255), (int)(green * 255), (int)(blue * 255)];
+        return [NSString stringWithFormat:@"#%02X%02X%02X%02X",
+                (int)([self validateColorRange:alpha] * 255),
+                (int)([self validateColorRange:red] * 255),
+                (int)([self validateColorRange:green] * 255),
+                (int)([self validateColorRange:blue] * 255)];
     }
     else
     {
         return nil;
     }
+}
+
++ (CGFloat)validateColorRange:(CGFloat)colorComponent
+{
+    //getRed..green..blue..alpha function may return -0.001, maybe due
+    //to float accuracy. Check the validate range is 0~1.
+    if (colorComponent < 0)
+    {
+        return 0;
+    }
+    if (colorComponent > 1)
+    {
+        return 1;
+    }
+    return colorComponent;
 }
 
 @end
