@@ -1604,7 +1604,7 @@
 
 //Some key requires value has some format, check here. It returns checking result and log warning.
 - (BOOL)checkTagValue:(NSObject *)value forKey:(NSString *)key;
-//Key has some rule, for example no more than 30 chars. Check and return suitable key, meantime log warning.
+//Key has some rule, for example no more than 500 chars. Check and return suitable key, meantime log warning.
 - (NSString *)checkTagKey:(NSString *)key;
 
 @end
@@ -1732,10 +1732,10 @@
 
 - (NSString *)checkTagKey:(NSString *)key
 {
-    if (key.length > 30)
+    if (key.length > 500)
     {
-        key = [key substringToIndex:30];
-        SHLog(@"WARNING: Tag key should be no more than 30 characters. Your key will be truncated as \"%@\".", key);
+        key = [key substringToIndex:500];
+        SHLog(@"WARNING: Tag key should be no more than 500 characters. Your key will be truncated as \"%@\".", key);
     }
     return key;
 }

@@ -212,7 +212,7 @@ NSString *shAppendString(NSString *str1, NSString *str2)
 //If need to set a string as paramter to URL, it needs to check some spefical characters (such as !*'();:@&=+$,/?%#[]) and convert them to URL encoding, for example "#" is encoded as "%23".
 NSString *shUrlEncodeFull(NSString *input)
 {
-    NSString *encoded = (__bridge_transfer/*ARC: create CF and memory managed by NS*/ NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef)input, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+    NSString *encoded = (__bridge_transfer/*ARC: create CF and memory managed by NS*/ NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef)input, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]_", kCFStringEncodingUTF8);
     return encoded;
 }
 
