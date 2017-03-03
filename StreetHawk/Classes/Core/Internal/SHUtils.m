@@ -87,14 +87,12 @@ NSDateFormatter *shGetDateFormatter(NSString *dateFormat, NSTimeZone *timeZone, 
 
 NSString *shFormatStreetHawkDate(NSDate *date)
 {
-    NSDateFormatter *date_formatter = shGetDateFormatter(nil, nil, nil);
-    return [date_formatter stringFromDate:date];
+    return [shGetDateFormatter(nil, nil, nil) stringFromDate:date];
 }
 
 NSString *shFormatISODate(NSDate *date)
 {
-    NSDateFormatter *date_formatter = shGetDateFormatter(@"yyyy-MM-dd'T'HH:mm:ssZ", nil, nil);
-    return [date_formatter stringFromDate:date];
+    return [shGetDateFormatter(@"yyyy-MM-dd'T'HH:mm:ssZ", nil, nil) stringFromDate:date];
 }
 
 NSDate *shParseDate(NSString *input, int offsetSeconds)
