@@ -65,9 +65,18 @@ extern NSDateFormatter *shGetDateFormatter(NSString *dateFormat, NSTimeZone *tim
 extern NSString *shFormatStreetHawkDate(NSDate *date);
 
 /**
+ Formats a date into a string in ISO format.
+ Format is yyyy-MM-dd'T'HH:mm:ssZ in UTC timezone, for example 2017-03-03T05:27:59+0000.
+ @param date The date value to be formatted.
+ @return The return string.
+ */
+extern NSString *shFormatISODate(NSDate *date);
+
+/**
  Parses date string into NSDate format. It tries to support as much format as possible. Refer to `input` parameters for the supported date time format.
  @param input Date time string. It supports this kinds of strings:
  
+ * yyyy-MM-dd'T'HH:mm:ssZ, for example 2017-03-03T05:27:59+0000
  * yyyy-MM-dd HH:mm:ss, for example 2012-12-20 18:20:50
  * yyyy-MM-dd, for example 2012-12-20
  * dd/MM/yyyy HH:mm:ss, for example 20/12/2012 18:20:50

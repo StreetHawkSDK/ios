@@ -91,6 +91,12 @@ NSString *shFormatStreetHawkDate(NSDate *date)
     return [date_formatter stringFromDate:date];
 }
 
+NSString *shFormatISODate(NSDate *date)
+{
+    NSDateFormatter *date_formatter = shGetDateFormatter(@"yyyy-MM-dd'T'HH:mm:ssZ", nil, nil);
+    return [date_formatter stringFromDate:date];
+}
+
 NSDate *shParseDate(NSString *input, int offsetSeconds)
 {
     static dispatch_semaphore_t formatter_semaphore;
@@ -104,6 +110,11 @@ NSDate *shParseDate(NSString *input, int offsetSeconds)
         dispatch_semaphore_wait(formatter_semaphore, DISPATCH_TIME_FOREVER);
         NSDateFormatter *dateFormatter = shGetDateFormatter(nil, nil, nil);
         out = [dateFormatter dateFromString:input];
+        if (out == nil)
+        {
+            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+            out = [dateFormatter dateFromString:input];
+        }
         if (out == nil)
         {
             [dateFormatter setDateFormat:@"yyyy-MM-dd"];
