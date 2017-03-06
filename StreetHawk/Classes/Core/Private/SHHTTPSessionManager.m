@@ -61,7 +61,7 @@
     {
         [self processFailureCallback:task withError:error failure:failure];
     }];
-    SHLog(@"GET - %@", URLString);
+    SHLog(@"GET - %@", task.currentRequest.URL.absoluteString);
     return task;
 }
 
@@ -75,7 +75,7 @@
     {
         [self processFailureCallback:task withError:error failure:failure];
     }];
-    SHLog(@"POST - %@", URLString);
+    SHLog(@"POST - %@", task.currentRequest.URL.absoluteString);
     return task;
 }
 
