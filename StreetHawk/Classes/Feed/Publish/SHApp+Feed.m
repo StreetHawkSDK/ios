@@ -79,14 +79,22 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     handler = [handler copy];
-    [[SHHTTPSessionManager sharedInstance] GET:@"/feed/" hostVersion:SHHostVersion_V1 parameters:@{@"offset": @(offset)} success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
-    {
+    [[SHHTTPSessionManager sharedInstance] GET:@"/feeds/"
+                                   hostVersion:SHHostVersion_V3
+                                    parameters:@{@"app_key": NONULL(StreetHawk.appKey),
+                                                 @"offset": @(offset)}
+                                       success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
+     {
+         NSDictionary *dictResponse = (NSDictionary *)responseObject;
+         NSAssert([dictResponse isKindOfClass:[NSDictionary class]],
+                  @"Feed response should be dictionary, got %@.", responseObject);
         NSMutableArray *arrayFeeds = [NSMutableArray array];
         NSError *error = nil;
-        NSAssert([responseObject isKindOfClass:[NSArray class]], @"Feed result should be array, got %@.", responseObject);
-        if ([responseObject isKindOfClass:[NSArray class]])
+        NSAssert([dictResponse[@"results"] isKindOfClass:[NSArray class]],
+                 @"Feed result should be array, got %@.", dictResponse[@"results"]);
+        if ([dictResponse[@"results"] isKindOfClass:[NSArray class]])
         {
-            for (id obj in (NSArray *)responseObject)
+            for (id obj in (NSArray *)dictResponse[@"results"])
             {
                 NSAssert([obj isKindOfClass:[NSDictionary class]], @"Feed item should be dictionary, got %@.", obj);
                 if ([obj isKindOfClass:[NSDictionary class]])
