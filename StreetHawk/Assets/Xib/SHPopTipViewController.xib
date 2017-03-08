@@ -28,11 +28,9 @@
                 <outlet property="cstButtonPrevMarginBottom" destination="SEW-kR-D6y" id="AFs-6U-ncl"/>
                 <outlet property="cstButtonPrevMarginLeft" destination="ogt-AZ-rSA" id="srB-JY-keU"/>
                 <outlet property="cstContentBottom" destination="nJa-2L-Gix" id="t8J-yI-hEf"/>
-                <outlet property="cstContentHeight" destination="jOd-Re-8ai" id="1a1-WG-CLp"/>
                 <outlet property="cstContentLeading" destination="vko-KX-IRF" id="tTV-Gd-zJ0"/>
                 <outlet property="cstContentTop" destination="fi4-6h-F4Z" id="DxW-K2-6jn"/>
                 <outlet property="cstContentTrailing" destination="Vvj-RF-zkr" id="CLT-gs-nhN"/>
-                <outlet property="cstContentWidth" destination="iKd-2t-MnQ" id="UWx-An-8CT"/>
                 <outlet property="cstLabelContentHeight" destination="tEk-gK-vog" id="Snl-Af-tHW"/>
                 <outlet property="cstLabelContentMarginBottom" destination="LZI-DO-ZcB" id="eqz-cs-TDP"/>
                 <outlet property="cstLabelContentMarginLeft" destination="QjZ-N4-d3N" id="xur-pd-HI8"/>
@@ -148,8 +146,6 @@
                         <constraint firstAttribute="trailing" secondItem="9VL-dq-wHT" secondAttribute="trailing" constant="-57" id="dJz-Wa-6pP"/>
                         <constraint firstItem="9VL-dq-wHT" firstAttribute="top" secondItem="maO-66-cw2" secondAttribute="bottom" constant="19" id="f50-h7-IFb"/>
                         <constraint firstItem="fSK-HF-g6U" firstAttribute="top" secondItem="oH9-V3-GvT" secondAttribute="bottom" constant="20" id="g7y-jI-Tm4"/>
-                        <constraint firstAttribute="width" constant="375" id="iKd-2t-MnQ"/>
-                        <constraint firstAttribute="height" constant="667" id="jOd-Re-8ai"/>
                         <constraint firstItem="b7f-Pj-Epc" firstAttribute="centerX" secondItem="7UD-fP-icM" secondAttribute="centerX" id="jUV-zb-Dv1"/>
                         <constraint firstItem="11X-TI-uky" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" constant="80" id="ogt-AZ-rSA"/>
                         <constraint firstAttribute="trailing" secondItem="fSK-HF-g6U" secondAttribute="trailing" constant="80" id="yvz-md-pn9"/>
