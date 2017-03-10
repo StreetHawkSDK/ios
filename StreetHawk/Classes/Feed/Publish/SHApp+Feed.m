@@ -58,26 +58,7 @@
         }
         return;
     }
-    //update local cache time before send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setFeedTimestamp` again. If fail to get request, clear local cache time in callback handler, make next fetch happen.
-    BOOL needSet = NO;
-    NSObject *localTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_FEED_FETCH_TIME];
-    if (localTimeVal == nil || ![localTimeVal isKindOfClass:[NSNumber class]])
-    {
-        needSet = YES;
-    }
-    else
-    {
-        double localTime = [(NSNumber *)localTimeVal doubleValue];
-        if (localTime < [[NSDate date] timeIntervalSinceReferenceDate] + 60)
-        {
-            needSet = YES;
-        }
-    }
-    if (needSet)
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:@([[NSDate date] timeIntervalSinceReferenceDate] + 60/*by testing server side is faster than client side time sometimes, add one minutes*/) forKey:APPSTATUS_FEED_FETCH_TIME];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
+    //use v3 endpoint and it doesn't have app_status in v3 any more, so not update APPSTATUS_FEED_FETCH_TIME. 
     handler = [handler copy];
     [[SHHTTPSessionManager sharedInstance] GET:@"/feeds/"
                                    hostVersion:SHHostVersion_V3
