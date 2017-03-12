@@ -103,7 +103,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oH9-V3-GvT" userLabel="webView">
-                            <rect key="frame" x="197" y="79" width="178" height="489"/>
+                            <rect key="frame" x="0.0" y="79" width="375" height="489"/>
                             <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="489" id="CAu-Rb-Dgt"/>
@@ -144,7 +144,6 @@
                         <constraint firstItem="oH9-V3-GvT" firstAttribute="top" secondItem="9VL-dq-wHT" secondAttribute="bottom" id="LZI-DO-ZcB"/>
                         <constraint firstItem="maO-66-cw2" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" id="OLm-bi-8QG"/>
                         <constraint firstItem="9VL-dq-wHT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" id="QjZ-N4-d3N"/>
-                        <constraint firstItem="oH9-V3-GvT" firstAttribute="leading" secondItem="b7f-Pj-Epc" secondAttribute="trailing" id="S9h-20-7af"/>
                         <constraint firstAttribute="bottom" secondItem="11X-TI-uky" secondAttribute="bottom" constant="49" id="SEW-kR-D6y"/>
                         <constraint firstItem="Uri-9x-BKo" firstAttribute="leading" secondItem="2mW-pS-QVy" secondAttribute="trailing" constant="240" id="W1J-Q0-iDl"/>
                         <constraint firstItem="maO-66-cw2" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" id="XDI-Bg-pcY"/>
@@ -152,6 +151,7 @@
                         <constraint firstAttribute="trailing" secondItem="maO-66-cw2" secondAttribute="trailing" id="cPR-t5-MLM"/>
                         <constraint firstAttribute="trailing" secondItem="9VL-dq-wHT" secondAttribute="trailing" id="dJz-Wa-6pP"/>
                         <constraint firstItem="9VL-dq-wHT" firstAttribute="top" secondItem="maO-66-cw2" secondAttribute="bottom" constant="19" id="f50-h7-IFb"/>
+                        <constraint firstItem="oH9-V3-GvT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" id="hMn-3N-e80"/>
                         <constraint firstItem="b7f-Pj-Epc" firstAttribute="centerX" secondItem="7UD-fP-icM" secondAttribute="centerX" id="jUV-zb-Dv1"/>
                         <constraint firstItem="11X-TI-uky" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" constant="80" id="ogt-AZ-rSA"/>
                         <constraint firstItem="Uri-9x-BKo" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" constant="30" id="qND-Bk-7aj"/>
