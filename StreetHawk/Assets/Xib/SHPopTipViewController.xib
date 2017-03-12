@@ -37,9 +37,10 @@
                 <outlet property="cstLabelContentMarginBottom" destination="LZI-DO-ZcB" id="eqz-cs-TDP"/>
                 <outlet property="cstLabelContentMarginLeft" destination="QjZ-N4-d3N" id="xur-pd-HI8"/>
                 <outlet property="cstLabelContentMarginRight" destination="dJz-Wa-6pP" id="RmD-po-nSH"/>
-                <outlet property="cstLabelTitleContentMarginTop" destination="8N4-R1-1x9" id="mVq-0R-tV8"/>
+                <outlet property="cstLabelTitleContentMarginTop" destination="f50-h7-IFb" id="s9D-iM-I8N"/>
                 <outlet property="cstLabelTitleHeight" destination="AW7-3G-GZD" id="eCm-Vs-Yq2"/>
                 <outlet property="cstLabelTitleMarginLeft" destination="AWN-YE-Nqz" id="PAg-FJ-4j6"/>
+                <outlet property="cstLabelTitleMarginTop" destination="8N4-R1-1x9" id="lu7-UO-I8Y"/>
                 <outlet property="cstTitleCloseMargin" destination="W1J-Q0-iDl" id="Hqx-rf-jBw"/>
                 <outlet property="cstViewTitleHeight" destination="Plg-RA-qH9" id="P3H-5Y-oOf"/>
                 <outlet property="cstViewTitleMarginLeft" destination="XDI-Bg-pcY" id="0tC-q8-YyK"/>
