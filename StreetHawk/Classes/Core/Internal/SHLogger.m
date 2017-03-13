@@ -922,9 +922,9 @@ enum
     {
         NSAssert(shStrIsEmpty(assocId), @"Try to do none push or feed related log (%@) with assoc id (%@).", comment, assocId);
     }
-    NSAssert(shStrIsEmpty(StreetHawk.appKey)/*when app not setup, logger is not initialized on purpose*/
-             || shStrIsEmpty([[SHAppStatus sharedInstance] aliveHostForVersion:SHHostVersion_Unknown]) /*route hasn't return host server*/
-             || self.logger != nil, @"Lose logline due to logger is not ready.");
+//    NSAssert(shStrIsEmpty(StreetHawk.appKey)/*when app not setup, logger is not initialized on purpose*/
+//             || shStrIsEmpty([[SHAppStatus sharedInstance] aliveHostForVersion:SHHostVersion_Unknown]) /*route hasn't return host server*/
+//             || self.logger != nil, @"Lose logline due to logger is not ready.");
     [self.logger logComment:comment atTime:[NSDate date] forCode:code forAssocId:assocId withResult:result withHandler:handler];
 }
 
