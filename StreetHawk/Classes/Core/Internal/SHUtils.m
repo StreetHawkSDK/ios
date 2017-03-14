@@ -729,7 +729,7 @@ BOOL streetHawkIsEnabled()
     }
     else if (shStrIsEmpty([[SHAppStatus sharedInstance] aliveHostForVersion:SHHostVersion_Unknown]))
     {
-        NSLog(@"No host server, please contact Administrator to enable it.");
+        NSLog(@"Route to host server.");
         return NO;
     }
     else
