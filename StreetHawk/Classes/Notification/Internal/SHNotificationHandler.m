@@ -370,11 +370,14 @@ const NSString *Push_Payload_SupressDialog = @"n"; //if payload has "n", regardl
                 }
                 if (!handledByCustomer)
                 {
-                    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
+                    SHDeepLinking *deepLinkingObj = [[SHDeepLinking alloc] init];
+                    NSURL *deeplinkingUrl = [NSURL URLWithString:deeplinkingStr];
+                    if ([deepLinkingObj isSupportedDeeplinkingUrl:deeplinkingUrl])
                     {
-                        SHDeepLinking *deepLinkingObj = [[SHDeepLinking alloc] init];
-                        BOOL vcLaunched = [deepLinkingObj launchDeepLinkingVC:deeplinkingStr withPushData:pushData increaseGrowthClick:YES];
-                        if (!vcLaunched)
+                        BOOL handledBySDK = [deepLinkingObj processDeeplinkingUrl:deeplinkingUrl
+                                                                 withPushData:pushData
+                                                           withIncreaseGrowth:YES];
+                        if (!handledBySDK)
                         {
                             [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:[NSString stringWithFormat:@"Fail to create VC from \"%@\". Push msgid: %@.", pushData.data, pushData.msgID] forAssocId:nil withResult:100/*ignore*/ withHandler:nil];
                             //Cannot launch vc, however still need to show confirm dialog in FG, and sends pushresult; in BG always sends pushresult=1. There was a discussion that not hide confirm dialog to hide error in this case.

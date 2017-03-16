@@ -535,20 +535,13 @@
                 NSString *deeplinkingUrl = [NSString stringWithFormat:@"%@://%@", dictMessage[@"scheme"], dictMessage[@"uri"]];
                 dispatch_async(dispatch_get_main_queue(), ^
                    {
-                       BOOL handledBySDK = NO;
-                       if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
+                       SHDeepLinking *deepLinkingObj = [[SHDeepLinking alloc] init];
+                       BOOL handledBySDK = [deepLinkingObj processDeeplinkingUrl:[NSURL URLWithString:deeplinkingUrl]
+                                                                    withPushData:nil withIncreaseGrowth:NO];
+                       if (handledBySDK)
                        {
-                           NSString *command = [NSURL URLWithString:deeplinkingUrl].host;
-                           if (command != nil && [command compare:@"launchvc" options:NSCaseInsensitiveSearch] == NSOrderedSame)
-                           {
-                               SHDeepLinking *deepLinkingObj = [[SHDeepLinking alloc] init];
-                               handledBySDK = [deepLinkingObj launchDeepLinkingVC:deeplinkingUrl withPushData:nil increaseGrowthClick:NO];
-                               if (handledBySDK)
-                               {
-                                   SHLog(@"Growth launch %@ successfully by StreetHawk SDK.", deeplinkingUrl);
-                                   return;
-                               }
-                           }
+                           SHLog(@"Growth url %@ processed by StreetHawk SDK.", deeplinkingUrl);
+                           return;
                        }
                        if (!handledBySDK && StreetHawk.openUrlHandler != nil)
                        {
