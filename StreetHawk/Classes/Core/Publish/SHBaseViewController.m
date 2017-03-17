@@ -82,6 +82,7 @@
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
@@ -94,6 +95,7 @@
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
 @end
@@ -126,6 +128,7 @@
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
@@ -138,6 +141,7 @@
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
 }
 
 @end
