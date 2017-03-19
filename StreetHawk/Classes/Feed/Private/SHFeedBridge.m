@@ -84,7 +84,10 @@
                     //always do a fetch when new feeds available, because feeds is automatically displays as tip.
                     [StreetHawk feed:0 withHandler:^(NSArray *arrayFeeds, NSError *error)
                      {
-                         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ParseFeed_Notification" object:nil userInfo:@{@"feeds": arrayFeeds}]; //parse feeds to fill tip
+                         if (arrayFeeds != nil)
+                         {
+                             [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ParseFeed_Notification" object:nil userInfo:@{@"feeds": arrayFeeds}]; //parse feeds to fill tip
+                         }
                      }];
                 }
                 if (StreetHawk.newFeedHandler != nil)
