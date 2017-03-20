@@ -398,6 +398,7 @@ UIWindow *shGetPresentWindow()
 #pragma mark - Resources and Bundles Utility
 
 #define StreetHawk_BUNDLE ([[NSBundle mainBundle] URLForResource:@"streethawk" withExtension:@"bundle"] != nil ? [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"streethawk" withExtension:@"bundle"]] : nil)
+#define Pointzi_BUNDLE ([[NSBundle mainBundle] URLForResource:@"Pointzi" withExtension:@"bundle"] != nil ? [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"Pointzi" withExtension:@"bundle"]] : nil)
 #define StreetHawkCoreRES_BUNDLE ([[NSBundle mainBundle] URLForResource:@"StreetHawkCoreRes" withExtension:@"bundle"] != nil ? [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"StreetHawkCoreRes" withExtension:@"bundle"]] : nil)
 #define StreetHawkCoreRES_Titanium_BUNDLE ([[NSBundle mainBundle] URLForResource:@"StreetHawkCoreRes" withExtension:@"bundle" subdirectory:@"modules/com.streethawk.shanalytics"] != nil ? [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"StreetHawkCoreRes" withExtension:@"bundle" subdirectory:@"modules/com.streethawk.shanalytics"]] : nil)
 #define StreetHawkCoreRES_EmbeddedFull_BUNDLE ([[NSBundle mainBundle] URLForResource:@"StreetHawkCoreRes" withExtension:@"bundle" subdirectory:@"Frameworks/StreetHawkCore.framework"] != nil ? [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"StreetHawkCoreRes" withExtension:@"bundle" subdirectory:@"Frameworks/StreetHawkCore.framework"]] : nil)
@@ -412,6 +413,10 @@ NSBundle *shFindBundleForResource(NSString *resourceName, NSString *type, BOOL m
     else if (StreetHawk_BUNDLE != nil && [[NSFileManager defaultManager] fileExistsAtPath:[StreetHawk_BUNDLE pathForResource:resourceName ofType:type]]) //check streethawk.bundle
     {
         bundle = StreetHawk_BUNDLE;
+    }
+    else if (Pointzi_BUNDLE != nil && [[NSFileManager defaultManager] fileExistsAtPath:[Pointzi_BUNDLE pathForResource:resourceName ofType:type]]) //check Pointzi.bundle
+    {
+        bundle = Pointzi_BUNDLE;
     }
     else if (StreetHawkCoreRES_BUNDLE != nil && [[NSFileManager defaultManager] fileExistsAtPath:[StreetHawkCoreRES_BUNDLE pathForResource:resourceName ofType:type]])  //check StreetHawkCoreRes.bundle
     {
@@ -452,6 +457,10 @@ NSString *shLocalizedString(NSString *key, NSString *defaultStr)
         if (StreetHawk_BUNDLE != nil)
         {
             retStr = NSLocalizedStringWithDefaultValue(key, nil, StreetHawk_BUNDLE, defaultStr, nil);
+        }
+        if (Pointzi_BUNDLE != nil)
+        {
+            retStr = NSLocalizedStringWithDefaultValue(key, nil, Pointzi_BUNDLE, defaultStr, nil);
         }
         if (StreetHawkCoreRES_BUNDLE != nil && (shStrIsEmpty(retStr) || [retStr isEqualToString:key]))
         {
