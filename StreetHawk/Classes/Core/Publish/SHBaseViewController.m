@@ -270,7 +270,13 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
             self.coverView.overlayColor = coverColor;
             self.coverView.overlayAlpha = coverAlpha;
             self.coverView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight; //make cover always full screen during rotation.
-            [rootVC.view addSubview:self.coverView];
+            UIViewController *presentedVC = rootVC;
+            while (presentedVC.presentedViewController != nil)
+            {
+                presentedVC = presentedVC.presentedViewController;
+            }
+            [presentedVC.view addSubview:self.coverView];
+//            [[UIApplication sharedApplication].keyWindow addSubview:self.coverView]; //this also work but cannot rotate
             self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin; //content vc by default always in center, not affected by rotatation.
             [self.coverView addSubview:self.view];
             if (coverTouchHandler != nil)
