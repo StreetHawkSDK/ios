@@ -135,37 +135,37 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="Uri-9x-BKo" secondAttribute="trailing" constant="105" id="2rQ-VA-LPm"/>
-                        <constraint firstItem="2mW-pS-QVy" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" constant="30" id="8N4-R1-1x9"/>
-                        <constraint firstItem="fSK-HF-g6U" firstAttribute="leading" secondItem="11X-TI-uky" secondAttribute="trailing" constant="155" id="9ZV-Sg-Z4O"/>
-                        <constraint firstItem="2mW-pS-QVy" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" id="AWN-YE-Nqz"/>
-                        <constraint firstItem="b7f-Pj-Epc" firstAttribute="centerY" secondItem="7UD-fP-icM" secondAttribute="centerY" id="EoS-dY-uoi"/>
-                        <constraint firstAttribute="trailing" secondItem="oH9-V3-GvT" secondAttribute="trailing" id="FF8-8e-DGB"/>
-                        <constraint firstItem="oH9-V3-GvT" firstAttribute="top" secondItem="9VL-dq-wHT" secondAttribute="bottom" id="LZI-DO-ZcB"/>
-                        <constraint firstItem="maO-66-cw2" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" id="OLm-bi-8QG"/>
-                        <constraint firstItem="9VL-dq-wHT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" id="QjZ-N4-d3N"/>
-                        <constraint firstAttribute="bottom" secondItem="11X-TI-uky" secondAttribute="bottom" constant="49" id="SEW-kR-D6y"/>
-                        <constraint firstItem="Uri-9x-BKo" firstAttribute="leading" secondItem="2mW-pS-QVy" secondAttribute="trailing" constant="240" id="W1J-Q0-iDl"/>
-                        <constraint firstItem="maO-66-cw2" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" id="XDI-Bg-pcY"/>
-                        <constraint firstItem="11X-TI-uky" firstAttribute="width" secondItem="fSK-HF-g6U" secondAttribute="width" id="Z2Z-cB-Mrh"/>
-                        <constraint firstAttribute="trailing" secondItem="maO-66-cw2" secondAttribute="trailing" id="cPR-t5-MLM"/>
-                        <constraint firstAttribute="trailing" secondItem="9VL-dq-wHT" secondAttribute="trailing" id="dJz-Wa-6pP"/>
-                        <constraint firstItem="9VL-dq-wHT" firstAttribute="top" secondItem="maO-66-cw2" secondAttribute="bottom" constant="19" id="f50-h7-IFb"/>
-                        <constraint firstItem="oH9-V3-GvT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" id="hMn-3N-e80"/>
-                        <constraint firstItem="b7f-Pj-Epc" firstAttribute="centerX" secondItem="7UD-fP-icM" secondAttribute="centerX" id="jUV-zb-Dv1"/>
-                        <constraint firstItem="11X-TI-uky" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" constant="80" id="ogt-AZ-rSA"/>
-                        <constraint firstItem="Uri-9x-BKo" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" constant="30" id="qND-Bk-7aj"/>
-                        <constraint firstAttribute="trailing" secondItem="fSK-HF-g6U" secondAttribute="trailing" constant="80" id="yvz-md-pn9"/>
-                        <constraint firstAttribute="bottom" secondItem="fSK-HF-g6U" secondAttribute="bottom" constant="49" id="zhS-3t-1WH"/>
+                        <constraint firstAttribute="trailing" secondItem="Uri-9x-BKo" secondAttribute="trailing" constant="105" identifier="ButtonDismissMarginRight" id="2rQ-VA-LPm"/>
+                        <constraint firstItem="2mW-pS-QVy" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" constant="30" identifier="LabelTitleMarginTop" id="8N4-R1-1x9"/>
+                        <constraint firstItem="fSK-HF-g6U" firstAttribute="leading" secondItem="11X-TI-uky" secondAttribute="trailing" constant="155" identifier="ButtonMarginBetween" id="9ZV-Sg-Z4O"/>
+                        <constraint firstItem="2mW-pS-QVy" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="LabelTitleMarginLeft" id="AWN-YE-Nqz"/>
+                        <constraint firstItem="b7f-Pj-Epc" firstAttribute="centerY" secondItem="7UD-fP-icM" secondAttribute="centerY" identifier="ActivityCenterY" id="EoS-dY-uoi"/>
+                        <constraint firstAttribute="trailing" secondItem="oH9-V3-GvT" secondAttribute="trailing" identifier="WebViewTrailing" id="FF8-8e-DGB"/>
+                        <constraint firstItem="oH9-V3-GvT" firstAttribute="top" secondItem="9VL-dq-wHT" secondAttribute="bottom" identifier="LabelContentMarginBottom" id="LZI-DO-ZcB"/>
+                        <constraint firstItem="maO-66-cw2" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" identifier="ViewTitleMarginTop" id="OLm-bi-8QG"/>
+                        <constraint firstItem="9VL-dq-wHT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="LabelContentMarginLeft" id="QjZ-N4-d3N"/>
+                        <constraint firstAttribute="bottom" secondItem="11X-TI-uky" secondAttribute="bottom" constant="49" identifier="ButtonPrevMarginBottom" id="SEW-kR-D6y"/>
+                        <constraint firstItem="Uri-9x-BKo" firstAttribute="leading" secondItem="2mW-pS-QVy" secondAttribute="trailing" constant="240" identifier="TitleCloseMargin" id="W1J-Q0-iDl"/>
+                        <constraint firstItem="maO-66-cw2" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="ViewTitleMarginLeft" id="XDI-Bg-pcY"/>
+                        <constraint firstItem="11X-TI-uky" firstAttribute="width" secondItem="fSK-HF-g6U" secondAttribute="width" identifier="ButtonWidthEqual" id="Z2Z-cB-Mrh"/>
+                        <constraint firstAttribute="trailing" secondItem="maO-66-cw2" secondAttribute="trailing" identifier="ViewTitleMarginRight" id="cPR-t5-MLM"/>
+                        <constraint firstAttribute="trailing" secondItem="9VL-dq-wHT" secondAttribute="trailing" identifier="LabelContentMarginRight" id="dJz-Wa-6pP"/>
+                        <constraint firstItem="9VL-dq-wHT" firstAttribute="top" secondItem="maO-66-cw2" secondAttribute="bottom" constant="19" identifier="LabelTitleContentMarginTop" id="f50-h7-IFb"/>
+                        <constraint firstItem="oH9-V3-GvT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="WebviewLeading" id="hMn-3N-e80"/>
+                        <constraint firstItem="b7f-Pj-Epc" firstAttribute="centerX" secondItem="7UD-fP-icM" secondAttribute="centerX" identifier="ActivityCenterX" id="jUV-zb-Dv1"/>
+                        <constraint firstItem="11X-TI-uky" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" constant="80" identifier="ButtonPrevMarginLeft" id="ogt-AZ-rSA"/>
+                        <constraint firstItem="Uri-9x-BKo" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" constant="30" identifier="ButtonDismissMarginTop" id="qND-Bk-7aj"/>
+                        <constraint firstAttribute="trailing" secondItem="fSK-HF-g6U" secondAttribute="trailing" constant="80" identifier="ButtonNextMarginRight" id="yvz-md-pn9"/>
+                        <constraint firstAttribute="bottom" secondItem="fSK-HF-g6U" secondAttribute="bottom" constant="49" identifier="ButtonNextMarginBottom" id="zhS-3t-1WH"/>
                     </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="7UD-fP-icM" secondAttribute="trailing" id="Vvj-RF-zkr"/>
-                <constraint firstItem="7UD-fP-icM" firstAttribute="top" secondItem="1" secondAttribute="top" id="fi4-6h-F4Z"/>
-                <constraint firstAttribute="bottom" secondItem="7UD-fP-icM" secondAttribute="bottom" id="nJa-2L-Gix"/>
-                <constraint firstItem="7UD-fP-icM" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="vko-KX-IRF"/>
+                <constraint firstAttribute="trailing" secondItem="7UD-fP-icM" secondAttribute="trailing" identifier="ContentTrailing" id="Vvj-RF-zkr"/>
+                <constraint firstItem="7UD-fP-icM" firstAttribute="top" secondItem="1" secondAttribute="top" identifier="ContentTop" id="fi4-6h-F4Z"/>
+                <constraint firstAttribute="bottom" secondItem="7UD-fP-icM" secondAttribute="bottom" identifier="ContentBottom" id="nJa-2L-Gix"/>
+                <constraint firstItem="7UD-fP-icM" firstAttribute="leading" secondItem="1" secondAttribute="leading" identifier="ContentLeading" id="vko-KX-IRF"/>
             </constraints>
             <point key="canvasLocation" x="26.5" y="51.5"/>
         </view>

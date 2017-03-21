@@ -940,3 +940,12 @@ NSString *shCaptureAdvertisingIdentifier()
 }
 
 @end
+
+@implementation NSLayoutConstraint (SHExt)
+
+-(NSString *)description
+{
+    return [NSString stringWithFormat:@"id: %@, constant: %f", self.identifier, self.constant];
+}
+
+@end

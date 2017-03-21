@@ -298,4 +298,11 @@ extern NSString *shCaptureAdvertisingIdentifier();
 
 @end
 
+/**
+ Extension for prints auto-layout constraint description.
+ */
+@interface NSLayoutConstraint (SHExt)
+
+@end
+
 #endif //SH__UTILS__H
