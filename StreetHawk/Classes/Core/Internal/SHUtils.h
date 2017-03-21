@@ -305,4 +305,16 @@ extern NSString *shCaptureAdvertisingIdentifier();
 
 @end
 
+/**
+ Extension for NSObject.
+ */
+@interface NSObject (SHExt)
+
+/**
+ Get direct properties inside this class definition. Not include super class's properties.
+ */
+- (NSDictionary<NSString *, NSString *> *)getPropertyNameTypes;
+
+@end
+
 #endif //SH__UTILS__H

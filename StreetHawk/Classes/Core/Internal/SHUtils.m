@@ -949,3 +949,69 @@ NSString *shCaptureAdvertisingIdentifier()
 }
 
 @end
+
+#import "objc/runtime.h"
+
+@implementation NSObject (SHExt)
+
+static NSString *getPropertyType(objc_property_t property)
+{
+    const char *attributes = property_getAttributes(property);
+    char buffer[1 + strlen(attributes)];
+    strcpy(buffer, attributes);
+    char *state = buffer, *attribute;
+    while ((attribute = strsep(&state, ",")) != NULL)
+    {
+        if (attribute[0] == 'T')
+        {
+            NSString *attributeStr = [NSString stringWithUTF8String:attribute];
+            if ([attributeStr isEqualToString:@"Ti"])
+            {
+                return @"int"; //not exactly the property definition. enum, NSInteger etc all end this.
+            }
+            else if ([attributeStr isEqualToString:@"Td"])
+            {
+                return @"double"; //double, float, CGFloat etc.
+            }
+            if ([attributeStr isEqualToString:@"Tq"])
+            {
+                return @"NSTextAlignment";
+            }
+            if ([attributeStr isEqualToString:@"TB"])
+            {
+                return @"bool";
+            }
+            if ([attributeStr isEqualToString:@"T@"])
+            {
+                return @"id";
+            }
+            if (attributeStr.length > 4)
+            {
+                return [attributeStr substringWithRange:NSMakeRange(3, attributeStr.length - 4)];;
+            }
+        }
+    }
+    return @"";
+}
+
+- (NSDictionary<NSString *, NSString *> *)getPropertyNameTypes
+{
+    unsigned int outCount, i;
+    objc_property_t *properties = class_copyPropertyList([self class], &outCount);
+    NSMutableDictionary<NSString *, NSString *> *dictProperties = [NSMutableDictionary dictionaryWithCapacity:outCount];
+    for(i = 0; i < outCount; i++)
+    {
+        objc_property_t property = properties[i];
+        const char *propName = property_getName(property);
+        if(propName)
+        {
+            NSString *propertyName = [NSString stringWithUTF8String:propName];
+            NSString *propertyType = getPropertyType(property);
+            dictProperties[propertyName] = NONULL(propertyType);
+        }
+    }
+    free(properties);
+    return dictProperties;
+}
+
+@end
