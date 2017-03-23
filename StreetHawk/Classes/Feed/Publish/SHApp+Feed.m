@@ -66,42 +66,43 @@
                                                  @"offset": @(offset)}
                                        success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
      {
+         SHLog(@"Fetch feeds: %@.", responseObject);
          NSDictionary *dictResponse = (NSDictionary *)responseObject;
          NSAssert([dictResponse isKindOfClass:[NSDictionary class]],
                   @"Feed response should be dictionary, got %@.", responseObject);
-        NSMutableArray *arrayFeeds = [NSMutableArray array];
-        NSError *error = nil;
-        NSAssert([dictResponse[@"results"] isKindOfClass:[NSArray class]],
-                 @"Feed result should be array, got %@.", dictResponse[@"results"]);
-        if ([dictResponse[@"results"] isKindOfClass:[NSArray class]])
-        {
-            for (id obj in (NSArray *)dictResponse[@"results"])
-            {
-                NSAssert([obj isKindOfClass:[NSDictionary class]], @"Feed item should be dictionary, got %@.", obj);
-                if ([obj isKindOfClass:[NSDictionary class]])
-                {
-                    SHFeedObject *feedObj = [SHFeedObject createFromDictionary:(NSDictionary *)obj];
-                    [arrayFeeds addObject:feedObj];
-                }
-            }
-        }
-        else
-        {
-            error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Feed result should be array, got %@.", responseObject]}];
-        }
-        if (handler)
-        {
-            handler(arrayFeeds, error);
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_FEED_FETCH_TIME]; //make next fetch happen as this time fail.
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        if (handler)
-        {
-            handler(nil, error);
-        }
-    }];
+         NSMutableArray *arrayFeeds = [NSMutableArray array];
+         NSError *error = nil;
+         NSAssert([dictResponse[@"results"] isKindOfClass:[NSArray class]],
+                  @"Feed result should be array, got %@.", dictResponse[@"results"]);
+         if ([dictResponse[@"results"] isKindOfClass:[NSArray class]])
+         {
+             for (id obj in (NSArray *)dictResponse[@"results"])
+             {
+                 NSAssert([obj isKindOfClass:[NSDictionary class]], @"Feed item should be dictionary, got %@.", obj);
+                 if ([obj isKindOfClass:[NSDictionary class]])
+                 {
+                     SHFeedObject *feedObj = [SHFeedObject createFromDictionary:(NSDictionary *)obj];
+                     [arrayFeeds addObject:feedObj];
+                 }
+             }
+         }
+         else
+         {
+             error = [NSError errorWithDomain:SHErrorDomain code:INT_MIN userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Feed result should be array, got %@.", responseObject]}];
+         }
+         if (handler)
+         {
+             handler(arrayFeeds, error);
+         }
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error)
+     {
+         [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:APPSTATUS_FEED_FETCH_TIME]; //make next fetch happen as this time fail.
+         [[NSUserDefaults standardUserDefaults] synchronize];
+         if (handler)
+         {
+             handler(nil, error);
+         }
+     }];
 }
 
 - (void)sendFeedAck:(NSString *)feed_id
