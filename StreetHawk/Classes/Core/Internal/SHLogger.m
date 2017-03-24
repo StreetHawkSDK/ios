@@ -247,7 +247,8 @@ enum
             || (code == LOG_CODE_TIMEOFFSET)  //immediately send for time utc offset change
             || (code == LOG_CODE_HEARTBEAT)  //immediately send for heart beat
             || (code == LOG_CODE_PUSH_RESULT) //immediately send for pushresult
-            || (code == LOG_CODE_FEED_RESULT); //immediately send for feedresult
+            || (code == LOG_CODE_FEED_RESULT) //immediately send for feedresult
+            || (code == LOG_CODE_VIEW_ENTER || code == LOG_CODE_VIEW_EXIT || code == LOG_CODE_VIEW_COMPLETE); //immediately send for page enter/exit
         }
         else
         {
