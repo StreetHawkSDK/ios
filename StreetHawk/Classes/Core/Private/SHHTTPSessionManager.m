@@ -239,6 +239,7 @@
                     //check "feed"
                     if ([dictStatus.allKeys containsObject:@"feed"])
                     {
+                        SHLog(@"feed timestamp in app_status: %@", dictStatus[@"feed"]);
                         [SHAppStatus sharedInstance].feedTimestamp = dictStatus[@"feed"];
                     }
                     //check "reregister"
