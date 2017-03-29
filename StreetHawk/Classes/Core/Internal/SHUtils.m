@@ -27,7 +27,7 @@ void SHLog(NSString *format, ...)
         va_list args;
         va_start(args, format);
         NSString * msg = [[NSString alloc] initWithFormat:format arguments:args];
-        NSLog(@"%@", msg);
+        NSLog(@"(StreetHawk Log): %@", msg);
         va_end(args);
     }
 }
