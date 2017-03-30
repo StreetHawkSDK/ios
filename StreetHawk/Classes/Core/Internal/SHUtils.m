@@ -19,6 +19,7 @@
 //header from StreetHawk
 #import "SHApp.h" //for `StreetHawk.isDebugMode`
 #import "SHAppStatus.h" //for check streetHawkIsEnabled
+#import "SHViewController.h" //for SHBase(Table)ViewController
 
 void SHLog(NSString *format, ...)
 {
@@ -745,6 +746,11 @@ BOOL streetHawkIsEnabled()
     {
         return YES;
     }
+}
+
+BOOL shIsSDKViewController(UIViewController * vc)
+{
+    return ([vc isKindOfClass:[SHBaseViewController class]] || [vc isKindOfClass:[SHBaseTableViewController class]]);
 }
 
 BOOL shStrIsEmpty(NSString *str)
