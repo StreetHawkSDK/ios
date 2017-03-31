@@ -1,0 +1,9 @@
+Example_ObjC/Pods
+*.orig
+Example_ObjC/StreetHawkDemo.xcodeproj/project.xcworkspace/xcuserdata
+Example_ObjC/StreetHawkDemo.xcodeproj/xcuserdata
+Example_ObjC/StreetHawkDemo.xcworkspace/xcuserdata
+Example_Swift/Pods
+Example_Swift/StreetHawkDemo.xcodeproj/project.xcworkspace/xcuserdata
+Example_Swift/StreetHawkDemo.xcodeproj/xcuserdata
+Example_Swift/StreetHawkDemo.xcworkspace/xcuserdata

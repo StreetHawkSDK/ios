@@ -1,0 +1,100 @@
+/*
+ * Copyright (c) StreetHawk, All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ */
+
+//Common resource strings
+"STREETHAWK_CANCEL" = "Cancel";         //Cancel string
+"STREETHAWK_YES" = "Yes Please!";       //yes button for push notification confirm dialog, click this to continue process push notification.
+"STREETHAWK_OKAY" = "OK";               //OK string
+"STREETHAWK_CLOSE" = "Close";           //Close string
+"STREETHAWK_OPEN" = "Open";             //Open string
+
+//Rate
+"STREETHAWK_RATE" = "Rate";             //button for perform rate.
+"STREETHAWK_LATER" = "Later";           //button for do rate later.
+"STREETHAWK_DISMISS" = "Dismiss";       //button for dismiss and never rate again.
+
+//Feedback
+"STREETHAWK_WINDOW_FEEDBACK_THANKS" = "Thanks for your feedback!";      //Successfully submit feedback alert view title
+"STREETHAWK_WINDOW_FEEDBACK_TITLE" = "%@ loves Feedback!";       //Suggest to submit feedback alert view title
+
+//Notification buttons
+"STREETHAWK_8000_POSITIVE" = "Show";
+"STREETHAWK_8000_NEGATIVE" = "Cancel";
+"STREETHAWK_8004_POSITIVE" = "Open App";
+"STREETHAWK_8004_NEGATIVE" = "Cancel";
+"STREETHAWK_8005_POSITIVE" = "Rate";
+"STREETHAWK_8005_LATER" = "Later";
+"STREETHAWK_8006_POSITIVE" = "Open App";
+"STREETHAWK_8006_NEGATIVE" = "Cancel";
+"STREETHAWK_8007_POSITIVE" = "Open App";
+"STREETHAWK_8007_NEGATIVE" = "Cancel";
+"STREETHAWK_8008_POSITIVE" = "Upgrade";
+"STREETHAWK_8008_NEGATIVE" = "Cancel";
+"STREETHAWK_8009_POSITIVE" = "Call";
+"STREETHAWK_8009_NEGATIVE" = "Cancel";
+"STREETHAWK_8010_POSITIVE" = "Read";
+"STREETHAWK_8010_NEGATIVE" = "Cancel";
+"STREETHAWK_8011_POSITIVE" = "Open";
+"STREETHAWK_8011_NEGATIVE" = "Cancel";
+"STREETHAWK_8012_POSITIVE" = "Enable";
+"STREETHAWK_8012_NEGATIVE" = "Cancel";
+"STREETHAWK_8013_POSITIVE" = "Enable";
+"STREETHAWK_8013_NEGATIVE" = "Cancel";
+"STREETHAWK_8014_POSITIVE" = "Enable";
+"STREETHAWK_8014_NEGATIVE" = "Cancel";
+"STREETHAWK_8049_POSITIVE" = "Yes please";
+"STREETHAWK_8049_NEGATIVE" = "Cancel";
+
+"STREETHAWK_Yes_No_1" = "Yes";
+"STREETHAWK_Yes_No_2" = "No";
+"STREETHAWK_Accept_Decline_1" = "Accept";
+"STREETHAWK_Accept_Decline_2" = "Decline";
+"STREETHAWK_Share_Download_1" = "Share";
+"STREETHAWK_Share_Download_2" = "Download";
+"STREETHAWK_Share_Remind_1" = "Share";
+"STREETHAWK_Share_Remind_2" = "Remind Me Later";
+"STREETHAWK_Share_Optin_1" = "Share";
+"STREETHAWK_Share_Optin_2" = "Opt-in";
+"STREETHAWK_Share_Optout_1" = "Share";
+"STREETHAWK_Share_Optout_2" = "Opt-out";
+"STREETHAWK_Share_Follow_1" = "Share";
+"STREETHAWK_Share_Follow_2" = "Follow";
+"STREETHAWK_Share_Unfollow_1" = "Share";
+"STREETHAWK_Share_Unfollow_2" = "Unfollow";
+"STREETHAWK_Share_ShopNow_1" = "Share";
+"STREETHAWK_Share_ShopNow_2" = "Shop Now";
+"STREETHAWK_Share_BuyNow_1" = "Share";
+"STREETHAWK_Share_BuyNow_2" = "Buy Now";
+"STREETHAWK_Share_Like_1" = "Share";
+"STREETHAWK_Share_Like_2" = "Like";
+"STREETHAWK_Like_Dislike_1" = "Like";
+"STREETHAWK_Like_Dislike_2" = "Dislike";
+"STREETHAWK_MoreLikeThis_LessLikeThis_1" = "More Like This";
+"STREETHAWK_MoreLikeThis_LessLikeThis_2" = "Less Like This";
+
+//Growth share channel
+"STREETHAWK_Growth_Channel_Title" = "Share content to which channel?";
+"STREETHAWK_Growth_Channel_Message" = "Please choose one channel from below to share the url.";
+"STREETHAWK_Growth_Channel_SMS" = "SMS";
+"STREETHAWK_Growth_Channel_Email" = "Email";
+"STREETHAWK_Growth_Channel_Facebook" = "Facebook";
+"STREETHAWK_Growth_Channel_Twitter" = "Twitter";
+"STREETHAWK_Growth_Channel_SinaWeibo" = "Sina Weibo";
+"STREETHAWK_Growth_Channel_TencentWeibo" = "Tencent Weibo";
+"STREETHAWK_Growth_Channel_GeneratingUrl" = "Generating share_guid_url...";
+"STREETHAWK_Growth_Channel_PostDone" = "Post successfully!";
+"STREETHAWK_Growth_Channel_PostCancel" = "Post is cancelled.";
