@@ -59,8 +59,11 @@
     {
         [self performSelector:@selector(displayDeepLinkingToUI)];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    if (!shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    }
 }
 
 //tricky: Record `viewWillAppear` as backup, become in canceled pop up `viewDidAppear` is not called.
@@ -109,8 +112,11 @@
     {
         [self performSelector:@selector(displayDeepLinkingToUI)];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    if (!shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
