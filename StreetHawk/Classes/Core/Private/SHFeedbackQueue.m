@@ -185,7 +185,7 @@
             SHFeedbackViewController *feedbackVC = [[SHFeedbackViewController alloc] initWithNibName:nil bundle:nil];
             feedbackVC.inputHandler = inputHandler;
             feedbackVC.feedbackTitle = feedbackChoice;
-            [feedbackVC presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withCoverTouchHandler:nil withAnimationHandler:nil withOrientationChangedHandler:^(CGRect fullScreenRect)
+            [feedbackVC presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withDelay:YES withCoverTouchHandler:nil withAnimationHandler:nil withOrientationChangedHandler:^(CGRect fullScreenRect)
              {
                  feedbackVC.view.frame = CGRectMake((fullScreenRect.size.width - feedbackVC.view.frame.size.width) / 2, (fullScreenRect.size.height - feedbackVC.view.frame.size.height) / 2, feedbackVC.view.frame.size.width, feedbackVC.view.frame.size.height);
              }];
@@ -302,7 +302,7 @@
             choiceVC.arrayChoices = arrayChoiceRefine;
             choiceVC.displayTitle = alertTitle;
             choiceVC.displayMessage = infoMessage;
-            [choiceVC presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withCoverTouchHandler:nil withAnimationHandler:^(CGRect fullScreenRect)
+            [choiceVC presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withDelay:YES withCoverTouchHandler:nil withAnimationHandler:^(CGRect fullScreenRect)
              {
                  [choiceVC arrangeControls:fullScreenRect];
              } withOrientationChangedHandler:^(CGRect fullScreenRect)

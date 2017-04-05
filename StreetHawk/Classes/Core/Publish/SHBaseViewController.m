@@ -259,9 +259,15 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
     objc_setAssociatedObject(self, @selector(coverView), coverView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)(CGPoint touchPoint))coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler withOrientationChangedHandler:(void (^)(CGRect))orientationChangedHandler
+- (void)presentOnTopWithCover:(BOOL)needCover
+               withCoverColor:(UIColor *)coverColor
+               withCoverAlpha:(CGFloat)coverAlpha
+                    withDelay:(BOOL)needDelay
+        withCoverTouchHandler:(void (^)(CGPoint touchPoint))coverTouchHandler
+         withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler
+        withOrientationChangedHandler:(void (^)(CGRect))orientationChangedHandler
 {
-    double delayInMilliSeconds = 500; //delay, otherwise if previous is an alert view, the rootVC is UIAlertShimPresentingViewController. Test this is minimum time.
+    double delayInMilliSeconds = needDelay ? 500 : 0; //delay, otherwise if previous is an alert view, the rootVC is UIAlertShimPresentingViewController. Test this is minimum time.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliSeconds * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^(void)
     {
         UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;

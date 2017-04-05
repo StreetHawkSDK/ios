@@ -137,7 +137,7 @@ static const float SlideTitle_Height = 28;
         self.contentVC.view.frame = CGRectMake(0, SlideTitle_Height, self.view.bounds.size.width, self.view.bounds.size.height - SlideTitle_Height);
         self.contentVC.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.view addSubview:self.contentVC.view];
-        [self presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withCoverTouchHandler:nil withAnimationHandler:^(CGRect fullScreenRect)
+        [self presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withDelay:YES withCoverTouchHandler:nil withAnimationHandler:^(CGRect fullScreenRect)
          {
              self.view.frame = [self calculateStartRect:fullScreenRect];
              [self.contentVC contentViewAdjustUI];  //first time know view size.
