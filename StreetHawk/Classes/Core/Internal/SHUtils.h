@@ -242,6 +242,11 @@ extern NSString *shDevelopmentPlatformString();
 extern BOOL streetHawkIsEnabled();
 
 /**
+ Check whether it's SDK's view controller.
+ */
+extern BOOL shIsSDKViewController(UIViewController * vc);
+
+/**
  Utility function to check string is nil or empty.
  @param str Check the string.
  @return Return YES if `str` is nil or length = 0; Otherwise return NO.
