@@ -61,11 +61,18 @@
  @param needCover When showing self's view, whether need a cover view behide it. Sometimes it needs a light transparanet color cover. 
  @param coverColor Optional, only take effect when needCover = YES; It has default value `lightGrayColor` when it's nil.
  @param coverAlpha Optional, only take effect when needCover = YES; It has default value 0.5 when it's 0. If it's really want to be 0, set needCover = NO.
+ @param needDelay By default it needs delay 0.5 second to let transition view gone. But if it already has delay, this can be set to NO to avoid too much delay.
  @param coverTouchHandler Callback when touch cover. Must have needCover=YES to work. The touchPoint is in cover full screen range.
  @param animationHandler Callback when need caller to show by changing self view's frame. The pass in rect is orientated root rect.
  @param orientationChangedHandler Callback when orientation changed. Must have needCover=YES to work.
  */
-- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)(CGPoint touchPoint))coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler withOrientationChangedHandler:(void (^)(CGRect fullScreenRect))orientationChangedHandler;
+- (void)presentOnTopWithCover:(BOOL)needCover
+               withCoverColor:(UIColor *)coverColor
+               withCoverAlpha:(CGFloat)coverAlpha
+                    withDelay:(BOOL)needDelay
+        withCoverTouchHandler:(void (^)(CGPoint touchPoint))coverTouchHandler
+         withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler
+        withOrientationChangedHandler:(void (^)(CGRect))orientationChangedHandler;
 
 /**
  Dismiss self VC's view from top.
