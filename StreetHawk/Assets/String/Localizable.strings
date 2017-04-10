@@ -98,3 +98,6 @@
 "STREETHAWK_Growth_Channel_GeneratingUrl" = "Generating share_guid_url...";
 "STREETHAWK_Growth_Channel_PostDone" = "Post successfully!";
 "STREETHAWK_Growth_Channel_PostCancel" = "Post is cancelled.";
+
+//Pointzi
+"STREETHAWK_Tip_Upload_Screenshot" = "Uploading screenshot and meta, please wait...";
