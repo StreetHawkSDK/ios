@@ -112,7 +112,10 @@
                 UINavigationController *navigationVC = (UINavigationController *)topVC;
                 topVC = navigationVC.topViewController;
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": topVC}];
+            if (topVC)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": topVC}];
+            }
             return YES;
         }
     }
