@@ -277,19 +277,20 @@ void shPresentErrorAlertOrLog(NSError *error)
 //Go traverse to UIView's responder till get a UIViewController.
 id shTraverseResponderChainForUIViewController(UIView *view)
 {
-    id nextResponder = [view nextResponder];
-    if ([nextResponder isKindOfClass:[UIViewController class]])
+    if ([view respondsToSelector:@selector(nextResponder)])
     {
-        return nextResponder;
+        id nextResponder = [view nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]])
+        {
+            return nextResponder;
+        }
+        else if ([nextResponder isKindOfClass:[UIView class]])
+        {
+            return shTraverseResponderChainForUIViewController((UIView *)nextResponder);
+        }
     }
-    else if ([nextResponder isKindOfClass:[UIView class]])
-    {
-        return shTraverseResponderChainForUIViewController((UIView *)nextResponder);
-    }
-    else
-    {
-        return nil;
-    }
+    
+    return nil;
 }
 
 UIViewController *shGetViewController(UIView *view)
