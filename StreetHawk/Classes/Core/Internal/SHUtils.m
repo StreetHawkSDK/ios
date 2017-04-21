@@ -751,7 +751,9 @@ BOOL streetHawkIsEnabled()
 
 BOOL shIsSDKViewController(UIViewController * vc)
 {
-    return ([vc isKindOfClass:[SHBaseViewController class]] || [vc isKindOfClass:[SHBaseTableViewController class]]);
+    return ([vc isKindOfClass:[SHBaseViewController class]]
+            || [vc isKindOfClass:[SHBaseTableViewController class]]
+            || [vc isKindOfClass:[SHBaseCollectionViewController class]]);
 }
 
 BOOL shStrIsEmpty(NSString *str)

@@ -19,7 +19,7 @@
 //header from StreetHawk
 #import "SHUtils.h" //for shFindBundleForResource
 
-//Due to class inheritance, SHBaseViewController and SHBaseTableViewController has many duplicated code. Create an imp obj inside them to avoid duplicated code.
+//Due to class inheritance, SHBaseViewController, SHBaseTableViewController and SHBaseCollectionViewController has many duplicated code. Create an imp obj inside them to avoid duplicated code.
 @interface SHBaseVCImp : NSObject
 
 //The container vc for this imp. It must be weak reference to avoid loop reference.
@@ -352,3 +352,82 @@
 }
 
 @end
+
+@interface SHBaseCollectionViewController ()
+
+//The implementation object to do common code.
+@property (nonatomic, strong) SHBaseVCImp *imp;
+
+@end
+
+@implementation SHBaseCollectionViewController
+
+@synthesize isViewAdjustForKeyboard;
+
+#pragma mark - life cycle
+
+- (id)init
+{
+    if (self = [super init])
+    {
+        self.isViewAdjustForKeyboard = NO;
+        self.imp = [[SHBaseVCImp alloc] initForVC:self];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.isViewAdjustForKeyboard = NO;
+        self.imp = [[SHBaseVCImp alloc] initForVC:self];
+    }
+    return self;
+}
+
+- (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
+{
+    if (self = [super initWithCollectionViewLayout:layout])
+    {
+        self.isViewAdjustForKeyboard = NO;
+        self.imp = [[SHBaseVCImp alloc] initForVC:self];
+    }
+    return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if (self = [super initWithNibName:nibNameOrNil bundle:[SHBaseVCImp prepareInitForClass:self.class withNibName:nibNameOrNil withbundle:nibBundleOrNil]])
+    {
+        self.isViewAdjustForKeyboard = NO;
+        self.imp = [[SHBaseVCImp alloc] initForVC:self];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    self.imp = nil;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self.imp viewDidLoad];
+}
+
+#pragma mark - keyboard functions
+
+- (void)keyboardDidShowFrom:(CGRect)frameBegin to:(CGRect)frameEnd duration:(double)second
+{
+    [self.imp keyboardDidShowFrom:frameBegin to:frameEnd duration:second];
+}
+
+- (void)keyboardDidHideFrom:(CGRect)frameBegin to:(CGRect)frameEnd duration:(double)second
+{
+    [self.imp keyboardDidHideFrom:frameBegin to:frameEnd duration:second];
+}
+
+@end
+

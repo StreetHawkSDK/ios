@@ -18,7 +18,7 @@
 #import "SHBaseViewController.h" //for inherit from StreetHawkBase(Table)ViewController
 
 /**
- SHBaseViewController and SHBaseTableViewController conform this protocol to handle common stuff:
+ SHBaseViewController, SHBaseTableViewController and SHBaseCollectionViewController conform this protocol to handle common stuff:
  
  1. Log when VC enter(viewDidAppear)/exit(viewWillDisappear).
  2. Adjust UI for iOS 7.
@@ -61,5 +61,12 @@
  Base class for all view controller inherit from StreetHawkBaseTableViewController.
  */
 @interface SHBaseTableViewController : StreetHawkBaseTableViewController <SHBaseVC>
+
+@end
+
+/**
+ Base class for all view controller inherit from StreetHawkBaseCollectionViewController.
+ */
+@interface SHBaseCollectionViewController : StreetHawkBaseCollectionViewController <SHBaseVC>
 
 @end
