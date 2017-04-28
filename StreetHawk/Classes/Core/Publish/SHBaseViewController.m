@@ -333,6 +333,10 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
                 presentedVC = presentedVC.presentedViewController;
             }
             [presentedVC.view addSubview:self.coverView];
+            self.coverView.alpha = 0;
+            [UIView animateWithDuration:0.5 animations:^{
+                self.coverView.alpha = 1.0;
+            }];
 //            [[UIApplication sharedApplication].keyWindow addSubview:self.coverView]; //this also work but cannot rotate
             self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin; //content vc by default always in center, not affected by rotatation.
             [self.coverView addSubview:self.view];
@@ -372,8 +376,12 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
     [self.view removeFromSuperview];
     if (self.coverView != nil)
     {
-        [self.coverView removeFromSuperview];
-        self.coverView.contentVC = nil; //break loop retain to make self dealloc
+        [UIView animateWithDuration:0.1 animations:^{
+            self.coverView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.coverView removeFromSuperview];
+            self.coverView.contentVC = nil; //break loop retain to make self dealloc
+        }];
     }
 }
 
