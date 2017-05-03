@@ -107,6 +107,19 @@
             }
             [[NSUserDefaults standardUserDefaults] synchronize];
             UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+            if (topVC.childViewControllers.count > 0)
+            {
+                UIViewController *vc = topVC.childViewControllers[0];
+                if ([vc isKindOfClass:[UITabBarController class]])
+                {
+                    topVC = vc;
+                }
+            }
+            if ([topVC isKindOfClass:[UITabBarController class]])
+            {
+                UITabBarController *tabVC = (UITabBarController *)topVC;
+                topVC = tabVC.selectedViewController;
+            }
             if ([topVC isKindOfClass:[UINavigationController class]])
             {
                 UINavigationController *navigationVC = (UINavigationController *)topVC;
