@@ -42,6 +42,12 @@
  */
 @interface StreetHawkBaseViewController : UIViewController <ISHDeepLinking>
 
+/**
+ Some customer view controller may be inherited not in purpose (such as base vc do inherit). 
+ Use this property to exclude them from being treated as StreetHawk behavior vc.
+ */
+@property (nonatomic) BOOL excludeBehavior;
+
 @end
 
 /**
@@ -49,12 +55,24 @@
  */
 @interface StreetHawkBaseTableViewController : UITableViewController <ISHDeepLinking>
 
+/**
+ Some customer view controller may be inherited not in purpose (such as base vc do inherit).
+ Use this property to exclude them from being treated as StreetHawk behavior vc.
+ */
+@property (nonatomic) BOOL excludeBehavior;
+
 @end
 
 /**
  Base class for all view controller inherit from UICollectionViewController. It sends logs when enter/exit this VC.
  */
 @interface StreetHawkBaseCollectionViewController : UICollectionViewController <ISHDeepLinking>
+
+/**
+ Some customer view controller may be inherited not in purpose (such as base vc do inherit).
+ Use this property to exclude them from being treated as StreetHawk behavior vc.
+ */
+@property (nonatomic) BOOL excludeBehavior;
 
 @end
 
