@@ -44,6 +44,17 @@
       {
           sharedHTTPSessionManager = [[SHHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
           sharedHTTPSessionManager.completionQueue = dispatch_queue_create("com.streethawk.StreetHawk.network", NULL/*NULL attribute same as DISPATCH_QUEUE_SERIAL, means this queue is FIFO.*/); //set completionQueue otherwise completion callback runs in main thread.
+          //add header
+          [sharedHTTPSessionManager.requestSerializer setValue:[NSString stringWithFormat:@"%@(%@)", StreetHawk.appKey, StreetHawk.version] forHTTPHeaderField:@"User-Agent"]; //e.g: "SHSample(1.5.3)"
+          [sharedHTTPSessionManager.requestSerializer setValue:NONULL(StreetHawk.appKey) forHTTPHeaderField:@"X-App-Key"];
+          [sharedHTTPSessionManager.requestSerializer setValue:StreetHawk.version forHTTPHeaderField:@"X-Version"];
+          [sharedHTTPSessionManager.requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null" forHTTPHeaderField:@"X-Installid"];
+          //Add install token for /v3 request. Cannot check host version here, add to all requests.
+          NSString *installToken = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INSTALL_TOKEN];
+          if (!shStrIsEmpty(installToken))
+          {
+              [sharedHTTPSessionManager.requestSerializer setValue:installToken forHTTPHeaderField:@"X-Install-Token"];
+          }
       });
     //By default it uses HTTP request and JSON response serializer.
     return sharedHTTPSessionManager;
@@ -125,11 +136,6 @@
             }
             [completeUrl appendFormat:@"/%@", urlString];
         }
-        //add header
-        [self.requestSerializer setValue:[NSString stringWithFormat:@"%@(%@)", StreetHawk.appKey, StreetHawk.version] forHTTPHeaderField:@"User-Agent"]; //e.g: "SHSample(1.5.3)"
-        [self.requestSerializer setValue:NONULL(StreetHawk.appKey) forHTTPHeaderField:@"X-App-Key"];
-        [self.requestSerializer setValue:StreetHawk.version forHTTPHeaderField:@"X-Version"];
-        [self.requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null" forHTTPHeaderField:@"X-Installid"];
         //add "installid"
         NSAssert([completeUrl rangeOfString:@"?"].location == NSNotFound, @"Query should not contained.");
         if (!shStrIsEmpty(StreetHawk.currentInstall.suid))
@@ -140,15 +146,6 @@
     //Background fetch must be finished in 30 seconds, however when testing found `[UIApplication sharedApplication].backgroundTimeRemaining` sometimes is more than 30 seconds, for example if just enter background it's 180 seconds, if start background task it's 10 minutes. Thus cannot depend on `[UIApplication sharedApplication].backgroundTimeRemaining` to calculate timeout.
     //To be safe and simple, if in background, timeout is 13 seconds(sometimes heartbeat follow by location update), if in foreground, timeout is 60 seconds.
     [self.requestSerializer setTimeoutInterval:([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) ? 13 : 60];
-    //Add install token for /v3 request.
-    if (hostVersion == SHHostVersion_V3)
-    {
-        NSString *installToken = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INSTALL_TOKEN];
-        if (!shStrIsEmpty(installToken))
-        {
-            [self.requestSerializer setValue:installToken forHTTPHeaderField:@"X-Install-Token"];
-        }
-    }
     return completeUrl;
 }
 
