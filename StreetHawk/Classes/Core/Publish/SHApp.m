@@ -323,6 +323,10 @@
         //setup intercept app delegate
         if (self.autoIntegrateAppDelegate)
         {
+            if ([[UIApplication sharedApplication].delegate isKindOfClass:[SHInterceptor class]])
+            {
+                return; //already intercept, in case customer forcily do register again.
+            }
             self.appDelegateInterceptor = [[SHInterceptor alloc] init];  //strong property
             self.appDelegateInterceptor.firstResponder = self;  //weak property
             self.appDelegateInterceptor.secondResponder = [UIApplication sharedApplication].delegate;
