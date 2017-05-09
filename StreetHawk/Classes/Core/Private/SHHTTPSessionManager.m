@@ -41,21 +41,26 @@
     static SHHTTPSessionManager *sharedHTTPSessionManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^
-      {
-          sharedHTTPSessionManager = [[SHHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-          sharedHTTPSessionManager.completionQueue = dispatch_queue_create("com.streethawk.StreetHawk.network", NULL/*NULL attribute same as DISPATCH_QUEUE_SERIAL, means this queue is FIFO.*/); //set completionQueue otherwise completion callback runs in main thread.
-          //add header
-          [sharedHTTPSessionManager.requestSerializer setValue:[NSString stringWithFormat:@"%@(%@)", StreetHawk.appKey, StreetHawk.version] forHTTPHeaderField:@"User-Agent"]; //e.g: "SHSample(1.5.3)"
-          [sharedHTTPSessionManager.requestSerializer setValue:NONULL(StreetHawk.appKey) forHTTPHeaderField:@"X-App-Key"];
-          [sharedHTTPSessionManager.requestSerializer setValue:StreetHawk.version forHTTPHeaderField:@"X-Version"];
-          [sharedHTTPSessionManager.requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null" forHTTPHeaderField:@"X-Installid"];
-          //Add install token for /v3 request. Cannot check host version here, add to all requests.
-          NSString *installToken = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INSTALL_TOKEN];
-          if (!shStrIsEmpty(installToken))
-          {
-              [sharedHTTPSessionManager.requestSerializer setValue:installToken forHTTPHeaderField:@"X-Install-Token"];
-          }
-      });
+    {
+        sharedHTTPSessionManager = [[SHHTTPSessionManager alloc]
+                                    initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        sharedHTTPSessionManager.completionQueue = dispatch_queue_create("com.streethawk.StreetHawk.network", NULL/*NULL attribute same as DISPATCH_QUEUE_SERIAL, means this queue is FIFO.*/); //set completionQueue otherwise completion callback runs in main thread.
+        //add header
+        [sharedHTTPSessionManager.requestSerializer setValue:[NSString stringWithFormat:@"%@(%@)", StreetHawk.appKey, StreetHawk.version]
+                                          forHTTPHeaderField:@"User-Agent"]; //e.g: "SHSample(1.5.3)"
+        [sharedHTTPSessionManager.requestSerializer setValue:NONULL(StreetHawk.appKey)
+                                          forHTTPHeaderField:@"X-App-Key"];
+        [sharedHTTPSessionManager.requestSerializer setValue:StreetHawk.version
+                                          forHTTPHeaderField:@"X-Version"];
+        [sharedHTTPSessionManager.requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null"
+                                          forHTTPHeaderField:@"X-Installid"];
+        //Add install token for /v3 request. Cannot check host version here, add to all requests.
+        NSString *installToken = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INSTALL_TOKEN];
+        if (!shStrIsEmpty(installToken))
+        {
+            [sharedHTTPSessionManager.requestSerializer setValue:installToken forHTTPHeaderField:@"X-Install-Token"];
+        }
+    });
     //By default it uses HTTP request and JSON response serializer.
     return sharedHTTPSessionManager;
 }
