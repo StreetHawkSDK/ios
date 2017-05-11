@@ -25,6 +25,7 @@
 #import "SHDeepLinking.h"
 #import "SHFriendlyNameObject.h"
 #import "SHUtils.h"
+#import "SHHTTPSessionManager.h" //for set header "X-Installid"
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
@@ -1792,6 +1793,7 @@
                                {
                                    self.currentInstall = (SHInstall *)result;
                                    dispatch_semaphore_signal(self.install_semaphore); //make sure currentInstall is set to latest.
+                                   [[SHHTTPSessionManager sharedInstance].requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null" forHTTPHeaderField:@"X-Installid"]; //direct set for next request
                                    //save sent install parameters for later compare, because install does not have local cache, and avoid query install/details/ from server. Only save it after successfully install/register.
                                    [[NSUserDefaults standardUserDefaults] setObject:NONULL(StreetHawk.appKey) forKey:SentInstall_AppKey];
                                    [[NSUserDefaults standardUserDefaults] setObject:StreetHawk.clientVersion forKey:SentInstall_ClientVersion];

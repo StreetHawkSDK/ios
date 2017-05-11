@@ -22,6 +22,7 @@
 #import "SHFriendlyNameObject.h"  //for friendly name parse
 #import "PushDataForApplication.h" //for pushData
 #import "SHBaseViewController.h" //for `ISHDeepLinking` protocol
+#import "SHHTTPSessionManager.h" //for set header "X-Install-Token"
 //header from System
 #import <UIKit/UIKit.h>
 
@@ -104,6 +105,7 @@
             if (!shStrIsEmpty(token))
             {
                 [[NSUserDefaults standardUserDefaults] setObject:token forKey:SH_INSTALL_TOKEN];
+                [[SHHTTPSessionManager sharedInstance].requestSerializer setValue:token forHTTPHeaderField:@"X-Install-Token"]; //update directly for next request
             }
             [[NSUserDefaults standardUserDefaults] synchronize];
             UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
