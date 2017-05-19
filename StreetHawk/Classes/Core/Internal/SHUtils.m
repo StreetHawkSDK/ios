@@ -978,7 +978,8 @@ static NSString *getPropertyType(objc_property_t property)
             {
                 return @"int"; //not exactly the property definition. enum, NSInteger etc all end this.
             }
-            else if ([attributeStr isEqualToString:@"Td"])
+            else if ([attributeStr isEqualToString:@"Td"] ||
+                     [attributeStr isEqualToString:@"Tf"])
             {
                 return @"double"; //double, float, CGFloat etc.
             }
@@ -986,7 +987,8 @@ static NSString *getPropertyType(objc_property_t property)
             {
                 return @"NSTextAlignment";
             }
-            if ([attributeStr isEqualToString:@"TB"])
+            if ([attributeStr isEqualToString:@"TB"] ||
+                [attributeStr isEqualToString:@"Tc"])
             {
                 return @"bool";
             }
