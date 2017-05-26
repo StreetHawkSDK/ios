@@ -69,6 +69,26 @@
     return obj;
 }
 
++ (SHFeedObject *)loadFromDictionary:(NSDictionary *)dict
+{
+    if (![dict isKindOfClass:[NSDictionary class]])
+    {
+        return nil;
+    }
+    SHFeedObject *obj = [[SHFeedObject alloc] init];
+    obj.feed_id = dict[@"feed_id"];
+    obj.title = dict[@"title"];
+    obj.message = dict[@"message"];
+    obj.campaign = dict[@"campaign"];
+    obj.content = dict[@"content"];
+    obj.activates = dict[@"activates"];
+    obj.expires = dict[@"expires"];
+    obj.created = dict[@"created"];
+    obj.modified = dict[@"modified"];
+    obj.deleted = dict[@"deleted"];
+    return obj;
+}
+
 - (NSDictionary *)serializeToDictionary
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
