@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -22,11 +22,14 @@
                 <outlet property="cstButtonMarginBetween" destination="9ZV-Sg-Z4O" id="VeN-hv-xN0"/>
                 <outlet property="cstButtonNextHeight" destination="171-pb-fk2" id="fVu-r0-dJ3"/>
                 <outlet property="cstButtonNextMarginBottom" destination="zhS-3t-1WH" id="Y1J-vX-m4P"/>
+                <outlet property="cstButtonNextMarginLeftVertical" destination="3XF-fs-QXY" id="CQ8-gQ-WUU"/>
                 <outlet property="cstButtonNextMarginRight" destination="yvz-md-pn9" id="MiS-2c-edI"/>
                 <outlet property="cstButtonNextWidth" destination="VXx-DC-d4r" id="YOF-t9-Bpj"/>
                 <outlet property="cstButtonPrevHeight" destination="M77-lc-Waa" id="wFO-KL-9kY"/>
-                <outlet property="cstButtonPrevMarginBottom" destination="SEW-kR-D6y" id="AFs-6U-ncl"/>
+                <outlet property="cstButtonPrevMarginBottomHorizontal" destination="SEW-kR-D6y" id="Gb9-8h-roT"/>
                 <outlet property="cstButtonPrevMarginLeft" destination="ogt-AZ-rSA" id="srB-JY-keU"/>
+                <outlet property="cstButtonPrevMarginRightVertical" destination="7k1-U9-0Dg" id="hkP-MV-7At"/>
+                <outlet property="cstButtonPrevNextMarginVertical" destination="cSg-Ga-YBz" id="Xeh-6m-5MM"/>
                 <outlet property="cstButtonPrevWidth" destination="7iU-rR-S03" id="H2t-xJ-O3d"/>
                 <outlet property="cstButtonWidthEqual" destination="Z2Z-cB-Mrh" id="YTu-JR-jgl"/>
                 <outlet property="cstContentBottom" destination="nJa-2L-Gix" id="t8J-yI-hEf"/>
@@ -136,6 +139,8 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="Uri-9x-BKo" secondAttribute="trailing" constant="105" identifier="ButtonDismissMarginRight" id="2rQ-VA-LPm"/>
+                        <constraint firstItem="fSK-HF-g6U" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" constant="265" id="3XF-fs-QXY"/>
+                        <constraint firstAttribute="trailing" secondItem="11X-TI-uky" secondAttribute="trailing" constant="265" id="7k1-U9-0Dg"/>
                         <constraint firstItem="2mW-pS-QVy" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" constant="30" identifier="LabelTitleMarginTop" id="8N4-R1-1x9"/>
                         <constraint firstItem="fSK-HF-g6U" firstAttribute="leading" secondItem="11X-TI-uky" secondAttribute="trailing" constant="155" identifier="ButtonMarginBetween" id="9ZV-Sg-Z4O"/>
                         <constraint firstItem="2mW-pS-QVy" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="LabelTitleMarginLeft" id="AWN-YE-Nqz"/>
@@ -149,6 +154,7 @@
                         <constraint firstItem="maO-66-cw2" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="ViewTitleMarginLeft" id="XDI-Bg-pcY"/>
                         <constraint firstItem="11X-TI-uky" firstAttribute="width" secondItem="fSK-HF-g6U" secondAttribute="width" identifier="ButtonWidthEqual" id="Z2Z-cB-Mrh"/>
                         <constraint firstAttribute="trailing" secondItem="maO-66-cw2" secondAttribute="trailing" identifier="ViewTitleMarginRight" id="cPR-t5-MLM"/>
+                        <constraint firstItem="fSK-HF-g6U" firstAttribute="top" secondItem="11X-TI-uky" secondAttribute="bottom" constant="-30" id="cSg-Ga-YBz"/>
                         <constraint firstAttribute="trailing" secondItem="9VL-dq-wHT" secondAttribute="trailing" identifier="LabelContentMarginRight" id="dJz-Wa-6pP"/>
                         <constraint firstItem="9VL-dq-wHT" firstAttribute="top" secondItem="maO-66-cw2" secondAttribute="bottom" constant="19" identifier="LabelTitleContentMarginTop" id="f50-h7-IFb"/>
                         <constraint firstItem="oH9-V3-GvT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="WebViewLeading" id="hMn-3N-e80"/>
