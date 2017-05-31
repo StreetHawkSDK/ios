@@ -372,6 +372,46 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
     }
     else
     {
+        CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+        CGFloat colors[] =
+        {
+            1, 1, 1, 0.00,//start color(r,g,b,alpha)
+            0, 0, 0, 0.7,
+            0, 0, 0, 0.7,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,//end color
+        };
+        
+        CGGradientRef gradient = CGGradientCreateWithColorComponents
+        (rgb, colors, NULL, 20);
+        
+        CGPoint start = CGPointMake(230,264);
+        CGPoint end = CGPointMake(230,264);
+        CGFloat startRadius = 30.0f;
+        CGFloat endRadius = MAX(self.frame.size.width,self.frame.size.height);
+        CGContextRef graCtx = UIGraphicsGetCurrentContext();
+        CGContextDrawRadialGradient(graCtx, gradient, start, startRadius, end, endRadius, 0);
+        
+        CGGradientRelease(gradient);
+        gradient=NULL;
+        CGColorSpaceRelease(rgb);
+        
+        CGContextClearRect(UIGraphicsGetCurrentContext(), self.bounds);
         CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), self.overlayColor.CGColor);
         CGContextSetAlpha(UIGraphicsGetCurrentContext(), self.overlayAlpha);
     }
