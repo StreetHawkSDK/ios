@@ -216,6 +216,12 @@ NSString * const SHInstallNotification_kError = @"Error";
         }
             break;
     }
+    Class notificationBridge = NSClassFromString(@"SHNotificationBridge");
+    dictParams[@"feature_push"] = (notificationBridge == nil) ? @"false" : @"true";
+    Class locationBridge = NSClassFromString(@"SHLocationBridge");
+    dictParams[@"feature_locations"] = (locationBridge == nil) ? @"false" : @"true";
+    Class beaconBridge = NSClassFromString(@"SHBeaconBridge");
+    dictParams[@"feature_ibeacons"] = (beaconBridge == nil) ? @"false" : @"true";
     return dictParams;
 }
 
