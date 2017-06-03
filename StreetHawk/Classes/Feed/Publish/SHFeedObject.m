@@ -24,7 +24,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"feed id = %@, title = %@, message = %@, campaign = %@, content = %@, activate on %@, expires on %@, created on %@, modified on %@, deleted on %@", self.feed_id, self.title, self.message, self.campaign, self.content, shFormatStreetHawkDate(self.activates), shFormatStreetHawkDate(self.expires), shFormatStreetHawkDate(self.created), shFormatStreetHawkDate(self.modified), shFormatStreetHawkDate(self.deleted)];
+    return [NSString stringWithFormat:@"feed id = %@, title = %@, message = %@, campaign = %@, content = %@, activate on %@, expires on %@, created on %@, modified on %@, deleted on %@", self.feed_id, self.title, self.message, self.campaign, self.content, shFormatISODate(self.activates), shFormatISODate(self.expires), shFormatISODate(self.created), shFormatISODate(self.modified), shFormatISODate(self.deleted)];
 }
 
 + (SHFeedObject *)createFromDictionary:(NSDictionary *)dict
@@ -100,11 +100,11 @@
     {
         dict[@"content"] = self.content;
     }
-    dict[@"activates"] = shFormatStreetHawkDate(self.activates);
-    dict[@"expires"] = shFormatStreetHawkDate(self.expires);
-    dict[@"created"] = shFormatStreetHawkDate(self.created);
-    dict[@"modified"] = shFormatStreetHawkDate(self.modified);
-    dict[@"deleted"] = shFormatStreetHawkDate(self.deleted);
+    dict[@"activates"] = shFormatISODate(self.activates);
+    dict[@"expires"] = shFormatISODate(self.expires);
+    dict[@"created"] = shFormatISODate(self.created);
+    dict[@"modified"] = shFormatISODate(self.modified);
+    dict[@"deleted"] = shFormatISODate(self.deleted);
     return dict;
 }
 

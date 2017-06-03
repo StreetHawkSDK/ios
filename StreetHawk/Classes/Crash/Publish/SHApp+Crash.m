@@ -18,7 +18,7 @@
 #import "SHApp+Crash.h"
 //header from StreetHawk
 #import "SHCrashHandler.h" //for create instance
-#import "SHUtils.h" //for shFormatStreetHawkDate
+#import "SHUtils.h" //for shFormatISODate
 #import "SHHTTPSessionManager.h" //for sending request
 //header from System
 #import <objc/runtime.h> //for associate object
@@ -90,7 +90,7 @@
     [[SHHTTPSessionManager sharedInstance] POST:[NSString stringWithFormat:@"installs/%@/crash/", installId] hostVersion:SHHostVersion_V1 constructingBodyWithBlock:^(id<SHAFMultipartFormData> formData)
     {
         [formData appendPartWithFileData:[crashReportContent dataUsingEncoding:NSUTF8StringEncoding] name:@"exception_file" fileName:@"Crash Report" mimeType:@"text/text"];
-        [formData appendPartWithFormData:[shFormatStreetHawkDate(crashDate) dataUsingEncoding:NSUTF8StringEncoding] name:@"created"];
+        [formData appendPartWithFormData:[shFormatISODate(crashDate) dataUsingEncoding:NSUTF8StringEncoding] name:@"created"];
     } success:^(NSURLSessionDataTask *task, id  _Nullable responseObject)
     {
         self.isSendingCrashReport = NO;

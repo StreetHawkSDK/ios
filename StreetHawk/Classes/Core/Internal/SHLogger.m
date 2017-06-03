@@ -193,8 +193,8 @@ enum
             if (visibleTime != nil)
             {
                 NSMutableDictionary *dictAppSession = [NSMutableDictionary dictionary];
-                dictAppSession[@"visible"] = shFormatStreetHawkDate(visibleTime);
-                dictAppSession[@"invisible"] = shFormatStreetHawkDate([NSDate date]);
+                dictAppSession[@"visible"] = shFormatISODate(visibleTime);
+                dictAppSession[@"invisible"] = shFormatISODate([NSDate date]);
                 dictAppSession[@"duration"] = @([[NSDate date] timeIntervalSinceDate:visibleTime]);
                 [StreetHawk sendLogForCode:LOG_CODE_APP_COMPLETE withComment:shSerializeObjToJson(dictAppSession)];
                 [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:@"Previous_Visible_Time"];
@@ -215,7 +215,7 @@ enum
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_LMBridge_UpdateGeoLocation" object:nil]; //make value update
         double lat_deprecate = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LAT] doubleValue];
         double lng_deprecate = [[[NSUserDefaults standardUserDefaults] objectForKey:SH_GEOLOCATION_LNG] doubleValue];
-        NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, 0, '%@', '%ld'", (long)session, shFormatStreetHawkDate(created), (long)code, [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"], lat_deprecate, lng_deprecate, shStrIsEmpty(assocId)?@"0":assocId/*avoid insert (null)*/, (long)result];
+        NSString *values = [NSString stringWithFormat: @"0, %ld, '%@', %ld, '%@', %f, %f, 0, '%@', '%ld'", (long)session, shFormatISODate(created), (long)code, [comment stringByReplacingOccurrencesOfString:@"'" withString:@"''"], lat_deprecate, lng_deprecate, shStrIsEmpty(assocId)?@"0":assocId/*avoid insert (null)*/, (long)result];
         NSString *sql_str = [NSString stringWithFormat:@"INSERT OR REPLACE INTO '%@' (%@) VALUES (%@)", tableName, columns, values];
         @synchronized(self)
         {
@@ -235,7 +235,7 @@ enum
             int logid = (int)sqlite3_last_insert_rowid(database);
             [[NSUserDefaults standardUserDefaults] setObject:@(logid) forKey:MAX_LOGID];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            SHLog(@"LOG (%d @ %@) <%d> %@", logid, shFormatStreetHawkDate(created), code, comment);
+            SHLog(@"LOG (%d @ %@) <%d> %@", logid, shFormatISODate(created), code, comment);
         }
         BOOL isForce = NO;
         NSArray *arrayPriorityCodes = [[NSUserDefaults standardUserDefaults] objectForKey:@"APPSTATUS_PRIORITYCODES"];
@@ -965,14 +965,14 @@ enum
                 NSObject *valueObj = dict[@"datetime"];
                 if ([valueObj isKindOfClass:[NSDate class]])
                 {
-                    mutableDict[@"datetime"] = shFormatStreetHawkDate((NSDate *)valueObj);
+                    mutableDict[@"datetime"] = shFormatISODate((NSDate *)valueObj);
                 }
                 else if ([valueObj isKindOfClass:[NSString class]])
                 {
                     NSDate *formatDate = shParseDate((NSString *)valueObj, 0);
                     if (formatDate != nil)
                     {
-                        mutableDict[@"datetime"] = shFormatStreetHawkDate(formatDate);
+                        mutableDict[@"datetime"] = shFormatISODate(formatDate);
                     }
                     else
                     {
