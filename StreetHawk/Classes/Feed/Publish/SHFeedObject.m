@@ -24,7 +24,19 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"feed id = %@, title = %@, message = %@, campaign = %@, content = %@, activate on %@, expires on %@, created on %@, modified on %@, deleted on %@", self.feed_id, self.title, self.message, self.campaign, self.content, shFormatISODate(self.activates), shFormatISODate(self.expires), shFormatISODate(self.created), shFormatISODate(self.modified), shFormatISODate(self.deleted)];
+    return [NSString
+            stringWithFormat:
+            @"feed id = %@, title = %@, message = %@, campaign = %@, content = %@, activate on %@, expires on %@, created on %@, modified on %@, deleted on %@",
+            self.feed_id,
+            self.title,
+            self.message,
+            self.campaign,
+            self.content,
+            shFormatISODate(self.activates),
+            shFormatISODate(self.expires),
+            shFormatISODate(self.created),
+            shFormatISODate(self.modified),
+            shFormatISODate(self.deleted)];
 }
 
 + (SHFeedObject *)createFromDictionary:(NSDictionary *)dict
