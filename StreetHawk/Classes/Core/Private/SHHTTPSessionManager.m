@@ -244,6 +244,16 @@
                         SHLog(@"feed timestamp in app_status: %@", dictStatus[@"feed"]);
                         [SHAppStatus sharedInstance].feedTimestamp = dictStatus[@"feed"];
                     }
+                    //check "install_token"
+                    if ([dictStatus.allKeys containsObject:@"install_token"])
+                    {
+                        [SHAppStatus sharedInstance].pointziToken = dictStatus[@"install_token"];
+                    }
+                    //check "sh_preview"
+                    if ([dictStatus.allKeys containsObject:@"sh_preview"])
+                    {
+                        [SHAppStatus sharedInstance].pointziTimestamp = dictStatus[@"sh_preview"];
+                    }
                     //check "reregister"
                     if ([dictStatus.allKeys containsObject:@"reregister"])
                     {
