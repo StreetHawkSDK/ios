@@ -149,7 +149,8 @@ NSString * const SHInstallNotification_kError = @"Error";
     NSNumber *disablePushTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APNS_DISABLE_TIMESTAMP];
     [[NSUserDefaults standardUserDefaults] setObject:disablePushTimeVal != nil ? disablePushTimeVal : @0.0 forKey:APNS_SENT_DISABLE_TIMESTAMP];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    NSString *revokeDate = (disablePushTimeVal == nil || [disablePushTimeVal doubleValue] == 0) ? @"" : shFormatStreetHawkDate([NSDate dateWithTimeIntervalSince1970:disablePushTimeVal.doubleValue]);
+    NSString *revokeDate = (disablePushTimeVal == nil || [disablePushTimeVal doubleValue] == 0) ?
+    @"" : shFormatISODate([NSDate dateWithTimeIntervalSince1970:disablePushTimeVal.doubleValue]);
     dictParams[@"revoked"] = revokeDate;
     NSString *macAddress = shGetMacAddress();  //mac address cannot be got since iOS 7.0, always return "02:00:00:00:00:00".
     if (macAddress != nil && [macAddress compare:@"02:00:00:00:00:00"] != NSOrderedSame)
