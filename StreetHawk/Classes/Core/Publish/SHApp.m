@@ -70,8 +70,8 @@
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:self.viewName forKey:@"page"];
-    [dict setObject:shFormatStreetHawkDate(self.enterTime) forKey:@"enter"];
-    [dict setObject:shFormatStreetHawkDate(self.exitTime) forKey:@"exit"];
+    [dict setObject:shFormatISODate(self.enterTime) forKey:@"enter"];
+    [dict setObject:shFormatISODate(self.exitTime) forKey:@"exit"];
     [dict setObject:@(self.duration) forKey:@"duration"];
     [dict setObject:@(self.enterBg) forKey:@"bg"];
     return NONULL(shSerializeObjToJson(dict));
