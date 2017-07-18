@@ -326,7 +326,8 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 
 - (void)setPointziToken:(NSString *)pointziToken
 {
-    if (pointziToken != nil && pointziToken.length > 0)
+    pointziToken = NONULL(pointziToken);
+    if (pointziToken.length > 0)
     {
         //Save in temp location instead of directly affecting pointzi token. The real token will be affected by deeplinking.
         [[NSUserDefaults standardUserDefaults] setObject:pointziToken forKey:@"Temp_Pointzi_Token"];
