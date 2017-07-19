@@ -202,72 +202,78 @@
                     //check "streethawk" to enable/disable library function
                     if ([dictStatus.allKeys containsObject:@"streethawk"] && [dictStatus[@"streethawk"] respondsToSelector:@selector(boolValue)])
                     {
-                        [SHAppStatus sharedInstance].streethawkEnabled = [dictStatus[@"streethawk"] boolValue];
+                        [SHAppStatus sharedInstance].streethawkEnabled = [NONULL(dictStatus[@"streethawk"]) boolValue];
                     }
                     //check "host"
                     if ([dictStatus.allKeys containsObject:@"host"] && [dictStatus[@"host"] isKindOfClass:[NSString class]])
                     {
-                        [SHAppStatus sharedInstance].aliveHost = dictStatus[@"host"];
+                        [SHAppStatus sharedInstance].aliveHost = NONULL(dictStatus[@"host"]);
                     }
                     //check "growth_host"
                     if ([dictStatus.allKeys containsObject:@"growth_host"] && [dictStatus[@"growth_host"] isKindOfClass:[NSString class]])
                     {
-                        [SHAppStatus sharedInstance].growthHost = dictStatus[@"growth_host"];
+                        [SHAppStatus sharedInstance].growthHost = NONULL(dictStatus[@"growth_host"]);
                     }
                     //check "location_updates"
                     if ([dictStatus.allKeys containsObject:@"location_updates"] && [dictStatus[@"location_updates"] respondsToSelector:@selector(boolValue)])
                     {
-                        [SHAppStatus sharedInstance].uploadLocationChange = [dictStatus[@"location_updates"] boolValue];
+                        [SHAppStatus sharedInstance].uploadLocationChange = [NONULL(dictStatus[@"location_updates"]) boolValue];
                     }
                     //check "submit_views"
                     if ([dictStatus.allKeys containsObject:@"submit_views"] && [dictStatus[@"submit_views"] respondsToSelector:@selector(boolValue)])
                     {
-                        [SHAppStatus sharedInstance].allowSubmitFriendlyNames = [dictStatus[@"submit_views"] boolValue];
+                        [SHAppStatus sharedInstance].allowSubmitFriendlyNames = [NONULL(dictStatus[@"submit_views"]) boolValue];
                     }
                     if ([dictStatus.allKeys containsObject:@"submit_interactive_button"] && [dictStatus[@"submit_interactive_button"] respondsToSelector:@selector(boolValue)])
                     {
-                        [SHAppStatus sharedInstance].allowSubmitInteractiveButton = [dictStatus[@"submit_interactive_button"] boolValue];
+                        [SHAppStatus sharedInstance].allowSubmitInteractiveButton = [NONULL(dictStatus[@"submit_interactive_button"]) boolValue];
                     }
                     //check "ibeacon"
                     if ([dictStatus.allKeys containsObject:@"ibeacon"])
                     {
-                        [SHAppStatus sharedInstance].iBeaconTimestamp = dictStatus[@"ibeacon"]; //it may be nil
+                        [SHAppStatus sharedInstance].iBeaconTimestamp = NONULL(dictStatus[@"ibeacon"]); //it may be nil
                     }
                     //check "geofences"
                     if ([dictStatus.allKeys containsObject:@"geofences"])
                     {
-                        [SHAppStatus sharedInstance].geofenceTimestamp = dictStatus[@"geofences"];
+                        [SHAppStatus sharedInstance].geofenceTimestamp = NONULL(dictStatus[@"geofences"]);
                     }
                     //check "feed"
                     if ([dictStatus.allKeys containsObject:@"feed"])
                     {
                         SHLog(@"feed timestamp in app_status: %@", dictStatus[@"feed"]);
-                        [SHAppStatus sharedInstance].feedTimestamp = dictStatus[@"feed"];
+                        [SHAppStatus sharedInstance].feedTimestamp = NONULL(dictStatus[@"feed"]);
                     }
                     //check "install_token"
                     if ([dictStatus.allKeys containsObject:@"install_token"])
                     {
-                        [SHAppStatus sharedInstance].pointziToken = dictStatus[@"install_token"];
+                        [SHAppStatus sharedInstance].pointziToken = NONULL(dictStatus[@"install_token"]);
                     }
                     //check "preview_mode"
                     if ([dictStatus.allKeys containsObject:@"preview_mode"])
                     {
-                        [SHAppStatus sharedInstance].pointziTimestamp = dictStatus[@"preview_mode"];
+                        [SHAppStatus sharedInstance].pointziTimestamp = NONULL(dictStatus[@"preview_mode"]);
                     }
                     //check "reregister"
                     if ([dictStatus.allKeys containsObject:@"reregister"])
                     {
-                        [SHAppStatus sharedInstance].reregister = [dictStatus[@"reregister"] boolValue];
+                        [SHAppStatus sharedInstance].reregister = [NONULL(dictStatus[@"reregister"]) boolValue];
                     }
                     //check "app_store_id"
                     if ([dictStatus.allKeys containsObject:@"app_store_id"])
                     {
-                        [SHAppStatus sharedInstance].appstoreId = dictStatus[@"app_store_id"];
+                        [SHAppStatus sharedInstance].appstoreId = NONULL(dictStatus[@"app_store_id"]);
                     }
                     //check "disable_logs"
-                    [SHAppStatus sharedInstance].logDisableCodes = dictStatus[@"disable_logs"]; //directly pass nil
+                    if ([dictStatus.allKeys containsObject:@"disable_logs"])
+                    {
+                        [SHAppStatus sharedInstance].logDisableCodes = NONULL(dictStatus[@"disable_logs"]); //directly pass nil
+                    }
                     //check "priority"
-                    [SHAppStatus sharedInstance].logPriorityCodes = dictStatus[@"priority"];
+                    if ([dictStatus.allKeys containsObject:@"priority"])
+                    {
+                        [SHAppStatus sharedInstance].logPriorityCodes = NONULL(dictStatus[@"priority"]);
+                    }
                     //refresh app_status check time
                     [[SHAppStatus sharedInstance] recordCheckTime];
                 }
