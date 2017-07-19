@@ -249,10 +249,10 @@
                     {
                         [SHAppStatus sharedInstance].pointziToken = dictStatus[@"install_token"];
                     }
-                    //check "sh_preview"
-                    if ([dictStatus.allKeys containsObject:@"sh_preview"])
+                    //check "preview_mode"
+                    if ([dictStatus.allKeys containsObject:@"preview_mode"])
                     {
-                        [SHAppStatus sharedInstance].pointziTimestamp = dictStatus[@"sh_preview"];
+                        [SHAppStatus sharedInstance].pointziTimestamp = dictStatus[@"preview_mode"];
                     }
                     //check "reregister"
                     if ([dictStatus.allKeys containsObject:@"reregister"])

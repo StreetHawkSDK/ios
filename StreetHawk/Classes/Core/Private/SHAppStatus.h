@@ -93,7 +93,7 @@ extern NSString * const SHAppStatusChangeNotification;
 @property (nonatomic, strong) NSString *pointziToken;
 
 /**
- Match to `app_status` dictionary's `sh_preview`. It's a time stamp of server enable pointzi preview mode.
+ Match to `app_status` dictionary's `preview_mode`. It's a time stamp of server enable pointzi preview mode.
  */
 @property (nonatomic, strong) NSString *pointziTimestamp;
 
