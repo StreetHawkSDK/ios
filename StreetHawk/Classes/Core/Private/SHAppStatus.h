@@ -88,6 +88,16 @@ extern NSString * const SHAppStatusChangeNotification;
 @property (nonatomic, strong) NSString *feedTimestamp;
 
 /**
+ Match to `app_status` dictionary's `install_token`. It's the token for pointzi screen shot.
+ */
+@property (nonatomic, strong) NSString *pointziToken;
+
+/**
+ Match to `app_status` dictionary's `preview_mode`. It's a time stamp of server enable pointzi preview mode.
+ */
+@property (nonatomic, strong) NSString *pointziTimestamp;
+
+/**
  Match to `app_status` dictionary's `reregister`. In case it is given and set to true let the install register one more time.
  */
 @property (nonatomic) BOOL reregister;
