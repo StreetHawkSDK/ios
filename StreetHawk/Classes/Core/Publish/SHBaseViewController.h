@@ -17,8 +17,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class SHFeedObject;
-
 /**
  Protocol for deal with deeplinking. `StreetHawkBaseViewController`, `StreetHawkBaseTableViewController` and `StreetHawkBaseCollectionViewController` conform this protocol, customer App's view controller is recommended to inherit from `StreetHawkBaseViewController`, `StreetHawkBaseTableViewController` or `StreetHawkBaseCollectionViewController`, so can implement this protocol. Or customer's App's view controller can directly conform this protocol for deeplinking.
  */
@@ -39,21 +37,6 @@
 
 @end
 
-///**
-// Protocol for deal with custom feed. Customer App's view controller is recommended to inherit from `StreetHawkBaseViewController`, `StreetHawkBaseTableViewController` or `StreetHawkBaseCollectionViewController`, so can implement this protocol by set customFeedDelegate.
-// */
-//@protocol ISHCustomFeed <NSObject>
-//
-//@required
-//
-///**
-// Implement this function for receive custom feed. Set customFeedDelegate in view controller inherited from `StreetHawkBaseViewController`, `StreetHawkBaseTableViewController` or `StreetHawkBaseCollectionViewController`.
-// @param SHFeedObject Pass in parameters.
-// */
-//- (void)receiveCustomFeed:(SHFeedObject *)feed;
-//
-//@end
-
 /**
  Base class for all view controller inherit from UIViewController. It sends logs when enter/exit this VC.
  */
@@ -64,11 +47,6 @@
  Use this property to exclude them from being treated as StreetHawk behavior vc.
  */
 @property (nonatomic) BOOL excludeBehavior;
-
-///**
-// When custom feed received, sdk call this delegate.
-// */
-//@property (nonatomic, weak) id<ISHCustomFeed> customFeedDelegate;
 
 @end
 
@@ -83,11 +61,6 @@
  */
 @property (nonatomic) BOOL excludeBehavior;
 
-///**
-// When custom feed received, sdk call this delegate.
-// */
-//@property (nonatomic, weak) id<ISHCustomFeed> customFeedDelegate;
-
 @end
 
 /**
@@ -100,11 +73,6 @@
  Use this property to exclude them from being treated as StreetHawk behavior vc.
  */
 @property (nonatomic) BOOL excludeBehavior;
-
-///**
-// When custom feed received, sdk call this delegate.
-// */
-//@property (nonatomic, weak) id<ISHCustomFeed> customFeedDelegate;
 
 @end
 
