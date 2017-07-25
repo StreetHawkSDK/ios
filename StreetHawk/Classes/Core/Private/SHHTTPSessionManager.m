@@ -41,10 +41,26 @@
     static SHHTTPSessionManager *sharedHTTPSessionManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^
-      {
-          sharedHTTPSessionManager = [[SHHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-          sharedHTTPSessionManager.completionQueue = dispatch_queue_create("com.streethawk.StreetHawk.network", NULL/*NULL attribute same as DISPATCH_QUEUE_SERIAL, means this queue is FIFO.*/); //set completionQueue otherwise completion callback runs in main thread.
-      });
+    {
+        sharedHTTPSessionManager = [[SHHTTPSessionManager alloc]
+                                    initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        sharedHTTPSessionManager.completionQueue = dispatch_queue_create("com.streethawk.StreetHawk.network", NULL/*NULL attribute same as DISPATCH_QUEUE_SERIAL, means this queue is FIFO.*/); //set completionQueue otherwise completion callback runs in main thread.
+        //add header
+        [sharedHTTPSessionManager.requestSerializer setValue:[NSString stringWithFormat:@"%@(%@)", StreetHawk.appKey, StreetHawk.version]
+                                          forHTTPHeaderField:@"User-Agent"]; //e.g: "SHSample(1.5.3)"
+        [sharedHTTPSessionManager.requestSerializer setValue:NONULL(StreetHawk.appKey)
+                                          forHTTPHeaderField:@"X-App-Key"];
+        [sharedHTTPSessionManager.requestSerializer setValue:StreetHawk.version
+                                          forHTTPHeaderField:@"X-Version"];
+        [sharedHTTPSessionManager.requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null"
+                                          forHTTPHeaderField:@"X-Installid"];
+        //Add install token for /v3 request. Cannot check host version here, add to all requests.
+        NSString *installToken = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INSTALL_TOKEN];
+        if (!shStrIsEmpty(installToken))
+        {
+            [sharedHTTPSessionManager.requestSerializer setValue:installToken forHTTPHeaderField:@"X-Install-Token"];
+        }
+    });
     //By default it uses HTTP request and JSON response serializer.
     return sharedHTTPSessionManager;
 }
@@ -125,11 +141,6 @@
             }
             [completeUrl appendFormat:@"/%@", urlString];
         }
-        //add header
-        [self.requestSerializer setValue:[NSString stringWithFormat:@"%@(%@)", StreetHawk.appKey, StreetHawk.version] forHTTPHeaderField:@"User-Agent"]; //e.g: "SHSample(1.5.3)"
-        [self.requestSerializer setValue:NONULL(StreetHawk.appKey) forHTTPHeaderField:@"X-App-Key"];
-        [self.requestSerializer setValue:StreetHawk.version forHTTPHeaderField:@"X-Version"];
-        [self.requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null" forHTTPHeaderField:@"X-Installid"];
         //add "installid"
         NSAssert([completeUrl rangeOfString:@"?"].location == NSNotFound, @"Query should not contained.");
         if (!shStrIsEmpty(StreetHawk.currentInstall.suid))
@@ -140,15 +151,6 @@
     //Background fetch must be finished in 30 seconds, however when testing found `[UIApplication sharedApplication].backgroundTimeRemaining` sometimes is more than 30 seconds, for example if just enter background it's 180 seconds, if start background task it's 10 minutes. Thus cannot depend on `[UIApplication sharedApplication].backgroundTimeRemaining` to calculate timeout.
     //To be safe and simple, if in background, timeout is 13 seconds(sometimes heartbeat follow by location update), if in foreground, timeout is 60 seconds.
     [self.requestSerializer setTimeoutInterval:([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) ? 13 : 60];
-    //Add install token for /v3 request.
-    if (hostVersion == SHHostVersion_V3)
-    {
-        NSString *installToken = [[NSUserDefaults standardUserDefaults] objectForKey:SH_INSTALL_TOKEN];
-        if (!shStrIsEmpty(installToken))
-        {
-            [self.requestSerializer setValue:installToken forHTTPHeaderField:@"X-Install-Token"];
-        }
-    }
     return completeUrl;
 }
 
@@ -200,62 +202,78 @@
                     //check "streethawk" to enable/disable library function
                     if ([dictStatus.allKeys containsObject:@"streethawk"] && [dictStatus[@"streethawk"] respondsToSelector:@selector(boolValue)])
                     {
-                        [SHAppStatus sharedInstance].streethawkEnabled = [dictStatus[@"streethawk"] boolValue];
+                        [SHAppStatus sharedInstance].streethawkEnabled = [NONULL(dictStatus[@"streethawk"]) boolValue];
                     }
                     //check "host"
                     if ([dictStatus.allKeys containsObject:@"host"] && [dictStatus[@"host"] isKindOfClass:[NSString class]])
                     {
-                        [SHAppStatus sharedInstance].aliveHost = dictStatus[@"host"];
+                        [SHAppStatus sharedInstance].aliveHost = NONULL(dictStatus[@"host"]);
                     }
                     //check "growth_host"
                     if ([dictStatus.allKeys containsObject:@"growth_host"] && [dictStatus[@"growth_host"] isKindOfClass:[NSString class]])
                     {
-                        [SHAppStatus sharedInstance].growthHost = dictStatus[@"growth_host"];
+                        [SHAppStatus sharedInstance].growthHost = NONULL(dictStatus[@"growth_host"]);
                     }
                     //check "location_updates"
                     if ([dictStatus.allKeys containsObject:@"location_updates"] && [dictStatus[@"location_updates"] respondsToSelector:@selector(boolValue)])
                     {
-                        [SHAppStatus sharedInstance].uploadLocationChange = [dictStatus[@"location_updates"] boolValue];
+                        [SHAppStatus sharedInstance].uploadLocationChange = [NONULL(dictStatus[@"location_updates"]) boolValue];
                     }
                     //check "submit_views"
                     if ([dictStatus.allKeys containsObject:@"submit_views"] && [dictStatus[@"submit_views"] respondsToSelector:@selector(boolValue)])
                     {
-                        [SHAppStatus sharedInstance].allowSubmitFriendlyNames = [dictStatus[@"submit_views"] boolValue];
+                        [SHAppStatus sharedInstance].allowSubmitFriendlyNames = [NONULL(dictStatus[@"submit_views"]) boolValue];
                     }
                     if ([dictStatus.allKeys containsObject:@"submit_interactive_button"] && [dictStatus[@"submit_interactive_button"] respondsToSelector:@selector(boolValue)])
                     {
-                        [SHAppStatus sharedInstance].allowSubmitInteractiveButton = [dictStatus[@"submit_interactive_button"] boolValue];
+                        [SHAppStatus sharedInstance].allowSubmitInteractiveButton = [NONULL(dictStatus[@"submit_interactive_button"]) boolValue];
                     }
                     //check "ibeacon"
                     if ([dictStatus.allKeys containsObject:@"ibeacon"])
                     {
-                        [SHAppStatus sharedInstance].iBeaconTimestamp = dictStatus[@"ibeacon"]; //it may be nil
+                        [SHAppStatus sharedInstance].iBeaconTimestamp = NONULL(dictStatus[@"ibeacon"]); //it may be nil
                     }
                     //check "geofences"
                     if ([dictStatus.allKeys containsObject:@"geofences"])
                     {
-                        [SHAppStatus sharedInstance].geofenceTimestamp = dictStatus[@"geofences"];
+                        [SHAppStatus sharedInstance].geofenceTimestamp = NONULL(dictStatus[@"geofences"]);
                     }
                     //check "feed"
                     if ([dictStatus.allKeys containsObject:@"feed"])
                     {
                         SHLog(@"feed timestamp in app_status: %@", dictStatus[@"feed"]);
-                        [SHAppStatus sharedInstance].feedTimestamp = dictStatus[@"feed"];
+                        [SHAppStatus sharedInstance].feedTimestamp = NONULL(dictStatus[@"feed"]);
+                    }
+                    //check "install_token"
+                    if ([dictStatus.allKeys containsObject:@"install_token"])
+                    {
+                        [SHAppStatus sharedInstance].pointziToken = NONULL(dictStatus[@"install_token"]);
+                    }
+                    //check "preview_mode"
+                    if ([dictStatus.allKeys containsObject:@"preview_mode"])
+                    {
+                        [SHAppStatus sharedInstance].pointziTimestamp = NONULL(dictStatus[@"preview_mode"]);
                     }
                     //check "reregister"
                     if ([dictStatus.allKeys containsObject:@"reregister"])
                     {
-                        [SHAppStatus sharedInstance].reregister = [dictStatus[@"reregister"] boolValue];
+                        [SHAppStatus sharedInstance].reregister = [NONULL(dictStatus[@"reregister"]) boolValue];
                     }
                     //check "app_store_id"
                     if ([dictStatus.allKeys containsObject:@"app_store_id"])
                     {
-                        [SHAppStatus sharedInstance].appstoreId = dictStatus[@"app_store_id"];
+                        [SHAppStatus sharedInstance].appstoreId = NONULL(dictStatus[@"app_store_id"]);
                     }
                     //check "disable_logs"
-                    [SHAppStatus sharedInstance].logDisableCodes = dictStatus[@"disable_logs"]; //directly pass nil
+                    if ([dictStatus.allKeys containsObject:@"disable_logs"])
+                    {
+                        [SHAppStatus sharedInstance].logDisableCodes = NONULL(dictStatus[@"disable_logs"]); //directly pass nil
+                    }
                     //check "priority"
-                    [SHAppStatus sharedInstance].logPriorityCodes = dictStatus[@"priority"];
+                    if ([dictStatus.allKeys containsObject:@"priority"])
+                    {
+                        [SHAppStatus sharedInstance].logPriorityCodes = NONULL(dictStatus[@"priority"]);
+                    }
                     //refresh app_status check time
                     [[SHAppStatus sharedInstance] recordCheckTime];
                 }

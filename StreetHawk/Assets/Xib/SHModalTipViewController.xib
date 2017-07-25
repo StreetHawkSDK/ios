@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,11 +22,14 @@
                 <outlet property="cstButtonMarginBetween" destination="9ZV-Sg-Z4O" id="VeN-hv-xN0"/>
                 <outlet property="cstButtonNextHeight" destination="171-pb-fk2" id="fVu-r0-dJ3"/>
                 <outlet property="cstButtonNextMarginBottom" destination="zhS-3t-1WH" id="Y1J-vX-m4P"/>
+                <outlet property="cstButtonNextMarginLeftVertical" destination="K7h-1Y-XO3" id="0CI-j7-Zaq"/>
                 <outlet property="cstButtonNextMarginRight" destination="yvz-md-pn9" id="MiS-2c-edI"/>
                 <outlet property="cstButtonNextWidth" destination="VXx-DC-d4r" id="YOF-t9-Bpj"/>
                 <outlet property="cstButtonPrevHeight" destination="M77-lc-Waa" id="wFO-KL-9kY"/>
-                <outlet property="cstButtonPrevMarginBottom" destination="SEW-kR-D6y" id="AFs-6U-ncl"/>
+                <outlet property="cstButtonPrevMarginBottomHorizontal" destination="SEW-kR-D6y" id="uwn-pd-r1U"/>
                 <outlet property="cstButtonPrevMarginLeft" destination="ogt-AZ-rSA" id="srB-JY-keU"/>
+                <outlet property="cstButtonPrevMarginRightVertical" destination="uFA-7c-wvA" id="yiJ-wp-9AY"/>
+                <outlet property="cstButtonPrevNextMarginVertical" destination="x1q-EG-Fu2" id="jlP-XY-JNJ"/>
                 <outlet property="cstButtonPrevWidth" destination="7iU-rR-S03" id="H2t-xJ-O3d"/>
                 <outlet property="cstButtonWidthEqual" destination="Z2Z-cB-Mrh" id="YTu-JR-jgl"/>
                 <outlet property="cstContentBottom" destination="nJa-2L-Gix" id="t8J-yI-hEf"/>
@@ -84,7 +87,7 @@
                                 <action selector="buttonCloseClicked:" destination="-1" eventType="touchUpInside" id="E0N-Ra-Khn"/>
                             </connections>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2mW-pS-QVy" userLabel="labelTitle">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2mW-pS-QVy" userLabel="labelTitle" customClass="PaddingLabel">
                             <rect key="frame" x="0.0" y="30" width="0.0" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" identifier="LabelTitleHeight" id="AW7-3G-GZD"/>
@@ -93,7 +96,7 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9VL-dq-wHT" userLabel="labelContent">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9VL-dq-wHT" userLabel="labelContent" customClass="PaddingLabel">
                             <rect key="frame" x="0.0" y="49" width="375" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" identifier="LabelContentHeight" id="tEk-gK-vog"/>
@@ -141,6 +144,7 @@
                         <constraint firstItem="2mW-pS-QVy" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="LabelTitleMarginLeft" id="AWN-YE-Nqz"/>
                         <constraint firstItem="b7f-Pj-Epc" firstAttribute="centerY" secondItem="7UD-fP-icM" secondAttribute="centerY" identifier="ActivityCenterY" id="EoS-dY-uoi"/>
                         <constraint firstAttribute="trailing" secondItem="oH9-V3-GvT" secondAttribute="trailing" identifier="WebViewTrailing" id="FF8-8e-DGB"/>
+                        <constraint firstItem="fSK-HF-g6U" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" constant="265" id="K7h-1Y-XO3"/>
                         <constraint firstItem="oH9-V3-GvT" firstAttribute="top" secondItem="9VL-dq-wHT" secondAttribute="bottom" identifier="LabelContentMarginBottom" id="LZI-DO-ZcB"/>
                         <constraint firstItem="maO-66-cw2" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" identifier="ViewTitleMarginTop" id="OLm-bi-8QG"/>
                         <constraint firstItem="9VL-dq-wHT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="LabelContentMarginLeft" id="QjZ-N4-d3N"/>
@@ -155,6 +159,8 @@
                         <constraint firstItem="b7f-Pj-Epc" firstAttribute="centerX" secondItem="7UD-fP-icM" secondAttribute="centerX" identifier="ActivityCenterX" id="jUV-zb-Dv1"/>
                         <constraint firstItem="11X-TI-uky" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" constant="80" identifier="ButtonPrevMarginLeft" id="ogt-AZ-rSA"/>
                         <constraint firstItem="Uri-9x-BKo" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" constant="30" identifier="ButtonDismissMarginTop" id="qND-Bk-7aj"/>
+                        <constraint firstAttribute="trailing" secondItem="11X-TI-uky" secondAttribute="trailing" constant="265" id="uFA-7c-wvA"/>
+                        <constraint firstItem="fSK-HF-g6U" firstAttribute="top" secondItem="11X-TI-uky" secondAttribute="bottom" constant="-30" id="x1q-EG-Fu2"/>
                         <constraint firstAttribute="trailing" secondItem="fSK-HF-g6U" secondAttribute="trailing" constant="80" identifier="ButtonNextMarginRight" id="yvz-md-pn9"/>
                         <constraint firstAttribute="bottom" secondItem="fSK-HF-g6U" secondAttribute="bottom" constant="49" identifier="ButtonNextMarginBottom" id="zhS-3t-1WH"/>
                     </constraints>

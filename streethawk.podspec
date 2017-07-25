@@ -32,6 +32,7 @@ Pod::Spec.new do |s|
     sp.frameworks          = 'CoreTelephony', 'Foundation', 'CoreGraphics', 'UIKit', 'CoreSpotlight'
     sp.libraries           = 'sqlite3'    
     sp.dependency            'MBProgressHUD'
+    sp.dependency            'Masonry'
   end
   
   s.subspec 'Growth' do |sp|

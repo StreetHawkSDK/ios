@@ -20,6 +20,7 @@
 #import "SHUtils.h" //for SHLog
 #import "SHApp.h" //for `StreetHawk.currentInstall`
 #import "SHLogger.h" //for sending logline
+#import "SHDeepLinking.h" //for handle pointzi deeplinking
 
 #define APPSTATUS_STREETHAWKENABLED         @"APPSTATUS_STREETHAWKENABLED" //whether enable library functions
 #define APPSTATUS_ALIVE_HOST                @"APPSTATUS_ALIVE_HOST" //currently used alive host url
@@ -31,6 +32,7 @@
 #define APPSTATUS_APPSTOREID                @"APPSTATUS_APPSTOREID" //server push itunes id to client side
 #define APPSTATUS_DISABLECODES              @"APPSTATUS_DISABLECODES" //disable logline codes
 #define APPSTATUS_PRIORITYCODES             @"APPSTATUS_PRIORITYCODES" //priority logline codes
+#define APPSTATUS_POINTZI_SET_TIME          @"APPSTATUS_POINTZI_SET_TIME" //local enable pointzi time
 
 #define APPSTATUS_CHECK_TIME                @"APPSTATUS_CHECK_TIME"  //the last successfully check app status time, record to avoid frequently call server.
 
@@ -314,6 +316,78 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 - (void)setFeedTimestamp:(NSString *)feedTimestamp
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_FeedBridge_SetFeedTimestamp" object:nil userInfo:@{@"timestamp": NONULL(feedTimestamp)}];
+}
+
+- (NSString *)pointziToken
+{
+    NSAssert(NO, @"Should not call pointziToken.");
+    return nil;
+}
+
+- (void)setPointziToken:(NSString *)pointziToken
+{
+    pointziToken = NONULL(pointziToken);
+    if (pointziToken.length > 0)
+    {
+        //Save in temp location instead of directly affecting pointzi token. The real token will be affected by deeplinking.
+        [[NSUserDefaults standardUserDefaults] setObject:pointziToken forKey:@"Temp_Pointzi_Token"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (NSString *)pointziTimestamp
+{
+    NSAssert(NO, @"Should not call pointziTimestamp.");
+    return nil;
+}
+
+- (void)setPointziTimestamp:(NSString *)pointziTimestamp
+{
+    if (StreetHawk.currentInstall == nil)
+    {
+        return; //not register yet, wait for next time.
+    }
+    Class pointziBridge = NSClassFromString(@"SHPointziBridge");
+    if (pointziBridge == nil)
+    {
+        return; //not have pointzi included, ignore.
+    }
+    if (!streetHawkIsEnabled())
+    {
+        return;
+    }
+    if (pointziTimestamp != nil && [pointziTimestamp isKindOfClass:[NSString class]])
+    {
+        NSDate *serverTime = shParseDate(pointziTimestamp, 0);
+        if (serverTime != nil)
+        {
+            BOOL needSet = NO;
+            NSObject *localTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_POINTZI_SET_TIME];
+            if (localTimeVal == nil || ![localTimeVal isKindOfClass:[NSNumber class]])
+            {
+                needSet = YES;  //local never enable pointzi before, do it.
+            }
+            else
+            {
+                NSDate *localTime = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSNumber *)localTimeVal doubleValue]];
+                if ([localTime compare:serverTime] == NSOrderedAscending)
+                {
+                    needSet = YES;  //local enabled before, but too old, do enable again.
+                }
+            }
+            if (needSet)
+            {
+                //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setPointziTimestamp` again.
+                [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate] + 10/*avoid double accurate*/) forKey:APPSTATUS_POINTZI_SET_TIME];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                //format url to simulate
+                NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Temp_Pointzi_Token"];
+                NSString *url = [NSString stringWithFormat:@"scheme://pointzi_author?installid=%@&device_token=%@", StreetHawk.currentInstall.suid, token];
+                SHDeepLinking *deepLinking = [[SHDeepLinking alloc] init];
+                [deepLinking processDeeplinkingUrl:[NSURL URLWithString:url] withPushData:nil withIncreaseGrowth:NO];
+            }
+        }
+    }
 }
 
 - (BOOL)reregister

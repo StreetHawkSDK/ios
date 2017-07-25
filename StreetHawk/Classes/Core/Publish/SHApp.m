@@ -25,6 +25,7 @@
 #import "SHDeepLinking.h"
 #import "SHFriendlyNameObject.h"
 #import "SHUtils.h"
+#import "SHHTTPSessionManager.h" //for set header "X-Installid"
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
@@ -69,8 +70,8 @@
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:self.viewName forKey:@"page"];
-    [dict setObject:shFormatStreetHawkDate(self.enterTime) forKey:@"enter"];
-    [dict setObject:shFormatStreetHawkDate(self.exitTime) forKey:@"exit"];
+    [dict setObject:shFormatISODate(self.enterTime) forKey:@"enter"];
+    [dict setObject:shFormatISODate(self.exitTime) forKey:@"exit"];
     [dict setObject:@(self.duration) forKey:@"duration"];
     [dict setObject:@(self.enterBg) forKey:@"bg"];
     return NONULL(shSerializeObjToJson(dict));
@@ -323,6 +324,10 @@
         //setup intercept app delegate
         if (self.autoIntegrateAppDelegate)
         {
+            if ([[UIApplication sharedApplication].delegate isKindOfClass:[SHInterceptor class]])
+            {
+                return; //already intercept, in case customer forcily do register again.
+            }
             self.appDelegateInterceptor = [[SHInterceptor alloc] init];  //strong property
             self.appDelegateInterceptor.firstResponder = self;  //weak property
             self.appDelegateInterceptor.secondResponder = [UIApplication sharedApplication].delegate;
@@ -1788,6 +1793,7 @@
                                {
                                    self.currentInstall = (SHInstall *)result;
                                    dispatch_semaphore_signal(self.install_semaphore); //make sure currentInstall is set to latest.
+                                   [[SHHTTPSessionManager sharedInstance].requestSerializer setValue:!shStrIsEmpty(StreetHawk.currentInstall.suid) ? StreetHawk.currentInstall.suid : @"null" forHTTPHeaderField:@"X-Installid"]; //direct set for next request
                                    //save sent install parameters for later compare, because install does not have local cache, and avoid query install/details/ from server. Only save it after successfully install/register.
                                    [[NSUserDefaults standardUserDefaults] setObject:NONULL(StreetHawk.appKey) forKey:SentInstall_AppKey];
                                    [[NSUserDefaults standardUserDefaults] setObject:StreetHawk.clientVersion forKey:SentInstall_ClientVersion];

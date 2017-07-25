@@ -52,6 +52,33 @@
 
 @implementation StreetHawkBaseViewController
 
+- (id)init
+{
+    if (self = [super init])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -59,16 +86,23 @@
     {
         [self performSelector:@selector(displayDeepLinkingToUI)];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    }
 }
 
 //tricky: Record `viewWillAppear` as backup, become in canceled pop up `viewDidAppear` is not called.
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (!self.excludeBehavior && !shIsSDKViewController(self))
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 //tricky: Here must use `viewDidAppear` and `viewWillDisappear`.
@@ -78,7 +112,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (!shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
@@ -89,7 +123,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (!shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
         
@@ -102,6 +136,42 @@
 
 @implementation StreetHawkBaseTableViewController
 
+- (id)init
+{
+    if (self = [super init])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    if (self = [super initWithStyle:style])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -109,21 +179,28 @@
     {
         [self performSelector:@selector(displayDeepLinkingToUI)];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (!self.excludeBehavior && !shIsSDKViewController(self))
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (!shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
@@ -134,7 +211,94 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (!shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    {
+        [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
+    }
+}
+
+@end
+
+@implementation StreetHawkBaseCollectionViewController
+
+- (id)init
+{
+    if (self = [super init])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
+{
+    if (self = [super initWithCollectionViewLayout:layout])
+    {
+        self.excludeBehavior = NO;
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    if ([self respondsToSelector:@selector(displayDeepLinkingToUI)])
+    {
+        [self performSelector:@selector(displayDeepLinkingToUI)];
+    }
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (!self.excludeBehavior && !shIsSDKViewController(self))
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    {
+        [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
@@ -208,6 +372,46 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
     }
     else
     {
+        CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+        CGFloat colors[] =
+        {
+            1, 1, 1, 0.00,//start color(r,g,b,alpha)
+            0, 0, 0, 0.7,
+            0, 0, 0, 0.7,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,
+            0, 0, 0, 0.8,//end color
+        };
+        
+        CGGradientRef gradient = CGGradientCreateWithColorComponents
+        (rgb, colors, NULL, 20);
+        
+        CGPoint start = CGPointMake(230,264);
+        CGPoint end = CGPointMake(230,264);
+        CGFloat startRadius = 30.0f;
+        CGFloat endRadius = MAX(self.frame.size.width,self.frame.size.height);
+        CGContextRef graCtx = UIGraphicsGetCurrentContext();
+        CGContextDrawRadialGradient(graCtx, gradient, start, startRadius, end, endRadius, 0);
+        
+        CGGradientRelease(gradient);
+        gradient=NULL;
+        CGColorSpaceRelease(rgb);
+        
+        CGContextClearRect(UIGraphicsGetCurrentContext(), self.bounds);
         CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), self.overlayColor.CGColor);
         CGContextSetAlpha(UIGraphicsGetCurrentContext(), self.overlayAlpha);
     }
@@ -253,9 +457,15 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
     objc_setAssociatedObject(self, @selector(coverView), coverView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)presentOnTopWithCover:(BOOL)needCover withCoverColor:(UIColor *)coverColor withCoverAlpha:(CGFloat)coverAlpha withCoverTouchHandler:(void (^)(CGPoint touchPoint))coverTouchHandler withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler withOrientationChangedHandler:(void (^)(CGRect))orientationChangedHandler
+- (void)presentOnTopWithCover:(BOOL)needCover
+               withCoverColor:(UIColor *)coverColor
+               withCoverAlpha:(CGFloat)coverAlpha
+                    withDelay:(BOOL)needDelay
+        withCoverTouchHandler:(void (^)(CGPoint touchPoint))coverTouchHandler
+         withAnimationHandler:(void (^)(CGRect fullScreenRect))animationHandler
+        withOrientationChangedHandler:(void (^)(CGRect))orientationChangedHandler
 {
-    double delayInMilliSeconds = 500; //delay, otherwise if previous is an alert view, the rootVC is UIAlertShimPresentingViewController. Test this is minimum time.
+    double delayInMilliSeconds = needDelay ? 500 : 0; //delay, otherwise if previous is an alert view, the rootVC is UIAlertShimPresentingViewController. Test this is minimum time.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliSeconds * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^(void)
     {
         UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -274,6 +484,10 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
                 presentedVC = presentedVC.presentedViewController;
             }
             [presentedVC.view addSubview:self.coverView];
+            self.coverView.alpha = 0;
+            [UIView animateWithDuration:0.5 animations:^{
+                self.coverView.alpha = 1.0;
+            }];
 //            [[UIApplication sharedApplication].keyWindow addSubview:self.coverView]; //this also work but cannot rotate
             self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin; //content vc by default always in center, not affected by rotatation.
             [self.coverView addSubview:self.view];
@@ -313,8 +527,12 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
     [self.view removeFromSuperview];
     if (self.coverView != nil)
     {
-        [self.coverView removeFromSuperview];
-        self.coverView.contentVC = nil; //break loop retain to make self dealloc
+        [UIView animateWithDuration:0.1 animations:^{
+            self.coverView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.coverView removeFromSuperview];
+            self.coverView.contentVC = nil; //break loop retain to make self dealloc
+        }];
     }
 }
 

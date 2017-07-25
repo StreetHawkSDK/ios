@@ -277,19 +277,20 @@ void shPresentErrorAlertOrLog(NSError *error)
 //Go traverse to UIView's responder till get a UIViewController.
 id shTraverseResponderChainForUIViewController(UIView *view)
 {
-    id nextResponder = [view nextResponder];
-    if ([nextResponder isKindOfClass:[UIViewController class]])
+    if ([view respondsToSelector:@selector(nextResponder)])
     {
-        return nextResponder;
+        id nextResponder = [view nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]])
+        {
+            return nextResponder;
+        }
+        else if ([nextResponder isKindOfClass:[UIView class]])
+        {
+            return shTraverseResponderChainForUIViewController((UIView *)nextResponder);
+        }
     }
-    else if ([nextResponder isKindOfClass:[UIView class]])
-    {
-        return shTraverseResponderChainForUIViewController((UIView *)nextResponder);
-    }
-    else
-    {
-        return nil;
-    }
+    
+    return nil;
 }
 
 UIViewController *shGetViewController(UIView *view)
@@ -750,7 +751,9 @@ BOOL streetHawkIsEnabled()
 
 BOOL shIsSDKViewController(UIViewController * vc)
 {
-    return ([vc isKindOfClass:[SHBaseViewController class]] || [vc isKindOfClass:[SHBaseTableViewController class]]);
+    return ([vc isKindOfClass:[SHBaseViewController class]]
+            || [vc isKindOfClass:[SHBaseTableViewController class]]
+            || [vc isKindOfClass:[SHBaseCollectionViewController class]]);
 }
 
 BOOL shStrIsEmpty(NSString *str)
@@ -975,7 +978,8 @@ static NSString *getPropertyType(objc_property_t property)
             {
                 return @"int"; //not exactly the property definition. enum, NSInteger etc all end this.
             }
-            else if ([attributeStr isEqualToString:@"Td"])
+            else if ([attributeStr isEqualToString:@"Td"] ||
+                     [attributeStr isEqualToString:@"Tf"])
             {
                 return @"double"; //double, float, CGFloat etc.
             }
@@ -983,7 +987,8 @@ static NSString *getPropertyType(objc_property_t property)
             {
                 return @"NSTextAlignment";
             }
-            if ([attributeStr isEqualToString:@"TB"])
+            if ([attributeStr isEqualToString:@"TB"] ||
+                [attributeStr isEqualToString:@"Tc"])
             {
                 return @"bool";
             }
