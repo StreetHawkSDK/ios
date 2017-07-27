@@ -485,7 +485,7 @@ typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
             }
             [presentedVC.view addSubview:self.coverView];
             self.coverView.alpha = 0;
-            [UIView animateWithDuration:0.5 animations:^{
+            [UIView animateWithDuration:0.1 animations:^{
                 self.coverView.alpha = 1.0;
             }];
 //            [[UIApplication sharedApplication].keyWindow addSubview:self.coverView]; //this also work but cannot rotate
