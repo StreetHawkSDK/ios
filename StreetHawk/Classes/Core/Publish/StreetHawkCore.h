@@ -58,8 +58,7 @@
 
 //Pointzi
 #ifdef SH_FEATURE_POINTZI
-#import "SHApp+Pointzi.h"
-#import "SHTooltip.h"
+#import "SHTip.h"
 #endif
 
 #endif //SH__STREETHAWK__H
