@@ -63,6 +63,7 @@ typedef void (^SHOpenUrlHandler)(NSURL *openUrl);
  - Add "Background fetch" in "Background Modes", since iOS 7.
  - Add "NSLocationAlwaysUsageDescription" or "NSLocationWhenInUseUsageDescription" in Info.plist for enabling location service since iOS 8.
  - Because StreetHawk SDK uses significant location change at background, there is NO need to add "Required background modes" with *location service*.
+ - Add Notification in capabilities.
  
  */
 @interface SHApp : NSObject<UIApplicationDelegate>
