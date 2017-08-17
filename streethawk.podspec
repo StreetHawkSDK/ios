@@ -33,6 +33,7 @@ Pod::Spec.new do |s|
     sp.libraries           = 'sqlite3'    
     sp.dependency            'MBProgressHUD'
     sp.dependency            'Masonry'
+    sp.dependency            'WebViewJavascriptBridge'
   end
   
   s.subspec 'Growth' do |sp|
