@@ -26,6 +26,7 @@
 #import "SHInstall.h"
 #import "SHObject.h"
 #import "SHTypes.h"
+#import "SHUtils.h"
 
 //Crash
 #ifdef SH_FEATURE_CRASH
