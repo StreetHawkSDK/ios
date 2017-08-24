@@ -128,7 +128,7 @@
     }
     NSAssert(vcClass != nil, @"Fail to create view controller class.");
     UIViewController *vc = [[vcClass alloc] init];
-    vc.title = self.arraySampleCasesTitle[indexPath.row - 2];
+    vc.title = self.arraySampleCasesTitle[indexPath.row - 1];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
