@@ -74,12 +74,6 @@
 
 #pragma mark - event handler
 
-- (IBAction)buttonSetAlertClicked:(id)sender
-{
-    SHAlertSettingsViewController *alertSettingsVC = [[SHAlertSettingsViewController alloc] initWithNibName:nil bundle:nil];
-    [alertSettingsVC presentOnTopWithCover:YES withCoverColor:nil withCoverAlpha:0 withDelay:YES withCoverTouchHandler:nil withAnimationHandler:nil withOrientationChangedHandler:nil];
-}
-
 - (IBAction)buttonSetEnabledClicked:(id)sender
 {
     StreetHawk.isNotificationEnabled = !StreetHawk.isNotificationEnabled;
@@ -99,49 +93,6 @@
     else
     {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Info" message:@"No need to show enable notification preference." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }
-}
-
-- (IBAction)buttonTurnOnLogmodeClicked:(id)sender
-{
-    LogModeHandler *handler = [[LogModeHandler alloc] init];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification is handled by Log Mode!" message:@"Kill App and relaunch will turn back to normal mode." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-    [StreetHawk shSetCustomiseHandler:handler];
-    [alert show];
-}
-
-- (IBAction)buttonSendLogClicked:(id)sender
-{
-    if ([MFMailComposeViewController canSendMail])
-    {
-        BaseLogMonitor *logger = [[BaseLogMonitor alloc] initWithLogFileName:@"NotificationLogs"];
-        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-        mc.mailComposeDelegate = self;
-        [mc setMessageBody:[logger logHistoryContent:nil] isHTML:NO];
-        [mc setSubject:[NSString stringWithFormat:@"Notification logs sent on %@", shFormatStreetHawkDate([NSDate date])]];
-        [self presentViewController:mc animated:YES completion:nil];
-    }
-    else
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot send email" message:@"Please check email is configured and ready to use." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];
-    }
-}
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
-{
-    if (!error)
-    {
-        [controller dismissViewControllerAnimated:YES completion:nil];
-        SHAlertView *alertView = [[SHAlertView alloc] initWithTitle:@"Delete local logs?" message:@"Do you want to delete local caches, next will start from new text?" withHandler:^(UIAlertView *view, NSInteger buttonIndex)
-          {
-              if (buttonIndex != view.cancelButtonIndex)
-              {
-                  BaseLogMonitor *logger = [[BaseLogMonitor alloc] initWithLogFileName:@"NotificationLogs"];
-                  [logger clearLogHistory:nil];
-              }
-          } cancelButtonTitle:@"No" otherButtonTitles:@"Yes"];
         [alertView show];
     }
 }

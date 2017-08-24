@@ -19,8 +19,7 @@
 #import "FeedbackCasesViewController.h"
 #import "LogTagCasesViewController.h"
 #import "FeedCasesController.h"
-#import "LocationCasesViewController.h"
-#import "LocationServiceMonitor.h"
+#import "LocationViewController.h"
 #import "InstallCasesViewController.h"
 #import "InstallServiceMonitor.h"
 #import "PushNotificationCasesViewController.h"
@@ -38,9 +37,8 @@
     {
         //use array instead of dictionary as NSDictionary.allKeys cannot keep order.
         self.arraySampleCasesTitle = [NSMutableArray arrayWithArray:@[@"Feedback Sample", @"Tag & Log Sample", @"Feeds Sample", @"Location Sample", @"Install Sample", @"Push Notification Sample", @"Growth", @"Swift Sample"]];
-        self.arraySampleCasesVC = [NSMutableArray arrayWithArray:@[@"FeedbackCasesViewController", @"LogTagCasesViewController", @"FeedCasesController",  @"LocationCasesViewController", @"InstallCasesViewController", @"PushNotificationCasesViewController", @"GrowthCasesViewController", @"SwiftViewController"]];
+        self.arraySampleCasesVC = [NSMutableArray arrayWithArray:@[@"FeedbackCasesViewController", @"LogTagCasesViewController", @"FeedCasesController",  @"LocationViewController", @"InstallCasesViewController", @"PushNotificationCasesViewController", @"GrowthCasesViewController", @"SwiftViewController"]];
         //initialize long persistent objects
-        [LocationServiceMonitor shared];
         [InstallServiceMonitor shared];
     }
     return self;

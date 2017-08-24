@@ -27,7 +27,6 @@
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellIncrementValue;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellDelete;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellFeed;
-@property (retain, nonatomic) IBOutlet UITableViewCell *cellError;
 
 @property (retain, nonatomic) IBOutlet UITextField *textboxCuidValue;
 @property (retain, nonatomic) IBOutlet UITextField *textboxKeyNumeric;
@@ -49,6 +48,5 @@
 - (IBAction)buttonIncrementValueClicked:(id)sender;
 - (IBAction)buttonDeleteClicked:(id)sender;
 - (IBAction)buttonFeedClicked:(id)sender;
-- (IBAction)buttonErrorClicked:(id)sender;
 
 @end

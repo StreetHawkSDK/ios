@@ -25,10 +25,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *buttonSetAlert;
 @property (retain, nonatomic) IBOutlet UIButton *buttonSetEnabled;
 
-- (IBAction)buttonSetAlertClicked:(id)sender;
 - (IBAction)buttonSetEnabledClicked:(id)sender;
 - (IBAction)buttonCheckNotificationPermissionClicked:(id)sender;
-- (IBAction)buttonTurnOnLogmodeClicked:(id)sender;
-- (IBAction)buttonSendLogClicked:(id)sender;
 
 @end

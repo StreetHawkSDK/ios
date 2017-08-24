@@ -9,14 +9,6 @@
 /* Begin PBXBuildFile section */
 		4DE79DD51F4F030200EDB951 /* SampleCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DD41F4F030200EDB951 /* SampleCaseViewController.m */; };
 		4DE79DD81F4F041400EDB951 /* GrowthCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DD71F4F041400EDB951 /* GrowthCasesViewController.m */; };
-		4DE79DE61F4F043D00EDB951 /* BeaconRangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DDA1F4F043D00EDB951 /* BeaconRangeViewController.m */; };
-		4DE79DE71F4F043D00EDB951 /* BeaconRegionInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DDC1F4F043D00EDB951 /* BeaconRegionInputViewController.m */; };
-		4DE79DE81F4F043D00EDB951 /* BeaconRegionInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79DDD1F4F043D00EDB951 /* BeaconRegionInputViewController.xib */; };
-		4DE79DE91F4F043D00EDB951 /* FrequencyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DDF1F4F043D00EDB951 /* FrequencyViewController.m */; };
-		4DE79DEA1F4F043D00EDB951 /* FrequencyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79DE01F4F043D00EDB951 /* FrequencyViewController.xib */; };
-		4DE79DEB1F4F043D00EDB951 /* LocationCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DE21F4F043D00EDB951 /* LocationCasesViewController.m */; };
-		4DE79DEC1F4F043D00EDB951 /* LocationCasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79DE31F4F043D00EDB951 /* LocationCasesViewController.xib */; };
-		4DE79DED1F4F043D00EDB951 /* LocationServiceMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DE51F4F043D00EDB951 /* LocationServiceMonitor.m */; };
 		4DE79DF11F4F045700EDB951 /* PushNotificationCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DEF1F4F045700EDB951 /* PushNotificationCasesViewController.m */; };
 		4DE79DF21F4F045700EDB951 /* PushNotificationCasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79DF01F4F045700EDB951 /* PushNotificationCasesViewController.xib */; };
 		4DE79E151F4F04BC00EDB951 /* BaseLogMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DF51F4F04BB00EDB951 /* BaseLogMonitor.m */; };
@@ -30,6 +22,8 @@
 		4DE79E1D1F4F04BC00EDB951 /* InstallServiceMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E071F4F04BB00EDB951 /* InstallServiceMonitor.m */; };
 		4DE79E1E1F4F04BC00EDB951 /* LogTagCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E0A1F4F04BB00EDB951 /* LogTagCasesViewController.m */; };
 		4DE79E1F1F4F04BC00EDB951 /* LogTagCasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79E0B1F4F04BC00EDB951 /* LogTagCasesViewController.xib */; };
+		4DE79E341F4F129D00EDB951 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E321F4F129D00EDB951 /* LocationViewController.m */; };
+		4DE79E351F4F129D00EDB951 /* LocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79E331F4F129D00EDB951 /* LocationViewController.xib */; };
 		93F452A55EAEF3C62CC5C517 /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CF230F110BF4D54A8B8636 /* libPods-StreetHawkDemo.a */; };
 		CB42AC911B84895800171998 /* SwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB42AC8F1B84895800171998 /* SwiftViewController.swift */; };
 		CB42AC921B84895800171998 /* SwiftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB42AC901B84895800171998 /* SwiftViewController.xib */; };
@@ -58,19 +52,6 @@
 		4DE79DD41F4F030200EDB951 /* SampleCaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleCaseViewController.m; sourceTree = "<group>"; };
 		4DE79DD61F4F041400EDB951 /* GrowthCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrowthCasesViewController.h; sourceTree = "<group>"; };
 		4DE79DD71F4F041400EDB951 /* GrowthCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GrowthCasesViewController.m; sourceTree = "<group>"; };
-		4DE79DD91F4F043D00EDB951 /* BeaconRangeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconRangeViewController.h; sourceTree = "<group>"; };
-		4DE79DDA1F4F043D00EDB951 /* BeaconRangeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconRangeViewController.m; sourceTree = "<group>"; };
-		4DE79DDB1F4F043D00EDB951 /* BeaconRegionInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconRegionInputViewController.h; sourceTree = "<group>"; };
-		4DE79DDC1F4F043D00EDB951 /* BeaconRegionInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconRegionInputViewController.m; sourceTree = "<group>"; };
-		4DE79DDD1F4F043D00EDB951 /* BeaconRegionInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BeaconRegionInputViewController.xib; sourceTree = "<group>"; };
-		4DE79DDE1F4F043D00EDB951 /* FrequencyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrequencyViewController.h; sourceTree = "<group>"; };
-		4DE79DDF1F4F043D00EDB951 /* FrequencyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrequencyViewController.m; sourceTree = "<group>"; };
-		4DE79DE01F4F043D00EDB951 /* FrequencyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FrequencyViewController.xib; sourceTree = "<group>"; };
-		4DE79DE11F4F043D00EDB951 /* LocationCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationCasesViewController.h; sourceTree = "<group>"; };
-		4DE79DE21F4F043D00EDB951 /* LocationCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationCasesViewController.m; sourceTree = "<group>"; };
-		4DE79DE31F4F043D00EDB951 /* LocationCasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationCasesViewController.xib; sourceTree = "<group>"; };
-		4DE79DE41F4F043D00EDB951 /* LocationServiceMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServiceMonitor.h; sourceTree = "<group>"; };
-		4DE79DE51F4F043D00EDB951 /* LocationServiceMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServiceMonitor.m; sourceTree = "<group>"; };
 		4DE79DEE1F4F045700EDB951 /* PushNotificationCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotificationCasesViewController.h; sourceTree = "<group>"; };
 		4DE79DEF1F4F045700EDB951 /* PushNotificationCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotificationCasesViewController.m; sourceTree = "<group>"; };
 		4DE79DF01F4F045700EDB951 /* PushNotificationCasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PushNotificationCasesViewController.xib; sourceTree = "<group>"; };
@@ -93,6 +74,9 @@
 		4DE79E091F4F04BB00EDB951 /* LogTagCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTagCasesViewController.h; sourceTree = "<group>"; };
 		4DE79E0A1F4F04BB00EDB951 /* LogTagCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTagCasesViewController.m; sourceTree = "<group>"; };
 		4DE79E0B1F4F04BC00EDB951 /* LogTagCasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogTagCasesViewController.xib; sourceTree = "<group>"; };
+		4DE79E311F4F129D00EDB951 /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
+		4DE79E321F4F129D00EDB951 /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
+		4DE79E331F4F129D00EDB951 /* LocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationViewController.xib; sourceTree = "<group>"; };
 		66C62FB043A41B3D4CF8D1F2 /* Pods-StreetHawkDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.release.xcconfig"; sourceTree = "<group>"; };
 		CB42AC8E1B84895700171998 /* StreetHawkDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreetHawkDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		CB42AC8F1B84895800171998 /* SwiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftViewController.swift; sourceTree = "<group>"; };
@@ -235,19 +219,9 @@
 		CB25A5AD1B788D3300FBEF0E /* Location */ = {
 			isa = PBXGroup;
 			children = (
-				4DE79DD91F4F043D00EDB951 /* BeaconRangeViewController.h */,
-				4DE79DDA1F4F043D00EDB951 /* BeaconRangeViewController.m */,
-				4DE79DDB1F4F043D00EDB951 /* BeaconRegionInputViewController.h */,
-				4DE79DDC1F4F043D00EDB951 /* BeaconRegionInputViewController.m */,
-				4DE79DDD1F4F043D00EDB951 /* BeaconRegionInputViewController.xib */,
-				4DE79DDE1F4F043D00EDB951 /* FrequencyViewController.h */,
-				4DE79DDF1F4F043D00EDB951 /* FrequencyViewController.m */,
-				4DE79DE01F4F043D00EDB951 /* FrequencyViewController.xib */,
-				4DE79DE11F4F043D00EDB951 /* LocationCasesViewController.h */,
-				4DE79DE21F4F043D00EDB951 /* LocationCasesViewController.m */,
-				4DE79DE31F4F043D00EDB951 /* LocationCasesViewController.xib */,
-				4DE79DE41F4F043D00EDB951 /* LocationServiceMonitor.h */,
-				4DE79DE51F4F043D00EDB951 /* LocationServiceMonitor.m */,
+				4DE79E311F4F129D00EDB951 /* LocationViewController.h */,
+				4DE79E321F4F129D00EDB951 /* LocationViewController.m */,
+				4DE79E331F4F129D00EDB951 /* LocationViewController.xib */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -429,18 +403,16 @@
 				CB5962DC1B749BEC0086CC7D /* Images.xcassets in Resources */,
 				4DE79E1C1F4F04BC00EDB951 /* InstallCasesViewController.xib in Resources */,
 				CB5962E41B749DAE0086CC7D /* Default-568h@2x.png in Resources */,
+				4DE79E351F4F129D00EDB951 /* LocationViewController.xib in Resources */,
 				CB5962DB1B749BEC0086CC7D /* InfoPlist.strings in Resources */,
 				4DE79E191F4F04BC00EDB951 /* FeedDetailViewController.xib in Resources */,
 				CBA7EA021BABC2FF002C3F51 /* Launch Screen.storyboard in Resources */,
 				4DE79E1F1F4F04BC00EDB951 /* LogTagCasesViewController.xib in Resources */,
 				CBEEC85D1B7AEEA8006BC283 /* Localizable.strings in Resources */,
-				4DE79DEA1F4F043D00EDB951 /* FrequencyViewController.xib in Resources */,
 				CBEEC8691B7B2656006BC283 /* GenericShareViewController.xib in Resources */,
-				4DE79DEC1F4F043D00EDB951 /* LocationCasesViewController.xib in Resources */,
 				CBEEC8671B7B2656006BC283 /* ChannelShareViewController.xib in Resources */,
 				CB42AC921B84895800171998 /* SwiftViewController.xib in Resources */,
 				CB5962DE1B749BEC0086CC7D /* Main.storyboard in Resources */,
-				4DE79DE81F4F043D00EDB951 /* BeaconRegionInputViewController.xib in Resources */,
 				4DE79DF21F4F045700EDB951 /* PushNotificationCasesViewController.xib in Resources */,
 				CBEEC8521B78AAAE006BC283 /* DeepLinkingViewController.xib in Resources */,
 				CBD6BA4F1BC7B4770037CF1F /* TagViewController.xib in Resources */,
@@ -509,7 +481,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB42AC911B84895800171998 /* SwiftViewController.swift in Sources */,
-				4DE79DED1F4F043D00EDB951 /* LocationServiceMonitor.m in Sources */,
 				CBEEC8661B7B2656006BC283 /* ChannelShareViewController.m in Sources */,
 				4DE79E151F4F04BC00EDB951 /* BaseLogMonitor.m in Sources */,
 				4DE79E1B1F4F04BC00EDB951 /* InstallCasesViewController.m in Sources */,
@@ -524,14 +495,11 @@
 				CB5962D81B749BEC0086CC7D /* AppDelegate.m in Sources */,
 				4DE79E161F4F04BC00EDB951 /* AppKeyChoiceViewController.m in Sources */,
 				4DE79DF11F4F045700EDB951 /* PushNotificationCasesViewController.m in Sources */,
-				4DE79DE91F4F043D00EDB951 /* FrequencyViewController.m in Sources */,
 				CB5962DD1B749BEC0086CC7D /* main.m in Sources */,
 				CBD6BA4E1BC7B4770037CF1F /* TagViewController.m in Sources */,
 				4DE79E181F4F04BC00EDB951 /* FeedDetailViewController.m in Sources */,
 				4DE79DD51F4F030200EDB951 /* SampleCaseViewController.m in Sources */,
-				4DE79DE71F4F043D00EDB951 /* BeaconRegionInputViewController.m in Sources */,
-				4DE79DE61F4F043D00EDB951 /* BeaconRangeViewController.m in Sources */,
-				4DE79DEB1F4F043D00EDB951 /* LocationCasesViewController.m in Sources */,
+				4DE79E341F4F129D00EDB951 /* LocationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
