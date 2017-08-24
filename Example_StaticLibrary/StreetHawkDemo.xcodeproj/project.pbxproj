@@ -268,6 +268,7 @@
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = AG748WC3N7;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -343,7 +344,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-resources.sh",
-				"$PODS_CONFIGURATION_BUILD_DIR/streethawk/streethawk.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/streethawk/streethawk.bundle,
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -511,8 +512,9 @@
 				INFOPLIST_FILE = "Demo/Supporting Files/Demo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.streethawk.SHSampleProd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHStatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Dev - StreetHawk Pod Static Library Sample App";
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -527,6 +529,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = StreetHawkDemo.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Dealsta Pty Ltd (AG748WC3N7)";
 				DEVELOPMENT_TEAM = AG748WC3N7;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -534,8 +537,9 @@
 				INFOPLIST_FILE = "Demo/Supporting Files/Demo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.streethawk.SHSampleProd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHStatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Adhoc - StreetHawk Pod Static Library Sample App";
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
