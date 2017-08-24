@@ -15,3 +15,6 @@ Podfile.lock
 Example_StaticLibrary/Pods
 Example_StaticLibrary/StreetHawkDemo.xcodeproj/xcuserdata
 Example_StaticLibrary/StreetHawkDemo.xcworkspace/xcuserdata
+Example_DynamicFramework/Pods
+Example_DynamicFramework/StreetHawkDemo.xcodeproj/xcuserdata
+Example_DynamicFramework/StreetHawkDemo.xcworkspace/xcuserdata

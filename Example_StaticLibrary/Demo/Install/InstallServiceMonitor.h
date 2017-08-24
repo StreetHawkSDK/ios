@@ -15,8 +15,11 @@
  * License along with this library.
  */
 
-#import <StreetHawkCore/StreetHawkCore.h>
+#import "BaseLogMonitor.h"
 
-@interface GrowthViewController : StreetHawkBaseTableViewController
+@interface InstallServiceMonitor : BaseLogMonitor
+
+//Singleton instance
++ (id)shared;
 
 @end

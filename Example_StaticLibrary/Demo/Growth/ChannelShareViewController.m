@@ -19,24 +19,6 @@
 
 @interface ChannelShareViewController ()
 
-@property (strong, nonatomic) IBOutlet UITableViewCell *cellID;
-@property (strong, nonatomic) IBOutlet UITextField *textboxID;
-@property (retain, nonatomic) IBOutlet UITableViewCell *cellMedium;
-@property (retain, nonatomic) IBOutlet UITextField *textboxMedium;
-@property (retain, nonatomic) IBOutlet UITableViewCell *cellContent;
-@property (retain, nonatomic) IBOutlet UITextField *textboxContent;
-@property (retain, nonatomic) IBOutlet UITableViewCell *cellTerm;
-@property (retain, nonatomic) IBOutlet UITextField *textboxTerm;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cellUrl;
-@property (strong, nonatomic) IBOutlet UITextField *textboxUrl;
-@property (retain, nonatomic) IBOutlet UITableViewCell *cellDestinationUrl;
-@property (retain, nonatomic) IBOutlet UITextField *textboxDestinationUrl;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cellMessage;
-@property (strong, nonatomic) IBOutlet UITextField *textboxMessage;
-@property (retain, nonatomic) IBOutlet UITableViewCell *cellShare;
-
-- (IBAction)buttonShareClicked:(id)sender;
-
 @property (nonatomic, strong) NSArray *arrayCells;
 
 @end
@@ -47,6 +29,7 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     self.arrayCells = @[self.cellID, self.cellMedium, self.cellContent, self.cellTerm, self.cellUrl, self.cellDestinationUrl, self.cellMessage, self.cellShare];
 }
 

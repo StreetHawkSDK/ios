@@ -15,35 +15,12 @@
  * License along with this library.
  */
 
-#import "DeepLinkingViewController.h"
+#import <StreetHawkCore/StreetHawkCore.h>
 
-@interface DeepLinkingViewController ()
+@interface SampleCaseViewController : StreetHawkBaseTableViewController <UITextFieldDelegate>
 
-@property (nonatomic, strong) NSDictionary *dictParam;
-
-@end
-
-@implementation DeepLinkingViewController
-
-#pragma mark - life cycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.title = @"Show Deeplinking Param";
-}
-
-#pragma mark - deeplinking handler
-
-- (void)receiveDeepLinkingData:(NSDictionary *)dictParam
-{
-    self.dictParam = dictParam;
-    [self displayDeepLinkingToUI];
-}
-
-- (void)displayDeepLinkingToUI
-{
-    self.labelParam.text = [NSString stringWithFormat:@"%@", self.dictParam];
-}
+//Register sample cases.
+@property (nonatomic, strong) NSMutableArray *arraySampleCasesTitle;
+@property (nonatomic, strong) NSMutableArray *arraySampleCasesVC;
 
 @end

@@ -15,35 +15,17 @@
  * License along with this library.
  */
 
-#import "DeepLinkingViewController.h"
+#import <StreetHawkCore/StreetHawkCore.h>
 
-@interface DeepLinkingViewController ()
+@interface PushNotificationCasesViewController : StreetHawkBaseViewController
 
-@property (nonatomic, strong) NSDictionary *dictParam;
+@property (retain, nonatomic) IBOutlet UILabel *labelToken;
+@property (retain, nonatomic) IBOutlet UILabel *labelMode;
+@property (retain, nonatomic) IBOutlet UILabel *labelRevoked;
+@property (retain, nonatomic) IBOutlet UIButton *buttonSetAlert;
+@property (retain, nonatomic) IBOutlet UIButton *buttonSetEnabled;
 
-@end
-
-@implementation DeepLinkingViewController
-
-#pragma mark - life cycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.title = @"Show Deeplinking Param";
-}
-
-#pragma mark - deeplinking handler
-
-- (void)receiveDeepLinkingData:(NSDictionary *)dictParam
-{
-    self.dictParam = dictParam;
-    [self displayDeepLinkingToUI];
-}
-
-- (void)displayDeepLinkingToUI
-{
-    self.labelParam.text = [NSString stringWithFormat:@"%@", self.dictParam];
-}
+- (IBAction)buttonSetEnabledClicked:(id)sender;
+- (IBAction)buttonCheckNotificationPermissionClicked:(id)sender;
 
 @end

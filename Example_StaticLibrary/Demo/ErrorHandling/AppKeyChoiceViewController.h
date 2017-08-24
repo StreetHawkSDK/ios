@@ -15,10 +15,13 @@
  * License along with this library.
  */
 
-@import UIKit;
-
 #import <StreetHawkCore/StreetHawkCore.h>
 
-@interface NotificationViewController : StreetHawkBaseViewController
+typedef void(^AppKeySelected)(NSString *selectedAppKey);
+
+@interface AppKeyChoiceViewController : UITableViewController <UITextFieldDelegate>
+
+//Callback after select/input app key is done.
+@property (nonatomic, copy) AppKeySelected selectedCallback;
 
 @end
