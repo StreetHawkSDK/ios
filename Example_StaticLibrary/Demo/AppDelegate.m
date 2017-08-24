@@ -52,6 +52,7 @@
     if (appKey.length == 0)
     {
         AppKeyChoiceViewController *appKeyListVC = [[AppKeyChoiceViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        UINavigationController *navigationAppKeyListVC = [[UINavigationController alloc] initWithRootViewController:appKeyListVC];
         appKeyListVC.selectedCallback = ^(NSString *selectedAppKey)
         {
             [[NSUserDefaults standardUserDefaults] setObject:selectedAppKey forKey:SH_APPKEY];
@@ -65,9 +66,8 @@
                                                                exit(0); //kill App
                                                            }];
             [alertController addAction:action];
-            [navigationVC presentViewController:alertController animated:YES completion:nil];
+            [navigationAppKeyListVC presentViewController:alertController animated:YES completion:nil];
         };
-        UINavigationController *navigationAppKeyListVC = [[UINavigationController alloc] initWithRootViewController:appKeyListVC];
         [self.window.rootViewController presentViewController:navigationAppKeyListVC animated:YES completion:nil];
         return YES; //need to kill and restart
     }
