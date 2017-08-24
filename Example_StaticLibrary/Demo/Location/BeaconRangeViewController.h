@@ -15,10 +15,16 @@
  * License along with this library.
  */
 
-@import UIKit;
-
 #import <StreetHawkCore/StreetHawkCore.h>
 
-@interface NotificationViewController : StreetHawkBaseViewController
+/**
+ Show range iBeacon result. When enter view start range, when exit view stop range.
+ */
+@interface BeaconRangeViewController : StreetHawkBaseTableViewController
+
+/**
+ The iBeacon region to range.
+ */
+@property (nonatomic, strong) CLBeaconRegion *iBeaconRegion;
 
 @end

@@ -17,6 +17,11 @@
 
 #import <StreetHawkCore/StreetHawkCore.h>
 
-@interface GrowthViewController : StreetHawkBaseTableViewController
+typedef void(^AppKeySelected)(NSString *selectedAppKey);
+
+@interface AppKeyChoiceViewController : UITableViewController <UITextFieldDelegate>
+
+//Callback after select/input app key is done.
+@property (nonatomic, copy) AppKeySelected selectedCallback;
 
 @end

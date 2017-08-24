@@ -24,12 +24,12 @@ class SwiftViewController: StreetHawkBaseViewController
         super.init(coder: aDecoder)
     }
     
-    //override init to make sure load nib "SwiftViewController", as class name is "StreetHawkDemo.SwiftViewController", if not override fail to find right nib and cause black screen.
+    //override init to make sure load nib "SwiftViewController", as class name is "SHSampleDev.SwiftViewController", if not override fail to find right nib and cause black screen.
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: Bundle!)
     {
         super.init(nibName: "SwiftViewController", bundle: nil)
     }
-    
+  
     @IBAction func buttonFeedbackClicked(_ sender: AnyObject)
     {
         let arrayChoice = ["Product not Available", "Wrong Address", "Description mismatch"]
@@ -44,14 +44,14 @@ class SwiftViewController: StreetHawkBaseViewController
         SHApp.sharedInstance().tagNumeric(100, forKey: "click_count")
         SHApp.sharedInstance().incrementTag("click_count")
         SHApp.sharedInstance().tagString("+0123456789", forKey: "sh_phone")
-    }    
+    }
     
     @IBAction func buttonFeedClicked(_ sender: AnyObject)
     {
         SHApp.sharedInstance().feed(0, withHandler: {arrayFeeds, error in
             if (error != nil)
             {
-                print("Fetch feed meet error: \(error).")
+                print("Fetch feed meet error: \(String(describing: error)).")
             }
             else
             {

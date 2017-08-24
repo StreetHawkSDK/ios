@@ -15,11 +15,11 @@
  * License along with this library.
  */
 
-#import "GrowthViewController.h"
+#import "GrowthCasesViewController.h"
 #import "GenericShareViewController.h"
 #import "ChannelShareViewController.h"
 
-@interface GrowthViewController ()
+@interface GrowthCasesViewController ()
 
 //Register sample cases.
 @property (nonatomic, strong) NSArray *arraySampleCases;
@@ -28,7 +28,7 @@
 
 @end
 
-@implementation GrowthViewController
+@implementation GrowthCasesViewController
 
 #pragma mark - life cycle
 

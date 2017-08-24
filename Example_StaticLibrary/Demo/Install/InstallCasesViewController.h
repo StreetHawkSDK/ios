@@ -15,35 +15,16 @@
  * License along with this library.
  */
 
-#import "DeepLinkingViewController.h"
+#import <UIKit/UIKit.h>
+#import "InstallServiceMonitor.h"
 
-@interface DeepLinkingViewController ()
+@interface InstallCasesViewController : StreetHawkBaseViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) NSDictionary *dictParam;
+@property (retain, nonatomic) IBOutlet UIButton *buttonUpdateInstall;
+@property (retain, nonatomic) IBOutlet UITableView *tableViewInstall;
+@property (retain, nonatomic) IBOutlet UITextView *viewLogs;
 
-@end
-
-@implementation DeepLinkingViewController
-
-#pragma mark - life cycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.title = @"Show Deeplinking Param";
-}
-
-#pragma mark - deeplinking handler
-
-- (void)receiveDeepLinkingData:(NSDictionary *)dictParam
-{
-    self.dictParam = dictParam;
-    [self displayDeepLinkingToUI];
-}
-
-- (void)displayDeepLinkingToUI
-{
-    self.labelParam.text = [NSString stringWithFormat:@"%@", self.dictParam];
-}
+- (IBAction)buttonUpdateInstallClicked:(id)sender;
+- (IBAction)buttonClearLogClicked:(id)sender;
 
 @end

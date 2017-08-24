@@ -15,35 +15,21 @@
  * License along with this library.
  */
 
-#import "DeepLinkingViewController.h"
+#import <UIKit/UIKit.h>
+#import <StreetHawkCore/StreetHawkCore.h>
 
-@interface DeepLinkingViewController ()
+typedef void(^BeaconRegionInput)(CLBeaconRegion *region);
 
-@property (nonatomic, strong) NSDictionary *dictParam;
+@interface BeaconRegionInputViewController : SHBaseViewController <UITextFieldDelegate> //for adjust keyboard
 
-@end
+@property (retain, nonatomic) IBOutlet UITextField *textboxUUID;
+@property (retain, nonatomic) IBOutlet UITextField *textboxMajor;
+@property (retain, nonatomic) IBOutlet UITextField *textboxMinor;
+@property (retain, nonatomic) IBOutlet UITextField *textboxIdentifier;
 
-@implementation DeepLinkingViewController
+@property (nonatomic, copy) BeaconRegionInput inputHandler;
 
-#pragma mark - life cycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.title = @"Show Deeplinking Param";
-}
-
-#pragma mark - deeplinking handler
-
-- (void)receiveDeepLinkingData:(NSDictionary *)dictParam
-{
-    self.dictParam = dictParam;
-    [self displayDeepLinkingToUI];
-}
-
-- (void)displayDeepLinkingToUI
-{
-    self.labelParam.text = [NSString stringWithFormat:@"%@", self.dictParam];
-}
+- (IBAction)buttonAddClicked:(id)sender;
+- (IBAction)buttonCancelClicked:(id)sender;
 
 @end
