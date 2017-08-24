@@ -998,7 +998,7 @@ static NSString *getPropertyType(objc_property_t property)
             }
             if (attributeStr.length > 4)
             {
-                return [attributeStr substringWithRange:NSMakeRange(3, attributeStr.length - 4)];;
+                return [attributeStr substringWithRange:NSMakeRange(3, attributeStr.length - 4)];
             }
         }
     }
