@@ -12,3 +12,6 @@ Example_Swift/StreetHawkDemo.xcodeproj/xcuserdata
 Example_Swift/Pods
 Example_Swift/StreetHawkDemo.xcworkspace/xcuserdata
 Podfile.lock
+Example_StaticLibrary/Pods
+Example_StaticLibrary/StreetHawkDemo.xcodeproj/xcuserdata
+Example_StaticLibrary/StreetHawkDemo.xcworkspace/xcuserdata
