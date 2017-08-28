@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GenericShareViewController">
@@ -11,7 +10,7 @@
                 <outlet property="cellDestinationUrl" destination="fmV-eD-N26" id="fOq-T7-ba7"/>
                 <outlet property="cellEmailBody" destination="C2O-Sc-xqh" id="A3T-Ug-hHc"/>
                 <outlet property="cellEmailSubject" destination="5Tg-mp-r1A" id="8xr-Mt-M3i"/>
-                <outlet property="cellID" destination="oUy-8s-aUN" id="Bb8-Rh-1Am"/>
+                <outlet property="cellID" destination="oUy-8s-aUN" id="Aur-DG-aeJ"/>
                 <outlet property="cellMedium" destination="75z-8w-EjR" id="NoL-gN-fdw"/>
                 <outlet property="cellShare" destination="9Bx-3Z-c7u" id="NAr-dC-DP3"/>
                 <outlet property="cellSource" destination="EdM-vJ-Q1Z" id="HVB-oB-8pQ"/>
@@ -39,7 +38,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oUy-8s-aUN" id="koC-p0-H3w">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter utm campaign" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yYj-wC-HQj" userLabel="textboxID">
@@ -63,7 +61,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EdM-vJ-Q1Z" id="gYi-L1-6OI">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter utm source" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MMi-F4-ANz" userLabel="textboxSource">
@@ -87,7 +84,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="75z-8w-EjR" id="WY5-nN-c2f">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter utm medium" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6er-gU-BVD" userLabel="textboxMedium">
@@ -111,7 +107,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VDj-6c-c6U" id="axP-fP-QVi">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter utm content" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VOl-PS-Wc7" userLabel="textboxContent">
@@ -135,7 +130,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VRg-zh-ZtV" id="JqS-CG-sAY">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter utm term" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SHI-3n-LbT" userLabel="textboxTerm">
@@ -159,7 +153,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sJB-JS-Osh" id="DFH-Ua-7Tb">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter deeplinking url" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cbz-u2-r5a" userLabel="textboxUrl">
@@ -183,7 +176,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fmV-eD-N26" id="BKZ-Pt-Bmj">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter default destination url" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0Oq-YW-TXf" userLabel="textboxDestinationUrl">
@@ -207,7 +199,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Tg-mp-r1A" id="jlq-7C-0TB">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter email subject" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jz9-NC-BAa" userLabel="textboxEmailSubject">
@@ -231,7 +222,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="C2O-Sc-xqh" id="4OL-89-Kfi">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter email body" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yid-pQ-Ei0" userLabel="textboxEmailBody">
@@ -255,7 +245,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9Bx-3Z-c7u" id="gfU-K7-S8G">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C50-5T-BtJ" userLabel="buttonShare">
@@ -268,7 +257,7 @@
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <connections>
-                            <action selector="buttonShareClicked:" destination="-1" eventType="touchUpInside" id="rCk-ZE-PWu"/>
+                            <action selector="buttonShareClicked:" destination="-1" eventType="touchUpInside" id="Ffy-xm-Q9t"/>
                         </connections>
                     </button>
                 </subviews>

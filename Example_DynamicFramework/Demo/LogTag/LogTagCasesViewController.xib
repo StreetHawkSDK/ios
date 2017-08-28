@@ -1,25 +1,33 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TagViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LogTagCasesViewController">
             <connections>
                 <outlet property="cellCuid" destination="aRJ-v0-0Fy" id="fam-Vg-Ywb"/>
                 <outlet property="cellDatetime" destination="Glr-xu-LkW" id="Va2-D4-2rw"/>
                 <outlet property="cellDelete" destination="hVz-N2-IfH" id="iLn-ky-wJM"/>
+                <outlet property="cellFeed" destination="NEM-Mk-m4v" id="ck7-S2-r5I"/>
                 <outlet property="cellIncrement" destination="iWv-5a-O0l" id="GWr-RV-C83"/>
+                <outlet property="cellIncrementValue" destination="7cw-Gx-DHr" id="EPx-e1-bD1"/>
                 <outlet property="cellNumeric" destination="oUy-8s-aUN" id="xSs-QX-IGZ"/>
                 <outlet property="cellString" destination="EVw-PS-Itn" id="2BD-GA-CaW"/>
                 <outlet property="textboxCuidValue" destination="hvr-fW-J08" id="5TD-AZ-00M"/>
                 <outlet property="textboxKeyDatetime" destination="m1D-mv-wNR" id="yHc-mv-Ccc"/>
                 <outlet property="textboxKeyDelete" destination="CfS-N2-GtR" id="tSQ-4J-hln"/>
                 <outlet property="textboxKeyIncrement" destination="GGF-4h-d64" id="TNI-sK-tCi"/>
+                <outlet property="textboxKeyIncrementValue" destination="QCk-0x-sMw" id="tEX-5e-7B2"/>
                 <outlet property="textboxKeyNumeric" destination="yYj-wC-HQj" id="og9-96-kJj"/>
                 <outlet property="textboxKeyString" destination="1yK-81-etX" id="Wgo-oO-XbW"/>
                 <outlet property="textboxValueDatetime" destination="FTv-Ge-PWL" id="gdV-1H-Cpt"/>
+                <outlet property="textboxValueIncrementValue" destination="V4R-w8-hXf" id="OXj-qB-XhO"/>
                 <outlet property="textboxValueNumeric" destination="OoV-JS-tX0" id="OXG-T0-Ph7"/>
                 <outlet property="textboxValueString" destination="9Wg-r5-yqt" id="ZsR-tU-o9e"/>
                 <outlet property="view" destination="iN0-l3-epB" id="FSL-Na-7e3"/>
@@ -27,15 +35,15 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" userLabel="tableTags" customClass="UITableView">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </view>
         <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="91" id="aRJ-v0-0Fy" userLabel="cellTagCuid">
             <rect key="frame" x="0.0" y="0.0" width="320" height="91"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aRJ-v0-0Fy" id="blN-dk-wew">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="90.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hvr-fW-J08" userLabel="textboxCuidValue">
@@ -52,7 +60,7 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u5B-Bc-ltd" userLabel="buttonCuid">
                         <rect key="frame" x="130" y="50" width="61" height="30"/>
                         <state key="normal" title="Tag Cuid">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
                             <action selector="buttonCuidClicked:" destination="-1" eventType="touchUpInside" id="LUO-yb-eEl"/>
@@ -61,7 +69,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unique Id:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EGo-m9-4po" userLabel="labelUniqueId">
                         <rect key="frame" x="23" y="14" width="78" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -80,13 +88,13 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="146"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oUy-8s-aUN" id="koC-p0-H3w">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="145"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="145.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zla-b1-FmE" userLabel="labelKeyNumeric">
                         <rect key="frame" x="24" y="13" width="33" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yYj-wC-HQj" userLabel="textboxKeyNumeric">
@@ -114,7 +122,7 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iMK-EB-QQO" userLabel="buttonNumeric">
                         <rect key="frame" x="97" y="101" width="127" height="30"/>
                         <state key="normal" title="Send Numeric Tag">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
                             <action selector="buttonNumericClicked:" destination="-1" eventType="touchUpInside" id="re6-wz-8BJ"/>
@@ -123,7 +131,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3M5-oW-MAo" userLabel="labelValueNumeric">
                         <rect key="frame" x="20" y="57" width="47" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -146,13 +154,13 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="146"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EVw-PS-Itn" id="Jmc-A2-4MY">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="145"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="145.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s8c-Yq-WQo" userLabel="labelKeyString">
                         <rect key="frame" x="24" y="13" width="33" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1yK-81-etX" userLabel="textboxKeyString">
@@ -180,16 +188,16 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mDN-LC-ChA" userLabel="buttonString">
                         <rect key="frame" x="105" y="101" width="110" height="30"/>
                         <state key="normal" title="Send String Tag">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
-                            <action selector="buttonStringClicked:" destination="-1" eventType="touchUpInside" id="snU-O0-hXt"/>
+                            <action selector="buttonSringClicked:" destination="-1" eventType="touchUpInside" id="YtD-xO-CfQ"/>
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dg7-3h-eD6" userLabel="labelValueString">
                         <rect key="frame" x="20" y="57" width="47" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -212,13 +220,13 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="146"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Glr-xu-LkW" id="BoD-8f-d9Q">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="145"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="145.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsM-fr-hql" userLabel="labelKeyDatetime">
                         <rect key="frame" x="24" y="13" width="33" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="m1D-mv-wNR" userLabel="textboxKeyDatetime">
@@ -246,16 +254,16 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1X-N0-Ff5" userLabel="buttonDatetime">
                         <rect key="frame" x="95" y="101" width="131" height="30"/>
                         <state key="normal" title="Send Datetime Tag">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
                             <action selector="buttonDatetimeClicked:" destination="-1" eventType="touchUpInside" id="UFt-1n-AdY"/>
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eBa-Bf-Q8i" userLabel="labelValueDatetime">
-                        <rect key="frame" x="20" y="57" width="47" height="21"/>
+                        <rect key="frame" x="20" y="56" width="47" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -278,13 +286,13 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="91"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iWv-5a-O0l" id="QLH-ra-rG8">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="90.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jmY-Ly-ffD" userLabel="labelKeyIncrement">
                         <rect key="frame" x="24" y="13" width="33" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GGF-4h-d64" userLabel="textboxKeyIncrement">
@@ -301,7 +309,7 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6c6-hs-XIb" userLabel="buttonIncrement">
                         <rect key="frame" x="111" y="50" width="99" height="30"/>
                         <state key="normal" title="Increment Tag">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
                             <action selector="buttonIncrementClicked:" destination="-1" eventType="touchUpInside" id="Tak-eT-47K"/>
@@ -319,17 +327,83 @@
             </tableViewCellContentView>
             <point key="canvasLocation" x="448" y="-56.5"/>
         </tableViewCell>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="146" id="7cw-Gx-DHr" userLabel="cellIncrementValue">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="146"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7cw-Gx-DHr" id="xvE-jw-7bm">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="145.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X3O-61-34O" userLabel="labelKeyIncrementValue">
+                        <rect key="frame" x="24" y="13" width="33" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QCk-0x-sMw" userLabel="textboxKeyIncrementValue">
+                        <rect key="frame" x="75" y="10" width="230" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="230" id="iSD-9C-4Lo"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                        <connections>
+                            <outlet property="delegate" destination="-1" id="f17-FU-eRC"/>
+                        </connections>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="V4R-w8-hXf" userLabel="textboxValueIncrementValue">
+                        <rect key="frame" x="75" y="54" width="230" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="230" id="f3z-fY-p8Z"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad" returnKeyType="done"/>
+                        <connections>
+                            <outlet property="delegate" destination="-1" id="2WR-0i-MeP"/>
+                        </connections>
+                    </textField>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WJr-AY-Fru" userLabel="buttonIncrementValue">
+                        <rect key="frame" x="111" y="101" width="99" height="30"/>
+                        <state key="normal" title="Increment Tag">
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="buttonIncrementValueClicked:" destination="-1" eventType="touchUpInside" id="vrC-oZ-Fy2"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUJ-uP-MYc" userLabel="labelValueIncrementValue">
+                        <rect key="frame" x="20" y="56" width="47" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="centerX" secondItem="V4R-w8-hXf" secondAttribute="centerX" constant="-30" id="BCJ-qX-a2B"/>
+                    <constraint firstItem="QCk-0x-sMw" firstAttribute="leading" secondItem="X3O-61-34O" secondAttribute="trailing" constant="18" id="NNP-xx-HgR"/>
+                    <constraint firstItem="V4R-w8-hXf" firstAttribute="leading" secondItem="vUJ-uP-MYc" secondAttribute="trailing" constant="8" id="OY7-mP-N9T"/>
+                    <constraint firstItem="V4R-w8-hXf" firstAttribute="top" secondItem="QCk-0x-sMw" secondAttribute="bottom" constant="14" id="Xrj-XO-WhK"/>
+                    <constraint firstItem="V4R-w8-hXf" firstAttribute="baseline" secondItem="vUJ-uP-MYc" secondAttribute="baseline" id="b8P-gn-4ke"/>
+                    <constraint firstAttribute="centerX" secondItem="WJr-AY-Fru" secondAttribute="centerX" id="jjN-eh-rJF"/>
+                    <constraint firstAttribute="centerX" secondItem="QCk-0x-sMw" secondAttribute="centerX" constant="-30" id="kvN-pR-gOs"/>
+                    <constraint firstAttribute="bottom" secondItem="WJr-AY-Fru" secondAttribute="bottom" constant="14" id="nM3-b3-J1X"/>
+                    <constraint firstItem="QCk-0x-sMw" firstAttribute="top" secondItem="xvE-jw-7bm" secondAttribute="top" constant="10" id="odB-yf-jth"/>
+                    <constraint firstItem="QCk-0x-sMw" firstAttribute="baseline" secondItem="X3O-61-34O" secondAttribute="baseline" id="qr4-l5-r5S"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="448" y="-29"/>
+        </tableViewCell>
         <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="91" id="hVz-N2-IfH" userLabel="cellDelete">
             <rect key="frame" x="0.0" y="0.0" width="320" height="91"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hVz-N2-IfH" id="yaQ-tH-453">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="90.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kqi-Xx-atS" userLabel="labelKeyDelete">
                         <rect key="frame" x="24" y="13" width="33" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CfS-N2-GtR" userLabel="textboxKeyDelete">
@@ -346,7 +420,7 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZKo-Tf-GbF" userLabel="buttonDelete">
                         <rect key="frame" x="123" y="50" width="74" height="30"/>
                         <state key="normal" title="Delete Tag">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
                             <action selector="buttonDeleteClicked:" destination="-1" eventType="touchUpInside" id="ncP-Pb-nDW"/>
@@ -363,6 +437,30 @@
                 </constraints>
             </tableViewCellContentView>
             <point key="canvasLocation" x="448" y="-56.5"/>
+        </tableViewCell>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="68" id="NEM-Mk-m4v" userLabel="cellFeed">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NEM-Mk-m4v" id="Na5-lu-Rp4">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="67.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="te0-1P-BHG" userLabel="buttonFeed">
+                        <rect key="frame" x="52" y="19" width="216" height="30"/>
+                        <state key="normal" title="Fetch Feed and send ack/result">
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="buttonFeedClicked:" destination="-1" eventType="touchUpInside" id="WhU-Ok-SBm"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="centerY" secondItem="te0-1P-BHG" secondAttribute="centerY" id="Bd5-DF-j5h"/>
+                    <constraint firstAttribute="centerX" secondItem="te0-1P-BHG" secondAttribute="centerX" id="meh-QQ-C9x"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="448" y="-68"/>
         </tableViewCell>
     </objects>
 </document>
