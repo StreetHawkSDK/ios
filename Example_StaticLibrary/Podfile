@@ -1,6 +1,4 @@
 
-use_frameworks! 
-
 target 'StreetHawkDemo' do
 
 pod "streethawk", :path => "../"
