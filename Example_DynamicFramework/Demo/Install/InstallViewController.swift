@@ -16,6 +16,7 @@
  */
 
 import UIKit
+import StreetHawkCore
 
 class InstallViewController: StreetHawkBaseTableViewController
 {
