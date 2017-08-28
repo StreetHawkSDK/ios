@@ -16,15 +16,8 @@
  */
 
 #import "PushNotificationCasesViewController.h"
-#import "BaseLogMonitor.h"
 #import "MBProgressHUD.h"
 #import <MessageUI/MessageUI.h>
-
-@interface LogModeHandler : NSObject<ISHCustomiseHandler>
-
-@property (nonatomic, strong) BaseLogMonitor *logger;
-
-@end
 
 @interface PushNotificationCasesViewController () <MFMailComposeViewControllerDelegate>
 
@@ -125,37 +118,6 @@
 - (void)installUpdateSuccessHandler:(NSNotification *)notification
 {
     [self displayPushNotificationInfo];
-}
-
-@end
-
-@implementation LogModeHandler
-
-#pragma mark - life cycle
-
-- (id)init
-{
-    if (self = [super init])
-    {
-        self.logger = [[BaseLogMonitor alloc] initWithLogFileName:@"NotificationLogs"];
-    }
-    return self;
-}
-
-#pragma mark - override functions
-
-- (BOOL)onReceive:(PushDataForApplication *)pushData clickButton:(ClickButtonHandler)handler
-{
-    //not process normal UI stuff, only show a message to let user know notification arrives.
-    NSString *alert = shAppendString(pushData.title, pushData.message);
-    UIWindow *topWindow = [UIApplication sharedApplication].windows[0];
-    MBProgressHUD *infoView = [MBProgressHUD showHUDAddedTo:topWindow animated:YES];
-    infoView.mode = MBProgressHUDModeText; //only show result text, not show progress bar.
-    infoView.labelText = alert;
-    [infoView hide:YES afterDelay:1];
-    //log notification alert locally.
-    [self.logger writeToLogFileAndPostNotification:alert];
-    return YES;
 }
 
 @end

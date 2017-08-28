@@ -7,19 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4DD7AB3B1F516385001D8996 /* InstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD7AB3A1F516385001D8996 /* InstallViewController.swift */; };
 		4DE79DD51F4F030200EDB951 /* SampleCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DD41F4F030200EDB951 /* SampleCaseViewController.m */; };
 		4DE79DD81F4F041400EDB951 /* GrowthCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DD71F4F041400EDB951 /* GrowthCasesViewController.m */; };
 		4DE79DF11F4F045700EDB951 /* PushNotificationCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DEF1F4F045700EDB951 /* PushNotificationCasesViewController.m */; };
 		4DE79DF21F4F045700EDB951 /* PushNotificationCasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79DF01F4F045700EDB951 /* PushNotificationCasesViewController.xib */; };
-		4DE79E151F4F04BC00EDB951 /* BaseLogMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DF51F4F04BB00EDB951 /* BaseLogMonitor.m */; };
 		4DE79E161F4F04BC00EDB951 /* AppKeyChoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DF81F4F04BB00EDB951 /* AppKeyChoiceViewController.m */; };
 		4DE79E171F4F04BC00EDB951 /* FeedCasesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DFB1F4F04BB00EDB951 /* FeedCasesController.m */; };
 		4DE79E181F4F04BC00EDB951 /* FeedDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DFD1F4F04BB00EDB951 /* FeedDetailViewController.m */; };
 		4DE79E191F4F04BC00EDB951 /* FeedDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79DFE1F4F04BB00EDB951 /* FeedDetailViewController.xib */; };
 		4DE79E1A1F4F04BC00EDB951 /* FeedbackCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E011F4F04BB00EDB951 /* FeedbackCasesViewController.m */; };
-		4DE79E1B1F4F04BC00EDB951 /* InstallCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E041F4F04BB00EDB951 /* InstallCasesViewController.m */; };
-		4DE79E1C1F4F04BC00EDB951 /* InstallCasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79E051F4F04BB00EDB951 /* InstallCasesViewController.xib */; };
-		4DE79E1D1F4F04BC00EDB951 /* InstallServiceMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E071F4F04BB00EDB951 /* InstallServiceMonitor.m */; };
 		4DE79E1E1F4F04BC00EDB951 /* LogTagCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E0A1F4F04BB00EDB951 /* LogTagCasesViewController.m */; };
 		4DE79E1F1F4F04BC00EDB951 /* LogTagCasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79E0B1F4F04BC00EDB951 /* LogTagCasesViewController.xib */; };
 		4DE79E341F4F129D00EDB951 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E321F4F129D00EDB951 /* LocationViewController.m */; };
@@ -48,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		03B2F3B5D1706C7CDFD2DDF4 /* Pods-StreetHawkDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		4DD7AB3A1F516385001D8996 /* InstallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstallViewController.swift; sourceTree = "<group>"; };
 		4DE79DD31F4F030200EDB951 /* SampleCaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleCaseViewController.h; sourceTree = "<group>"; };
 		4DE79DD41F4F030200EDB951 /* SampleCaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleCaseViewController.m; sourceTree = "<group>"; };
 		4DE79DD61F4F041400EDB951 /* GrowthCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrowthCasesViewController.h; sourceTree = "<group>"; };
@@ -55,8 +53,6 @@
 		4DE79DEE1F4F045700EDB951 /* PushNotificationCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotificationCasesViewController.h; sourceTree = "<group>"; };
 		4DE79DEF1F4F045700EDB951 /* PushNotificationCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotificationCasesViewController.m; sourceTree = "<group>"; };
 		4DE79DF01F4F045700EDB951 /* PushNotificationCasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PushNotificationCasesViewController.xib; sourceTree = "<group>"; };
-		4DE79DF41F4F04BB00EDB951 /* BaseLogMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseLogMonitor.h; sourceTree = "<group>"; };
-		4DE79DF51F4F04BB00EDB951 /* BaseLogMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseLogMonitor.m; sourceTree = "<group>"; };
 		4DE79DF71F4F04BB00EDB951 /* AppKeyChoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppKeyChoiceViewController.h; sourceTree = "<group>"; };
 		4DE79DF81F4F04BB00EDB951 /* AppKeyChoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppKeyChoiceViewController.m; sourceTree = "<group>"; };
 		4DE79DFA1F4F04BB00EDB951 /* FeedCasesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCasesController.h; sourceTree = "<group>"; };
@@ -66,11 +62,6 @@
 		4DE79DFE1F4F04BB00EDB951 /* FeedDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedDetailViewController.xib; sourceTree = "<group>"; };
 		4DE79E001F4F04BB00EDB951 /* FeedbackCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackCasesViewController.h; sourceTree = "<group>"; };
 		4DE79E011F4F04BB00EDB951 /* FeedbackCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackCasesViewController.m; sourceTree = "<group>"; };
-		4DE79E031F4F04BB00EDB951 /* InstallCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstallCasesViewController.h; sourceTree = "<group>"; };
-		4DE79E041F4F04BB00EDB951 /* InstallCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallCasesViewController.m; sourceTree = "<group>"; };
-		4DE79E051F4F04BB00EDB951 /* InstallCasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstallCasesViewController.xib; sourceTree = "<group>"; };
-		4DE79E061F4F04BB00EDB951 /* InstallServiceMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstallServiceMonitor.h; sourceTree = "<group>"; };
-		4DE79E071F4F04BB00EDB951 /* InstallServiceMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallServiceMonitor.m; sourceTree = "<group>"; };
 		4DE79E091F4F04BB00EDB951 /* LogTagCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTagCasesViewController.h; sourceTree = "<group>"; };
 		4DE79E0A1F4F04BB00EDB951 /* LogTagCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTagCasesViewController.m; sourceTree = "<group>"; };
 		4DE79E0B1F4F04BC00EDB951 /* LogTagCasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogTagCasesViewController.xib; sourceTree = "<group>"; };
@@ -123,15 +114,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4DE79DF31F4F04BB00EDB951 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				4DE79DF41F4F04BB00EDB951 /* BaseLogMonitor.h */,
-				4DE79DF51F4F04BB00EDB951 /* BaseLogMonitor.m */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		4DE79DF61F4F04BB00EDB951 /* ErrorHandling */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,11 +147,7 @@
 		4DE79E021F4F04BB00EDB951 /* Install */ = {
 			isa = PBXGroup;
 			children = (
-				4DE79E031F4F04BB00EDB951 /* InstallCasesViewController.h */,
-				4DE79E041F4F04BB00EDB951 /* InstallCasesViewController.m */,
-				4DE79E051F4F04BB00EDB951 /* InstallCasesViewController.xib */,
-				4DE79E061F4F04BB00EDB951 /* InstallServiceMonitor.h */,
-				4DE79E071F4F04BB00EDB951 /* InstallServiceMonitor.m */,
+				4DD7AB3A1F516385001D8996 /* InstallViewController.swift */,
 			);
 			path = Install;
 			sourceTree = "<group>";
@@ -271,7 +249,6 @@
 		CB5962CB1B749BEC0086CC7D /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				4DE79DF31F4F04BB00EDB951 /* Common */,
 				CBD6BA471BC79C650037CF1F /* Core */,
 				4DE79DF61F4F04BB00EDB951 /* ErrorHandling */,
 				4DE79DF91F4F04BB00EDB951 /* Feed */,
@@ -401,7 +378,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB5962DC1B749BEC0086CC7D /* Images.xcassets in Resources */,
-				4DE79E1C1F4F04BC00EDB951 /* InstallCasesViewController.xib in Resources */,
 				CB5962E41B749DAE0086CC7D /* Default-568h@2x.png in Resources */,
 				4DE79E351F4F129D00EDB951 /* LocationViewController.xib in Resources */,
 				CB5962DB1B749BEC0086CC7D /* InfoPlist.strings in Resources */,
@@ -482,16 +458,14 @@
 			files = (
 				CB42AC911B84895800171998 /* SwiftViewController.swift in Sources */,
 				CBEEC8661B7B2656006BC283 /* ChannelShareViewController.m in Sources */,
-				4DE79E151F4F04BC00EDB951 /* BaseLogMonitor.m in Sources */,
-				4DE79E1B1F4F04BC00EDB951 /* InstallCasesViewController.m in Sources */,
 				CBD6BA4A1BC79C650037CF1F /* InstallViewController.m in Sources */,
 				CBEEC8511B78AAAE006BC283 /* DeepLinkingViewController.m in Sources */,
-				4DE79E1D1F4F04BC00EDB951 /* InstallServiceMonitor.m in Sources */,
 				4DE79E1A1F4F04BC00EDB951 /* FeedbackCasesViewController.m in Sources */,
 				4DE79E171F4F04BC00EDB951 /* FeedCasesController.m in Sources */,
 				4DE79E1E1F4F04BC00EDB951 /* LogTagCasesViewController.m in Sources */,
 				CBEEC8681B7B2656006BC283 /* GenericShareViewController.m in Sources */,
 				4DE79DD81F4F041400EDB951 /* GrowthCasesViewController.m in Sources */,
+				4DD7AB3B1F516385001D8996 /* InstallViewController.swift in Sources */,
 				CB5962D81B749BEC0086CC7D /* AppDelegate.m in Sources */,
 				4DE79E161F4F04BC00EDB951 /* AppKeyChoiceViewController.m in Sources */,
 				4DE79DF11F4F045700EDB951 /* PushNotificationCasesViewController.m in Sources */,
