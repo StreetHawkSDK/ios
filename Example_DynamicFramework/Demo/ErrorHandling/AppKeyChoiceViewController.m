@@ -40,7 +40,7 @@
     self = [super initWithStyle:style];
     if (self)
     {
-        self.arrayAppKeys = @[@"SHStatic_bison", @"SHStatic_zebra"];
+        self.arrayAppKeys = @[@"SHDynamic_bison", @"SHDynamic_zebra"];
     }
     return self;
 }

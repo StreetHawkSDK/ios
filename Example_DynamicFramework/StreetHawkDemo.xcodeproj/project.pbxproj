@@ -607,9 +607,10 @@
 				INFOPLIST_FILE = "Demo/Supporting Files/Demo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHStatic;
+				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHDynamic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Dev - StreetHawk Pod Static Library Sample App";
+				PROVISIONING_PROFILE = "5171bd9d-2463-4706-ae66-d880bd6a8713";
+				PROVISIONING_PROFILE_SPECIFIER = "Dev - StreetHawk Pod Dynamic Framework Sample App";
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -632,9 +633,10 @@
 				INFOPLIST_FILE = "Demo/Supporting Files/Demo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHStatic;
+				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHDynamic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Adhoc - StreetHawk Pod Static Library Sample App";
+				PROVISIONING_PROFILE = "063b02cd-210d-4ae2-ba78-52d06da0441d";
+				PROVISIONING_PROFILE_SPECIFIER = "Adhoc - StreetHawk Pod Dynamic Framework Sample";
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
