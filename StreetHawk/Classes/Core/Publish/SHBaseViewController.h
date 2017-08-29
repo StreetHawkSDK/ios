@@ -48,9 +48,9 @@
 
 /**
  Implement this function for receive custom feed. Set customFeedDelegate in view controller inherited from `StreetHawkBaseViewController`, `StreetHawkBaseTableViewController` or `StreetHawkBaseCollectionViewController`.
- @param SHFeedObject Pass in parameters.
+ @param feed Pass in parameters.
  */
-- (void)receiveCustomFeed:(SHFeedObject *)feed;
+- (void)receiveCustomFeed:(id)feed;
 
 @end
 
