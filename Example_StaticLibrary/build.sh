@@ -4,7 +4,7 @@
 pod install
 
 # delete /build/outputs folder
-rm -Rf /build/outputs/*
+rm -Rf ./build/outputs/*
 
 # clean project
 xcodebuild clean -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -sdk iphoneos -configuration Release
