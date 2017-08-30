@@ -1,4 +1,5 @@
 #!/bin/sh -x
+set -e
 
 # delete /build/outputs folder
 rm -Rf ./build/outputs/*
