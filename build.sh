@@ -1,4 +1,5 @@
 #!/bin/sh -x
+echo "Build started on $(date)"
 set -e
 
 # delete /build/outputs folder
