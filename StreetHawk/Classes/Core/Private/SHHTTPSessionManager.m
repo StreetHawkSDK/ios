@@ -244,13 +244,16 @@
                         SHLog(@"feed timestamp in app_status: %@", dictStatus[@"feed"]);
                         [SHAppStatus sharedInstance].feedTimestamp = NONULL(dictStatus[@"feed"]);
                     }
+                    SHLog(@"appstatus get install_token = %@, preview_mode = %@", dictStatus[@"install_token"], dictStatus[@"preview_mode"]);
                     //check "install_token"
-                    if ([dictStatus.allKeys containsObject:@"install_token"])
+                    //when change from exist to null should dismiss preview widget
+                    //if ([dictStatus.allKeys containsObject:@"install_token"])
                     {
                         [SHAppStatus sharedInstance].pointziToken = NONULL(dictStatus[@"install_token"]);
                     }
                     //check "preview_mode"
-                    if ([dictStatus.allKeys containsObject:@"preview_mode"])
+                    //when change from exist to null should dismiss preview widget
+                    //if ([dictStatus.allKeys containsObject:@"preview_mode"])
                     {
                         [SHAppStatus sharedInstance].pointziTimestamp = NONULL(dictStatus[@"preview_mode"]);
                     }
