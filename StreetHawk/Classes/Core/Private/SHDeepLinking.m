@@ -116,35 +116,37 @@
                 SHLog(@"Deeplinking process find install token is empty.");
             }
             [[NSUserDefaults standardUserDefaults] synchronize];
-            UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-            SHLog(@"Author mode find top vc on root is %@.", topVC);
-            if (topVC.childViewControllers.count > 0)
-            {
-                UIViewController *vc = topVC.childViewControllers[0];
-                SHLog(@"Author mode find top vc's first child is %@.", vc);
-                if ([vc isKindOfClass:[UITabBarController class]])
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+                SHLog(@"Author mode find top vc on root is %@.", topVC);
+                if (topVC.childViewControllers.count > 0)
                 {
-                    topVC = vc;
-                    SHLog(@"Author mode find top vc is tab %@.", topVC);
+                    UIViewController *vc = topVC.childViewControllers[0];
+                    SHLog(@"Author mode find top vc's first child is %@.", vc);
+                    if ([vc isKindOfClass:[UITabBarController class]])
+                    {
+                        topVC = vc;
+                        SHLog(@"Author mode find top vc is tab %@.", topVC);
+                    }
                 }
-            }
-            if ([topVC isKindOfClass:[UITabBarController class]])
-            {
-                UITabBarController *tabVC = (UITabBarController *)topVC;
-                topVC = tabVC.selectedViewController;
-                SHLog(@"Author mode find top vc is tab's selected %@.", topVC);
-            }
-            if ([topVC isKindOfClass:[UINavigationController class]])
-            {
-                UINavigationController *navigationVC = (UINavigationController *)topVC;
-                topVC = navigationVC.topViewController;
-                SHLog(@"Author mode find top vc is navigation's top %@.", topVC);
-            }
-            SHLog(@"Author mode find top vc is finally %@.", topVC);
-            if (topVC)
-            {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": topVC}];
-            }
+                if ([topVC isKindOfClass:[UITabBarController class]])
+                {
+                    UITabBarController *tabVC = (UITabBarController *)topVC;
+                    topVC = tabVC.selectedViewController;
+                    SHLog(@"Author mode find top vc is tab's selected %@.", topVC);
+                }
+                if ([topVC isKindOfClass:[UINavigationController class]])
+                {
+                    UINavigationController *navigationVC = (UINavigationController *)topVC;
+                    topVC = navigationVC.topViewController;
+                    SHLog(@"Author mode find top vc is navigation's top %@.", topVC);
+                }
+                SHLog(@"Author mode find top vc is finally %@.", topVC);
+                if (topVC)
+                {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": topVC}];
+                }
+            });
             return YES;
         }
         else

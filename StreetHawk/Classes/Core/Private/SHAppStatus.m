@@ -392,9 +392,11 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:SH_POINTZI_AUTHOR_MODE];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:APPSTATUS_POINTZI_SET_TIME];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification"
-                                                            object:nil
-                                                          userInfo:nil]; //use [SHTipManager sharedInstance].customerCurrentVC
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification"
+                                                                object:nil
+                                                              userInfo:nil]; //use [SHTipManager sharedInstance].customerCurrentVC
+        });
         return;
     }
     BOOL needAddWidget = NO;
