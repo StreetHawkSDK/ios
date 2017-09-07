@@ -329,9 +329,18 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     pointziToken = NONULL(pointziToken);
     if (pointziToken.length > 0) //always save a cache
     {
-        //Save in temp location instead of directly affecting pointzi token. The real token will be affected by deeplinking.
-        [[NSUserDefaults standardUserDefaults] setObject:pointziToken forKey:@"Temp_Pointzi_Token"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Temp_Pointzi_Token"];
+        if ([pointziToken compare:token] != NSOrderedSame)
+        {
+            SHLog(@"setPointziToken find it's changed.");
+            //Save in temp location instead of directly affecting pointzi token. The real token will be affected by deeplinking.
+            [[NSUserDefaults standardUserDefaults] setObject:pointziToken forKey:@"Temp_Pointzi_Token"];
+            //format url to simulate
+            NSString *url = [NSString stringWithFormat:@"scheme://pointzi_author?installid=%@&device_token=%@", StreetHawk.currentInstall.suid, pointziToken];
+            SHDeepLinking *deepLinking = [[SHDeepLinking alloc] init];
+            [deepLinking processDeeplinkingUrl:[NSURL URLWithString:url] withPushData:nil withIncreaseGrowth:NO];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
     }
 }
 
