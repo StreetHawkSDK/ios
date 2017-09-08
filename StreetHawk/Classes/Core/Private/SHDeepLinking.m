@@ -116,6 +116,8 @@
                 SHLog(@"Deeplinking process find install token is empty.");
             }
             [[NSUserDefaults standardUserDefaults] synchronize];
+            //client side positively connect install, notice server to update app_status.
+            [StreetHawk tagDatetime:[NSDate date] forKey:@"sh_preview_mode"];
             dispatch_async(dispatch_get_main_queue(), ^{
                 UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
                 SHLog(@"Author mode find top vc on root is %@.", topVC);
