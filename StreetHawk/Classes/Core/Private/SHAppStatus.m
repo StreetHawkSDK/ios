@@ -327,11 +327,20 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 - (void)setPointziToken:(NSString *)pointziToken
 {
     pointziToken = NONULL(pointziToken);
-    if (pointziToken.length > 0)
+    if (pointziToken.length > 0) //always save a cache
     {
-        //Save in temp location instead of directly affecting pointzi token. The real token will be affected by deeplinking.
-        [[NSUserDefaults standardUserDefaults] setObject:pointziToken forKey:@"Temp_Pointzi_Token"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Temp_Pointzi_Token"];
+        if ([pointziToken compare:token] != NSOrderedSame)
+        {
+            SHLog(@"setPointziToken find it's changed.");
+            //Save in temp location instead of directly affecting pointzi token. The real token will be affected by deeplinking.
+            [[NSUserDefaults standardUserDefaults] setObject:pointziToken forKey:@"Temp_Pointzi_Token"];
+            //format url to simulate
+            NSString *url = [NSString stringWithFormat:@"scheme://pointzi_author?installid=%@&device_token=%@", StreetHawk.currentInstall.suid, pointziToken];
+            SHDeepLinking *deepLinking = [[SHDeepLinking alloc] init];
+            [deepLinking processDeeplinkingUrl:[NSURL URLWithString:url] withPushData:nil withIncreaseGrowth:NO];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
     }
 }
 
@@ -345,48 +354,80 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
 {
     if (StreetHawk.currentInstall == nil)
     {
+        SHLog(@"setPointziTimestamp return for current install is nil.");
         return; //not register yet, wait for next time.
     }
     Class pointziBridge = NSClassFromString(@"SHPointziBridge");
     if (pointziBridge == nil)
     {
+        SHLog(@"setPointziTimestamp return for pointzi bridge not exist.");
         return; //not have pointzi included, ignore.
     }
     if (!streetHawkIsEnabled())
     {
+        SHLog(@"setPointziTimestamp return for not streetHawkIsEnabled.");
         return;
     }
+    NSDate *localTime = nil;
+    NSObject *localTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_POINTZI_SET_TIME];
+    if (localTimeVal != nil && [localTimeVal isKindOfClass:[NSNumber class]])
+    {
+        localTime = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSNumber *)localTimeVal doubleValue]];
+    }
+    SHLog(@"setPointziTimestamp get local time %@.", localTime);
+    NSDate *serverTime = nil;
     if (pointziTimestamp != nil && [pointziTimestamp isKindOfClass:[NSString class]])
     {
-        NSDate *serverTime = shParseDate(pointziTimestamp, 0);
-        if (serverTime != nil)
+        serverTime = shParseDate(pointziTimestamp, 0);
+    }
+    SHLog(@"setPointziTimestamp get server time %@.", serverTime);
+    if (localTime == nil && serverTime == nil)
+    {
+        SHLog(@"setPointziTimestamp do nothing, local and server are both nil.");
+        return;
+    }
+    if (localTime != nil && serverTime == nil)
+    {
+        SHLog(@"setPointziTimestamp local has but server is nil, remove widget and stop polling.");
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:SH_POINTZI_AUTHOR_MODE];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:APPSTATUS_POINTZI_SET_TIME];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification"
+                                                                object:nil
+                                                              userInfo:nil]; //use [SHTipManager sharedInstance].customerCurrentVC
+        });
+        return;
+    }
+    BOOL needAddWidget = NO;
+    if (localTime == nil && serverTime != nil)
+    {
+        SHLog(@"setPointziTimestamp local is nil and server is new, add widget.");
+        needAddWidget = YES;
+    }
+    else if (localTime != nil && serverTime != nil)
+    {
+        if ([localTime compare:serverTime] == NSOrderedAscending)
         {
-            BOOL needSet = NO;
-            NSObject *localTimeVal = [[NSUserDefaults standardUserDefaults] objectForKey:APPSTATUS_POINTZI_SET_TIME];
-            if (localTimeVal == nil || ![localTimeVal isKindOfClass:[NSNumber class]])
-            {
-                needSet = YES;  //local never enable pointzi before, do it.
-            }
-            else
-            {
-                NSDate *localTime = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSNumber *)localTimeVal doubleValue]];
-                if ([localTime compare:serverTime] == NSOrderedAscending)
-                {
-                    needSet = YES;  //local enabled before, but too old, do enable again.
-                }
-            }
-            if (needSet)
-            {
-                //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setPointziTimestamp` again.
-                [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate] + 10/*avoid double accurate*/) forKey:APPSTATUS_POINTZI_SET_TIME];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                //format url to simulate
-                NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Temp_Pointzi_Token"];
-                NSString *url = [NSString stringWithFormat:@"scheme://pointzi_author?installid=%@&device_token=%@", StreetHawk.currentInstall.suid, token];
-                SHDeepLinking *deepLinking = [[SHDeepLinking alloc] init];
-                [deepLinking processDeeplinkingUrl:[NSURL URLWithString:url] withPushData:nil withIncreaseGrowth:NO];
-            }
+            SHLog(@"setPointziTimestamp local is older than server, add widget.");
+            needAddWidget = YES;  //local enabled before, but too old, do enable again.
         }
+        else
+        {
+            SHLog(@"setPointziTimestamp local is newer than server, do nothing.");
+        }
+    }
+    if (needAddWidget)
+    {
+        SHLog(@"setPointziTimestamp add widget.");
+        //update local cache time before notice user and send request, because this request has same format as others {app_status:..., code:0, value:...}, it will trigger `setPointziTimestamp` again.
+        [[NSUserDefaults standardUserDefaults] setObject:@([serverTime timeIntervalSinceReferenceDate] + 10/*avoid double accurate*/) forKey:APPSTATUS_POINTZI_SET_TIME];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        //format url to simulate
+        NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Temp_Pointzi_Token"];
+        NSString *url = [NSString stringWithFormat:@"scheme://pointzi_author?installid=%@&device_token=%@", StreetHawk.currentInstall.suid, token];
+        SHDeepLinking *deepLinking = [[SHDeepLinking alloc] init];
+        [deepLinking processDeeplinkingUrl:[NSURL URLWithString:url] withPushData:nil withIncreaseGrowth:NO];
     }
 }
 

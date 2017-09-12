@@ -121,6 +121,11 @@ NSDate *shParseDate(NSString *input, int offsetSeconds)
         }
         if (out == nil)
         {
+            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+            out = [dateFormatter dateFromString:input];
+        }
+        if (out == nil)
+        {
             [dateFormatter setDateFormat:@"yyyy-MM-dd"];
             out = [dateFormatter dateFromString:input];
         }
