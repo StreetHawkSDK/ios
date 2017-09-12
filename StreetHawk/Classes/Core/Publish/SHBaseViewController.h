@@ -17,8 +17,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class SHFeedObject;
-
 /**
  Protocol for deal with deeplinking. `StreetHawkBaseViewController`, `StreetHawkBaseTableViewController` and `StreetHawkBaseCollectionViewController` conform this protocol, customer App's view controller is recommended to inherit from `StreetHawkBaseViewController`, `StreetHawkBaseTableViewController` or `StreetHawkBaseCollectionViewController`, so can implement this protocol. Or customer's App's view controller can directly conform this protocol for deeplinking.
  */
