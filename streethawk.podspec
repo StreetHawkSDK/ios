@@ -83,6 +83,7 @@ Pod::Spec.new do |s|
   
   s.subspec 'Crash' do |sp|
     sp.xcconfig               = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) SH_FEATURE_CRASH' }
+    sp.pod_target_xcconfig    = { 'ENABLE_BITCODE' => 'NO' }
     sp.source_files           = 'StreetHawk/Classes/Crash/**/*.{h,m}'
     sp.public_header_files    = 'StreetHawk/Classes/Crash/Publish/*.h'
     sp.frameworks             = 'CoreLocation'
