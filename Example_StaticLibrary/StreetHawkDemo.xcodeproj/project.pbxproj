@@ -1,0 +1,654 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4DD7AB3B1F516385001D8996 /* InstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD7AB3A1F516385001D8996 /* InstallViewController.swift */; };
+		4DE79DD51F4F030200EDB951 /* SampleCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DD41F4F030200EDB951 /* SampleCaseViewController.m */; };
+		4DE79DD81F4F041400EDB951 /* GrowthCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DD71F4F041400EDB951 /* GrowthCasesViewController.m */; };
+		4DE79DF11F4F045700EDB951 /* PushNotificationCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DEF1F4F045700EDB951 /* PushNotificationCasesViewController.m */; };
+		4DE79DF21F4F045700EDB951 /* PushNotificationCasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79DF01F4F045700EDB951 /* PushNotificationCasesViewController.xib */; };
+		4DE79E161F4F04BC00EDB951 /* AppKeyChoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DF81F4F04BB00EDB951 /* AppKeyChoiceViewController.m */; };
+		4DE79E171F4F04BC00EDB951 /* FeedCasesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DFB1F4F04BB00EDB951 /* FeedCasesController.m */; };
+		4DE79E181F4F04BC00EDB951 /* FeedDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79DFD1F4F04BB00EDB951 /* FeedDetailViewController.m */; };
+		4DE79E191F4F04BC00EDB951 /* FeedDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79DFE1F4F04BB00EDB951 /* FeedDetailViewController.xib */; };
+		4DE79E1A1F4F04BC00EDB951 /* FeedbackCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E011F4F04BB00EDB951 /* FeedbackCasesViewController.m */; };
+		4DE79E1E1F4F04BC00EDB951 /* LogTagCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E0A1F4F04BB00EDB951 /* LogTagCasesViewController.m */; };
+		4DE79E1F1F4F04BC00EDB951 /* LogTagCasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79E0B1F4F04BC00EDB951 /* LogTagCasesViewController.xib */; };
+		4DE79E341F4F129D00EDB951 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE79E321F4F129D00EDB951 /* LocationViewController.m */; };
+		4DE79E351F4F129D00EDB951 /* LocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DE79E331F4F129D00EDB951 /* LocationViewController.xib */; };
+		93F452A55EAEF3C62CC5C517 /* libPods-StreetHawkDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CF230F110BF4D54A8B8636 /* libPods-StreetHawkDemo.a */; };
+		CB42AC911B84895800171998 /* SwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB42AC8F1B84895800171998 /* SwiftViewController.swift */; };
+		CB42AC921B84895800171998 /* SwiftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB42AC901B84895800171998 /* SwiftViewController.xib */; };
+		CB5962D81B749BEC0086CC7D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5962CD1B749BEC0086CC7D /* AppDelegate.m */; };
+		CB5962DB1B749BEC0086CC7D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CB5962D31B749BEC0086CC7D /* InfoPlist.strings */; };
+		CB5962DC1B749BEC0086CC7D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB5962D51B749BEC0086CC7D /* Images.xcassets */; };
+		CB5962DD1B749BEC0086CC7D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5962D61B749BEC0086CC7D /* main.m */; };
+		CB5962DE1B749BEC0086CC7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB5962D71B749BEC0086CC7D /* Main.storyboard */; };
+		CB5962E41B749DAE0086CC7D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5962E31B749DAE0086CC7D /* Default-568h@2x.png */; };
+		CBA7EA021BABC2FF002C3F51 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBA7EA011BABC2FF002C3F51 /* Launch Screen.storyboard */; };
+		CBD6BA4A1BC79C650037CF1F /* InstallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD6BA491BC79C650037CF1F /* InstallViewController.m */; };
+		CBD6BA4E1BC7B4770037CF1F /* TagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD6BA4C1BC7B4770037CF1F /* TagViewController.m */; };
+		CBD6BA4F1BC7B4770037CF1F /* TagViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBD6BA4D1BC7B4770037CF1F /* TagViewController.xib */; };
+		CBEEC8511B78AAAE006BC283 /* DeepLinkingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEEC84C1B78AAAE006BC283 /* DeepLinkingViewController.m */; };
+		CBEEC8521B78AAAE006BC283 /* DeepLinkingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBEEC84D1B78AAAE006BC283 /* DeepLinkingViewController.xib */; };
+		CBEEC85D1B7AEEA8006BC283 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CBEEC85C1B7AEEA8006BC283 /* Localizable.strings */; };
+		CBEEC8661B7B2656006BC283 /* ChannelShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEEC85F1B7B2656006BC283 /* ChannelShareViewController.m */; };
+		CBEEC8671B7B2656006BC283 /* ChannelShareViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBEEC8601B7B2656006BC283 /* ChannelShareViewController.xib */; };
+		CBEEC8681B7B2656006BC283 /* GenericShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEEC8621B7B2656006BC283 /* GenericShareViewController.m */; };
+		CBEEC8691B7B2656006BC283 /* GenericShareViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBEEC8631B7B2656006BC283 /* GenericShareViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03B2F3B5D1706C7CDFD2DDF4 /* Pods-StreetHawkDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		4DD7AB3A1F516385001D8996 /* InstallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstallViewController.swift; sourceTree = "<group>"; };
+		4DE79DD31F4F030200EDB951 /* SampleCaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleCaseViewController.h; sourceTree = "<group>"; };
+		4DE79DD41F4F030200EDB951 /* SampleCaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleCaseViewController.m; sourceTree = "<group>"; };
+		4DE79DD61F4F041400EDB951 /* GrowthCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrowthCasesViewController.h; sourceTree = "<group>"; };
+		4DE79DD71F4F041400EDB951 /* GrowthCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GrowthCasesViewController.m; sourceTree = "<group>"; };
+		4DE79DEE1F4F045700EDB951 /* PushNotificationCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotificationCasesViewController.h; sourceTree = "<group>"; };
+		4DE79DEF1F4F045700EDB951 /* PushNotificationCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotificationCasesViewController.m; sourceTree = "<group>"; };
+		4DE79DF01F4F045700EDB951 /* PushNotificationCasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PushNotificationCasesViewController.xib; sourceTree = "<group>"; };
+		4DE79DF71F4F04BB00EDB951 /* AppKeyChoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppKeyChoiceViewController.h; sourceTree = "<group>"; };
+		4DE79DF81F4F04BB00EDB951 /* AppKeyChoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppKeyChoiceViewController.m; sourceTree = "<group>"; };
+		4DE79DFA1F4F04BB00EDB951 /* FeedCasesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCasesController.h; sourceTree = "<group>"; };
+		4DE79DFB1F4F04BB00EDB951 /* FeedCasesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedCasesController.m; sourceTree = "<group>"; };
+		4DE79DFC1F4F04BB00EDB951 /* FeedDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedDetailViewController.h; sourceTree = "<group>"; };
+		4DE79DFD1F4F04BB00EDB951 /* FeedDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedDetailViewController.m; sourceTree = "<group>"; };
+		4DE79DFE1F4F04BB00EDB951 /* FeedDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedDetailViewController.xib; sourceTree = "<group>"; };
+		4DE79E001F4F04BB00EDB951 /* FeedbackCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackCasesViewController.h; sourceTree = "<group>"; };
+		4DE79E011F4F04BB00EDB951 /* FeedbackCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackCasesViewController.m; sourceTree = "<group>"; };
+		4DE79E091F4F04BB00EDB951 /* LogTagCasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTagCasesViewController.h; sourceTree = "<group>"; };
+		4DE79E0A1F4F04BB00EDB951 /* LogTagCasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTagCasesViewController.m; sourceTree = "<group>"; };
+		4DE79E0B1F4F04BC00EDB951 /* LogTagCasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogTagCasesViewController.xib; sourceTree = "<group>"; };
+		4DE79E311F4F129D00EDB951 /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
+		4DE79E321F4F129D00EDB951 /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
+		4DE79E331F4F129D00EDB951 /* LocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationViewController.xib; sourceTree = "<group>"; };
+		66C62FB043A41B3D4CF8D1F2 /* Pods-StreetHawkDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StreetHawkDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo.release.xcconfig"; sourceTree = "<group>"; };
+		CB42AC8E1B84895700171998 /* StreetHawkDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StreetHawkDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		CB42AC8F1B84895800171998 /* SwiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftViewController.swift; sourceTree = "<group>"; };
+		CB42AC901B84895800171998 /* SwiftViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwiftViewController.xib; sourceTree = "<group>"; };
+		CB5962A21B749B9A0086CC7D /* StreetHawkDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StreetHawkDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB5962CC1B749BEC0086CC7D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		CB5962CD1B749BEC0086CC7D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		CB5962D11B749BEC0086CC7D /* Demo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Demo-Info.plist"; sourceTree = "<group>"; };
+		CB5962D21B749BEC0086CC7D /* Demo-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Demo-Prefix.pch"; sourceTree = "<group>"; };
+		CB5962D41B749BEC0086CC7D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CB5962D51B749BEC0086CC7D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		CB5962D61B749BEC0086CC7D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CB5962D71B749BEC0086CC7D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		CB5962E31B749DAE0086CC7D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		CBA6D0FE1D93C5EC00C61682 /* StreetHawkDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StreetHawkDemo.entitlements; sourceTree = "<group>"; };
+		CBA7EA011BABC2FF002C3F51 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		CBD6BA481BC79C650037CF1F /* InstallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstallViewController.h; sourceTree = "<group>"; };
+		CBD6BA491BC79C650037CF1F /* InstallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallViewController.m; sourceTree = "<group>"; };
+		CBD6BA4B1BC7B4770037CF1F /* TagViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagViewController.h; sourceTree = "<group>"; };
+		CBD6BA4C1BC7B4770037CF1F /* TagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagViewController.m; sourceTree = "<group>"; };
+		CBD6BA4D1BC7B4770037CF1F /* TagViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TagViewController.xib; sourceTree = "<group>"; };
+		CBEEC84B1B78AAAE006BC283 /* DeepLinkingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeepLinkingViewController.h; sourceTree = "<group>"; };
+		CBEEC84C1B78AAAE006BC283 /* DeepLinkingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeepLinkingViewController.m; sourceTree = "<group>"; };
+		CBEEC84D1B78AAAE006BC283 /* DeepLinkingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeepLinkingViewController.xib; sourceTree = "<group>"; };
+		CBEEC85C1B7AEEA8006BC283 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		CBEEC85E1B7B2656006BC283 /* ChannelShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelShareViewController.h; sourceTree = "<group>"; };
+		CBEEC85F1B7B2656006BC283 /* ChannelShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelShareViewController.m; sourceTree = "<group>"; };
+		CBEEC8601B7B2656006BC283 /* ChannelShareViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChannelShareViewController.xib; sourceTree = "<group>"; };
+		CBEEC8611B7B2656006BC283 /* GenericShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericShareViewController.h; sourceTree = "<group>"; };
+		CBEEC8621B7B2656006BC283 /* GenericShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericShareViewController.m; sourceTree = "<group>"; };
+		CBEEC8631B7B2656006BC283 /* GenericShareViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GenericShareViewController.xib; sourceTree = "<group>"; };
+		F0CF230F110BF4D54A8B8636 /* libPods-StreetHawkDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-StreetHawkDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CB59629F1B749B9A0086CC7D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93F452A55EAEF3C62CC5C517 /* libPods-StreetHawkDemo.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4DE79DF61F4F04BB00EDB951 /* ErrorHandling */ = {
+			isa = PBXGroup;
+			children = (
+				4DE79DF71F4F04BB00EDB951 /* AppKeyChoiceViewController.h */,
+				4DE79DF81F4F04BB00EDB951 /* AppKeyChoiceViewController.m */,
+			);
+			path = ErrorHandling;
+			sourceTree = "<group>";
+		};
+		4DE79DF91F4F04BB00EDB951 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				4DE79DFA1F4F04BB00EDB951 /* FeedCasesController.h */,
+				4DE79DFB1F4F04BB00EDB951 /* FeedCasesController.m */,
+				4DE79DFC1F4F04BB00EDB951 /* FeedDetailViewController.h */,
+				4DE79DFD1F4F04BB00EDB951 /* FeedDetailViewController.m */,
+				4DE79DFE1F4F04BB00EDB951 /* FeedDetailViewController.xib */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		4DE79DFF1F4F04BB00EDB951 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				4DE79E001F4F04BB00EDB951 /* FeedbackCasesViewController.h */,
+				4DE79E011F4F04BB00EDB951 /* FeedbackCasesViewController.m */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
+		4DE79E021F4F04BB00EDB951 /* Install */ = {
+			isa = PBXGroup;
+			children = (
+				4DD7AB3A1F516385001D8996 /* InstallViewController.swift */,
+			);
+			path = Install;
+			sourceTree = "<group>";
+		};
+		4DE79E081F4F04BB00EDB951 /* LogTag */ = {
+			isa = PBXGroup;
+			children = (
+				4DE79E091F4F04BB00EDB951 /* LogTagCasesViewController.h */,
+				4DE79E0A1F4F04BB00EDB951 /* LogTagCasesViewController.m */,
+				4DE79E0B1F4F04BC00EDB951 /* LogTagCasesViewController.xib */,
+			);
+			path = LogTag;
+			sourceTree = "<group>";
+		};
+		BDA02CB30496458B861EE505 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F0CF230F110BF4D54A8B8636 /* libPods-StreetHawkDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BE30AE02FE1503FBD931CB19 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				03B2F3B5D1706C7CDFD2DDF4 /* Pods-StreetHawkDemo.debug.xcconfig */,
+				66C62FB043A41B3D4CF8D1F2 /* Pods-StreetHawkDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		CB25A5AC1B788D3300FBEF0E /* Growth */ = {
+			isa = PBXGroup;
+			children = (
+				CBEEC85E1B7B2656006BC283 /* ChannelShareViewController.h */,
+				CBEEC85F1B7B2656006BC283 /* ChannelShareViewController.m */,
+				CBEEC8601B7B2656006BC283 /* ChannelShareViewController.xib */,
+				CBEEC8611B7B2656006BC283 /* GenericShareViewController.h */,
+				CBEEC8621B7B2656006BC283 /* GenericShareViewController.m */,
+				CBEEC8631B7B2656006BC283 /* GenericShareViewController.xib */,
+				4DE79DD61F4F041400EDB951 /* GrowthCasesViewController.h */,
+				4DE79DD71F4F041400EDB951 /* GrowthCasesViewController.m */,
+			);
+			path = Growth;
+			sourceTree = "<group>";
+		};
+		CB25A5AD1B788D3300FBEF0E /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				4DE79E311F4F129D00EDB951 /* LocationViewController.h */,
+				4DE79E321F4F129D00EDB951 /* LocationViewController.m */,
+				4DE79E331F4F129D00EDB951 /* LocationViewController.xib */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		CB25A5AE1B788D3300FBEF0E /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				4DE79DEE1F4F045700EDB951 /* PushNotificationCasesViewController.h */,
+				4DE79DEF1F4F045700EDB951 /* PushNotificationCasesViewController.m */,
+				4DE79DF01F4F045700EDB951 /* PushNotificationCasesViewController.xib */,
+				CBEEC84B1B78AAAE006BC283 /* DeepLinkingViewController.h */,
+				CBEEC84C1B78AAAE006BC283 /* DeepLinkingViewController.m */,
+				CBEEC84D1B78AAAE006BC283 /* DeepLinkingViewController.xib */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		CB42AC8D1B84891A00171998 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				CB42AC8F1B84895800171998 /* SwiftViewController.swift */,
+				CB42AC901B84895800171998 /* SwiftViewController.xib */,
+				CB42AC8E1B84895700171998 /* StreetHawkDemo-Bridging-Header.h */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
+		CB5962991B749B9A0086CC7D = {
+			isa = PBXGroup;
+			children = (
+				CBA6D0FE1D93C5EC00C61682 /* StreetHawkDemo.entitlements */,
+				CB5962CB1B749BEC0086CC7D /* Demo */,
+				CB5962A31B749B9A0086CC7D /* Products */,
+				BE30AE02FE1503FBD931CB19 /* Pods */,
+				BDA02CB30496458B861EE505 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		CB5962A31B749B9A0086CC7D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB5962A21B749B9A0086CC7D /* StreetHawkDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CB5962CB1B749BEC0086CC7D /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				CBD6BA471BC79C650037CF1F /* Core */,
+				4DE79DF61F4F04BB00EDB951 /* ErrorHandling */,
+				4DE79DF91F4F04BB00EDB951 /* Feed */,
+				4DE79DFF1F4F04BB00EDB951 /* Feedback */,
+				4DE79E021F4F04BB00EDB951 /* Install */,
+				CB25A5AC1B788D3300FBEF0E /* Growth */,
+				CB25A5AD1B788D3300FBEF0E /* Location */,
+				4DE79E081F4F04BB00EDB951 /* LogTag */,
+				CB25A5AE1B788D3300FBEF0E /* Notification */,
+				CB42AC8D1B84891A00171998 /* Swift */,
+				CB5962CC1B749BEC0086CC7D /* AppDelegate.h */,
+				CB5962CD1B749BEC0086CC7D /* AppDelegate.m */,
+				4DE79DD31F4F030200EDB951 /* SampleCaseViewController.h */,
+				4DE79DD41F4F030200EDB951 /* SampleCaseViewController.m */,
+				CBEEC85B1B7AEEA8006BC283 /* Resources */,
+				CB5962D01B749BEC0086CC7D /* Supporting Files */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
+		CB5962D01B749BEC0086CC7D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CB5962E31B749DAE0086CC7D /* Default-568h@2x.png */,
+				CB5962D11B749BEC0086CC7D /* Demo-Info.plist */,
+				CB5962D21B749BEC0086CC7D /* Demo-Prefix.pch */,
+				CB5962D31B749BEC0086CC7D /* InfoPlist.strings */,
+				CB5962D51B749BEC0086CC7D /* Images.xcassets */,
+				CB5962D61B749BEC0086CC7D /* main.m */,
+				CB5962D71B749BEC0086CC7D /* Main.storyboard */,
+				CBA7EA011BABC2FF002C3F51 /* Launch Screen.storyboard */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CBD6BA471BC79C650037CF1F /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				CBD6BA481BC79C650037CF1F /* InstallViewController.h */,
+				CBD6BA491BC79C650037CF1F /* InstallViewController.m */,
+				CBD6BA4B1BC7B4770037CF1F /* TagViewController.h */,
+				CBD6BA4C1BC7B4770037CF1F /* TagViewController.m */,
+				CBD6BA4D1BC7B4770037CF1F /* TagViewController.xib */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		CBEEC85B1B7AEEA8006BC283 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CBEEC85C1B7AEEA8006BC283 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CB5962A11B749B9A0086CC7D /* StreetHawkDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB5962C51B749B9A0086CC7D /* Build configuration list for PBXNativeTarget "StreetHawkDemo" */;
+			buildPhases = (
+				B2F0417CE7B225C6EF02999F /* [CP] Check Pods Manifest.lock */,
+				CB59629E1B749B9A0086CC7D /* Sources */,
+				CB59629F1B749B9A0086CC7D /* Frameworks */,
+				CB5962A01B749B9A0086CC7D /* Resources */,
+				1D186C728F4CD3064700360A /* [CP] Embed Pods Frameworks */,
+				651D3E72C95996BFB0885CE2 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StreetHawkDemo;
+			productName = StreetHawkDemo;
+			productReference = CB5962A21B749B9A0086CC7D /* StreetHawkDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB59629A1B749B9A0086CC7D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = StreetHawk;
+				TargetAttributes = {
+					CB5962A11B749B9A0086CC7D = {
+						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = AG748WC3N7;
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = CB59629D1B749B9A0086CC7D /* Build configuration list for PBXProject "StreetHawkDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CB5962991B749B9A0086CC7D;
+			productRefGroup = CB5962A31B749B9A0086CC7D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB5962A11B749B9A0086CC7D /* StreetHawkDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CB5962A01B749B9A0086CC7D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB5962DC1B749BEC0086CC7D /* Images.xcassets in Resources */,
+				CB5962E41B749DAE0086CC7D /* Default-568h@2x.png in Resources */,
+				4DE79E351F4F129D00EDB951 /* LocationViewController.xib in Resources */,
+				CB5962DB1B749BEC0086CC7D /* InfoPlist.strings in Resources */,
+				4DE79E191F4F04BC00EDB951 /* FeedDetailViewController.xib in Resources */,
+				CBA7EA021BABC2FF002C3F51 /* Launch Screen.storyboard in Resources */,
+				4DE79E1F1F4F04BC00EDB951 /* LogTagCasesViewController.xib in Resources */,
+				CBEEC85D1B7AEEA8006BC283 /* Localizable.strings in Resources */,
+				CBEEC8691B7B2656006BC283 /* GenericShareViewController.xib in Resources */,
+				CBEEC8671B7B2656006BC283 /* ChannelShareViewController.xib in Resources */,
+				CB42AC921B84895800171998 /* SwiftViewController.xib in Resources */,
+				CB5962DE1B749BEC0086CC7D /* Main.storyboard in Resources */,
+				4DE79DF21F4F045700EDB951 /* PushNotificationCasesViewController.xib in Resources */,
+				CBEEC8521B78AAAE006BC283 /* DeepLinkingViewController.xib in Resources */,
+				CBD6BA4F1BC7B4770037CF1F /* TagViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1D186C728F4CD3064700360A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		651D3E72C95996BFB0885CE2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-resources.sh",
+				$PODS_CONFIGURATION_BUILD_DIR/streethawk/streethawk.bundle,
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B2F0417CE7B225C6EF02999F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-StreetHawkDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CB59629E1B749B9A0086CC7D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB42AC911B84895800171998 /* SwiftViewController.swift in Sources */,
+				CBEEC8661B7B2656006BC283 /* ChannelShareViewController.m in Sources */,
+				CBD6BA4A1BC79C650037CF1F /* InstallViewController.m in Sources */,
+				CBEEC8511B78AAAE006BC283 /* DeepLinkingViewController.m in Sources */,
+				4DE79E1A1F4F04BC00EDB951 /* FeedbackCasesViewController.m in Sources */,
+				4DE79E171F4F04BC00EDB951 /* FeedCasesController.m in Sources */,
+				4DE79E1E1F4F04BC00EDB951 /* LogTagCasesViewController.m in Sources */,
+				CBEEC8681B7B2656006BC283 /* GenericShareViewController.m in Sources */,
+				4DE79DD81F4F041400EDB951 /* GrowthCasesViewController.m in Sources */,
+				4DD7AB3B1F516385001D8996 /* InstallViewController.swift in Sources */,
+				CB5962D81B749BEC0086CC7D /* AppDelegate.m in Sources */,
+				4DE79E161F4F04BC00EDB951 /* AppKeyChoiceViewController.m in Sources */,
+				4DE79DF11F4F045700EDB951 /* PushNotificationCasesViewController.m in Sources */,
+				CB5962DD1B749BEC0086CC7D /* main.m in Sources */,
+				CBD6BA4E1BC7B4770037CF1F /* TagViewController.m in Sources */,
+				4DE79E181F4F04BC00EDB951 /* FeedDetailViewController.m in Sources */,
+				4DE79DD51F4F030200EDB951 /* SampleCaseViewController.m in Sources */,
+				4DE79E341F4F129D00EDB951 /* LocationViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		CB5962D31B749BEC0086CC7D /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB5962D41B749BEC0086CC7D /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CB5962C31B749B9A0086CC7D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CB5962C41B749B9A0086CC7D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CB5962C61B749B9A0086CC7D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 03B2F3B5D1706C7CDFD2DDF4 /* Pods-StreetHawkDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = StreetHawkDemo.entitlements;
+				DEVELOPMENT_TEAM = AG748WC3N7;
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Demo/Supporting Files/Demo-Prefix.pch";
+				INFOPLIST_FILE = "Demo/Supporting Files/Demo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHStatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Dev - StreetHawk Pod Static Library Sample App";
+				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		CB5962C71B749B9A0086CC7D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 66C62FB043A41B3D4CF8D1F2 /* Pods-StreetHawkDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = StreetHawkDemo.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Dealsta Pty Ltd (AG748WC3N7)";
+				DEVELOPMENT_TEAM = AG748WC3N7;
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Demo/Supporting Files/Demo-Prefix.pch";
+				INFOPLIST_FILE = "Demo/Supporting Files/Demo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHStatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Adhoc - StreetHawk Pod Static Library Sample App";
+				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CB59629D1B749B9A0086CC7D /* Build configuration list for PBXProject "StreetHawkDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB5962C31B749B9A0086CC7D /* Debug */,
+				CB5962C41B749B9A0086CC7D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB5962C51B749B9A0086CC7D /* Build configuration list for PBXNativeTarget "StreetHawkDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB5962C61B749B9A0086CC7D /* Debug */,
+				CB5962C71B749B9A0086CC7D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CB59629A1B749B9A0086CC7D /* Project object */;
+}

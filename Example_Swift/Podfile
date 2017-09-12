@@ -1,8 +1,0 @@
-
-target 'StreetHawkDemo' do
-
-#use_frameworks! #not enable this line
-
-pod "streethawk", :path => "../"
-
-end
