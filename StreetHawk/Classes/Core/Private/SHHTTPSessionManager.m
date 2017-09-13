@@ -244,19 +244,6 @@
                         SHLog(@"feed timestamp in app_status: %@", dictStatus[@"feed"]);
                         [SHAppStatus sharedInstance].feedTimestamp = NONULL(dictStatus[@"feed"]);
                     }
-                    SHLog(@"appstatus get install_token = %@, preview_mode = %@", dictStatus[@"install_token"], dictStatus[@"preview_mode"]);
-                    //check "install_token"
-                    //when change from exist to null should dismiss preview widget
-                    //if ([dictStatus.allKeys containsObject:@"install_token"])
-                    {
-                        [SHAppStatus sharedInstance].pointziToken = NONULL(dictStatus[@"install_token"]);
-                    }
-                    //check "preview_mode"
-                    //when change from exist to null should dismiss preview widget
-                    //if ([dictStatus.allKeys containsObject:@"preview_mode"])
-                    {
-                        [SHAppStatus sharedInstance].pointziTimestamp = NONULL(dictStatus[@"preview_mode"]);
-                    }
                     //check "reregister"
                     if ([dictStatus.allKeys containsObject:@"reregister"])
                     {
@@ -277,6 +264,9 @@
                     {
                         [SHAppStatus sharedInstance].logPriorityCodes = NONULL(dictStatus[@"priority"]);
                     }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_AppStatus_Notification"
+                                                                        object:nil
+                                                                      userInfo:@{@"appstatus": dictStatus}];
                     //refresh app_status check time
                     [[SHAppStatus sharedInstance] recordCheckTime];
                 }

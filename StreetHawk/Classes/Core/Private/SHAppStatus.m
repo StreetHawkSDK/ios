@@ -317,32 +317,6 @@ NSString * const SHAppStatusChangeNotification = @"SHAppStatusChangeNotification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_FeedBridge_SetFeedTimestamp" object:nil userInfo:@{@"timestamp": NONULL(feedTimestamp)}];
 }
 
-- (NSString *)pointziToken
-{
-    NSAssert(NO, @"Should not call pointziToken.");
-    return nil;
-}
-
-- (void)setPointziToken:(NSString *)pointziToken
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SetPointziToken_Notification"
-                                                        object:nil
-                                                      userInfo:@{@"token": NONULL(pointziToken)}];
-}
-
-- (NSString *)pointziTimestamp
-{
-    NSAssert(NO, @"Should not call pointziTimestamp.");
-    return nil;
-}
-
-- (void)setPointziTimestamp:(NSString *)pointziTimestamp
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SetPointziTimestamp_Notification"
-                                                        object:nil
-                                                      userInfo:@{@"timestamp": NONULL(pointziTimestamp)}];
-}
-
 - (BOOL)reregister
 {
     NSAssert(NO, @"Should not call reregister.");
