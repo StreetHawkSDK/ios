@@ -264,9 +264,10 @@
                     {
                         [SHAppStatus sharedInstance].logPriorityCodes = NONULL(dictStatus[@"priority"]);
                     }
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_AppStatus_Notification"
-                                                                        object:nil
-                                                                      userInfo:@{@"appstatus": dictStatus}];
+                    [[NSNotificationCenter defaultCenter]
+                     postNotificationName:@"SH_PointziBridge_AppStatus_Notification"
+                     object:nil
+                     userInfo:@{@"appstatus": dictStatus}];
                     //refresh app_status check time
                     [[SHAppStatus sharedInstance] recordCheckTime];
                 }

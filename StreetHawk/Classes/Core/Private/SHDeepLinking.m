@@ -97,9 +97,10 @@
     }
     else if (command != nil && [command compare:COMMAND_POINTZI_AUTHOR options:NSCaseInsensitiveSearch] == NSOrderedSame) //pointzi author
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_Deeplinking_Notification"
-                                                            object:nil
-                                                          userInfo:@{@"url": NONULL(deeplinking.absoluteString)}];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SH_PointziBridge_Deeplinking_Notification"
+         object:nil
+         userInfo:@{@"url": NONULL(deeplinking.absoluteString)}];
         return YES;
     }
     return NO;
