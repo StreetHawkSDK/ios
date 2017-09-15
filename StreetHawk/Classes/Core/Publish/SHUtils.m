@@ -1033,9 +1033,9 @@ static NSString *getPropertyType(objc_property_t property)
 
 - (NSString *)md5
 {
-    const char *cStr = [[NSData dataWithContentsOfFile:self] bytes];
+    const char *cStr = [self cStringUsingEncoding:NSUTF8StringEncoding];
     unsigned char result[CC_MD5_DIGEST_LENGTH];
-    NSInteger length = [[NSData dataWithContentsOfFile:self] length]; // strlen(cStr);
+    NSInteger length = strlen(cStr);
     CC_MD5(cStr, (int)length, result);
     return [NSString stringWithFormat:
             @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
