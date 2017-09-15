@@ -27,7 +27,6 @@
 #import <UIKit/UIKit.h>
 
 #define COMMAND_LAUNCHVC        @"launchvc"
-#define COMMAND_POINTZI_AUTHOR  @"pointzi_author"
 
 @interface SHDeepLinking ()
 
@@ -75,8 +74,7 @@
 {
     NSString *command = deeplinking.host;
     return (command != nil
-            &&( [command compare:COMMAND_LAUNCHVC options:NSCaseInsensitiveSearch] == NSOrderedSame
-                || [command compare:COMMAND_POINTZI_AUTHOR options:NSCaseInsensitiveSearch] == NSOrderedSame));
+            && [command compare:COMMAND_LAUNCHVC options:NSCaseInsensitiveSearch] == NSOrderedSame);
 }
 
 - (BOOL)processDeeplinkingUrl:(NSURL *)deeplinking withPushData:(PushDataForApplication *)pushData withIncreaseGrowth:(BOOL)increaseGrowth
@@ -94,14 +92,6 @@
                 return YES; //launchvc deeplinking is handled by StreetHawk
             }
         }
-    }
-    else if (command != nil && [command compare:COMMAND_POINTZI_AUTHOR options:NSCaseInsensitiveSearch] == NSOrderedSame) //pointzi author
-    {
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SH_PointziBridge_Deeplinking_Notification"
-         object:nil
-         userInfo:@{@"url": NONULL(deeplinking.absoluteString)}];
-        return YES;
     }
     return NO;
 }
