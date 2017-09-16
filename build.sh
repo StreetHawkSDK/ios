@@ -20,7 +20,7 @@ xcodebuild clean -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -s
 xcodebuild archive -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -archivePath ../build/outputs/SHStatic.xcarchive
 
 # export ipa
-xcodebuild -exportArchive -archivePath ../build/outputs/SHStatic.xcarchive -exportPath ../build/outputs/ -exportOptionsPlist ../build/ExportPlist.plist
+xcodebuild -exportArchive -archivePath ../build/outputs/SHStatic.xcarchive -exportPath ../build/outputs/ -exportOptionsPlist ../ExportPlist.plist
 mv ../build/outputs/StreetHawkDemo.ipa ../build/outputs/SHStatic.ipa
 
 # ------------------- build SHDynamic ------------------------
@@ -38,7 +38,7 @@ xcodebuild clean -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -s
 xcodebuild archive -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -archivePath ../build/outputs/SHDynamic.xcarchive
 
 # export ipa
-xcodebuild -exportArchive -archivePath ../build/outputs/SHDynamic.xcarchive -exportPath ../build/outputs/ -exportOptionsPlist ../build/ExportPlist.plist
+xcodebuild -exportArchive -archivePath ../build/outputs/SHDynamic.xcarchive -exportPath ../build/outputs/ -exportOptionsPlist ../ExportPlist.plist
 mv ../build/outputs/StreetHawkDemo.ipa ../build/outputs/SHDynamic.ipa
 
 popd
