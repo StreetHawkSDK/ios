@@ -27,7 +27,6 @@
 #import <UIKit/UIKit.h>
 
 #define COMMAND_LAUNCHVC        @"launchvc"
-#define COMMAND_POINTZI_AUTHOR  @"pointzi_author"
 
 @interface SHDeepLinking ()
 
@@ -75,8 +74,7 @@
 {
     NSString *command = deeplinking.host;
     return (command != nil
-            &&( [command compare:COMMAND_LAUNCHVC options:NSCaseInsensitiveSearch] == NSOrderedSame
-                || [command compare:COMMAND_POINTZI_AUTHOR options:NSCaseInsensitiveSearch] == NSOrderedSame));
+            && [command compare:COMMAND_LAUNCHVC options:NSCaseInsensitiveSearch] == NSOrderedSame);
 }
 
 - (BOOL)processDeeplinkingUrl:(NSURL *)deeplinking withPushData:(PushDataForApplication *)pushData withIncreaseGrowth:(BOOL)increaseGrowth
@@ -93,63 +91,6 @@
             {
                 return YES; //launchvc deeplinking is handled by StreetHawk
             }
-        }
-    }
-    else if (command != nil && [command compare:COMMAND_POINTZI_AUTHOR options:NSCaseInsensitiveSearch] == NSOrderedSame) //pointzi author
-    {
-        SHLog(@"Deeplinking process do pointzi author vc: %@.", deeplinking.absoluteString);
-        NSDictionary *dictPointzi = shParseGetParamStringToDict(deeplinking.query);
-        NSString *installId = dictPointzi[@"installid"];
-        NSString *token = dictPointzi[@"device_token"];
-        if ([StreetHawk.currentInstall.suid compare:installId] == NSOrderedSame)
-        {
-            SHLog(@"Deeplinking process match install id: %@, and set author mode to true.", installId);
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SH_POINTZI_AUTHOR_MODE]; //for passing module convenience, directly use NSUserDefaults.
-            if (!shStrIsEmpty(token))
-            {
-                SHLog(@"Deeplinking process set install token: %@.", token);
-                [[NSUserDefaults standardUserDefaults] setObject:token forKey:SH_INSTALL_TOKEN];
-                [[SHHTTPSessionManager sharedInstance].requestSerializer setValue:token forHTTPHeaderField:@"X-Install-Token"]; //update directly for next request
-            }
-            else
-            {
-                SHLog(@"Deeplinking process find install token is empty.");
-            }
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-            SHLog(@"Author mode find top vc on root is %@.", topVC);
-            if (topVC.childViewControllers.count > 0)
-            {
-                UIViewController *vc = topVC.childViewControllers[0];
-                SHLog(@"Author mode find top vc's first child is %@.", vc);
-                if ([vc isKindOfClass:[UITabBarController class]])
-                {
-                    topVC = vc;
-                    SHLog(@"Author mode find top vc is tab %@.", topVC);
-                }
-            }
-            if ([topVC isKindOfClass:[UITabBarController class]])
-            {
-                UITabBarController *tabVC = (UITabBarController *)topVC;
-                topVC = tabVC.selectedViewController;
-                SHLog(@"Author mode find top vc is tab's selected %@.", topVC);
-            }
-            if ([topVC isKindOfClass:[UINavigationController class]])
-            {
-                UINavigationController *navigationVC = (UINavigationController *)topVC;
-                topVC = navigationVC.topViewController;
-                SHLog(@"Author mode find top vc is navigation's top %@.", topVC);
-            }
-            SHLog(@"Author mode find top vc is finally %@.", topVC);
-            if (topVC)
-            {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": topVC}];
-            }
-            return YES;
-        }
-        else
-        {
-            SHLog(@"Deeplinking process not match install id: %@.", installId);
         }
     }
     return NO;
