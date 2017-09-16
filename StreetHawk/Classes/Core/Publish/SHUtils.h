@@ -322,4 +322,13 @@ extern NSString *shCaptureAdvertisingIdentifier();
 
 @end
 
+@interface NSString (SHExt)
+
+/**
+ Get md5 of a string.
+ */
+- (NSString *)md5;
+
+@end
+
 #endif //SH__UTILS__H

@@ -645,7 +645,7 @@
 
 - (BOOL)openURL:(NSURL *)url
 {
-    SHLog(@"Open URL received: %@.", url.absoluteString);
+    SHLog(@"StreetHawk open URL received: %@.", url.absoluteString);
     SHDeepLinking *deepLinking = [[SHDeepLinking alloc] init];
     BOOL handledBySDK = [deepLinking processDeeplinkingUrl:url withPushData:nil withIncreaseGrowth:YES];
     if (handledBySDK)

@@ -21,7 +21,6 @@
 #import "SHCrashHandler.h"
 #import "SHUtils.h" //for SHLog
 //header from System
-#import <CommonCrypto/CommonDigest.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
@@ -29,7 +28,6 @@
 
 + (void)createCrashHandler:(NSNotification *)notification; //for creating crash handler when register. notification name: SH_CrashBridge_CreateObject; user info: empty.
 + (void)installUpdateSucceededForCrash:(NSNotification *)notification; //Handle install update notification for sending crash report.
-+ (NSString*)getMD5Checksum:(NSString*)content; //Get MD5 of a string
 
 @end
 
@@ -95,7 +93,7 @@
         NSString *infoStr = [NSString stringWithFormat:@"CrashReporter Key:   %@, %@, %@, %@, Battery %@, Memory: %@", shDevelopmentPlatformString(), shAppModeString(shAppMode()), StreetHawk.version, StreetHawk.currentInstall.suid, battery, memoryUsage];
         crashReport = [crashReport stringByReplacingOccurrencesOfString:@"CrashReporter Key:   " withString:infoStr];
         //store MD5 in NSUserDefaults and compare with next send to avoid double reporting of crashlogs
-        NSString *md5 = [self getMD5Checksum:crashReport];
+        NSString *md5 = [crashReport md5];
         NSString *previousSend = [[NSUserDefaults standardUserDefaults] objectForKey:@"CrashLog_MD5"];
         if (previousSend != md5)
         {
@@ -115,16 +113,6 @@
             [StreetHawk.crashHandler purgePendingCrashReport]; //Same as before, purge local.
         }
     }
-}
-
-+ (NSString*)getMD5Checksum:(NSString*)content
-{
-    const char *cStr = [[NSData dataWithContentsOfFile:content] bytes];
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    NSInteger length = [[NSData dataWithContentsOfFile:content] length]; // strlen(cStr);
-    CC_MD5(cStr, (int)length, result);
-    return [NSString stringWithFormat:
-            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X", result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], result[9], result[10], result[11], result[12], result[13], result[14], result[15]];
 }
 
 @end
