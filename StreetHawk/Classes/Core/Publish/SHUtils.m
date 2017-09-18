@@ -109,45 +109,26 @@ NSDate *shParseDate(NSString *input, int offsetSeconds)
         dispatch_semaphore_wait(formatter_semaphore, DISPATCH_TIME_FOREVER);
         NSDateFormatter *dateFormatter = shGetDateFormatter(nil, nil, nil);
         out = [dateFormatter dateFromString:input];
+        NSArray *arrayTimeformat = @[@"yyyy-MM-dd'T'HH:mm:ss.SSS",
+                                     @"yyyy-MM-dd'T'HH:mm:ssZ",
+                                     @"yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+                                     @"yyyy-MM-dd'T'HH:mm:ss",
+                                     @"yyyy-MM-dd",
+                                     @"dd/MM/yyyy HH:mm:ss",
+                                     @"dd/MM/yyyy",
+                                     @"MM/dd/yyyy HH:mm:ss",
+                                     @"MM/dd/yyyy"];
         if (out == nil)
         {
-            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-            out = [dateFormatter dateFromString:input];
-        }
-        if (out == nil)
-        {
-            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
-            out = [dateFormatter dateFromString:input];
-        }
-        if (out == nil)
-        {
-            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-            out = [dateFormatter dateFromString:input];
-        }
-        if (out == nil)
-        {
-            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-            out = [dateFormatter dateFromString:input];
-        }
-        if (out == nil)
-        {
-            [dateFormatter setDateFormat:@"dd/MM/yyyy HH:mm:ss"];
-            out = [dateFormatter dateFromString:input];
-        }
-        if (out == nil)
-        {
-            [dateFormatter setDateFormat:@"dd/MM/yyyy"];
-            out = [dateFormatter dateFromString:input];
-        }
-        if (out == nil)
-        {
-            [dateFormatter setDateFormat:@"MM/dd/yyyy HH:mm:ss"];
-            out = [dateFormatter dateFromString:input];
-        }
-        if (out == nil)
-        {
-            [dateFormatter setDateFormat:@"MM/dd/yyyy"];
-            out = [dateFormatter dateFromString:input];
+            for (NSString *strTimeFormat in arrayTimeformat)
+            {
+                [dateFormatter setDateFormat:strTimeFormat];
+                out = [dateFormatter dateFromString:input];
+                if (out != nil)
+                {
+                    break;
+                }
+            }
         }
         dispatch_semaphore_signal(formatter_semaphore);
         if (offsetSeconds != 0)
