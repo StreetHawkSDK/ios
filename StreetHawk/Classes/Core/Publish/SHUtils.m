@@ -965,7 +965,11 @@ static NSString *getPropertyType(objc_property_t property)
         if (attribute[0] == 'T')
         {
             NSString *attributeStr = [NSString stringWithUTF8String:attribute];
-            if ([attributeStr isEqualToString:@"Ti"])
+            if ([attributeStr containsString:@"FourSide"]) //get "T{FourSide=dddd}"
+            {
+                return @"FourSide";
+            }
+            else if ([attributeStr isEqualToString:@"Ti"])
             {
                 return @"int"; //not exactly the property definition. enum, NSInteger etc all end this.
             }
