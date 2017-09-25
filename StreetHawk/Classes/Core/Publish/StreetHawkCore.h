@@ -59,6 +59,7 @@
 
 //Pointzi
 #ifdef SH_FEATURE_POINTZI
+#import "SHPointziApi.h"
 #import "SHTip.h"
 #endif
 

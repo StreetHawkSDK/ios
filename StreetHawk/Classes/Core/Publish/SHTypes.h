@@ -78,7 +78,5 @@ typedef enum SHDevelopmentPlatform SHDevelopmentPlatform;
 #define SH_LOCATION_STATUS      @"SH_LOCATION_STATUS"
 //For get/set App install token
 #define SH_INSTALL_TOKEN        @"SH_INSTALL_TOKEN"
-//For set whether it's in author mode
-#define SH_POINTZI_AUTHOR_MODE  @"SH_POINTZI_AUTHOR_MODE"
 
 #endif

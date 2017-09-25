@@ -20,6 +20,7 @@
 #import "SHApp.h" //for `StreetHawk shNotifyPageEnter/Exit`
 #import "SHViewController.h" //for checking internal vc to avoid enter/exit log
 #import "SHUtils.h" //for shIsSDKViewController
+#import "SHCoverView.h" //for cover view
 //header from System
 #import <objc/runtime.h> //for associate object
 
@@ -303,137 +304,6 @@
         [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-@end
-
-typedef void (^SHCoverViewOrientationChanged) ();
-typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
-
-/**
- Transparent light color cover view.
- */
-@interface SHCoverView : UIView
-
-@property (nonatomic, strong) UIViewController *contentVC;
-
-/**
- The color of the overlay.
- */
-@property (nonatomic, strong) UIColor *overlayColor;
-
-/**
- The alpha of the overlay.
- */
-@property (nonatomic) CGFloat overlayAlpha;
-
-/**
- Callback when orientation changes.
- */
-@property (nonatomic, copy) SHCoverViewOrientationChanged orientationChangedHandler;
-
-/**
- Callback when full screen cover view is touched.
- */
-@property (nonatomic, copy) SHCoverViewTouched touchedHandler;
-
-- (void)orientationChanged:(NSNotification *)notification;
-
-@end
-
-@implementation SHCoverView
-
--(id)initWithFrame:(CGRect)frame
-{
-    if (self = [super initWithFrame:frame])
-    {
-        self.backgroundColor = [UIColor clearColor];
-        //add rotation notificaton observer
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
--(void)drawRect:(CGRect)rect
-{
-    //must use draw to avoid the subview's alpha not affected.
-    if (self.overlayColor == nil)
-    {
-        CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), [UIColor lightGrayColor].CGColor); //draw light gray cover.
-        CGContextSetAlpha(UIGraphicsGetCurrentContext(), 0.5);
-    }
-    else
-    {
-        CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-        CGFloat colors[] =
-        {
-            1, 1, 1, 0.00,//start color(r,g,b,alpha)
-            0, 0, 0, 0.7,
-            0, 0, 0, 0.7,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,
-            0, 0, 0, 0.8,//end color
-        };
-        
-        CGGradientRef gradient = CGGradientCreateWithColorComponents
-        (rgb, colors, NULL, 20);
-        
-        CGPoint start = CGPointMake(230,264);
-        CGPoint end = CGPointMake(230,264);
-        CGFloat startRadius = 30.0f;
-        CGFloat endRadius = MAX(self.frame.size.width,self.frame.size.height);
-        CGContextRef graCtx = UIGraphicsGetCurrentContext();
-        CGContextDrawRadialGradient(graCtx, gradient, start, startRadius, end, endRadius, 0);
-        
-        CGGradientRelease(gradient);
-        gradient=NULL;
-        CGColorSpaceRelease(rgb);
-        
-        CGContextClearRect(UIGraphicsGetCurrentContext(), self.bounds);
-        CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), self.overlayColor.CGColor);
-        CGContextSetAlpha(UIGraphicsGetCurrentContext(), self.overlayAlpha);
-    }
-    CGContextFillRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, self.frame.size.width, self.frame.size.height));
-}
-
-- (void)orientationChanged:(NSNotification *)notification
-{
-    if (self.orientationChangedHandler)
-    {
-        self.orientationChangedHandler();
-    }
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
-{
-    [super touchesBegan:touches withEvent:event];
-    if (self.touchedHandler)
-    {
-        UITouch *touch = [[event allTouches] anyObject];
-        CGPoint touchLocation = [touch locationInView:self];
-        self.touchedHandler(touchLocation);
     }
 }
 
