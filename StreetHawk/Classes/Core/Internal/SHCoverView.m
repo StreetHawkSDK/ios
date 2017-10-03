@@ -111,8 +111,7 @@
     {
         if (self.touchedHandler)
         {
-            UITouch *touch = [[event allTouches] anyObject];
-            CGPoint touchLocation = [touch locationInView:self];
+            CGPoint touchLocation = [[[event allTouches] anyObject] locationInView:self];
             self.touchedHandler(touchLocation);
         }
     }
