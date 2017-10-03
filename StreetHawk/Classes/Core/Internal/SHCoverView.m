@@ -111,8 +111,7 @@
     {
         if (self.touchedHandler)
         {
-            CGPoint touchLocation = [[[event allTouches] anyObject] locationInView:self];
-            self.touchedHandler(touchLocation);
+            self.touchedHandler([[[event allTouches] anyObject] locationInView:self]);
         }
     }
     else
