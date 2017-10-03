@@ -104,11 +104,19 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
-    if (self.touchedHandler)
+    //A safety precautions: this view is dim cover used for tip.
+    //In case there is no tip available, the dim cover should be able to dismiss itself.
+    //Check whether the dim cover has tip on it, if not, just remove it so that it won't stuck customer.
+    if (self.subviews.count > 0)
     {
-        UITouch *touch = [[event allTouches] anyObject];
-        CGPoint touchLocation = [touch locationInView:self];
-        self.touchedHandler(touchLocation);
+        if (self.touchedHandler)
+        {
+            self.touchedHandler([[[event allTouches] anyObject] locationInView:self]);
+        }
+    }
+    else
+    {
+        [self removeFromSuperview];
     }
 }
 
