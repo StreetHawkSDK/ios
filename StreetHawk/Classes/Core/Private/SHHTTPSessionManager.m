@@ -238,11 +238,11 @@
                     {
                         [SHAppStatus sharedInstance].geofenceTimestamp = NONULL(dictStatus[@"geofences"]);
                     }
-                    //check "feed"
-                    if ([dictStatus.allKeys containsObject:@"feed"])
+                    //check "feed_updated"
+                    if ([dictStatus.allKeys containsObject:@"feed_updated"])
                     {
-                        SHLog(@"feed timestamp in app_status: %@", dictStatus[@"feed"]);
-                        [SHAppStatus sharedInstance].feedTimestamp = NONULL(dictStatus[@"feed"]);
+                        SHLog(@"feed timestamp in app_status: %@", dictStatus[@"feed_updated"]);
+                        [SHAppStatus sharedInstance].feedTimestamp = NONULL(dictStatus[@"feed_updated"]);
                     }
                     //check "reregister"
                     if ([dictStatus.allKeys containsObject:@"reregister"])
