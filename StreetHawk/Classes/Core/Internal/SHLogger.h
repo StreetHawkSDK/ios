@@ -49,6 +49,9 @@
 #define LOG_CODE_PUSH_ACK           8202
 #define LOG_CODE_PUSH_RESULT        8203
 
+//super tag heatmap
+#define LOG_CODE_SUPERTAG           8996
+
 //tag
 #define LOG_CODE_TAG_INCREMENT      8997
 #define LOG_CODE_TAG_DELETE         8998
