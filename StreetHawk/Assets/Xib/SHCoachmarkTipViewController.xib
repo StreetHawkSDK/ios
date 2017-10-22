@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -88,7 +88,7 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2mW-pS-QVy" userLabel="labelTitle" customClass="PaddingLabel">
-                            <rect key="frame" x="0.0" y="30" width="0.0" height="30"/>
+                            <rect key="frame" x="0.0" y="30" width="375" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" identifier="LabelTitleHeight" id="AW7-3G-GZD"/>
                             </constraints>
@@ -149,7 +149,7 @@
                         <constraint firstItem="maO-66-cw2" firstAttribute="top" secondItem="7UD-fP-icM" secondAttribute="top" identifier="ViewTitleMarginTop" id="OLm-bi-8QG"/>
                         <constraint firstItem="9VL-dq-wHT" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="LabelContentMarginLeft" id="QjZ-N4-d3N"/>
                         <constraint firstAttribute="bottom" secondItem="11X-TI-uky" secondAttribute="bottom" constant="49" identifier="ButtonPrevMarginBottom" id="SEW-kR-D6y"/>
-                        <constraint firstItem="Uri-9x-BKo" firstAttribute="leading" secondItem="2mW-pS-QVy" secondAttribute="trailing" constant="240" identifier="TitleCloseMargin" id="W1J-Q0-iDl"/>
+                        <constraint firstAttribute="trailing" secondItem="2mW-pS-QVy" secondAttribute="trailing" identifier="TitleCloseMargin" id="W1J-Q0-iDl"/>
                         <constraint firstItem="maO-66-cw2" firstAttribute="leading" secondItem="7UD-fP-icM" secondAttribute="leading" identifier="ViewTitleMarginLeft" id="XDI-Bg-pcY"/>
                         <constraint firstItem="11X-TI-uky" firstAttribute="width" secondItem="fSK-HF-g6U" secondAttribute="width" identifier="ButtonWidthEqual" id="Z2Z-cB-Mrh"/>
                         <constraint firstAttribute="trailing" secondItem="maO-66-cw2" secondAttribute="trailing" identifier="ViewTitleMarginRight" id="cPR-t5-MLM"/>
@@ -176,9 +176,4 @@
             <point key="canvasLocation" x="26.5" y="51.5"/>
         </view>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
-    </simulatedMetricsContainer>
 </document>
