@@ -690,6 +690,13 @@ enum
                 NSAssert(pushCode != 0, @"Send push result without code.");
                 logRecord[@"numeric"] = @(pushCode);
             }
+            //Code: 8996. Super Tag
+            else if (code == LOG_CODE_SUPERTAG)
+            {
+                NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
+                NSAssert(dictComment != nil, @"Fail to parse code 8996 super tag json.");
+                logRecord[@"json"] = dictComment;
+            }
             //Code: 8997. Increment Tag
             //Code: 8998. Delete Tag
             //Code: 8999. Add Tag
