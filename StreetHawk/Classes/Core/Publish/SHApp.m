@@ -158,7 +158,7 @@
     });
 }
 
-+ (SHApp *)sharedInstance
++ (nonnull SHApp *)sharedInstance
 {
     static SHApp *instance = nil;
     static dispatch_once_t onceToken;
@@ -263,7 +263,7 @@
     return self;
 }
 
-- (void)registerInstallForApp:(NSString *)appKey withDebugMode:(BOOL)isDebugMode
+- (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode
 {
     if (self.isRegisterInstallForAppCalled)
     {
@@ -363,7 +363,7 @@
     }
 }
 
-- (void)registerInstallForApp:(NSString *)appKey withDebugMode:(BOOL)isDebugMode withiTunesId:(NSString *)iTunesId
+- (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode withiTunesId:(nullable NSString *)iTunesId
 {
     StreetHawk.itunesAppId = iTunesId;
     [StreetHawk registerInstallForApp:appKey withDebugMode:isDebugMode];
