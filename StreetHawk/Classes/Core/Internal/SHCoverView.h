@@ -17,7 +17,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^SHCoverViewOrientationChanged) ();
+typedef void (^SHCoverViewOrientationChanged) (void);
 typedef void (^SHCoverViewTouched) (CGPoint touchPoint);
 
 /**

@@ -145,12 +145,12 @@ extern CGSize shrinkControlSize(UIView *control);
 /**
  Dismiss all message views, including UIAlertView, UIActionSheet, UIModalView.
  */
-extern void shDismissAllMessageView();
+extern void shDismissAllMessageView(void);
 
 /**
  Get a suitable window to present other views, such as `MBProgressHUD`, `UIActionSheet` etc. It's not hidden, and not confirm dialog window.
  */
-extern UIWindow *shGetPresentWindow();
+extern UIWindow *shGetPresentWindow(void);
 
 /** @name Resources and Bundles Utility */
 
@@ -182,12 +182,12 @@ extern BOOL shCallPhoneNumber(NSString *phone);
 /**
  Get mac address of current device, the output is for example: 00:23:32:CB:AB:80. However since iOS 7 this function cannot work on device anymore, always return fake address.
  */
-extern NSString *shGetMacAddress();
+extern NSString *shGetMacAddress(void);
 
 /**
  Get carrier's name from current device, for example "AT&T", "China Mobile" etc. If current device does not connect to carrier, for example iPad Wifi, return "Other".
  */
-extern NSString *shGetCarrierName();
+extern NSString *shGetCarrierName(void);
 
 /**
  Enum for this App's mode.
@@ -224,7 +224,7 @@ typedef enum SHAppMode SHAppMode;
 /**
  Return the mode of current App.
  */
-extern SHAppMode shAppMode();
+extern SHAppMode shAppMode(void);
 
 /**
  Return the string to describe current mode. 
@@ -234,12 +234,12 @@ extern NSString *shAppModeString(SHAppMode mode);
 /**
  Return string describing which development platform current App is.
  */
-extern NSString *shDevelopmentPlatformString();
+extern NSString *shDevelopmentPlatformString(void);
 
 /**
  Return app/status result of streethawk function should be enabled. 
  */
-extern BOOL streetHawkIsEnabled();
+extern BOOL streetHawkIsEnabled(void);
 
 /**
  Check whether it's SDK's view controller.
@@ -271,7 +271,7 @@ extern BOOL shIsUniversalLinking(NSString *url);
 /**
  Automatically capture advertising identifier if customer's App add AdSupport.framework. If not return nil.
  */
-extern NSString *shCaptureAdvertisingIdentifier();
+extern NSString *shCaptureAdvertisingIdentifier(void);
 
 /**
  Extension to system UIDevice class.
