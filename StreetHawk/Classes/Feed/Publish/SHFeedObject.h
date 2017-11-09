@@ -22,7 +22,7 @@
 /**
  Callback once detect new feeds.
  */
-typedef void (^SHNewFeedsHandler)();
+typedef void (^SHNewFeedsHandler)(void);
 
 /**
  Callback once fetch feeds.

@@ -158,7 +158,7 @@
     });
 }
 
-+ (SHApp *)sharedInstance
++ (nonnull SHApp *)sharedInstance
 {
     static SHApp *instance = nil;
     static dispatch_once_t onceToken;
@@ -263,7 +263,7 @@
     return self;
 }
 
-- (void)registerInstallForApp:(NSString *)appKey withDebugMode:(BOOL)isDebugMode
+- (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode
 {
     if (self.isRegisterInstallForAppCalled)
     {
@@ -363,7 +363,7 @@
     }
 }
 
-- (void)registerInstallForApp:(NSString *)appKey withDebugMode:(BOOL)isDebugMode withiTunesId:(NSString *)iTunesId
+- (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode withiTunesId:(nullable NSString *)iTunesId
 {
     StreetHawk.itunesAppId = iTunesId;
     [StreetHawk registerInstallForApp:appKey withDebugMode:isDebugMode];
@@ -1149,7 +1149,10 @@
 //2. NOT called when App in FG.
 //3. NOT called when click notification banner directly.
 //This delegate callback not mixed with above `didReceiveRemoteNotification`.
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
+- (void)application:(UIApplication *)application
+handleActionWithIdentifier:(NSString *)identifier
+forRemoteNotification:(NSDictionary *)userInfo
+  completionHandler:(nonnull void (^)())completionHandler
 {
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleActionWithIdentifier:forRemoteNotification:completionHandler:)];
     NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
@@ -1189,7 +1192,10 @@
     }
 }
 
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
+- (void)application:(UIApplication *)application
+handleActionWithIdentifier:(NSString *)identifier
+forLocalNotification:(UILocalNotification *)notification
+  completionHandler:(void (^)())completionHandler
 {
     BOOL customerAppResponse = [self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:handleActionWithIdentifier:forLocalNotification:completionHandler:)];
     NSMutableDictionary *dictUserInfo = [NSMutableDictionary dictionary];
@@ -1569,7 +1575,7 @@
     NSAssert3(NO, @"Crash intentionally: NSAssert3 in SDK, %@, %@, %@.", @"param1", @"param2", @"param3");
     NSAssert4(NO, @"Crash intentionally: NSAssert4 in SDK, %@, %@, %@, %@.", @"param1", @"param2", @"param3", @"param4");
     NSAssert5(NO, @"Crash intentionally: NSAssert5 in SDK, %@, %@, %@, %@, %@.", @"param1", @"param2", @"param3", @"param4", @"param5");
-    assert(NO && @"Crash intentionally: assert in SDK.");
+    assert(NO);
 }
 
 @end

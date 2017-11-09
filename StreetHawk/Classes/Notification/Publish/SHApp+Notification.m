@@ -408,7 +408,10 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     }
 }
 
-- (void)handleRemoteNotification:(NSDictionary *)userInfo withActionId:(NSString *)identifier needComplete:(BOOL)needComplete completionHandler:(void (^)())completionHandler
+- (void)handleRemoteNotification:(NSDictionary *)userInfo
+                    withActionId:(NSString *)identifier
+                    needComplete:(BOOL)needComplete
+               completionHandler:(void (^)(void))completionHandler
 {
     BOOL isDefinedCode = [StreetHawk.notificationHandler isDefinedCode:userInfo];
     if (isDefinedCode)
@@ -447,7 +450,10 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     }
 }
 
-- (void)handleLocalNotification:(UILocalNotification *)notification withActionId:(NSString *)identifier needComplete:(BOOL)needComplete completionHandler:(void (^)())completionHandler
+- (void)handleLocalNotification:(UILocalNotification *)notification
+                   withActionId:(NSString *)identifier
+                   needComplete:(BOOL)needComplete
+              completionHandler:(void (^)(void))completionHandler
 {
     if (notification.userInfo != nil) //currently only support `userInfo`. local can do more such as location based notification.
     {

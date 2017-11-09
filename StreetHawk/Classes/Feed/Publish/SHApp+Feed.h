@@ -26,27 +26,28 @@
 /**
  Callback happen when new feed detects by app_status/feed.
  */
-@property (nonatomic, copy) SHNewFeedsHandler newFeedHandler;
+@property (nonatomic, copy, nullable) SHNewFeedsHandler newFeedHandler;
 
 /**
  Fetch feeds starting from `offset`.
  @param offset Offset from which to fetch.
  @param handler Callback for fetch handler, which return NSArray of SHFeedObject and error if meet.
  */
-- (void)feed:(NSInteger)offset withHandler:(SHFeedsFetchHandler)handler;
+- (void)feed:(NSInteger)offset withHandler:(nullable SHFeedsFetchHandler)handler;
 
 /**
  Send priority logline for feedack. Customer developer should call this when a feed is read. Server may receive multiple loglines if user read one feed many times.
  @param feed_id The feed id of reading feed.
  */
-- (void)sendFeedAck:(NSString *)feed_id;
+- (void)sendFeedAck:(nonnull NSString *)feed_id;
 
 /**
  Send no priority logline for feed result.
  @param feed_id The feed id of result feed.
  @param result The result for accept, or postpone or decline.
  */
-- (void)notifyFeedResult:(NSString *)feed_id withResult:(SHResult)result;
+- (void)notifyFeedResult:(nonnull NSString *)feed_id
+              withResult:(SHResult)result;
 
 /**
  Send priority logline for feed result.
@@ -56,6 +57,10 @@
  @param feedDelete Set to true if feed items should be deleted from server for the given install.
  @param complete Set to true when tour complete.
  */
-- (void)notifyFeedResult:(NSString *)feed_id withResult:(SHResult)result withStepId:(NSString *)stepId deleteFeed:(BOOL)feedDelete completed:(BOOL)complete;
+- (void)notifyFeedResult:(nonnull NSString *)feed_id
+              withResult:(SHResult)result
+              withStepId:(nullable NSString *)stepId
+              deleteFeed:(BOOL)feedDelete
+               completed:(BOOL)complete;
 
 @end
