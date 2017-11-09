@@ -690,23 +690,31 @@ enum
                 NSAssert(pushCode != 0, @"Send push result without code.");
                 logRecord[@"numeric"] = @(pushCode);
             }
-            //Code: 8996. Super Tag
-            else if (code == LOG_CODE_SUPERTAG)
-            {
-                NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
-                NSAssert(dictComment != nil, @"Fail to parse code 8996 super tag json.");
-                logRecord[@"json"] = dictComment;
-            }
             //Code: 8997. Increment Tag
             //Code: 8998. Delete Tag
             //Code: 8999. Add Tag
             else if (code == LOG_CODE_TAG_INCREMENT || code == LOG_CODE_TAG_DELETE || code == LOG_CODE_TAG_ADD)
             {
-                NSDictionary *dictTag = shParseObjectToDict(shCstringToNSString(comment));
-                NSAssert(dictTag != nil, @"Fail to parse tag dictionary.");
-                for (NSString *key in dictTag.allKeys)
+                NSDictionary *dictComment = shParseObjectToDict(shCstringToNSString(comment));
+                NSAssert(dictComment != nil, @"Fail to parse code 8997/8998/8999 dictionary.");
+                NSMutableDictionary *dictJson = [NSMutableDictionary dictionary];
+                for (NSString *key in dictComment.allKeys)
                 {
-                    logRecord[key] = dictTag[key];
+                    if ([key compare:@"x"] != NSOrderedSame
+                        && [key compare:@"y"] != NSOrderedSame
+                        && [key compare:@"friendly_name"] != NSOrderedSame)
+                    {
+                        logRecord[key] = dictComment[key];
+                    }
+                    else
+                    {
+                        dictJson[key] = dictComment[key];
+                    }
+                }
+                //super tag use increment tag and want to store in json
+                if (dictJson.allKeys.count > 0)
+                {
+                    logRecord[@"json"] = dictJson;
                 }
             }
             else
