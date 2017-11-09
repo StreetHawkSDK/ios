@@ -702,7 +702,7 @@ enum
                 {
                     if ([key compare:@"x"] != NSOrderedSame
                         && [key compare:@"y"] != NSOrderedSame
-                        && [key compare:@"friendly_name"] != NSOrderedSame)
+                        && [key compare:@"label"] != NSOrderedSame)
                     {
                         logRecord[key] = dictComment[key];
                     }
