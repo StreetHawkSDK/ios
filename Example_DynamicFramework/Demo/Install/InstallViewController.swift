@@ -128,47 +128,47 @@ class InstallViewController: StreetHawkBaseTableViewController
                     return
                 }
                 let arrayGeneralValue = self.arrayValues[0] as! NSMutableArray
-                arrayGeneralValue[0] = "install id: \(SHApp.sharedInstance().currentInstall.suid)"
-                arrayGeneralValue[1] = "app key: \(SHApp.sharedInstance().currentInstall.appKey)"
-                arrayGeneralValue[2] = "sh_cuid: \(SHApp.sharedInstance().currentInstall.sh_cuid)"
-                arrayGeneralValue[3] = "client App version: \(SHApp.sharedInstance().currentInstall.clientVersion)"
-                arrayGeneralValue[4] = "StreetHawk SDK version: \(SHApp.sharedInstance().currentInstall.shVersion)"
-                arrayGeneralValue[5] = "OS: \(SHApp.sharedInstance().currentInstall.operatingSystem) \(SHApp.sharedInstance().currentInstall.osVersion)"
-                arrayGeneralValue[6] = "AppStore or Enterprise release: \(SHApp.sharedInstance().currentInstall.live ? "true" : "false")"
-                arrayGeneralValue[7] = "development platform: \(SHApp.sharedInstance().currentInstall.developmentPlatform)"
-                arrayGeneralValue[8] = "created date: \(SHApp.sharedInstance().currentInstall.created)"
-                arrayGeneralValue[9] = "modifid date: \(SHApp.sharedInstance().currentInstall.modified)"
-                arrayGeneralValue[10] = "replaced by: \(SHApp.sharedInstance().currentInstall.replaced)"
-                arrayGeneralValue[11] = "uninstalled date: \(SHApp.sharedInstance().currentInstall.uninstalled)"
+                arrayGeneralValue[0] = "install id: \(String(describing: SHApp.sharedInstance().currentInstall?.suid))"
+                arrayGeneralValue[1] = "app key: \(String(describing: SHApp.sharedInstance().currentInstall?.appKey))"
+                arrayGeneralValue[2] = "sh_cuid: \(String(describing: SHApp.sharedInstance().currentInstall?.sh_cuid))"
+                arrayGeneralValue[3] = "client App version: \(String(describing: SHApp.sharedInstance().currentInstall?.clientVersion))"
+                arrayGeneralValue[4] = "StreetHawk SDK version: \(String(describing: SHApp.sharedInstance().currentInstall?.shVersion))"
+                arrayGeneralValue[5] = "OS: \(String(describing: SHApp.sharedInstance().currentInstall?.operatingSystem)) \(String(describing: SHApp.sharedInstance().currentInstall?.osVersion))"
+                arrayGeneralValue[6] = "AppStore or Enterprise release: \((SHApp.sharedInstance().currentInstall?.live)! ? "true" : "false")"
+                arrayGeneralValue[7] = "development platform: \(String(describing: SHApp.sharedInstance().currentInstall?.developmentPlatform))"
+                arrayGeneralValue[8] = "created date: \(String(describing: SHApp.sharedInstance().currentInstall?.created))"
+                arrayGeneralValue[9] = "modifid date: \(String(describing: SHApp.sharedInstance().currentInstall?.modified))"
+                arrayGeneralValue[10] = "replaced by: \(String(describing: SHApp.sharedInstance().currentInstall?.replaced))"
+                arrayGeneralValue[11] = "uninstalled date: \(String(describing: SHApp.sharedInstance().currentInstall?.uninstalled))"
                 let arrayCapabilityValue = self.arrayValues[1] as! NSMutableArray
-                arrayCapabilityValue[0] = "use location feature: \(SHApp.sharedInstance().currentInstall.featureLocation ? "true" : "false")"
-                arrayCapabilityValue[1] = "use push feature: \(SHApp.sharedInstance().currentInstall.featurePush ? "true" : "false")"
-                arrayCapabilityValue[2] = "use iBeacon feature: \(SHApp.sharedInstance().currentInstall.featureiBeacons ? "true" : "false")"
-                arrayCapabilityValue[3] = "support iBeacon: \(SHApp.sharedInstance().currentInstall.supportiBeacons ? "true" : "false")"
+                arrayCapabilityValue[0] = "use location feature: \((SHApp.sharedInstance().currentInstall?.featureLocation)! ? "true" : "false")"
+                arrayCapabilityValue[1] = "use push feature: \((SHApp.sharedInstance().currentInstall?.featurePush)! ? "true" : "false")"
+                arrayCapabilityValue[2] = "use iBeacon feature: \((SHApp.sharedInstance().currentInstall?.featureiBeacons)! ? "true" : "false")"
+                arrayCapabilityValue[3] = "support iBeacon: \((SHApp.sharedInstance().currentInstall?.supportiBeacons)! ? "true" : "false")"
                 let arrayPushValue = self.arrayValues[2] as! NSMutableArray
-                arrayPushValue[0] = "push service mode: \(SHApp.sharedInstance().currentInstall.mode)"
-                arrayPushValue[1] = "token: \(SHApp.sharedInstance().currentInstall.pushNotificationToken)"
-                arrayPushValue[2] = "negative feedback: \(SHApp.sharedInstance().currentInstall.negativeFeedback)"
-                arrayPushValue[3] = "revoked: \(SHApp.sharedInstance().currentInstall.revoked)"
-                arrayPushValue[4] = "use smart push: \(SHApp.sharedInstance().currentInstall.smart ? "true" : "false")"
-                arrayPushValue[5] = "feed timestamp: \(SHApp.sharedInstance().currentInstall.feed)"
+                arrayPushValue[0] = "push service mode: \(String(describing: SHApp.sharedInstance().currentInstall?.mode))"
+                arrayPushValue[1] = "token: \(String(describing: SHApp.sharedInstance().currentInstall?.pushNotificationToken))"
+                arrayPushValue[2] = "negative feedback: \(String(describing: SHApp.sharedInstance().currentInstall?.negativeFeedback))"
+                arrayPushValue[3] = "revoked: \(String(describing: SHApp.sharedInstance().currentInstall?.revoked))"
+                arrayPushValue[4] = "use smart push: \((SHApp.sharedInstance().currentInstall?.smart)! ? "true" : "false")"
+                arrayPushValue[5] = "feed timestamp: \(String(describing: SHApp.sharedInstance().currentInstall?.feed))"
                 let arrayDeviceValue = self.arrayValues[3] as! NSMutableArray
-                if (SHApp.sharedInstance().currentInstall.latitude != nil && SHApp.sharedInstance().currentInstall.longitude != nil)
+                if (SHApp.sharedInstance().currentInstall?.latitude != nil && SHApp.sharedInstance().currentInstall?.longitude != nil)
                 {
-                    arrayDeviceValue[0] = "location: (\(SHApp.sharedInstance().currentInstall.latitude.doubleValue), \(SHApp.sharedInstance().currentInstall.longitude.doubleValue))"
+                    arrayDeviceValue[0] = "location: (\(String(describing: SHApp.sharedInstance().currentInstall?.latitude.doubleValue)), \(String(describing: SHApp.sharedInstance().currentInstall?.longitude.doubleValue)))"
                 }
                 else
                 {
                     arrayDeviceValue[0] = "location not available.";
                 }
-                arrayDeviceValue[1] = "timezone offset in mins: \(SHApp.sharedInstance().currentInstall.utcOffset)"
-                arrayDeviceValue[2] = "model: \(SHApp.sharedInstance().currentInstall.model)"
-                arrayDeviceValue[3] = "ip address: \(SHApp.sharedInstance().currentInstall.ipAddress)"
-                arrayDeviceValue[4] = "mac address: \(SHApp.sharedInstance().currentInstall.macAddress)"
-                arrayDeviceValue[5] = "vendor identifier: \(SHApp.sharedInstance().currentInstall.identifierForVendor)"
-                arrayDeviceValue[6] = "advertising identifier: \(SHApp.sharedInstance().currentInstall.advertisingIdentifier)"
-                arrayDeviceValue[7] = "carrier: \(SHApp.sharedInstance().currentInstall.carrierName)"
-                arrayDeviceValue[8] = "resolution: \(SHApp.sharedInstance().currentInstall.resolution)"
+                arrayDeviceValue[1] = "timezone offset in mins: \(String(describing: SHApp.sharedInstance().currentInstall?.utcOffset))"
+                arrayDeviceValue[2] = "model: \(String(describing: SHApp.sharedInstance().currentInstall?.model))"
+                arrayDeviceValue[3] = "ip address: \(String(describing: SHApp.sharedInstance().currentInstall?.ipAddress))"
+                arrayDeviceValue[4] = "mac address: \(String(describing: SHApp.sharedInstance().currentInstall?.macAddress))"
+                arrayDeviceValue[5] = "vendor identifier: \(String(describing: SHApp.sharedInstance().currentInstall?.identifierForVendor))"
+                arrayDeviceValue[6] = "advertising identifier: \(String(describing: SHApp.sharedInstance().currentInstall?.advertisingIdentifier))"
+                arrayDeviceValue[7] = "carrier: \(String(describing: SHApp.sharedInstance().currentInstall?.carrierName))"
+                arrayDeviceValue[8] = "resolution: \(String(describing: SHApp.sharedInstance().currentInstall?.resolution))"
                 
                 self.tableView.reloadData()
         }
