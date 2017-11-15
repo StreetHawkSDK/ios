@@ -112,7 +112,10 @@
     {
         self.choiceHandler(YES, -1);
     }
-    [self dismissOnTop];
+    if (self.parentViewController == nil)
+    {
+        [self dismissOnTop];
+    }
 }
 
 #pragma mark - UITableView delegate and datasource
@@ -154,7 +157,10 @@
     {
         self.choiceHandler(NO, indexPath.row);
     }
-    [self dismissOnTop];
+    if (self.parentViewController == nil)
+    {
+        [self dismissOnTop];
+    }
 }
 
 @end
