@@ -257,7 +257,7 @@
         //some handlers initialize erlier
         self.installHandler = [[SHInstallHandler alloc] init];
 
-        self.autoIntegrateAppDelegate = YES;
+        self.autoIntegrateAppDelegate = NO;
         [self setupNotifications]; //move early so that Phonegap can handle remote notification in appDidFinishLaunching.
     }
     return self;
