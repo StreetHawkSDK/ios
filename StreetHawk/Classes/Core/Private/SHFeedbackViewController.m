@@ -68,7 +68,10 @@
     {
         self.inputHandler(YES, self.feedbackTitle, self.textboxContent.text);
     }
-    [self dismissOnTop];
+    if (self.parentViewController == nil)
+    {
+        [self dismissOnTop];
+    }
 }
 
 - (IBAction)buttonCancelClicked:(id)sender
@@ -77,7 +80,10 @@
     {
         self.inputHandler(NO, nil, nil);
     }
-    [self dismissOnTop];
+    if (self.parentViewController == nil)
+    {
+        [self dismissOnTop];
+    }
 }
 
 #pragma mark - UITextFieldDelegate and UITextViewDelegate handler
