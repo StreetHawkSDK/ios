@@ -869,13 +869,22 @@ NSString *shCaptureAdvertisingIdentifier()
     {
         return nil;
     }
-    if (hexString.length != 7 && hexString.length != 9)
+    if (hexString.length != 4 //#RGB
+        && hexString.length != 7 //#RRGGBB
+        && hexString.length != 9) //AARRGGBB
     {
         return nil;
     }
     if (![hexString hasPrefix:@"#"])
     {
         return nil;
+    }
+    if (hexString.length == 4)
+    {
+        NSString *red = [hexString substringWithRange:NSMakeRange(1, 1)];
+        NSString *green = [hexString substringWithRange:NSMakeRange(2, 1)];
+        NSString *blue = [hexString substringWithRange:NSMakeRange(3, 1)];
+        hexString = [NSString stringWithFormat:@"#%@%@%@%@%@%@", red, red, green, green, blue, blue];
     }
     NSScanner *scanner = [NSScanner scannerWithString:hexString];
     [scanner setScanLocation:1]; // bypass '#' character
