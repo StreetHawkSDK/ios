@@ -869,38 +869,69 @@ NSString *shCaptureAdvertisingIdentifier()
     {
         return nil;
     }
-    if (hexString.length != 4 //#RGB
-        && hexString.length != 7 //#RRGGBB
-        && hexString.length != 9) //AARRGGBB
+    CGFloat red = -1;
+    CGFloat green = -1;
+    CGFloat blue = -1;
+    CGFloat alpha = -1;
+    if (hexString.length == 4 //#RGB
+        || hexString.length == 7 //#RRGGBB
+        || hexString.length == 9) //#AARRGGBB
     {
-        return nil;
-    }
-    if (![hexString hasPrefix:@"#"])
-    {
-        return nil;
-    }
-    if (hexString.length == 4)
-    {
-        NSString *red = [hexString substringWithRange:NSMakeRange(1, 1)];
-        NSString *green = [hexString substringWithRange:NSMakeRange(2, 1)];
-        NSString *blue = [hexString substringWithRange:NSMakeRange(3, 1)];
-        hexString = [NSString stringWithFormat:@"#%@%@%@%@%@%@", red, red, green, green, blue, blue];
-    }
-    NSScanner *scanner = [NSScanner scannerWithString:hexString];
-    [scanner setScanLocation:1]; // bypass '#' character
-    unsigned rgbValue = 0;
-    [scanner scanHexInt:&rgbValue];
-    CGFloat red, green, blue, alpha;
-    red = ((rgbValue & 0xFF0000) >> 16)/255.0;
-    green = ((rgbValue & 0xFF00) >> 8)/255.0;
-    blue = (rgbValue & 0xFF)/255.0;
-    if (hexString.length == 7)
-    {
-        alpha = 1.0;
+        if (![hexString hasPrefix:@"#"])
+        {
+            return nil;
+        }
+        if (hexString.length == 4)
+        {
+            NSString *red = [hexString substringWithRange:NSMakeRange(1, 1)];
+            NSString *green = [hexString substringWithRange:NSMakeRange(2, 1)];
+            NSString *blue = [hexString substringWithRange:NSMakeRange(3, 1)];
+            hexString = [NSString stringWithFormat:@"#%@%@%@%@%@%@", red, red, green, green, blue, blue];
+        }
+        NSScanner *scanner = [NSScanner scannerWithString:hexString];
+        [scanner setScanLocation:1]; // bypass '#' character
+        unsigned rgbValue = 0;
+        [scanner scanHexInt:&rgbValue];
+        red = ((rgbValue & 0xFF0000) >> 16)/255.0;
+        green = ((rgbValue & 0xFF00) >> 8)/255.0;
+        blue = (rgbValue & 0xFF)/255.0;
+        if (hexString.length == 7)
+        {
+            alpha = 1.0;
+        }
+        else
+        {
+            alpha = ((rgbValue & 0xFF000000) >> 24)/255.0;
+        }
     }
     else
     {
-        alpha = ((rgbValue & 0xFF000000) >> 24)/255.0;
+        //rgb(255,255,255,1)
+        if ([hexString.lowercaseString hasPrefix:@"rgb("]
+            && [hexString.lowercaseString hasSuffix:@")"])
+        {
+            hexString = [hexString stringByReplacingOccurrencesOfString:@"rgb(" withString:@""];
+            hexString = [hexString stringByReplacingOccurrencesOfString:@")" withString:@""];
+            NSArray *arrayComponents = [hexString componentsSeparatedByString:@","];
+            if (arrayComponents.count >= 3)
+            {
+                red = [arrayComponents[0] floatValue]/255.0;
+                green = [arrayComponents[1] floatValue]/255.0;
+                blue = [arrayComponents[2] floatValue]/255.0;
+            }
+            if (arrayComponents.count == 4)
+            {
+                alpha = [arrayComponents[3] floatValue];
+                if (alpha > 1)
+                {
+                    alpha = alpha/255.0;
+                }
+            }
+            else
+            {
+                alpha = 1.0;
+            }
+        }
     }
     if (red >= 0 && red <= 1 && green >= 0 && green <= 1 && blue >= 0 && blue <= 1 && alpha >= 0 && alpha <= 1)
     {
