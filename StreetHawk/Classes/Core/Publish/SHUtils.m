@@ -863,23 +863,27 @@ NSString *shCaptureAdvertisingIdentifier()
 
 @implementation UIColor (SHExt)
 
++ (BOOL)isRGB:(NSArray *)arrayComponents
+{
+    return arrayComponents.count >= RGB_COLOUR_CODE_LEN;
+}
+
++ (BOOL)isRGBA:(NSArray *)arrayComponents
+{
+    return arrayComponents.count == ARGB_COLOUR_CODE_LEN;
+}
+
 + (UIColor *)colorFromHexString:(NSString *)hexString
 {
-    if (![hexString isKindOfClass:[NSString class]])
-    {
-        return nil;
-    }
-    if (hexString.length != 4 //#RGB
-        && hexString.length != 7 //#RRGGBB
-        && hexString.length != 9) //AARRGGBB
-    {
-        return nil;
-    }
     if (![hexString hasPrefix:@"#"])
     {
         return nil;
     }
-    if (hexString.length == 4)
+    CGFloat red = -1;
+    CGFloat green = -1;
+    CGFloat blue = -1;
+    CGFloat alpha = -1;
+    if (hexString.length == RGB_COLOUR_CODE_LEN + 1)
     {
         NSString *red = [hexString substringWithRange:NSMakeRange(1, 1)];
         NSString *green = [hexString substringWithRange:NSMakeRange(2, 1)];
@@ -890,11 +894,10 @@ NSString *shCaptureAdvertisingIdentifier()
     [scanner setScanLocation:1]; // bypass '#' character
     unsigned rgbValue = 0;
     [scanner scanHexInt:&rgbValue];
-    CGFloat red, green, blue, alpha;
     red = ((rgbValue & 0xFF0000) >> 16)/255.0;
     green = ((rgbValue & 0xFF00) >> 8)/255.0;
     blue = (rgbValue & 0xFF)/255.0;
-    if (hexString.length == 7)
+    if (hexString.length == RRGGBB_COLOUR_CODE_LEN + 1)
     {
         alpha = 1.0;
     }
@@ -902,7 +905,10 @@ NSString *shCaptureAdvertisingIdentifier()
     {
         alpha = ((rgbValue & 0xFF000000) >> 24)/255.0;
     }
-    if (red >= 0 && red <= 1 && green >= 0 && green <= 1 && blue >= 0 && blue <= 1 && alpha >= 0 && alpha <= 1)
+    if (red >= 0 && red <= 1
+        && green >= 0 && green <= 1
+        && blue >= 0 && blue <= 1
+        && alpha >= 0 && alpha <= 1)
     {
         return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
     }
@@ -910,6 +916,70 @@ NSString *shCaptureAdvertisingIdentifier()
     {
         return nil;
     }
+}
+
++ (UIColor *)colorFromRGBString:(NSString *)rgbString
+{
+    CGFloat red = -1;
+    CGFloat green = -1;
+    CGFloat blue = -1;
+    CGFloat alpha = -1;
+    if ([rgbString.lowercaseString hasPrefix:@"rgb("]
+        && [rgbString.lowercaseString hasSuffix:@")"])
+    {
+        rgbString = [rgbString.lowercaseString stringByReplacingOccurrencesOfString:@"rgb(" withString:@""];
+        rgbString = [rgbString stringByReplacingOccurrencesOfString:@")" withString:@""];
+        NSArray *arrayComponents = [rgbString componentsSeparatedByString:@","];
+        NSCharacterSet *whiteChar = [NSCharacterSet whitespaceCharacterSet];
+        if ([self isRGB:arrayComponents])
+        {
+            red = [[arrayComponents[0] stringByTrimmingCharactersInSet:whiteChar] floatValue]/255.0;
+            green = [[arrayComponents[1] stringByTrimmingCharactersInSet:whiteChar] floatValue]/255.0;
+            blue = [[arrayComponents[2] stringByTrimmingCharactersInSet:whiteChar] floatValue]/255.0;
+        }
+        if ([self isRGBA:arrayComponents])
+        {
+            alpha = [[arrayComponents[3] stringByTrimmingCharactersInSet:whiteChar] floatValue];
+            if (alpha > 1)
+            {
+                alpha = alpha/255.0;
+            }
+        }
+        else
+        {
+            alpha = 1.0;
+        }
+    }
+    if (red >= 0 && red <= 1
+        && green >= 0 && green <= 1
+        && blue >= 0 && blue <= 1
+        && alpha >= 0 && alpha <= 1)
+    {
+        return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
++ (UIColor *)colorFromString:(NSString *)str
+{
+    if (![str isKindOfClass:[NSString class]])
+    {
+        return nil;
+    }
+    if (str.length == RGB_COLOUR_CODE_LEN + 1 //#RGB
+        || str.length == RRGGBB_COLOUR_CODE_LEN + 1 //#RRGGBB
+        || str.length == AARRGGBB_COLOUR_CODE_LEN + 1) //#AARRGGBB
+    {
+        return [self colorFromHexString:str];
+    }
+    else //rgb(255,255,255,1)
+    {
+        return [self colorFromRGBString:str];
+    }
+    return nil;
 }
 
 + (NSString *)hexStringFromColor:(UIColor *)color
