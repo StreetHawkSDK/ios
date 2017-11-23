@@ -865,19 +865,16 @@ NSString *shCaptureAdvertisingIdentifier()
 
 + (BOOL)isRGB:(NSArray *)arrayComponents
 {
-    return arrayComponents.count >= 3;
+    return arrayComponents.count >= RGB_COLOUR_CODE_LEN;
 }
 
 + (BOOL)isRGBA:(NSArray *)arrayComponents
 {
-    return arrayComponents.count == 4;
+    return arrayComponents.count == ARGB_COLOUR_CODE_LEN;
 }
 
 + (UIColor *)colorFromHexString:(NSString *)hexString
 {
-    const NSInteger RGB_COLOUR_CODE_LEN = 4;
-    const NSInteger RRGGBB_COLOUR_CODE_LEN = 7;
-    const NSInteger AARRGGBB_COLOUR_CODE_LEN = 9;
     if (![hexString isKindOfClass:[NSString class]])
     {
         return nil;
@@ -886,15 +883,15 @@ NSString *shCaptureAdvertisingIdentifier()
     CGFloat green = -1;
     CGFloat blue = -1;
     CGFloat alpha = -1;
-    if (hexString.length == RGB_COLOUR_CODE_LEN //#RGB
-        || hexString.length == RRGGBB_COLOUR_CODE_LEN //#RRGGBB
-        || hexString.length == AARRGGBB_COLOUR_CODE_LEN) //#AARRGGBB
+    if (hexString.length == RGB_COLOUR_CODE_LEN + 1 //#RGB
+        || hexString.length == RRGGBB_COLOUR_CODE_LEN + 1 //#RRGGBB
+        || hexString.length == AARRGGBB_COLOUR_CODE_LEN + 1) //#AARRGGBB
     {
         if (![hexString hasPrefix:@"#"])
         {
             return nil;
         }
-        if (hexString.length == RGB_COLOUR_CODE_LEN)
+        if (hexString.length == RGB_COLOUR_CODE_LEN + 1)
         {
             NSString *red = [hexString substringWithRange:NSMakeRange(1, 1)];
             NSString *green = [hexString substringWithRange:NSMakeRange(2, 1)];
@@ -908,7 +905,7 @@ NSString *shCaptureAdvertisingIdentifier()
         red = ((rgbValue & 0xFF0000) >> 16)/255.0;
         green = ((rgbValue & 0xFF00) >> 8)/255.0;
         blue = (rgbValue & 0xFF)/255.0;
-        if (hexString.length == RRGGBB_COLOUR_CODE_LEN)
+        if (hexString.length == RRGGBB_COLOUR_CODE_LEN + 1)
         {
             alpha = 1.0;
         }
