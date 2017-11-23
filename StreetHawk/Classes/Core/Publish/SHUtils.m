@@ -865,11 +865,11 @@ NSString *shCaptureAdvertisingIdentifier()
 
 + (UIColor *)colorFromHexString:(NSString *)hexString
 {
-    const NSInteger RGB = 4;
-    const NSInteger RRGGBB = 7;
-    const NSInteger AARRGGBB = 9;
-    const NSInteger COMPONENTRGB = 3;
-    const NSInteger COMPONENTARGB = 4;
+    const NSInteger RGB_COLOUR_CODE_LEN = 4;
+    const NSInteger RRGGBB_COLOUR_CODE_LEN = 7;
+    const NSInteger AARRGGBB_COLOUR_CODE_LEN = 9;
+    const NSInteger IS_RGB = 3;
+    const NSInteger IS_RGBA = 4;
     if (![hexString isKindOfClass:[NSString class]])
     {
         return nil;
@@ -878,15 +878,15 @@ NSString *shCaptureAdvertisingIdentifier()
     CGFloat green = -1;
     CGFloat blue = -1;
     CGFloat alpha = -1;
-    if (hexString.length == RGB //#RGB
-        || hexString.length == RRGGBB //#RRGGBB
-        || hexString.length == AARRGGBB) //#AARRGGBB
+    if (hexString.length == RGB_COLOUR_CODE_LEN //#RGB
+        || hexString.length == RRGGBB_COLOUR_CODE_LEN //#RRGGBB
+        || hexString.length == AARRGGBB_COLOUR_CODE_LEN) //#AARRGGBB
     {
         if (![hexString hasPrefix:@"#"])
         {
             return nil;
         }
-        if (hexString.length == RGB)
+        if (hexString.length == RGB_COLOUR_CODE_LEN)
         {
             NSString *red = [hexString substringWithRange:NSMakeRange(1, 1)];
             NSString *green = [hexString substringWithRange:NSMakeRange(2, 1)];
@@ -900,7 +900,7 @@ NSString *shCaptureAdvertisingIdentifier()
         red = ((rgbValue & 0xFF0000) >> 16)/255.0;
         green = ((rgbValue & 0xFF00) >> 8)/255.0;
         blue = (rgbValue & 0xFF)/255.0;
-        if (hexString.length == RRGGBB)
+        if (hexString.length == RRGGBB_COLOUR_CODE_LEN)
         {
             alpha = 1.0;
         }
@@ -918,13 +918,13 @@ NSString *shCaptureAdvertisingIdentifier()
             hexString = [hexString stringByReplacingOccurrencesOfString:@"rgb(" withString:@""];
             hexString = [hexString stringByReplacingOccurrencesOfString:@")" withString:@""];
             NSArray *arrayComponents = [hexString componentsSeparatedByString:@","];
-            if (arrayComponents.count >= COMPONENTRGB)
+            if (arrayComponents.count >= IS_RGB)
             {
                 red = [arrayComponents[0] floatValue]/255.0;
                 green = [arrayComponents[1] floatValue]/255.0;
                 blue = [arrayComponents[2] floatValue]/255.0;
             }
-            if (arrayComponents.count == COMPONENTARGB)
+            if (arrayComponents.count == IS_RGBA)
             {
                 alpha = [arrayComponents[3] floatValue];
                 if (alpha > 1)
