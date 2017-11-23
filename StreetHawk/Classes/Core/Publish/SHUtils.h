@@ -297,9 +297,12 @@ extern NSString *shCaptureAdvertisingIdentifier(void);
 #define AARRGGBB_COLOUR_CODE_LEN    8
 
 /**
- Convert hex string formatted as #RRGGBB or #AARRGGBB to UIColor. It must prefix "#" and only contains (A), R, G, B. If not in this format, return nil.
+ Support two types:
+ 1. Convert hex string formatted as #RGB or #RRGGBB or #AARRGGBB to UIColor.
+    It must prefix "#" and only contains (A), R, G, B. If not in this format, return nil.
+ 2. Convert RGB string formatted as rgb(255,255,255,1).
  */
-+ (UIColor *)colorFromHexString:(NSString *)hexString;
++ (UIColor *)colorFromString:(NSString *)str;
 
 /**
  Convert color to hex string formatted as #AARRGGBB. If color is nil return nil.
