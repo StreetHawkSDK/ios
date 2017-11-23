@@ -863,13 +863,21 @@ NSString *shCaptureAdvertisingIdentifier()
 
 @implementation UIColor (SHExt)
 
++ (BOOL)isRGB:(NSArray *)arrayComponents
+{
+    return arrayComponents.count >= 3;
+}
+
++ (BOOL)isRGBA:(NSArray *)arrayComponents
+{
+    return arrayComponents.count == 4;
+}
+
 + (UIColor *)colorFromHexString:(NSString *)hexString
 {
     const NSInteger RGB_COLOUR_CODE_LEN = 4;
     const NSInteger RRGGBB_COLOUR_CODE_LEN = 7;
     const NSInteger AARRGGBB_COLOUR_CODE_LEN = 9;
-    const NSInteger IS_RGB = 3;
-    const NSInteger IS_RGBA = 4;
     if (![hexString isKindOfClass:[NSString class]])
     {
         return nil;
@@ -918,13 +926,13 @@ NSString *shCaptureAdvertisingIdentifier()
             hexString = [hexString stringByReplacingOccurrencesOfString:@"rgb(" withString:@""];
             hexString = [hexString stringByReplacingOccurrencesOfString:@")" withString:@""];
             NSArray *arrayComponents = [hexString componentsSeparatedByString:@","];
-            if (arrayComponents.count >= IS_RGB)
+            if ([self isRGB:arrayComponents])
             {
                 red = [arrayComponents[0] floatValue]/255.0;
                 green = [arrayComponents[1] floatValue]/255.0;
                 blue = [arrayComponents[2] floatValue]/255.0;
             }
-            if (arrayComponents.count == IS_RGBA)
+            if ([self isRGBA:arrayComponents])
             {
                 alpha = [arrayComponents[3] floatValue];
                 if (alpha > 1)
