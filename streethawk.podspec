@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
     sp.dependency            'MBProgressHUD'
     sp.dependency            'Masonry'
     sp.dependency            'WebViewJavascriptBridge'
-    sp.dependency            'SDWebImage'
+    sp.dependency            'SDWebImage/GIF'
   end
   
   s.subspec 'Growth' do |sp|
