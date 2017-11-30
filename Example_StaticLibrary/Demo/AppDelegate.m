@@ -76,6 +76,7 @@
     //    StreetHawk.notificationTypes = UIRemoteNotificationTypeAlert;
     //    StreetHawk.isDefaultLocationServiceEnabled = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegisterSuccessHandler:) name:SHInstallRegistrationSuccessNotification object:nil];
+    StreetHawk.autoIntegrateAppDelegate = YES;
     [StreetHawk registerInstallForApp:appKey withDebugMode:YES];
     
     //Sample code to register some friendly names which will be used in push notification 8004/8006/8007.
