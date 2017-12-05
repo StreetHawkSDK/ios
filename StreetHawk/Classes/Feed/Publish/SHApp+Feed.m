@@ -149,6 +149,10 @@
     dictResult[@"status"] = resultStr;
     dictResult[@"feed_delete"] = @(feedDelete);
     dictResult[@"complete"] = @(complete);
+    if (![stepId isKindOfClass:[NSString class]])
+    {
+        stepId = [NSString stringWithFormat:@"%@", stepId];
+    }
     if (!shStrIsEmpty(stepId))
     {
         dictResult[@"step_id"] = stepId;
