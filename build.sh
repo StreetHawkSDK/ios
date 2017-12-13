@@ -17,7 +17,7 @@ pod install
 xcodebuild clean -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -sdk iphoneos -configuration Release
 
 # archive app
-xcodebuild archive -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -archivePath ../build/outputs/SHStatic.xcarchive
+xcodebuild archive -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -archivePath ../build/outputs/SHStatic.xcarchive -allowProvisioningUpdates
 
 # ------------------- build SHDynamic ------------------------
 
@@ -31,7 +31,7 @@ pod install
 xcodebuild clean -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -sdk iphoneos -configuration Release
 
 # archive app
-xcodebuild archive -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -archivePath ../build/outputs/SHDynamic.xcarchive
+xcodebuild archive -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -archivePath ../build/outputs/SHDynamic.xcarchive -allowProvisioningUpdates
 
 popd
 
