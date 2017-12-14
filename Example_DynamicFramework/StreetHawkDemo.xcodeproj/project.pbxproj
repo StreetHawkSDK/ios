@@ -437,7 +437,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-resources.sh",
-				"$PODS_CONFIGURATION_BUILD_DIR/streethawk/streethawk.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/streethawk/streethawk.bundle,
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -614,7 +614,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHDynamic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e70d2acd-95f2-48ea-b534-54445199721d";
+				PROVISIONING_PROFILE = "e341d902-6ca0-40f5-b695-ecc7f69e637b";
 				PROVISIONING_PROFILE_SPECIFIER = "Dev - StreetHawk Pod Dynamic Framework Sample App";
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -641,7 +641,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHDynamic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "79b85b17-135b-45fd-bb55-c147fb7f8493";
+				PROVISIONING_PROFILE = "60eefa66-e980-4928-8608-2f61c6898c2b";
 				PROVISIONING_PROFILE_SPECIFIER = "Adhoc - StreetHawk Pod Dynamic Framework Sample";
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
