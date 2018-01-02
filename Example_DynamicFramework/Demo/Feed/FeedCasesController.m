@@ -38,7 +38,11 @@
     [fetchFeedButton addTarget:self action:@selector(buttonFetchFeedClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     self.tableView.tableHeaderView = fetchFeedButton;
-    
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     [self buttonFetchFeedClicked:nil]; //when open this page, automatically load feeds.
 }
 

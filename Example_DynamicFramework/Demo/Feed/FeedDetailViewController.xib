@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,7 +29,7 @@
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x48-d0-bxi" userLabel="buttonFeedack">
-                    <rect key="frame" x="31" y="560" width="102" height="30"/>
+                    <rect key="frame" x="200" y="560" width="102" height="30"/>
                     <state key="normal" title="Send Feed ack"/>
                     <connections>
                         <action selector="buttonFeedackClicked:" destination="-1" eventType="touchUpInside" id="eUf-BF-jxJ"/>
@@ -78,7 +78,7 @@
                 <constraint firstItem="NDO-UE-j5c" firstAttribute="leading" secondItem="Xjw-5W-ST8" secondAttribute="trailing" constant="7" id="pnD-KX-0Pl"/>
                 <constraint firstAttribute="bottom" secondItem="d4f-eZ-jmQ" secondAttribute="bottom" constant="11" id="w1A-xH-bYh"/>
                 <constraint firstItem="x48-d0-bxi" firstAttribute="top" secondItem="Wp6-QF-AxU" secondAttribute="bottom" constant="10" id="xSL-dC-NJB"/>
-                <constraint firstItem="x48-d0-bxi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="31" id="yLa-9l-ID6"/>
+                <constraint firstItem="x48-d0-bxi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="200" id="yLa-9l-ID6"/>
             </constraints>
             <point key="canvasLocation" x="34.5" y="133.5"/>
         </view>
