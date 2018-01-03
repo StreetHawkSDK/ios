@@ -73,5 +73,26 @@
                       withStepId:nil
                       deleteFeed:isDeleted
                        completed:NO];
+    if (isDeleted)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                     (int64_t)(3 * NSEC_PER_SEC)),
+                       dispatch_get_main_queue(), ^{
+                           UIAlertController *alertCtrl
+                           = [UIAlertController alertControllerWithTitle:@"This feed is deleted"
+                                                                 message:nil
+                                                          preferredStyle:UIAlertControllerStyleAlert];
+                           UIAlertAction *action
+                           = [UIAlertAction actionWithTitle:@"OK"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                                                        [self.navigationController popViewControllerAnimated:YES];
+                                                    }];
+                           [alertCtrl addAction:action];
+                           [self presentViewController:alertCtrl
+                                              animated:YES
+                                            completion:nil];
+                       });
+    }
 }
 @end
