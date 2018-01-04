@@ -2,40 +2,31 @@
 echo "Build started on $(date)"
 set -e
 
-# delete /build/outputs folder
-rm -Rf ./build/outputs/*
-pushd .
+BUILD_OUTPUTS=$(pwd)/build/outputs/
+mkdir -p $BUILD_OUTPUTS
+rm -Rf $BUILD_OUTPUTS/*
 
 # ------------------- build SHStatic ------------------------
 
+pushd .
+
 cd Example_StaticLibrary
 
-# install third-party pods
-pod install
+fastlane gym --scheme StreetHawkDemo --export_method "ad-hoc" --output_directory "$BUILD_OUTPUTS" --output_name "SHStatic.ipa" --clean true
 
-# clean project
-xcodebuild clean -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -sdk iphoneos -configuration Release
-
-# archive app
-xcodebuild archive -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -archivePath ../build/outputs/SHStatic.xcarchive -allowProvisioningUpdates
+popd
 
 # ------------------- build SHDynamic ------------------------
 
-cd ..
+pushd .
+
 cd Example_DynamicFramework
 
-# install third-party pods
-pod install
-
-# clean project
-xcodebuild clean -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -sdk iphoneos -configuration Release
-
-# archive app
-xcodebuild archive -workspace StreetHawkDemo.xcworkspace -scheme StreetHawkDemo -archivePath ../build/outputs/SHDynamic.xcarchive -allowProvisioningUpdates
+fastlane gym --scheme StreetHawkDemo --export_method "ad-hoc" --output_directory "$BUILD_OUTPUTS" --output_name "SHDynamic.ipa" --clean true
 
 popd
 
 # ---------------------- upload to hockeyapp ---------------------
 
-/usr/local/bin/puck -submit=auto -download=true -notes="$(git log -1)" -notes_type=markdown -source_path=$PWD -repository_url=https://github.com/StreetHawkSDK/ios -api_token=$HOCKEYAPP_TOKEN -app_id=$HOCKEYAPP_APPID_DYNAMIC build/outputs/SHDynamic.xcarchive
-/usr/local/bin/puck -submit=auto -download=true -notes="$(git log -1)" -notes_type=markdown -source_path=$PWD -repository_url=https://github.com/StreetHawkSDK/ios -api_token=$HOCKEYAPP_TOKEN -app_id=$HOCKEYAPP_APPID_STATIC build/outputs/SHStatic.xcarchive
+/usr/local/bin/puck -submit=auto -download=true -notes="$(git log -1)" -notes_type=markdown -source_path=$PWD -repository_url=https://github.com/StreetHawkSDK/ios -api_token=$HOCKEYAPP_TOKEN -app_id=$HOCKEYAPP_APPID_DYNAMIC build/outputs/SHDynamic.ipa
+/usr/local/bin/puck -submit=auto -download=true -notes="$(git log -1)" -notes_type=markdown -source_path=$PWD -repository_url=https://github.com/StreetHawkSDK/ios -api_token=$HOCKEYAPP_TOKEN -app_id=$HOCKEYAPP_APPID_STATIC build/outputs/SHStatic.ipa
