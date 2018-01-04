@@ -12,7 +12,7 @@ pushd .
 
 cd Example_StaticLibrary
 
-
+fastlane gym --scheme StreetHawkDemo --export_method "ad-hoc" --output_directory "$BUILD_OUTPUTS" --output_name "SHStatic.ipa" --clean true
 
 popd
 
