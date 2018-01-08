@@ -641,8 +641,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHDynamic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "60eefa66-e980-4928-8608-2f61c6898c2b";
-				PROVISIONING_PROFILE_SPECIFIER = "Adhoc - StreetHawk Pod Dynamic Framework Sample";
+				PROVISIONING_PROFILE = "a808e5ce-ef83-4e2e-b82c-29963a2be9d7";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc com.streethawk.SHDynamic";
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
