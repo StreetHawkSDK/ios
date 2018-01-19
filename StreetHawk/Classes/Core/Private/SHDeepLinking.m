@@ -83,8 +83,10 @@
     if (command != nil && [command compare:COMMAND_LAUNCHVC options:NSCaseInsensitiveSearch] == NSOrderedSame) //launch vc
     {
         SHLog(@"Deeplinking process do launch vc: %@.", deeplinking.absoluteString);
+        //automatically launch vc only available for native, xamarin and react-native
         if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native
-            || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin) //automatically launch vc only available for native and xamarin
+            || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin
+            || StreetHawk.developmentPlatform == SHDevelopmentPlatform_ReactNative)
         {
             BOOL isHandled = [self launchDeepLinkingVC:deeplinking.absoluteString withPushData:pushData increaseGrowthClick:increaseGrowth];
             if (isHandled)

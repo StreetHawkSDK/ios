@@ -51,6 +51,10 @@ enum SHDevelopmentPlatform
      Unity Apps.
      */
     SHDevelopmentPlatform_Unity,
+    /**
+     React-native Apps.
+     */
+    SHDevelopmentPlatform_ReactNative,
 };
 typedef enum SHDevelopmentPlatform SHDevelopmentPlatform;
 

@@ -714,6 +714,9 @@ NSString *shDevelopmentPlatformString()
         case SHDevelopmentPlatform_Unity:
             platformStr = @"unity";
             break;
+        case SHDevelopmentPlatform_ReactNative:
+            platformStr = @"reactnative";
+            break;
         default:
             assert(NO && "Meet unknown development platform.");
             platformStr = @"unknown";

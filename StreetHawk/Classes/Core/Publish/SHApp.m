@@ -437,6 +437,12 @@
 
 - (SHDevelopmentPlatform)developmentPlatform
 {
+    //React-native check specific class exist
+    Class rcClass = NSClassFromString(@"RCTRootView");
+    if (rcClass)
+    {
+        return SHDevelopmentPlatform_ReactNative;
+    }
     return SHDevelopmentPlatform_Native; //hard code, when distribute change for each platform.
 }
 
@@ -1343,7 +1349,11 @@ forLocalNotification:(UILocalNotification *)notification
 
 - (void)sendModuleTags
 {
-    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin) //all these can reflect bridge class.
+    //all these can reflect bridge class.
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Native
+        || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Phonegap
+        || StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin
+        || StreetHawk.developmentPlatform == SHDevelopmentPlatform_ReactNative)
     {
         Class growthBridge = NSClassFromString(@"SHGrowthBridge");
         NSString *growthCurrent = (growthBridge == nil) ? @"false" : @"true";
