@@ -6,6 +6,8 @@ BUILD_OUTPUTS=$(pwd)/build/outputs/
 mkdir -p $BUILD_OUTPUTS
 rm -Rf $BUILD_OUTPUTS/*
 
+export PATH="$HOME/.fastlane/bin:$PATH"
+
 # ------------------- build SHStatic ------------------------
 
 pushd .
