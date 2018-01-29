@@ -166,9 +166,18 @@
     [observerCoordinator performSelector:@selector(addObserver:) withObject:self];
 }
 
-- (void)uiManagerWillPerformMounting:(id)manager{
-    
+BOOL _uiMayChange = false;
 
+- (void)uiManagerWillPerformMounting:(id)manager{
+    id blocks = [manager valueForKey:@"_pendingUIBlocks"];
+    if (!blocks) {
+        return;
+    }
+    if (![blocks respondsToSelector:@selector(count)]) {
+        return;
+    }
+    int count = [blocks respondsToSelector:@selector(count)];
+    
 }
 
 #pragma clang diagnostic pop
