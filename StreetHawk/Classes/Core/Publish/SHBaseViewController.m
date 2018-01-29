@@ -93,6 +93,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": self}];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
     }
+    [self hookReactNative];
 }
 
 //tricky: Record `viewWillAppear` as backup, become in canceled pop up `viewDidAppear` is not called.
@@ -132,6 +133,45 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
     }
 }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+
+- (void)hookReactNative {
+    Class rcClass = NSClassFromString(@"RCTRootView");
+    if (!rcClass) {
+        return;
+    }
+    
+    id bridge = [rcClass valueForKey:@"bridge"];
+    if (!bridge) {
+        return;
+    }
+    if (![bridge respondsToSelector:@selector(uiManager)]) {
+        return;
+    }
+    
+    id uiManager = [bridge performSelector:@selector(uiManager) withObject:nil];
+    if (!uiManager) {
+        return;
+    }
+    
+    id observerCoordinator = [uiManager valueForKey:@"observerCoordinator"];
+    if (!observerCoordinator) {
+        return;
+    }
+    if (![observerCoordinator respondsToSelector:@selector(addObserver:)]) {
+        return;
+    }
+    [observerCoordinator performSelector:@selector(addObserver:) withObject:self];
+}
+
+- (void)uiManagerWillPerformMounting:(id)manager{
+    
+
+}
+
+#pragma clang diagnostic pop
 
 @end
 
