@@ -193,14 +193,18 @@ BOOL _uiMayChange = false;
 NSDate *_lastChangeDate = nil;
 
 - (void)uiManagerWillPerformMounting:(id)manager{
-    id blocks = [manager valueForKey:@"_pendingUIBlocks"];
+    id blocks = nil;
+    @try {
+        blocks = [manager valueForKey:@"_pendingUIBlocks"];
+    }
+    @catch(NSException *e) {}
     if (!blocks) {
         return;
     }
     if (![blocks respondsToSelector:@selector(count)]) {
         return;
     }
-    int count = [blocks respondsToSelector:@selector(count)];
+    int count = (int)[blocks performSelector:@selector(count)];
     
     if (count > 0) {
         if (!_uiMayChange) {
@@ -214,8 +218,7 @@ NSDate *_lastChangeDate = nil;
     else if (_uiMayChange) {
         NSDate *now = [NSDate date];
         NSTimeInterval diff = [now timeIntervalSinceDate:_lastChangeDate];
-        NSLog(@"diff %f", diff);
-        if (diff > 1000) {
+        if (diff > 1) {
             _uiMayChange = false;
             // equal to viewDidLoad + viewWillAppear
             [self _doViewDidLoad];
