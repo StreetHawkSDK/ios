@@ -83,6 +83,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (![self checkReactNative]) {
+        [self _doViewDidLoad];
+    }
+}
+
+- (void)_doViewDidLoad {
     if ([self respondsToSelector:@selector(displayDeepLinkingToUI)])
     {
         [self performSelector:@selector(displayDeepLinkingToUI)];
@@ -99,6 +105,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (![self checkReactNative]) {
+        [self _doViewWillAppear];
+    }
+    [self hookReactNative];
+}
+
+- (void)_doViewWillAppear {
     if (!self.excludeBehavior && !shIsSDKViewController(self))
     {
         [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
@@ -132,6 +145,89 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
     }
 }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+
+- (BOOL)checkReactNative {
+    Class rcClass = NSClassFromString(@"RCTRootView");
+    return rcClass;
+}
+
+- (void)hookReactNative {
+    Class rcClass = NSClassFromString(@"RCTRootView");
+    if (!rcClass) {
+        return;
+    }
+    
+    if (![self.view respondsToSelector:@selector(bridge)]) {
+        return;
+    }
+    id bridge = [self.view valueForKey:@"bridge"];
+    if (!bridge) {
+        return;
+    }
+    
+    if (![bridge respondsToSelector:@selector(uiManager)]) {
+        return;
+    }
+    id uiManager = [bridge performSelector:@selector(uiManager) withObject:nil];
+    if (!uiManager) {
+        return;
+    }
+    
+    if (![uiManager respondsToSelector:@selector(observerCoordinator)]) {
+        return;
+    }
+    id observerCoordinator = [uiManager valueForKey:@"observerCoordinator"];
+    if (!observerCoordinator) {
+        return;
+    }
+    if (![observerCoordinator respondsToSelector:@selector(addObserver:)]) {
+        return;
+    }
+    [observerCoordinator performSelector:@selector(addObserver:) withObject:self];
+}
+
+BOOL _uiMayChange = false;
+NSDate *_lastChangeDate = nil;
+
+- (void)uiManagerWillPerformMounting:(id)manager{
+    id blocks = nil;
+    @try {
+        blocks = [manager valueForKey:@"_pendingUIBlocks"];
+    }
+    @catch(NSException *e) {}
+    if (!blocks) {
+        return;
+    }
+    if (![blocks respondsToSelector:@selector(count)]) {
+        return;
+    }
+    int count = (int)[blocks performSelector:@selector(count)];
+    
+    if (count > 0) {
+        if (!_uiMayChange) {
+            // equal to viewWillDisappear
+            [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
+        }
+        _uiMayChange = true;
+        _lastChangeDate = [NSDate date];
+    }
+    else if (_uiMayChange) {
+        NSDate *now = [NSDate date];
+        NSTimeInterval diff = [now timeIntervalSinceDate:_lastChangeDate];
+        if (diff > 1) {
+            _uiMayChange = false;
+            // equal to viewDidLoad + viewWillAppear
+            [self _doViewDidLoad];
+            [self _doViewWillAppear];
+        }
+    }
+}
+
+#pragma clang diagnostic pop
 
 @end
 
