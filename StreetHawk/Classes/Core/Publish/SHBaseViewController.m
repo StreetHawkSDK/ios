@@ -225,8 +225,6 @@ NSDate *_lastChangeDate = nil;
             [self _doViewWillAppear];
         }
     }
-    
-    
 }
 
 #pragma clang diagnostic pop
