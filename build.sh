@@ -8,7 +8,7 @@ rm -Rf $BUILD_OUTPUTS/*
 
 export PATH="$HOME/.fastlane/bin:$PATH"
 
-security unlock-keychain $BUILD_PASSWORD
+security unlock-keychain -p $BUILD_PASSWORD "/Users/hawk/Library/Keychains/login.keychain-db"
 
 # ------------------- build SHStatic ------------------------
 
