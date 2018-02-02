@@ -8,8 +8,6 @@ rm -Rf $BUILD_OUTPUTS/*
 
 export PATH="$HOME/.fastlane/bin:$PATH"
 
-security unlock-keychain $BUILD_PASSWORD
-
 # ------------------- build SHStatic ------------------------
 
 pushd .
