@@ -32,7 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.arrayCells = @[self.cellCuid, self.cellNumeric, self.cellString, self.cellDatetime, self.cellIncrement, self.cellIncrementValue, self.cellDelete, self.cellFeed, self.cellError];
+    self.arrayCells = @[self.cellCuid, self.cellNumeric, self.cellString, self.cellDatetime, self.cellIncrement, self.cellIncrementValue, self.cellDelete, self.cellFeed];
 }
 
 #pragma mark - Table view data source
@@ -247,12 +247,6 @@
              }
          });
      }];
-}
-
-- (IBAction)buttonErrorClicked:(id)sender
-{
-    [StreetHawk sendLogForCode:LOG_CODE_ERROR withComment:@"Test error logline."];
-    [self showDoneAlert:YES];
 }
 
 #pragma mark - private functions

@@ -14,7 +14,6 @@
                 <outlet property="cellCuid" destination="aRJ-v0-0Fy" id="fam-Vg-Ywb"/>
                 <outlet property="cellDatetime" destination="Glr-xu-LkW" id="Va2-D4-2rw"/>
                 <outlet property="cellDelete" destination="hVz-N2-IfH" id="iLn-ky-wJM"/>
-                <outlet property="cellError" destination="NcC-y7-3Es" id="CEl-Pn-XvU"/>
                 <outlet property="cellFeed" destination="NEM-Mk-m4v" id="ck7-S2-r5I"/>
                 <outlet property="cellIncrement" destination="iWv-5a-O0l" id="GWr-RV-C83"/>
                 <outlet property="cellIncrementValue" destination="7cw-Gx-DHr" id="EPx-e1-bD1"/>
@@ -459,30 +458,6 @@
                 <constraints>
                     <constraint firstAttribute="centerY" secondItem="te0-1P-BHG" secondAttribute="centerY" id="Bd5-DF-j5h"/>
                     <constraint firstAttribute="centerX" secondItem="te0-1P-BHG" secondAttribute="centerX" id="meh-QQ-C9x"/>
-                </constraints>
-            </tableViewCellContentView>
-            <point key="canvasLocation" x="448" y="-68"/>
-        </tableViewCell>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="68" id="NcC-y7-3Es" userLabel="cellError">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NcC-y7-3Es" id="V9K-sR-2dh">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="67.5"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vX-Wd-xGx" userLabel="buttonError">
-                        <rect key="frame" x="97" y="19" width="127" height="30"/>
-                        <state key="normal" title="Send Error Logline">
-                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </state>
-                        <connections>
-                            <action selector="buttonErrorClicked:" destination="-1" eventType="touchUpInside" id="4b3-1D-FkB"/>
-                        </connections>
-                    </button>
-                </subviews>
-                <constraints>
-                    <constraint firstAttribute="centerY" secondItem="8vX-Wd-xGx" secondAttribute="centerY" id="OMq-Ag-TmI"/>
-                    <constraint firstAttribute="centerX" secondItem="8vX-Wd-xGx" secondAttribute="centerX" id="Wfv-AD-jvX"/>
                 </constraints>
             </tableViewCellContentView>
             <point key="canvasLocation" x="448" y="-68"/>
