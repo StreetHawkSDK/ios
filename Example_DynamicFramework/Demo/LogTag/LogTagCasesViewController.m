@@ -49,13 +49,34 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = self.arrayCells[indexPath.row];
-    return cell.bounds.size.height;
+    NSInteger rowCuid = 0;
+    NSInteger rowIncrease = 4;
+    NSInteger rowDelete = 6;
+    NSInteger rowButtonDelete = 7;
+    NSInteger rowButtonFeed = 8;
+    CGFloat oneLineHeight = 50;
+    CGFloat twoLineHeight = 80;
+    CGFloat threeLineHeight = 135;
+    if (indexPath.row == rowCuid
+        || indexPath.row == rowIncrease
+        || indexPath.row == rowDelete)
+    {
+        return twoLineHeight;
+    }
+    else if (indexPath.row == rowButtonDelete
+             || indexPath.row == rowButtonFeed)
+    {
+        return oneLineHeight;
+    }
+    else
+    {
+        return threeLineHeight;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return self.arrayCells[indexPath.row];;
+    return self.arrayCells[indexPath.row];
 }
 
 #pragma mark - UITextFieldDelegate handler
