@@ -49,20 +49,28 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0
-        || indexPath.row == 4
-        || indexPath.row == 6)
+    NSInteger rowCuid = 0;
+    NSInteger rowIncrease = 4;
+    NSInteger rowDelete = 6;
+    NSInteger rowButtonDelete = 7;
+    NSInteger rowButtonFeed = 8;
+    CGFloat oneLineHeight = 50;
+    CGFloat twoLineHeight = 80;
+    CGFloat threeLineHeight = 135;
+    if (indexPath.row == rowCuid
+        || indexPath.row == rowIncrease
+        || indexPath.row == rowDelete)
     {
-        return 80;
+        return twoLineHeight;
     }
-    else if (indexPath.row == 7
-             || indexPath.row == 8)
+    else if (indexPath.row == rowButtonDelete
+             || indexPath.row == rowButtonFeed)
     {
-        return 50;
+        return oneLineHeight;
     }
     else
     {
-        return 135;
+        return threeLineHeight;
     }
 }
 
