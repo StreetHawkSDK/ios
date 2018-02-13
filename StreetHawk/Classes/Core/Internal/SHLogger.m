@@ -500,7 +500,9 @@ enum
 - (NSMutableArray *)loadLogRecords
 {
     NSMutableArray *logRecords = [NSMutableArray array];
-    NSString *select_sql_str = [NSString stringWithFormat:@"SELECT * from '%@' WHERE status = 0 ORDER BY logid", tableName];
+    NSString *select_sql_str = [NSString stringWithFormat:@"SELECT * from '%@' WHERE status = 0 ORDER BY logid LIMIT %d",
+                                tableName,
+                                LOG_UPLOAD_INTERVAL];
     @synchronized(self)
     {
         sqlite3_stmt *select_sql = NULL;
