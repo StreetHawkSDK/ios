@@ -401,7 +401,16 @@
 
 - (NSString *)clientVersion
 {
-    return [NSString stringWithFormat:@"%@ (%@)", [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"], [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"]];
+    NSString *clientVersion = [NSString stringWithFormat:@"%@ (%@)",
+                               [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"],
+                               [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"]];
+    const NSInteger CLIENT_VERSION_MAX_LENGTH = 64;
+    if (clientVersion.length > CLIENT_VERSION_MAX_LENGTH)
+    {
+        SHLog(@"WARNING: ClientVersion (%@) is trimed to max length (%d).", clientVersion, CLIENT_VERSION_MAX_LENGTH);
+        clientVersion = [clientVersion substringToIndex:CLIENT_VERSION_MAX_LENGTH];
+    }
+    return clientVersion;
 }
 
 - (NSString *)version
