@@ -165,7 +165,7 @@
 
 - (BOOL)checkReactNative {
     Class rcClass = NSClassFromString(@"RCTRootView");
-    return rcClass;
+    return (rcClass != nil);
 }
 
 - (void)hookReactNative {

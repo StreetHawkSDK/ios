@@ -297,6 +297,13 @@ The application version and build version of current Application, formatted as @
 - (void)shNotifyPageExit:(nullable NSString *)page;
 
 /**
+ Xamarin wrappers.
+ */
+- (void)shNotifyViewDidLoad:(nonnull UIViewController *)vc;
+- (void)shNotifyViewAppear:(nonnull UIViewController *)vc withPage:(nullable NSString *)page;
+- (void)shNotifyViewDisappear:(nonnull UIViewController *)vc withPage:(nullable NSString *)page;
+
+/**
  Get StreetHawk formatted datetime string for given seconds since 1970.
  @param seconds Seconds since 1970.
  @return Streethawk formatted string in style `yyyy-MM-dd HH:mm:ss`, such as 2016-10-21 16:23:18.
