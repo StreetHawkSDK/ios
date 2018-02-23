@@ -579,6 +579,50 @@
     [self shNotifyPageExit:page clearEnterHistory:YES/*for normal App calls, after exit clear history*/ logCompleteView:YES/*normal App call, this is manual exit a view so complete.*/];
 }
 
+- (void)shNotifyViewDidLoad:(nonnull UIViewController *)vc
+{
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification"
+                                                            object:nil
+                                                          userInfo:@{@"vc": vc}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification"
+                                                            object:nil
+                                                          userInfo:@{@"vc": vc}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification"
+                                                            object:nil
+                                                          userInfo:@{@"vc": vc}];
+    }
+}
+
+- (void)shNotifyViewAppear:(nonnull UIViewController *)vc withPage:(nullable NSString *)page
+{
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
+    {
+        [StreetHawk shNotifyPageEnter:page];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification"
+                                                            object:nil
+                                                          userInfo:@{@"vc": vc}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification"
+                                                            object:nil
+                                                          userInfo:@{@"vc": vc}];
+    }
+}
+
+- (void)shNotifyViewDisappear:(nonnull UIViewController *)vc withPage:(nullable NSString *)page
+{
+    if (StreetHawk.developmentPlatform == SHDevelopmentPlatform_Xamarin)
+    {
+        [StreetHawk shNotifyPageExit:page];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification"
+                                                            object:nil
+                                                          userInfo:@{@"vc": vc}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification"
+                                                            object:nil
+                                                          userInfo:@{@"vc": vc}];
+    }
+}
+
 - (NSString *)getFormattedDateTime:(NSTimeInterval)seconds
 {
     return shFormatStreetHawkDate([NSDate dateWithTimeIntervalSince1970:seconds]);
