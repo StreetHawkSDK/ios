@@ -132,7 +132,8 @@
     }
 }
 
-- (void)_doViewDidAppear {
+- (void)_doViewDidAppear
+{
     if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageEnter:[[SHTipUtil appendUniqueSuffix:self] refinePageName]];
@@ -149,12 +150,13 @@
     }
 }
 
-- (void)_doViewWillDisappear {
+- (void)_doViewWillDisappear
+{
     if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
         [StreetHawk shNotifyPageExit:[[SHTipUtil appendUniqueSuffix:self] refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
     }
 }
 
