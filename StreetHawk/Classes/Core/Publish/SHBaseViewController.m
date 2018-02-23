@@ -219,8 +219,7 @@ NSDate *_lastChangeDate = nil;
         return;
     }
     int changePageCount = (int)[blocks performSelector:@selector(count)];
-    const NSInteger COUNT = 1;
-    if (changePageCount > COUNT) {
+    if (changePageCount > 1) {
         if (!_uiMayChange) {
             // equal to viewWillDisappear
             [self _doViewWillDisappear];
@@ -231,8 +230,7 @@ NSDate *_lastChangeDate = nil;
     else if (_uiMayChange) {
         NSDate *now = [NSDate date];
         NSTimeInterval changeTimeInterval = [now timeIntervalSinceDate:_lastChangeDate];
-        const double DIFF = 1.0f;
-        if (changeTimeInterval > DIFF) {
+        if (changeTimeInterval > 1.0f) {
             _uiMayChange = false;
             // equal to viewDidLoad + viewWillAppear + viewDidAppear
             [self _doViewDidLoad];
