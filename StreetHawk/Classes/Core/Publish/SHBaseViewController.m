@@ -217,8 +217,8 @@ NSDate *_lastChangeDate = nil;
         return;
     }
     int count = (int)[blocks performSelector:@selector(count)];
-    
-    if (count > 1) {
+    const NSInteger COUNT = 1;
+    if (count > COUNT) {
         if (!_uiMayChange) {
             // equal to viewWillDisappear
             [self _doViewWillDisappear];
@@ -229,7 +229,8 @@ NSDate *_lastChangeDate = nil;
     else if (_uiMayChange) {
         NSDate *now = [NSDate date];
         NSTimeInterval diff = [now timeIntervalSinceDate:_lastChangeDate];
-        if (diff > 1.0f) {
+        const double DIFF = 1.0f;
+        if (diff > DIFF) {
             _uiMayChange = false;
             // equal to viewDidLoad + viewWillAppear + viewDidAppear
             [self _doViewDidLoad];
