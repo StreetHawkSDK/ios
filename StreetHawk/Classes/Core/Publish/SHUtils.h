@@ -247,6 +247,12 @@ extern BOOL streetHawkIsEnabled(void);
 extern BOOL shIsSDKViewController(UIViewController * vc);
 
 /**
+ Some view such as react-native use RCTView for all views, so that only vc cannot work, it needs an
+ additional id. This function appends additional id.
+ */
+extern NSString *shAppendUniqueSuffix(UIViewController *vc);
+
+/**
  Utility function to check string is nil or empty.
  @param str Check the string.
  @return Return YES if `str` is nil or length = 0; Otherwise return NO.
