@@ -20,6 +20,7 @@
 #import "SHApp.h" //for `StreetHawk shNotifyPageEnter/Exit`
 #import "SHViewController.h" //for checking internal vc to avoid enter/exit log
 #import "SHUtils.h" //for shIsSDKViewController
+#import "SHTipUtil.h" //for tip
 #import "SHCoverView.h" //for cover view
 //header from System
 #import <objc/runtime.h> //for associate object
@@ -126,9 +127,15 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if (![self checkReactNative]) {
+        [self _doViewDidAppear];
+    }
+}
+
+- (void)_doViewDidAppear {
     if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
-        [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
+        [StreetHawk shNotifyPageEnter:[[SHTipUtil appendUniqueSuffix:self] refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
     }
@@ -137,12 +144,17 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    if (![self checkReactNative]) {
+        [self _doViewWillDisappear];
+    }
+}
+
+- (void)_doViewWillDisappear {
     if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
-        [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
-        
+        [StreetHawk shNotifyPageExit:[[SHTipUtil appendUniqueSuffix:self] refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
     }
 }
 
@@ -206,11 +218,10 @@ NSDate *_lastChangeDate = nil;
     }
     int count = (int)[blocks performSelector:@selector(count)];
     
-    if (count > 0) {
+    if (count > 1) {
         if (!_uiMayChange) {
             // equal to viewWillDisappear
-            [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
+            [self _doViewWillDisappear];
         }
         _uiMayChange = true;
         _lastChangeDate = [NSDate date];
@@ -218,11 +229,12 @@ NSDate *_lastChangeDate = nil;
     else if (_uiMayChange) {
         NSDate *now = [NSDate date];
         NSTimeInterval diff = [now timeIntervalSinceDate:_lastChangeDate];
-        if (diff > 1) {
+        if (diff > 1.0f) {
             _uiMayChange = false;
-            // equal to viewDidLoad + viewWillAppear
+            // equal to viewDidLoad + viewWillAppear + viewDidAppear
             [self _doViewDidLoad];
             [self _doViewWillAppear];
+            [self _doViewDidAppear];
         }
     }
 }
