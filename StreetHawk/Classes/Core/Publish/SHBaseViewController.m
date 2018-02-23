@@ -218,9 +218,9 @@ NSDate *_lastChangeDate = nil;
     if (![blocks respondsToSelector:@selector(count)]) {
         return;
     }
-    int changeCount = (int)[blocks performSelector:@selector(count)];
+    int changePageCount = (int)[blocks performSelector:@selector(count)];
     const NSInteger COUNT = 1;
-    if (changeCount > COUNT) {
+    if (changePageCount > COUNT) {
         if (!_uiMayChange) {
             // equal to viewWillDisappear
             [self _doViewWillDisappear];
