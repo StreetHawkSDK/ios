@@ -750,6 +750,41 @@ BOOL shIsSDKViewController(UIViewController * vc)
             || [vc isKindOfClass:[SHBaseCollectionViewController class]]);
 }
 
+NSString* findNativeID(UIView *view)
+{
+    __block NSString *nativeid = nil;
+    [view.subviews enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        id nid = [obj valueForKey:@"nativeID"];
+        if (nid && [nid isKindOfClass:NSString.class]) {
+            nativeid = (NSString*)nid;
+        }
+        if (nativeid.length <= 0) {
+            nativeid = findNativeID(obj);
+        }
+        if (nativeid.length > 0) {
+            *stop = YES;
+        }
+    }];
+    return nativeid;
+}
+
+NSString *shAppendUniqueSuffix(UIViewController *vc)
+{
+    NSString *ret = [vc.class description];
+    //check react-native
+    if ([vc.view isKindOfClass:NSClassFromString(@"RCTRootView")]) {
+        id cview = [vc.view valueForKey:@"contentView"];
+        if (cview) {
+            UIView *view = (UIView*)cview;
+            NSString *nativeid = findNativeID(view);
+            if (nativeid.length > 0) {
+                ret = nativeid;
+            }
+        }
+    }
+    return ret;
+}
+
 BOOL shStrIsEmpty(NSString *str)
 {
     return (str == nil || str.length == 0);

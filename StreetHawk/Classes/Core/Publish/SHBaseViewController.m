@@ -20,7 +20,6 @@
 #import "SHApp.h" //for `StreetHawk shNotifyPageEnter/Exit`
 #import "SHViewController.h" //for checking internal vc to avoid enter/exit log
 #import "SHUtils.h" //for shIsSDKViewController
-#import "SHTipUtil.h" //for tip
 #import "SHCoverView.h" //for cover view
 //header from System
 #import <objc/runtime.h> //for associate object
@@ -136,7 +135,7 @@
 {
     if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
-        [StreetHawk shNotifyPageEnter:[[SHTipUtil appendUniqueSuffix:self] refinePageName]];
+        [StreetHawk shNotifyPageEnter:[shAppendUniqueSuffix(self) refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
     }
@@ -154,7 +153,7 @@
 {
     if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
     {
-        [StreetHawk shNotifyPageExit:[[SHTipUtil appendUniqueSuffix:self] refinePageName]];
+        [StreetHawk shNotifyPageExit:[shAppendUniqueSuffix(self) refinePageName]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
     }
