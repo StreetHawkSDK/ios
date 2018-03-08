@@ -87,6 +87,13 @@ typedef void (^SHOpenUrlHandler)(NSURL * _Nullable openUrl);
 - (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode;
 
 /**
+ Initialize for an Application, setting up the environment.
+ override - (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode;
+ @param segmentID identifier for segment.io. Tagged by segment.io API `segmentID:[[SEGAnalytics sharedAnalytics] forKey:@"sh_cuid"]`
+ */
+- (void)registerInstallForApp:(nonnull NSString *)appKey segmentID:(NSString *)segmentid withDebugMode:(BOOL)isDebugMode;
+
+/**
  Deprecated, use `- (void)registerInstallForApp:(NSString *)appKey withDebugMode:(BOOL)isDebugMode;` instead. `iTunesId` is setup in web console, or by property `@property (nonatomic, strong) NSString *itunesAppId;`.
  */
 - (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode withiTunesId:(nullable NSString *)iTunesId;
@@ -97,6 +104,11 @@ typedef void (^SHOpenUrlHandler)(NSURL * _Nullable openUrl);
  The allocated name or code for this app as set in the StreetHawk Cloud, for example "SHSheridan1". It's mandatory for an Application to work. Check `- (void)registerInstallForApp:(NSString *)appKey withDebugMode:(BOOL)isDebugMode` for how it works.
  */
 @property (nonatomic, strong, nonnull) NSString *appKey;
+
+/**
+  identifier for segment.io. Tagged by API `[StreetHawk tagString:<unique_value> segmentID:[[SEGAnalytics sharedAnalytics] forKey:@"sh_cuid"];`
+ */
+@property (nonatomic, strong, nullable) NSString *segmentid;
 
 /**
  Decide whether need to show debug log in console.

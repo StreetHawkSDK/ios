@@ -93,6 +93,7 @@ NSString * const SHInstallNotification_kError = @"Error";
     NSMutableDictionary *dictParams = [NSMutableDictionary dictionary];
     UIDevice *device = [UIDevice currentDevice];
     dictParams[@"app_key"] = NONULL(StreetHawk.appKey);
+    dictParams[@"segmentio_anonymous_id"] = StreetHawk.segmentid;
     dictParams[@"client_version"] = StreetHawk.clientVersion;
     dictParams[@"sh_version"] = StreetHawk.version;
     dictParams[@"model"] = NONULL(device.platformString); //rename class not use UIDevice extension, to avoid link to wrong obj
