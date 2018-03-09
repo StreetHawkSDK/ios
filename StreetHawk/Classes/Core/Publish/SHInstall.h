@@ -74,9 +74,9 @@ Customer developer register app_key in streethawk server. It's same as `StreetHa
 @property (nonatomic, strong) NSString *clientVersion;
 
 /**
- identifier for segment.io. Tagged by API `[StreetHawk tagString:<unique_value> segmentID:[[SEGAnalytics sharedAnalytics] forKey:@"sh_cuid"];`
+ identifier for segment.io. Tagged by API `[StreetHawk tagString:<unique_value> segmentId:[[SEGAnalytics sharedAnalytics] forKey:@"sh_cuid"];`
  */
-@property (nonatomic, strong) NSString *segmentid;
+@property (nonatomic, strong) NSString *segmentId;
 
 /**
  The version of StreetHawkCore framework SDK.

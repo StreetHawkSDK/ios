@@ -362,15 +362,15 @@
     }
 }
 
-- (void)registerInstallForApp:(nonnull NSString *)appKey segmentID:(NSString *)segmentid withDebugMode:(BOOL)isDebugMode
+- (void)registerInstallForApp:(nonnull NSString *)appKey segmentId:(NSString *)segmentId withDebugMode:(BOOL)isDebugMode
 {
-    StreetHawk.segmentid = segmentid;
+    StreetHawk.segmentId = segmentId;
     [StreetHawk registerInstallForApp:appKey withDebugMode:isDebugMode];
 }
 
-- (NSString *)segmentid
+- (NSString *)segmentId
 {
-    return _segmentid;
+    return _segmentId;
 }
 
 - (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode withiTunesId:(nullable NSString *)iTunesId

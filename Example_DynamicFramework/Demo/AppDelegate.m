@@ -18,8 +18,9 @@
 #import "AppDelegate.h"
 #import "SampleCaseViewController.h"
 #import "AppKeyChoiceViewController.h"
-
 #import <StreetHawkCore/StreetHawkCore.h>
+#import <Analytics/SEGAnalytics.h>
+#import <Analytics/SEGIntegrationsManager.h>
 
 #define SH_APPKEY   @"SH_APPKEY"
 
@@ -76,8 +77,13 @@
     //    StreetHawk.notificationTypes = UIRemoteNotificationTypeAlert;
     //    StreetHawk.isDefaultLocationServiceEnabled = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegisterSuccessHandler:) name:SHInstallRegistrationSuccessNotification object:nil];
-    StreetHawk.autoIntegrateAppDelegate = YES;
-    [StreetHawk registerInstallForApp:appKey withDebugMode:YES];
+    
+    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:@"Z3KDihiA42uXBPr82xULjKA6Fb0p0v38"];
+    configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
+    configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
+    [SEGAnalytics setupWithConfiguration:configuration];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(integrationDidStart:) name:SEGAnalyticsIntegrationDidStart object:nil];
     
     //Sample code to register some friendly names which will be used in push notification 8004/8006/8007.
     SHFriendlyNameObject *name1 = [[SHFriendlyNameObject alloc] init]; //Match friendly name "login" to a vc, to test push notification 8007
@@ -127,6 +133,13 @@
     [StreetHawk setInteractivePushBtnPairs:@[pair1, pair2, pair3]];
     
     return YES;
+}
+
+- (void)integrationDidStart:(nonnull NSNotification *)notification
+{
+    NSString *appKey = [[NSUserDefaults standardUserDefaults] objectForKey:SH_APPKEY];
+    StreetHawk.autoIntegrateAppDelegate = YES;
+    [StreetHawk registerInstallForApp:appKey segmentId:[[SEGAnalytics sharedAnalytics] getAnonymousId] withDebugMode:YES];
 }
 
 - (void)installRegisterSuccessHandler:(NSNotification *)notification
