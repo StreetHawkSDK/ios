@@ -18,7 +18,6 @@
 #import "AppDelegate.h"
 #import "SampleCaseViewController.h"
 #import "AppKeyChoiceViewController.h"
-#import <Analytics/SEGAnalytics.h>
 #import <StreetHawkCore/StreetHawkCore.h>
 
 #define SH_APPKEY   @"SH_APPKEY"
@@ -77,14 +76,8 @@
     //    StreetHawk.isDefaultLocationServiceEnabled = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegisterSuccessHandler:) name:SHInstallRegistrationSuccessNotification object:nil];
     
-    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:@"Z3KDihiA42uXBPr82xULjKA6Fb0p0v38"];
-    configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
-    configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
-    [SEGAnalytics setupWithConfiguration:configuration];
-    
-    
     StreetHawk.autoIntegrateAppDelegate = YES;
-    [StreetHawk registerInstallForApp:appKey segmentID:[[SEGAnalytics sharedAnalytics] getAnonymousId] withDebugMode:YES];
+    [StreetHawk registerInstallForApp:appKey withDebugMode:YES];
     
     StreetHawk.autoIntegrateAppDelegate = YES;
     [StreetHawk registerInstallForApp:appKey withDebugMode:YES];

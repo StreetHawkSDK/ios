@@ -34,7 +34,6 @@
 
 #define APPKEY_KEY                          @"APPKEY_KEY" //key for store "app key", next time if try to read appKey before register, read from this one.
 #define INSTALL_SUID_KEY                    @"INSTALL_SUID_KEY"
-#define SEGMENT_ID                          @"SEGMENT_ID" //segment.io id
 #define ENTER_PAGE_HISTORY                  @"ENTER_PAGE_HISTORY"  //key for record entered page history. It's set when enter a page and cleared when send exit log except go BG.
 #define ENTERBAK_PAGE_HISTORY               @"ENTERBAK_PAGE_HISTORY" //key for record entered page history as backup. It's set as backup in case ENTER_PAGE_HISTORY not set in canceled pop up.
 #define EXIT_PAGE_HISTORY                   @"EXIT_PAGE_HISTORY"  //key for record send exit log history. It's set when send exit log and cleared when send enter log. This is to avoid send duplicated exit log.
@@ -1917,7 +1916,6 @@ NSString *SentInstall_IBeacon = @"SentInstall_IBeacon";
 -(BOOL)checkInstallChangeForLaunch
 {
     NSString *sentAppKey = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_AppKey];
-    NSString *sentSegmentId = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_SegmentId];
     NSString *sentClientVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_ClientVersion];
     NSString *sentShVersion = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_ShVersion];
     NSString *sentCarrier = [[NSUserDefaults standardUserDefaults] objectForKey:SentInstall_Carrier];
