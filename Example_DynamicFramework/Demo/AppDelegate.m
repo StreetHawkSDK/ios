@@ -18,6 +18,7 @@
 #import "AppDelegate.h"
 #import "SampleCaseViewController.h"
 #import "AppKeyChoiceViewController.h"
+
 #import <StreetHawkCore/StreetHawkCore.h>
 
 #define SH_APPKEY   @"SH_APPKEY"
@@ -75,10 +76,6 @@
     //    StreetHawk.notificationTypes = UIRemoteNotificationTypeAlert;
     //    StreetHawk.isDefaultLocationServiceEnabled = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegisterSuccessHandler:) name:SHInstallRegistrationSuccessNotification object:nil];
-    
-    StreetHawk.autoIntegrateAppDelegate = YES;
-    [StreetHawk registerInstallForApp:appKey withDebugMode:YES];
-    
     StreetHawk.autoIntegrateAppDelegate = YES;
     [StreetHawk registerInstallForApp:appKey withDebugMode:YES];
     
