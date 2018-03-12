@@ -41,6 +41,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //Sample code to add segment.io
+    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:@"Z3KDihiA42uXBPr82xULjKA6Fb0p0v38"];
+    configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
+    configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
+    [SEGAnalytics setupWithConfiguration:configuration];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     SampleCaseViewController *sampleCaseVC = [[SampleCaseViewController alloc] initWithStyle:UITableViewStylePlain];
     UINavigationController *navigationVC = [[UINavigationController alloc] initWithRootViewController:sampleCaseVC];
@@ -77,15 +83,9 @@
     //    StreetHawk.notificationTypes = UIRemoteNotificationTypeAlert;
     //    StreetHawk.isDefaultLocationServiceEnabled = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(installRegisterSuccessHandler:) name:SHInstallRegistrationSuccessNotification object:nil];
-    
-    //Sample code to add segment.io
-    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:@"Z3KDihiA42uXBPr82xULjKA6Fb0p0v38"];
-    configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
-    configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
-    [SEGAnalytics setupWithConfiguration:configuration];
-    
-    //Register an observer to run integrationDidStart when segment.io is ready
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(integrationDidStart:) name:SEGAnalyticsIntegrationDidStart object:nil];
+
+    StreetHawk.autoIntegrateAppDelegate = YES;
+    [StreetHawk registerInstallForApp:appKey segmentId:[[SEGAnalytics sharedAnalytics] getAnonymousId] withDebugMode:YES];
     
     //Sample code to register some friendly names which will be used in push notification 8004/8006/8007.
     SHFriendlyNameObject *name1 = [[SHFriendlyNameObject alloc] init]; //Match friendly name "login" to a vc, to test push notification 8007
@@ -137,16 +137,6 @@
     return YES;
 }
 
-/**
- register streethawk when segment is ready
- */
-- (void)integrationDidStart:(nonnull NSNotification *)notification
-{
-    NSString *appKey = [[NSUserDefaults standardUserDefaults] objectForKey:SH_APPKEY];
-    StreetHawk.autoIntegrateAppDelegate = YES;
-    [StreetHawk registerInstallForApp:appKey segmentId:[[SEGAnalytics sharedAnalytics] getAnonymousId] withDebugMode:YES];
-}
-
 - (void)installRegisterSuccessHandler:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^ {
@@ -183,9 +173,21 @@
         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
     });
     
-    //Sample code to send segment traits after streethawk is ready
-    [[SEGAnalytics sharedAnalytics] identify:@"segment@streethawk"
-                                      traits:@{ @"email": @"segment@streethawk.com" }];
+/** Sample code to send segment.io traits after streethawk is ready
+    @"sh_cuid": @"myuser",
+    @"gender": @"male",
+    @"phone": @"0450000000",
+    @"birthday": @"2000-01-01",
+    @"firstName": @"segment-firstname",
+    @"lastName": @"streethawk-lastname",
+    @"city": @"Sydney",
+    @"country_code": @"61"
+ */
+    [[SEGAnalytics sharedAnalytics] identify:@"myuser@acme.com"
+                                      traits:@{
+                                               @"firstName": @"pzdynamic",
+                                               @"email": @"segment-pzd@streethawk.com"
+                                       }];
 }
 
 @end
