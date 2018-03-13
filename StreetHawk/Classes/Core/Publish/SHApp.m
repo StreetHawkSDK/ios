@@ -34,7 +34,6 @@
 
 #define APPKEY_KEY                          @"APPKEY_KEY" //key for store "app key", next time if try to read appKey before register, read from this one.
 #define INSTALL_SUID_KEY                    @"INSTALL_SUID_KEY"
-
 #define ENTER_PAGE_HISTORY                  @"ENTER_PAGE_HISTORY"  //key for record entered page history. It's set when enter a page and cleared when send exit log except go BG.
 #define ENTERBAK_PAGE_HISTORY               @"ENTERBAK_PAGE_HISTORY" //key for record entered page history as backup. It's set as backup in case ENTER_PAGE_HISTORY not set in canceled pop up.
 #define EXIT_PAGE_HISTORY                   @"EXIT_PAGE_HISTORY"  //key for record send exit log history. It's set when send exit log and cleared when send enter log. This is to avoid send duplicated exit log.
@@ -361,6 +360,17 @@
     {
         action();
     }
+}
+
+- (void)registerInstallForApp:(nonnull NSString *)appKey segmentId:(NSString *)segmentId withDebugMode:(BOOL)isDebugMode
+{
+    StreetHawk.segmentId = segmentId;
+    [StreetHawk registerInstallForApp:appKey withDebugMode:isDebugMode];
+}
+
+- (NSString *)segmentId
+{
+    return _segmentId;
 }
 
 - (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode withiTunesId:(nullable NSString *)iTunesId
@@ -1895,6 +1905,7 @@ forLocalNotification:(UILocalNotification *)notification
 }
 
 NSString *SentInstall_AppKey = @"SentInstall_AppKey";
+NSString *SentInstall_SegmentId = @"SentInstall_SegmentId";
 NSString *SentInstall_ClientVersion = @"SentInstall_ClientVersion";
 NSString *SentInstall_ShVersion = @"SentInstall_ShVersion";
 NSString *SentInstall_Mode = @"SentInstall_Mode";
