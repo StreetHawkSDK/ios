@@ -87,6 +87,20 @@ typedef void (^SHOpenUrlHandler)(NSURL * _Nullable openUrl);
 - (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode;
 
 /**
+ Initialize for an Application, setting up the environment.
+ override - (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode;
+ @param segmentId identifier for segment.io. Tagged by segment.io API `segmentId:[[SEGAnalytics sharedAnalytics] forKey:@"sh_cuid"]`
+ In order to get the segmentid correctly, the register function should be called after SEGAnalyticsIntegrationDidStart happen, using notification observer to achieve this, and call registerInstallForApp when integration of segement.io is done.
+ [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(integrationDidStart:) name:SEGAnalyticsIntegrationDidStart object:nil];
+ - (void)integrationDidStart:(nonnull NSNotification *)notification
+ {
+    [StreetHawk registerInstallForApp:appKey segmentId:[[SEGAnalytics sharedAnalytics] getAnonymousId] withDebugMode:YES];
+ }
+
+ */
+- (void)registerInstallForApp:(nonnull NSString *)appKey segmentId:(NSString *)segmentId withDebugMode:(BOOL)isDebugMode;
+
+/**
  Deprecated, use `- (void)registerInstallForApp:(NSString *)appKey withDebugMode:(BOOL)isDebugMode;` instead. `iTunesId` is setup in web console, or by property `@property (nonatomic, strong) NSString *itunesAppId;`.
  */
 - (void)registerInstallForApp:(nonnull NSString *)appKey withDebugMode:(BOOL)isDebugMode withiTunesId:(nullable NSString *)iTunesId;
@@ -97,6 +111,11 @@ typedef void (^SHOpenUrlHandler)(NSURL * _Nullable openUrl);
  The allocated name or code for this app as set in the StreetHawk Cloud, for example "SHSheridan1". It's mandatory for an Application to work. Check `- (void)registerInstallForApp:(NSString *)appKey withDebugMode:(BOOL)isDebugMode` for how it works.
  */
 @property (nonatomic, strong, nonnull) NSString *appKey;
+
+/**
+  identifier for segment.io. Tagged by API `[StreetHawk tagString:<unique_value> segmentId:[[SEGAnalytics sharedAnalytics] forKey:@"sh_cuid"];`
+ */
+@property (nonatomic, strong, nullable) NSString *segmentId;
 
 /**
  Decide whether need to show debug log in console.

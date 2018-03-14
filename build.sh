@@ -17,6 +17,9 @@ pushd .
 
 cd Example_StaticLibrary
 
+pod install
+pod update
+
 fastlane gym --scheme StreetHawkDemo --export_method "ad-hoc" --output_directory "$BUILD_OUTPUTS" --output_name "SHStatic.ipa" --clean true
 
 popd
@@ -26,6 +29,9 @@ popd
 pushd .
 
 cd Example_DynamicFramework
+
+pod install
+pod update
 
 fastlane gym --scheme StreetHawkDemo --export_method "ad-hoc" --output_directory "$BUILD_OUTPUTS" --output_name "SHDynamic.ipa" --clean true
 
