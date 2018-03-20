@@ -1073,6 +1073,8 @@
 //Called when dismiss asking permission of location service.
 - (void)applicationDidBecomeActiveNotificationHandler:(NSNotification *)notification
 {
+    //check push permission from background to foreground
+    [self checkPushPermission];
     //check app status from background to foreground, most actually return because of "one day not call" limitation.
     [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO];  //a chance to check if sdk was disabled, may be able to wake up again. Choose this instead of applicationWillEnterForeground because this is also called when App not launched, manually click to open.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_SetBadge_Notification" object:nil userInfo:@{@"badge": @(0)}]; //clear badge when App open, for some user they don't like this number and would like to launch App to dismiss it.
@@ -1103,6 +1105,55 @@
     [self shRegularTask:nil needComplete:NO];
     //check smart push
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_Smart_Notification" object:nil];
+}
+
+/**
+ check push permission and set tag sh_push_denied to current datetime if permission is denied, or delete the tag if permission change from NO to YES
+ */
+- (void)checkPushPermission
+{
+    if([self currentInstall].suid == nil){
+        return;
+    }
+    
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"registerForRemoteNotificationOccurred"] == nil){
+        return;
+    }
+    
+    BOOL currentPushPermissionDenied = [[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone;
+
+    NSString *isPushDenied = @"is_push_denied";
+    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+
+    if ([preferences objectForKey:isPushDenied] == nil)
+    {
+        if (currentPushPermissionDenied) {
+            [StreetHawk tagDatetime:[self getCurrentLocalDateTime] forKey:@"sh_push_denied"];
+            [preferences setBool:YES forKey:isPushDenied];
+        } else {
+            [preferences setBool:NO forKey:isPushDenied];
+        }
+    }
+    else if ([preferences boolForKey:isPushDenied] != currentPushPermissionDenied)
+    {
+        if (currentPushPermissionDenied) {
+            [StreetHawk tagDatetime:[self getCurrentLocalDateTime] forKey:@"sh_push_denied"];
+        } else {
+            [StreetHawk removeTag:@"sh_push_denied"];
+        }
+        [preferences setBool:currentPushPermissionDenied forKey:isPushDenied];
+    }
+}
+
+- (NSDate*)getCurrentLocalDateTime
+{
+    NSDate* sourceDate = [NSDate date];
+    NSTimeZone* sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone* destinationTimeZone = [NSTimeZone localTimeZone];//use `[NSTimeZone localTimeZone]` if your users will be changing time-zones.
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    return [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
 }
 
 - (void)applicationWillTerminateNotificationHandler:(NSNotification *)notification
@@ -1167,6 +1218,7 @@
     if (deviceToken != nil)
     {
         dictUserInfo[@"token"] = deviceToken;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"registerForRemoteNotificationOccurred"];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveToken_Notification" object:nil userInfo:dictUserInfo];
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)])
