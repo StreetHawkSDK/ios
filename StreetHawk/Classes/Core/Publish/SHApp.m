@@ -1108,17 +1108,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_Smart_Notification" object:nil];
 }
 
-- (NSDate*)getCurrentLocalDateTime
-{
-    NSDate* sourceDate = [NSDate date];
-    NSTimeZone* sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-    NSTimeZone* destinationTimeZone = [NSTimeZone localTimeZone];//use `[NSTimeZone localTimeZone]` if your users will be changing time-zones.
-    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
-    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
-    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
-    return [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
-}
-
 - (void)applicationWillTerminateNotificationHandler:(NSNotification *)notification
 {
     if (!streetHawkIsEnabled())
