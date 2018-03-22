@@ -29,6 +29,7 @@
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
+#import <StreetHawkCore/StreetHawkCore-Swift.h>
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -1074,7 +1075,7 @@
 - (void)applicationDidBecomeActiveNotificationHandler:(NSNotification *)notification
 {
     //check push permission from background to foreground
-    [self checkPushPermission];
+    [[SwiftySHApp new] checkPushPermission];
     //check app status from background to foreground, most actually return because of "one day not call" limitation.
     [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO];  //a chance to check if sdk was disabled, may be able to wake up again. Choose this instead of applicationWillEnterForeground because this is also called when App not launched, manually click to open.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_SetBadge_Notification" object:nil userInfo:@{@"badge": @(0)}]; //clear badge when App open, for some user they don't like this number and would like to launch App to dismiss it.
@@ -1105,44 +1106,6 @@
     [self shRegularTask:nil needComplete:NO];
     //check smart push
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_Smart_Notification" object:nil];
-}
-
-/**
- check push permission and set tag sh_push_denied to current datetime if permission is denied, or delete the tag if permission change from NO to YES
- */
-- (void)checkPushPermission
-{
-    if([self currentInstall].suid == nil){
-        return;
-    }
-    
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"registerForRemoteNotificationOccurred"] == nil){
-        return;
-    }
-    
-    BOOL currentPushPermissionDenied = [[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone;
-
-    NSString *isPushDenied = @"is_push_denied";
-    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
-
-    if ([preferences objectForKey:isPushDenied] == nil)
-    {
-        if (currentPushPermissionDenied) {
-            [StreetHawk tagDatetime:[self getCurrentLocalDateTime] forKey:@"sh_push_denied"];
-            [preferences setBool:YES forKey:isPushDenied];
-        } else {
-            [preferences setBool:NO forKey:isPushDenied];
-        }
-    }
-    else if ([preferences boolForKey:isPushDenied] != currentPushPermissionDenied)
-    {
-        if (currentPushPermissionDenied) {
-            [StreetHawk tagDatetime:[self getCurrentLocalDateTime] forKey:@"sh_push_denied"];
-        } else {
-            [StreetHawk removeTag:@"sh_push_denied"];
-        }
-        [preferences setBool:currentPushPermissionDenied forKey:isPushDenied];
-    }
 }
 
 - (NSDate*)getCurrentLocalDateTime
