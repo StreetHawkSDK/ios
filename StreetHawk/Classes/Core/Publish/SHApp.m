@@ -29,7 +29,6 @@
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
-#import <StreetHawkCore/StreetHawkCore-Swift.h>
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -1168,7 +1167,6 @@
     if (deviceToken != nil)
     {
         dictUserInfo[@"token"] = deviceToken;
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"registerForRemoteNotificationOccurred"];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_ReceiveToken_Notification" object:nil userInfo:dictUserInfo];
     if ([self.appDelegateInterceptor.secondResponder respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)])
