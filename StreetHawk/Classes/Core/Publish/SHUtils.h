@@ -73,6 +73,13 @@ extern NSString *shFormatStreetHawkDate(NSDate *date);
 extern NSString *shFormatISODate(NSDate *date);
 
 /**
+Generate datetime in current local timezone.
+@param void
+@return NSDate represent local timezone datetime.
+*/
+extern NSDate *getCurrentLocalDateTime(void);
+
+/**
  Parses date string into NSDate format. It tries to support as much format as possible. Refer to `input` parameters for the supported date time format.
  @param input Date time string. It supports this kinds of strings:
  

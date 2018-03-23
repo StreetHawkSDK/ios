@@ -1074,8 +1074,6 @@
 //Called when dismiss asking permission of location service.
 - (void)applicationDidBecomeActiveNotificationHandler:(NSNotification *)notification
 {
-    //check push permission from background to foreground
-    [[SwiftySHApp new] checkPushPermission];
     //check app status from background to foreground, most actually return because of "one day not call" limitation.
     [[SHAppStatus sharedInstance] sendAppStatusCheckRequest:NO];  //a chance to check if sdk was disabled, may be able to wake up again. Choose this instead of applicationWillEnterForeground because this is also called when App not launched, manually click to open.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PushBridge_SetBadge_Notification" object:nil userInfo:@{@"badge": @(0)}]; //clear badge when App open, for some user they don't like this number and would like to launch App to dismiss it.
