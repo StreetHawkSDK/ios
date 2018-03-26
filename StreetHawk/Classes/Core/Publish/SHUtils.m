@@ -96,18 +96,6 @@ NSString *shFormatISODate(NSDate *date)
     return [shGetDateFormatter(@"yyyy-MM-dd'T'HH:mm:ssZ", nil, nil) stringFromDate:date];
 }
 
-NSDate *getCurrentLocalDateTime()
-{
-    NSDate* sourceDate = [NSDate date];
-    NSTimeZone* sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-    NSTimeZone* destinationTimeZone = [NSTimeZone localTimeZone];//use `[NSTimeZone localTimeZone]` if your users will be changing time-zones.
-    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
-    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
-    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
-    return [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
-}
-
-
 NSDate *shParseDate(NSString *input, int offsetSeconds)
 {
     static dispatch_semaphore_t formatter_semaphore;
