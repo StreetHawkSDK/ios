@@ -172,7 +172,10 @@
             //clear location denied flag
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:LOCATION_DENIED_SENT];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            [StreetHawk tagString:@"false" forKey:@"sh_location_denied"];
+            SHLog(@"sh_location_denied set as false due to Location service enabled");
         }
+        
     }
     return isEnabled;
 }
@@ -756,6 +759,8 @@
         if (StreetHawk.currentInstall != nil && (sentFlag == nil || sentFlag.length == 0))
         {
             [StreetHawk sendLogForCode:LOG_CODE_LOCATION_DENIED withComment:@"Location service denied by user."];
+            [StreetHawk tagString:@"true" forKey:@"sh_location_denied"];
+            SHLog(@"sh_location_denied set as true due to Location service denied by user");
             [[NSUserDefaults standardUserDefaults] setObject:@"Sent" forKey:LOCATION_DENIED_SENT];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
