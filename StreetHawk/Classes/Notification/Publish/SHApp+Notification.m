@@ -213,8 +213,8 @@ NSString * const SHNMNotification_kPayload = @"Payload";
         {
             [StreetHawk registerOrUpdateInstallWithHandler:nil];
             SHLog(@"Upload notification disable info `revoked` to server.");
-            [StreetHawk tagDatetime: getCurrentLocalDateTime() forKey:@"sh_push_denied"];
-            SHLog(@"Tagging sh_push_denied to server.");
+            [StreetHawk tagString: @"true" forKey:@"sh_push_denied"];
+            SHLog(@"Tagging sh_push_denied with value true to server.");
         }
     }
 
@@ -225,9 +225,9 @@ NSString * const SHNMNotification_kPayload = @"Payload";
             SHLog(@"Notification is disabled by system preferrence settings, or fail to configure in project.");
         }
         
-        [StreetHawk removeTag:@"sh_push_denied"];
-        SHLog(@"Delete tag sh_push_denied on server.");
-        
+        [StreetHawk tagString: @"false" forKey:@"sh_push_denied"];
+        SHLog(@"Tagging sh_push_denied with value false to server.");
+
         //No matter system enabled or disabled, register it. For a fresh new App system is not enabled, if check `notificationDisabled` it will never register notification.
         if ([[UIDevice currentDevice].systemVersion doubleValue] < 10.0)
         {
