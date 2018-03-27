@@ -27,8 +27,6 @@
 #import "SHInteractiveButtons.h" //for interactive pair buttons
 //header from System
 #import <objc/runtime.h> //for associate object
-#import "SHUtils.h" //for getCurrentLocalDateTime
-
 
 #define APNS_DEVICE_TOKEN                   @"APNS_DEVICE_TOKEN"
 #define SH_PUSH_DENIED_FLAG                   @"SH_PUSH_DENIED_FLAG" // flag to identify if the app is able to be sent a remote push. it will determine tag sh_push_denied value. If sh push module not included or user manually turn off push, this flag will be true.
@@ -348,11 +346,8 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     }
 
     BOOL isPushPermissionDeniedBySysSettings = [[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone;
-    
     BOOL isPushModuleInstalled = [[[NSUserDefaults standardUserDefaults] stringForKey:@"sh_module_push"]  isEqual: @"true"];
-    
     BOOL shouldSHPushBeDenied = !isPushModuleInstalled || isPushPermissionDeniedBySysSettings;
-
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     
     if ([preferences objectForKey:SH_PUSH_DENIED_FLAG] == nil)
