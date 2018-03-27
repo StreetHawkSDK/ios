@@ -31,6 +31,7 @@
 
 
 #define APNS_DEVICE_TOKEN                   @"APNS_DEVICE_TOKEN"
+#define SH_PUSH_DENIED_FLAG                   @"SH_PUSH_DENIED_FLAG" // flag to identify if the app is able to be sent a remote push. it will determine tag sh_push_denied value. If sh push module not included or user manually turn off push, this flag will be true.
 #define ENABLE_PUSH_NOTIFICATION            @"ENABLE_PUSH_NOTIFICATION"  //key for record user manually set isNotificationEnabled. Although it's used for both remote and local, key not change name to be compatible with old version.
 #define ALERTSETTINGS_MINUTES   @"ALERTSETTINGS_MINUTES"  //Get and set alert settings is asynchronous, but need an synchronous API in SHApp. Store this locally. It's int value of pause minutes.
 
@@ -213,20 +214,15 @@ NSString * const SHNMNotification_kPayload = @"Payload";
         {
             [StreetHawk registerOrUpdateInstallWithHandler:nil];
             SHLog(@"Upload notification disable info `revoked` to server.");
-            [StreetHawk tagString: @"true" forKey:@"sh_push_denied"];
-            SHLog(@"Tagging sh_push_denied with value true to server.");
         }
     }
-
+    
     if (StreetHawk.isNotificationEnabled)  //not call this for customer disable notification to avoid permission message, work both for remote and location notification.
     {
         //customer not disable it, check system settings
         if(notificationDisabledBySystemSettings){
             SHLog(@"Notification is disabled by system preferrence settings, or fail to configure in project.");
         }
-        
-        [StreetHawk tagString: @"false" forKey:@"sh_push_denied"];
-        SHLog(@"Tagging sh_push_denied with value false to server.");
 
         //No matter system enabled or disabled, register it. For a fresh new App system is not enabled, if check `notificationDisabled` it will never register notification.
         if ([[UIDevice currentDevice].systemVersion doubleValue] < 10.0)
@@ -344,6 +340,44 @@ NSString * const SHNMNotification_kPayload = @"Payload";
 {
     return [[NSUserDefaults standardUserDefaults] objectForKey:APNS_DEVICE_TOKEN];
 }
+
+- (void)setSHPushDenied
+{
+    if([self currentInstall].suid == nil){
+        return;
+    }
+
+    BOOL isPushPermissionDeniedBySysSettings = [[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone;
+    
+    BOOL isPushModuleInstalled = [[[NSUserDefaults standardUserDefaults] stringForKey:@"sh_module_push"]  isEqual: @"true"];
+    
+    BOOL shouldSHPushBeDenied = !isPushModuleInstalled || isPushPermissionDeniedBySysSettings;
+
+    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+    
+    if ([preferences objectForKey:SH_PUSH_DENIED_FLAG] == nil)
+    {
+        if (shouldSHPushBeDenied){
+            [StreetHawk tagString:@"true" forKey:@"sh_push_denied"];
+            [preferences setBool:YES forKey:SH_PUSH_DENIED_FLAG];
+        } else {
+            [StreetHawk tagString:@"false" forKey:@"sh_push_denied"];
+            [preferences setBool:NO forKey:SH_PUSH_DENIED_FLAG];
+        }
+    }
+    else if ([preferences boolForKey:SH_PUSH_DENIED_FLAG] != shouldSHPushBeDenied)
+    {
+        if (shouldSHPushBeDenied) {
+            [StreetHawk tagString:@"true" forKey:@"sh_push_denied"];
+            [preferences setBool:YES forKey:SH_PUSH_DENIED_FLAG];
+        } else {
+            [StreetHawk tagString:@"false" forKey:@"sh_push_denied"];
+            [preferences setBool:NO forKey:SH_PUSH_DENIED_FLAG];
+        }
+        [preferences setBool:shouldSHPushBeDenied forKey:SH_PUSH_DENIED_FLAG];
+    }
+}
+
 
 - (void)handleUserNotificationInFG:(UNNotification *)notification completionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 {

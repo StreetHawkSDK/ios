@@ -83,6 +83,7 @@
 + (void)registerNotificationHandler:(NSNotification *)notification
 {
     [StreetHawk registerForNotificationAndNotifyServer];
+    [StreetHawk setSHPushDenied];
 }
 
 + (void)setInteractivePairButtonsNotificationHandler:(NSNotification *)notification
@@ -118,6 +119,7 @@
     NSData *deviceToken = notification.userInfo[@"token"];
     NSAssert(deviceToken != nil, @"\"deviceToken\" in didReceiveDeviceTokenHandler should not be nil.");
     [StreetHawk setApnsDeviceToken:deviceToken];
+    [StreetHawk setSHPushDenied];
 }
 
 + (void)receiveRemoteNotificationHandler:(NSNotification *)notification
