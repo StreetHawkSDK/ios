@@ -172,10 +172,13 @@
             //clear location denied flag
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:LOCATION_DENIED_SENT];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            [StreetHawk tagString:@"false" forKey:@"sh_location_denied"];
-            SHLog(@"sh_location_denied set as false due to Location service enabled");
+            // only when sh location module is included in the app and user enable the system location settings, set sh_location_denied as false
+            if([[[NSUserDefaults standardUserDefaults] stringForKey:@"sh_module_location"] compare:@"true"] == NSOrderedSame)
+            {
+                [StreetHawk tagString:@"false" forKey:@"sh_location_denied"];
+                SHLog(@"sh_location_denied set as false due to Location service enabled with sh location module embeded");
+            }
         }
-        
     }
     return isEnabled;
 }
