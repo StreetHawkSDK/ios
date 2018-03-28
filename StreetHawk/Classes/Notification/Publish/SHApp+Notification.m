@@ -348,15 +348,11 @@ NSString * const SHNMNotification_kPayload = @"Payload";
     BOOL shouldSHPushBeDenied = [[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone;
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     
-    if ([preferences objectForKey:SH_PUSH_DENIED_FLAG] == nil)
+    if ([preferences objectForKey:SH_PUSH_DENIED_FLAG] == nil || [preferences boolForKey:SH_PUSH_DENIED_FLAG] != shouldSHPushBeDenied)
     {
         [StreetHawk tagString:shouldSHPushBeDenied?@"true":@"false" forKey:@"sh_push_denied"];
         [preferences setBool:shouldSHPushBeDenied forKey:SH_PUSH_DENIED_FLAG];
-    }
-    else if ([preferences boolForKey:SH_PUSH_DENIED_FLAG] != shouldSHPushBeDenied)
-    {
-        [StreetHawk tagString:shouldSHPushBeDenied?@"true":@"false" forKey:@"sh_push_denied"];
-        [preferences setBool:shouldSHPushBeDenied forKey:SH_PUSH_DENIED_FLAG];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
