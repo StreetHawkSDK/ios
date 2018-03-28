@@ -1433,6 +1433,11 @@ forLocalNotification:(UILocalNotification *)notification
         {
             [StreetHawk tagString:pushCurrent forKey:@"sh_module_push"];
             [[NSUserDefaults standardUserDefaults] setObject:pushCurrent forKey:@"sh_module_push"];
+            // set sh_push_denied as true when sh_module_location not be included
+            if ([pushCurrent compare:@"false"] == NSOrderedSame) {
+                [StreetHawk tagString:@"true" forKey:@"sh_push_denied"];
+                SHLog(@"sh_push_denied set as true due to sh location module not be included in this app");
+            }
         }
         Class locationBridge = NSClassFromString(@"SHLocationBridge");
         NSString *locationCurrent = (locationBridge == nil) ? @"false" : @"true";
