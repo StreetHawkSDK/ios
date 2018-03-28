@@ -345,30 +345,17 @@ NSString * const SHNMNotification_kPayload = @"Payload";
         return;
     }
 
-    BOOL isPushPermissionDeniedBySysSettings = [[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone;
-    BOOL isPushModuleInstalled = [[[NSUserDefaults standardUserDefaults] stringForKey:@"sh_module_push"]  isEqual: @"true"];
-    BOOL shouldSHPushBeDenied = !isPushModuleInstalled || isPushPermissionDeniedBySysSettings;
+    BOOL shouldSHPushBeDenied = [[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone;
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     
     if ([preferences objectForKey:SH_PUSH_DENIED_FLAG] == nil)
     {
-        if (shouldSHPushBeDenied){
-            [StreetHawk tagString:@"true" forKey:@"sh_push_denied"];
-            [preferences setBool:YES forKey:SH_PUSH_DENIED_FLAG];
-        } else {
-            [StreetHawk tagString:@"false" forKey:@"sh_push_denied"];
-            [preferences setBool:NO forKey:SH_PUSH_DENIED_FLAG];
-        }
+        [StreetHawk tagString:shouldSHPushBeDenied?@"true":@"false" forKey:@"sh_push_denied"];
+        [preferences setBool:shouldSHPushBeDenied forKey:SH_PUSH_DENIED_FLAG];
     }
     else if ([preferences boolForKey:SH_PUSH_DENIED_FLAG] != shouldSHPushBeDenied)
     {
-        if (shouldSHPushBeDenied) {
-            [StreetHawk tagString:@"true" forKey:@"sh_push_denied"];
-            [preferences setBool:YES forKey:SH_PUSH_DENIED_FLAG];
-        } else {
-            [StreetHawk tagString:@"false" forKey:@"sh_push_denied"];
-            [preferences setBool:NO forKey:SH_PUSH_DENIED_FLAG];
-        }
+        [StreetHawk tagString:shouldSHPushBeDenied?@"true":@"false" forKey:@"sh_push_denied"];
         [preferences setBool:shouldSHPushBeDenied forKey:SH_PUSH_DENIED_FLAG];
     }
 }
