@@ -172,12 +172,6 @@
             //clear location denied flag
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:LOCATION_DENIED_SENT];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            // only when sh location module is included in the app and user enable the system location settings, set sh_location_denied as false
-            if([[[NSUserDefaults standardUserDefaults] stringForKey:@"sh_module_location"] compare:@"true"] == NSOrderedSame)
-            {
-                [StreetHawk tagString:@"false" forKey:@"sh_location_denied"];
-                SHLog(@"sh_location_denied set as false due to Location service enabled with sh location module embeded");
-            }
         }
     }
     return isEnabled;
@@ -762,8 +756,6 @@
         if (StreetHawk.currentInstall != nil && (sentFlag == nil || sentFlag.length == 0))
         {
             [StreetHawk sendLogForCode:LOG_CODE_LOCATION_DENIED withComment:@"Location service denied by user."];
-            [StreetHawk tagString:@"true" forKey:@"sh_location_denied"];
-            SHLog(@"sh_location_denied set as true due to Location service denied by user");
             [[NSUserDefaults standardUserDefaults] setObject:@"Sent" forKey:LOCATION_DENIED_SENT];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
@@ -944,6 +936,12 @@
         default:
             break;
     }
+    
+    // set sh_location_denied when location authorization status changed, sh_location_denied will be true/false value. true: if status is 'always' or 'when in use'; false: if status is not 'always' and not 'when in use'
+    NSString *isSHLocationDenied = (status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse)?@"false":@"true";
+    [StreetHawk tagString:isSHLocationDenied forKey:@"sh_location_denied"];
+    SHLog(@"set sh_location_denied as %@ due to Authorisation status changed", isSHLocationDenied);
+    
     SHLog(@"LocationManager Delegate: Authorisation status changed: %@.", authStatus);
     NSDictionary *userInfo = @{SHLMNotification_kAuthStatus: [NSNumber numberWithInt:status]};
     NSNotification *notification = [NSNotification notificationWithName:SHLMChangeAuthorizationStatusNotification object:self userInfo:userInfo];
