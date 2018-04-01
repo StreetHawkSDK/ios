@@ -39,7 +39,11 @@
 	<true/>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>SHSample checks bluetooth status.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>SHSample notifies about discounts and offers running in stores near you and hence requires to be notified about your location when app is in background.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
+	<string>SHSample notifies about discounts and offers running in stores near you and hence requires to be notified about your location when app is in background.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>SHSample notifies about discounts and offers running in stores near you and hence requires to be notified about your location when app is in background.</string>
 	<key>UIBackgroundModes</key>
 	<array>
