@@ -1441,6 +1441,11 @@ forLocalNotification:(UILocalNotification *)notification
         {
             [StreetHawk tagString:locationCurrent forKey:@"sh_module_location"];
             [[NSUserDefaults standardUserDefaults] setObject:locationCurrent forKey:@"sh_module_location"];
+            // set sh_location_denied as true when sh_module_location not be included
+            if ([locationCurrent compare:@"false"] == NSOrderedSame) {
+                [StreetHawk tagString:@"true" forKey:@"sh_location_denied"];
+                SHLog(@"sh_location_denied set as true due to sh location module not be included in this app");
+            }
         }
         Class geofenceBridge = NSClassFromString(@"SHGeofenceBridge");
         NSString *geofenceCurrent = (geofenceBridge == nil) ? @"false" : @"true";

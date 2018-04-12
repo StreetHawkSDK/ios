@@ -936,6 +936,12 @@
         default:
             break;
     }
+    
+    // set sh_location_denied when location authorization status changed, sh_location_denied will be true/false value. true: if status is 'always' or 'when in use'; false: if status is not 'always' and not 'when in use'
+    NSString *isSHLocationDenied = (status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse)?@"false":@"true";
+    [StreetHawk tagString:isSHLocationDenied forKey:@"sh_location_denied"];
+    SHLog(@"set sh_location_denied as %@ due to Authorisation status changed", isSHLocationDenied);
+    
     SHLog(@"LocationManager Delegate: Authorisation status changed: %@.", authStatus);
     NSDictionary *userInfo = @{SHLMNotification_kAuthStatus: [NSNumber numberWithInt:status]};
     NSNotification *notification = [NSNotification notificationWithName:SHLMChangeAuthorizationStatusNotification object:self userInfo:userInfo];
