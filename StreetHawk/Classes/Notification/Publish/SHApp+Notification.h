@@ -90,6 +90,11 @@ extern NSString * const SHNMNotification_kPayload; //string @"Payload", get NSDi
 -(void)registerForNotificationAndNotifyServer;
 
 /**
+ Function setSHPushDenied used for setting tag sh_push_denied, as install attribute revoke set in function registerForNotificationAndNotifyServer has been deprecated. now system using sh_push_denied to identify whether an install can receive push or not. This tag will be true/false value, and only be true when sh push module installed and system remote notification is enabled.
+ */
+-(void)setSHPushDenied;
+
+/**
  Handle user notification settings callback. Call this in customer App's UIApplicationDelegate if NOT auto-integrate. If `StreetHawk.autoIntegrateAppDelegate = YES;` make sure NOT call this otherwise cause dead loop. Code snippet:
  
  `- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings`
