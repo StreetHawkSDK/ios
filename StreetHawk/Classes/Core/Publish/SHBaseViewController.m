@@ -162,6 +162,60 @@
                                         }
                                         NSLog(@"View Controller %@ viewWillDisappear", aspectInfo.instance);
                                     } error:NULL];
+    
+    //aspect UICollectionViewController
+    [UICollectionViewController aspect_hookSelector:@selector(viewDidLoad)
+                                   withOptions:AspectPositionAfter
+                                    usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                                        UICollectionViewController *vc = (UICollectionViewController *)aspectInfo.instance;
+                                        if ([self respondsToSelector:@selector(displayDeepLinkingToUI)])
+                                        {
+                                            [self performSelector:@selector(displayDeepLinkingToUI)];
+                                        }
+                                        if (!shIsSDKViewController(vc)) //Not show tip and super tag for SDK vc
+                                        {
+                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": vc}];
+                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": vc}];
+                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": vc}];
+                                        }
+                                    } error:NULL];
+    
+    [UICollectionViewController aspect_hookSelector:@selector(viewWillAppear:)
+                                   withOptions:AspectPositionAfter
+                                    usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                                        UICollectionViewController *vc = (UICollectionViewController *)aspectInfo.instance;
+                                        if (!shIsSDKViewController(vc))
+                                        {
+                                            [[NSUserDefaults standardUserDefaults] setObject:vc.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
+                                            [[NSUserDefaults standardUserDefaults] synchronize];
+                                        }
+                                    } error:NULL];
+    
+    [UICollectionViewController aspect_hookSelector:@selector(viewDidAppear:)
+                                   withOptions:AspectPositionAfter
+                                    usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                                        UICollectionViewController *vc = (UICollectionViewController *)aspectInfo.instance;
+                                        if (!shIsSDKViewController(vc))
+                                        {
+                                            [StreetHawk shNotifyPageEnter:[vc.class.description refinePageName]];
+                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": vc}];
+                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": vc}];
+                                        }
+                                        NSLog(@"View Controller %@ viewWillDisappear", aspectInfo.instance);
+                                    } error:NULL];
+    
+    [UICollectionViewController aspect_hookSelector:@selector(viewWillDisappear:)
+                                   withOptions:AspectPositionAfter
+                                    usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                                        UICollectionViewController *vc = (UICollectionViewController *)aspectInfo.instance;
+                                        if (!shIsSDKViewController(vc))
+                                        {
+                                            [StreetHawk shNotifyPageExit:[vc.class.description refinePageName]];
+                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": vc}];
+                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": vc}];
+                                        }
+                                        NSLog(@"View Controller %@ viewWillDisappear", aspectInfo.instance);
+                                    } error:NULL];
 }
 
 + (void)_doViewDidLoad:(UIViewController *)vc
@@ -288,93 +342,6 @@
 //        }
 //    }
 //}
-
-@end
-
-@implementation StreetHawkBaseCollectionViewController
-
-- (id)init
-{
-    if (self = [super init])
-    {
-        self.excludeBehavior = NO;
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder])
-    {
-        self.excludeBehavior = NO;
-    }
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
-    {
-        self.excludeBehavior = NO;
-    }
-    return self;
-}
-
-- (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
-{
-    if (self = [super initWithCollectionViewLayout:layout])
-    {
-        self.excludeBehavior = NO;
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    if ([self respondsToSelector:@selector(displayDeepLinkingToUI)])
-    {
-        [self performSelector:@selector(displayDeepLinkingToUI)];
-    }
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self))
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
-    {
-        [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
-    {
-        [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
 
 @end
 

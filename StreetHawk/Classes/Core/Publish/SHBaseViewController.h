@@ -62,24 +62,6 @@
 @end
 
 /**
- Base class for all view controller inherit from UICollectionViewController. It sends logs when enter/exit this VC.
- */
-@interface StreetHawkBaseCollectionViewController : UICollectionViewController <ISHDeepLinking>
-
-/**
- Some customer view controller may be inherited not in purpose (such as base vc do inherit).
- Use this property to exclude them from being treated as StreetHawk behavior vc.
- */
-@property (nonatomic) BOOL excludeBehavior;
-
-/**
- When custom feed received, sdk call this delegate.
- */
-@property (nonatomic, weak) id<ISHCustomFeed> customFeedDelegate;
-
-@end
-
-/**
  Category extension of UIViewController.
  */
 @interface UIViewController (SHViewExt)

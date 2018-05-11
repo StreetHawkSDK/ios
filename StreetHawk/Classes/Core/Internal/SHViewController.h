@@ -67,6 +67,6 @@
 /**
  Base class for all view controller inherit from StreetHawkBaseCollectionViewController.
  */
-@interface SHBaseCollectionViewController : StreetHawkBaseCollectionViewController <SHBaseVC>
+@interface SHBaseCollectionViewController : UICollectionViewController <SHBaseVC>
 
 @end
