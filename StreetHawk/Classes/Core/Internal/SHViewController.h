@@ -60,7 +60,7 @@
 /**
  Base class for all view controller inherit from StreetHawkBaseTableViewController.
  */
-@interface SHBaseTableViewController : StreetHawkBaseTableViewController <SHBaseVC>
+@interface SHBaseTableViewController : UITableViewController <SHBaseVC>
 
 @end
 
