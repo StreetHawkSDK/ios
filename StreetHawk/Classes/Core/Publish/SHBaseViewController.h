@@ -53,20 +53,11 @@
 @end
 
 /**
- Base class for all view controller inherit from UIViewController. It sends logs when enter/exit this VC.
+ Method to aspect StreetHawk related functions into normal view controller.
  */
-@interface StreetHawkBaseViewController : UIViewController <ISHDeepLinking>
+@interface StreetHawkViewControllerSwizzle : NSObject
 
-/**
- Some customer view controller may be inherited not in purpose (such as base vc do inherit). 
- Use this property to exclude them from being treated as StreetHawk behavior vc.
- */
-@property (nonatomic) BOOL excludeBehavior;
-
-/**
- When custom feed received, sdk call this delegate.
- */
-@property (nonatomic, weak) id<ISHCustomFeed> customFeedDelegate;
++ (void)aspect;
 
 @end
 
