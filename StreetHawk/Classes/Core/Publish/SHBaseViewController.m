@@ -60,7 +60,7 @@
     //aspect UIViewController
     [UIViewController aspect_hookSelector:@selector(viewDidLoad)
                               withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                               usingBlock:^(id<AspectInfo> aspectInfo) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
                                    if (![self checkReactNative])
                                    {
@@ -110,7 +110,7 @@
     //aspect UITableViewController
     [UITableViewController aspect_hookSelector:@selector(viewDidLoad)
                               withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                               usingBlock:^(id<AspectInfo> aspectInfo) {
                                    UITableViewController *vc = (UITableViewController *)aspectInfo.instance;
                                    if ([vc respondsToSelector:@selector(displayDeepLinkingToUI)])
                                    {
@@ -166,7 +166,7 @@
     //aspect UICollectionViewController
     [UICollectionViewController aspect_hookSelector:@selector(viewDidLoad)
                                    withOptions:AspectPositionAfter
-                                    usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                                    usingBlock:^(id<AspectInfo> aspectInfo) {
                                         UICollectionViewController *vc = (UICollectionViewController *)aspectInfo.instance;
                                         if ([self respondsToSelector:@selector(displayDeepLinkingToUI)])
                                         {
