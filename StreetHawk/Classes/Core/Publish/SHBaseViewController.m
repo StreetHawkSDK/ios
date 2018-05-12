@@ -62,24 +62,25 @@
                               withOptions:AspectPositionAfter
                                usingBlock:^(id<AspectInfo> aspectInfo) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
-                                   if (![self checkReactNative])
+                                   if (![self checkReactNative]
+                                       && ![self ignoreVC:vc])
                                    {
                                        [self _doViewDidLoad:vc];
                                    }
-        NSLog(@"View Controller %@ viewDidLoad", aspectInfo.instance);
-    } error:NULL];
+                               } error:nil];
     
     //tricky: Record `viewWillAppear` as backup, become in canceled pop up `viewDidAppear` is not called.
     [UIViewController aspect_hookSelector:@selector(viewWillAppear:)
                               withOptions:AspectPositionAfter
                                usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
-                                   if (![self checkReactNative]) {
+                                   if (![self checkReactNative]
+                                       && ![self ignoreVC:vc])
+                                   {
                                        [self _doViewWillAppear:vc];
                                    }
                                    [self hookReactNative:vc];
-                                   NSLog(@"View Controller %@ viewWillAppear", aspectInfo.instance);
-                               } error:NULL];
+                               } error:nil];
     
     //tricky: Here must use `viewDidAppear` and `viewWillDisappear`.
     //if use `viewWillAppear`, two issues: 1) Launch App `viewWillAppear` is called before `didFinishLaunchingWithOptions`, making home page not logged; 2) `viewWillAppear` cannot get self.view.window, always null, making it's unknown to check `SHCoverWindow`(deprecated).
@@ -89,23 +90,23 @@
                               withOptions:AspectPositionAfter
                                usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
-                                   if (![self checkReactNative])
+                                   if (![self checkReactNative]
+                                       && ![self ignoreVC:vc])
                                    {
                                        [self _doViewDidAppear:vc];
                                    }
-                                   NSLog(@"View Controller %@ viewDidAppear", aspectInfo.instance);
-                               } error:NULL];
+                               } error:nil];
     
     [UIViewController aspect_hookSelector:@selector(viewWillDisappear:)
                               withOptions:AspectPositionAfter
                                usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
-                                   if (![self checkReactNative])
+                                   if (![self checkReactNative]
+                                       && ![self ignoreVC:vc])
                                    {
                                        [self _doViewWillDisappear:vc];
                                    }
-                                   NSLog(@"View Controller %@ viewWillDisappear", aspectInfo.instance);
-                               } error:NULL];
+                               } error:nil];
 }
 
 + (void)_doViewDidLoad:(UIViewController *)vc
@@ -149,6 +150,18 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": vc}];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": vc}];
     }
+}
+
++ (BOOL)ignoreVC:(UIViewController *)vc
+{
+    //aspect affects all UIViewControllers, including system's such as UINavigationController.
+    //These system's are container and they should not do StreetHawk behaviors. Ignore them before doing action.
+    if ([vc isKindOfClass:[UINavigationController class]]
+        || [vc isKindOfClass:[UITabBarController class]])
+    {
+        return YES;
+    }
+    return NO;
 }
 
 #pragma clang diagnostic push
