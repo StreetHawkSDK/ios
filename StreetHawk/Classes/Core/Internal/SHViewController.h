@@ -53,20 +53,20 @@
 /**
  Base class for all view controller inherit from StreetHawkBaseViewController.
  */
-@interface SHBaseViewController : UIViewController <SHBaseVC>
+@interface SHBaseViewController : StreetHawkBaseViewController <SHBaseVC>
 
 @end
 
 /**
  Base class for all view controller inherit from StreetHawkBaseTableViewController.
  */
-@interface SHBaseTableViewController : UITableViewController <SHBaseVC>
+@interface SHBaseTableViewController : StreetHawkBaseTableViewController <SHBaseVC>
 
 @end
 
 /**
  Base class for all view controller inherit from StreetHawkBaseCollectionViewController.
  */
-@interface SHBaseCollectionViewController : UICollectionViewController <SHBaseVC>
+@interface SHBaseCollectionViewController : StreetHawkBaseCollectionViewController <SHBaseVC>
 
 @end
