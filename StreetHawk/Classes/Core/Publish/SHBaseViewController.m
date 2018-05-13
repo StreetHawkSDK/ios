@@ -161,6 +161,21 @@
     {
         return YES;
     }
+    if ([vc respondsToSelector:@selector(excludeBehavior)])
+    {
+        SEL selector = @selector(excludeBehavior);
+        NSMethodSignature *ms = [vc methodSignatureForSelector:selector];
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:ms];
+        invocation.target = vc;
+        invocation.selector = selector;
+        [invocation invoke];
+        BOOL rtnVal = NO;
+        [invocation getReturnValue:&rtnVal];
+        if (rtnVal)
+        {
+            return YES;
+        }
+    }
     return NO;
 }
 
