@@ -24,7 +24,7 @@
 //header from System
 #import <objc/runtime.h> //for associate object
 //header from third-party
-#import "Aspects.h"
+#import "SHAspects.h"
 
 @interface NSString (SHEnterExitExt)
 
@@ -59,8 +59,8 @@
 {
     //aspect UIViewController
     [UIViewController aspect_hookSelector:@selector(viewDidLoad)
-                              withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo) {
+                              withOptions:SHAspectPositionAfter
+                               usingBlock:^(id<SHAspectInfo> aspectInfo) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
                                    if (![self checkReactNative]
                                        && ![self ignoreVC:vc])
@@ -71,8 +71,8 @@
     
     //tricky: Record `viewWillAppear` as backup, become in canceled pop up `viewDidAppear` is not called.
     [UIViewController aspect_hookSelector:@selector(viewWillAppear:)
-                              withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                              withOptions:SHAspectPositionAfter
+                               usingBlock:^(id<SHAspectInfo> aspectInfo, BOOL animated) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
                                    if (![self checkReactNative]
                                        && ![self ignoreVC:vc])
@@ -87,8 +87,8 @@
     //if use `viewDidDisappear`, present modal view controller has problem. For example, A present modal B, first call B `viewDidAppear` then call A `viewDidDisappear`, making the order wrong, expecting A disappear first and then B appear. Use `viewWillDisappear` solve this problem.
     //the mix just match requirement: disappear first and appear.
     [UIViewController aspect_hookSelector:@selector(viewDidAppear:)
-                              withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                              withOptions:SHAspectPositionAfter
+                               usingBlock:^(id<SHAspectInfo> aspectInfo, BOOL animated) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
                                    if (![self checkReactNative]
                                        && ![self ignoreVC:vc])
@@ -98,8 +98,8 @@
                                } error:nil];
     
     [UIViewController aspect_hookSelector:@selector(viewWillDisappear:)
-                              withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+                              withOptions:SHAspectPositionAfter
+                               usingBlock:^(id<SHAspectInfo> aspectInfo, BOOL animated) {
                                    UIViewController *vc = (UIViewController *)aspectInfo.instance;
                                    if (![self checkReactNative]
                                        && ![self ignoreVC:vc])
