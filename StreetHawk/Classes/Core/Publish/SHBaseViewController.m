@@ -156,8 +156,8 @@
 {
     //aspect affects all UIViewControllers, including system's such as UINavigationController.
     //These system's are container and they should not do StreetHawk behaviors. Ignore them before doing action.
-    if ([vc isKindOfClass:[UINavigationController class]]
-        || [vc isKindOfClass:[UITabBarController class]])
+    //More system UI found such as UIInputWindowController, UIAlertController etc.
+    if ([vc.class.description hasPrefix:@"UI"])
     {
         return YES;
     }
