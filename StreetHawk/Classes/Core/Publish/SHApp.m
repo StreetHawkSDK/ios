@@ -29,6 +29,7 @@
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
+#import "SHKeyChainStore.h"
 
 #define SETTING_UTC_OFFSET                  @"SETTING_UTC_OFFSET"  //key for local saved utc offset value
 
@@ -1970,13 +1971,23 @@ NSString *SentInstall_IBeacon = @"SentInstall_IBeacon";
     SHInstall *fakeInstall = [[SHInstall alloc] initWithSuid:@"fake_install"];
     handler = [handler copy];
     NSAssert(StreetHawk.currentInstall == nil, @"Install should not exist when call installs/register/.");
+    
+#pragma mark - todo
+    //TODO: generate install id locally and call v3/installs
+    
     [[SHHTTPSessionManager sharedInstance] POST:@"installs/register/" hostVersion:SHHostVersion_V1 body:[fakeInstall saveBody] success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject)
     {
         NSAssert(responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]], @"Register install return wrong json: %@.", responseObject);
         if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dict = (NSDictionary *)responseObject;
-            SHInstall *new_install = [[SHInstall alloc] initWithSuid:dict[@"installid"]];
+            NSString *installid = dict[@"installid"];
+            
+            //store installid in keychain
+            NSString *persistInstallid = [NSString stringWithFormat:@"%@_streethawk_install_id", self.appKey];
+            [SHKeyChainStore setString:installid forKey:persistInstallid];
+            
+            SHInstall *new_install = [[SHInstall alloc] initWithSuid:installid];
             [new_install loadFromDictionary:dict];
             if (handler)
             {
