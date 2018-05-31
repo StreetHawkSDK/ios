@@ -23,6 +23,8 @@
 #import "SHCoverView.h" //for cover view
 //header from System
 #import <objc/runtime.h> //for associate object
+//header from third-party
+#import "SHAspects.h"
 
 @interface NSString (SHEnterExitExt)
 
@@ -48,6 +50,216 @@
     }
     return page;
 }
+
+@end
+
+@implementation StreetHawkViewControllerSwizzle
+
++ (void)aspect
+{
+    //aspect UIViewController
+    [UIViewController aspect_hookSelector:@selector(viewDidLoad)
+                              withOptions:SHAspectPositionAfter
+                               usingBlock:^(id<SHAspectInfo> aspectInfo) {
+                                   UIViewController *vc = (UIViewController *)aspectInfo.instance;
+                                   if (![self checkReactNative]
+                                       && ![self ignoreVC:vc])
+                                   {
+                                       [self _doViewDidLoad:vc];
+                                   }
+                               } error:nil];
+    
+    //tricky: Record `viewWillAppear` as backup, become in canceled pop up `viewDidAppear` is not called.
+    [UIViewController aspect_hookSelector:@selector(viewWillAppear:)
+                              withOptions:SHAspectPositionAfter
+                               usingBlock:^(id<SHAspectInfo> aspectInfo, BOOL animated) {
+                                   UIViewController *vc = (UIViewController *)aspectInfo.instance;
+                                   if (![self checkReactNative]
+                                       && ![self ignoreVC:vc])
+                                   {
+                                       [self _doViewWillAppear:vc];
+                                   }
+                                   [self hookReactNative:vc];
+                               } error:nil];
+    
+    //tricky: Here must use `viewDidAppear` and `viewWillDisappear`.
+    //if use `viewWillAppear`, two issues: 1) Launch App `viewWillAppear` is called before `didFinishLaunchingWithOptions`, making home page not logged; 2) `viewWillAppear` cannot get self.view.window, always null, making it's unknown to check `SHCoverWindow`(deprecated).
+    //if use `viewDidDisappear`, present modal view controller has problem. For example, A present modal B, first call B `viewDidAppear` then call A `viewDidDisappear`, making the order wrong, expecting A disappear first and then B appear. Use `viewWillDisappear` solve this problem.
+    //the mix just match requirement: disappear first and appear.
+    [UIViewController aspect_hookSelector:@selector(viewDidAppear:)
+                              withOptions:SHAspectPositionAfter
+                               usingBlock:^(id<SHAspectInfo> aspectInfo, BOOL animated) {
+                                   UIViewController *vc = (UIViewController *)aspectInfo.instance;
+                                   if (![self checkReactNative]
+                                       && ![self ignoreVC:vc])
+                                   {
+                                       [self _doViewDidAppear:vc];
+                                   }
+                               } error:nil];
+    
+    [UIViewController aspect_hookSelector:@selector(viewWillDisappear:)
+                              withOptions:SHAspectPositionAfter
+                               usingBlock:^(id<SHAspectInfo> aspectInfo, BOOL animated) {
+                                   UIViewController *vc = (UIViewController *)aspectInfo.instance;
+                                   if (![self checkReactNative]
+                                       && ![self ignoreVC:vc])
+                                   {
+                                       [self _doViewWillDisappear:vc];
+                                   }
+                               } error:nil];
+}
+
++ (void)_doViewDidLoad:(UIViewController *)vc
+{
+    if ([vc respondsToSelector:@selector(displayDeepLinkingToUI)])
+    {
+        [vc performSelector:@selector(displayDeepLinkingToUI)];
+    }
+    if (!shIsSDKViewController(vc)) //Not show tip and super tag for SDK vc
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": vc}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": vc}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": vc}];
+    }
+}
+
++ (void)_doViewWillAppear:(UIViewController *)vc
+{
+    if (!shIsSDKViewController(vc))
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:[shAppendUniqueSuffix(vc) refinePageName] forKey:@"ENTERBAK_PAGE_HISTORY"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
++ (void)_doViewDidAppear:(UIViewController *)vc
+{
+    if (!shIsSDKViewController(vc)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    {
+        [StreetHawk shNotifyPageEnter:[shAppendUniqueSuffix(vc) refinePageName]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": vc}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": vc}];
+    }
+}
+
++ (void)_doViewWillDisappear:(UIViewController *)vc
+{
+    if (!shIsSDKViewController(vc)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
+    {
+        [StreetHawk shNotifyPageExit:[shAppendUniqueSuffix(vc) refinePageName]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": vc}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": vc}];
+    }
+}
+
++ (BOOL)ignoreVC:(UIViewController *)vc
+{
+    //aspect affects all UIViewControllers, including system's such as UINavigationController.
+    //These system's are container and they should not do StreetHawk behaviors. Ignore them before doing action.
+    //More system UI found such as UIInputWindowController, UIAlertController etc.
+    if ([vc.class.description hasPrefix:@"UI"])
+    {
+        return YES;
+    }
+    if ([vc respondsToSelector:@selector(excludeBehavior)])
+    {
+        SEL selector = @selector(excludeBehavior);
+        NSMethodSignature *ms = [vc methodSignatureForSelector:selector];
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:ms];
+        invocation.target = vc;
+        invocation.selector = selector;
+        [invocation invoke];
+        BOOL rtnVal = NO;
+        [invocation getReturnValue:&rtnVal];
+        if (rtnVal)
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+
++ (BOOL)checkReactNative {
+    Class rcClass = NSClassFromString(@"RCTRootView");
+    return (rcClass != nil);
+}
+
++ (void)hookReactNative:(UIViewController *)vc {
+    Class rcClass = NSClassFromString(@"RCTRootView");
+    if (!rcClass) {
+        return;
+    }
+    
+    if (![vc.view respondsToSelector:@selector(bridge)]) {
+        return;
+    }
+    id bridge = [vc.view valueForKey:@"bridge"];
+    if (!bridge) {
+        return;
+    }
+    
+    if (![bridge respondsToSelector:@selector(uiManager)]) {
+        return;
+    }
+    id uiManager = [bridge performSelector:@selector(uiManager) withObject:nil];
+    if (!uiManager) {
+        return;
+    }
+    
+    if (![uiManager respondsToSelector:@selector(observerCoordinator)]) {
+        return;
+    }
+    id observerCoordinator = [uiManager valueForKey:@"observerCoordinator"];
+    if (!observerCoordinator) {
+        return;
+    }
+    if (![observerCoordinator respondsToSelector:@selector(addObserver:)]) {
+        return;
+    }
+    [observerCoordinator performSelector:@selector(addObserver:) withObject:self];
+}
+
+#pragma clang diagnostic pop
+
+//BOOL _uiMayChange = false;
+//NSDate *_lastChangeDate = nil;
+//
+//- (void)uiManagerWillPerformMounting:(id)manager{
+//    id blocks = nil;
+//    @try {
+//        blocks = [manager valueForKey:@"_pendingUIBlocks"];
+//    }
+//    @catch(NSException *e) {}
+//    if (!blocks) {
+//        return;
+//    }
+//    if (![blocks respondsToSelector:@selector(count)]) {
+//        return;
+//    }
+//    int changePageCount = (int)[blocks performSelector:@selector(count)];
+//    if (changePageCount > 1) {
+//        if (!_uiMayChange) {
+//            // equal to viewWillDisappear
+//            [self _doViewWillDisappear];
+//        }
+//        _uiMayChange = true;
+//        _lastChangeDate = [NSDate date];
+//    }
+//    else if (_uiMayChange) {
+//        NSDate *now = [NSDate date];
+//        NSTimeInterval changeTimeInterval = [now timeIntervalSinceDate:_lastChangeDate];
+//        if (changeTimeInterval > 1.0f) {
+//            _uiMayChange = false;
+//            // equal to viewDidLoad + viewWillAppear + viewDidAppear
+//            [self _doViewDidLoad];
+//            [self _doViewWillAppear];
+//            [self _doViewDidAppear];
+//        }
+//    }
+//}
 
 @end
 
@@ -79,167 +291,6 @@
     }
     return self;
 }
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    if (![self checkReactNative]) {
-        [self _doViewDidLoad];
-    }
-}
-
-- (void)_doViewDidLoad {
-    if ([self respondsToSelector:@selector(displayDeepLinkingToUI)])
-    {
-        [self performSelector:@selector(displayDeepLinkingToUI)];
-    }
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-//tricky: Record `viewWillAppear` as backup, become in canceled pop up `viewDidAppear` is not called.
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (![self checkReactNative]) {
-        [self _doViewWillAppear];
-    }
-    [self hookReactNative];
-}
-
-- (void)_doViewWillAppear {
-    if (!self.excludeBehavior && !shIsSDKViewController(self))
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-//tricky: Here must use `viewDidAppear` and `viewWillDisappear`.
-//if use `viewWillAppear`, two issues: 1) Launch App `viewWillAppear` is called before `didFinishLaunchingWithOptions`, making home page not logged; 2) `viewWillAppear` cannot get self.view.window, always null, making it's unknown to check `SHCoverWindow`(deprecated).
-//if use `viewDidDisappear`, present modal view controller has problem. For example, A present modal B, first call B `viewDidAppear` then call A `viewDidDisappear`, making the order wrong, expecting A disappear first and then B appear. Use `viewWillDisappear` solve this problem.
-//the mix just match requirement: disappear first and appear.
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (![self checkReactNative]) {
-        [self _doViewDidAppear];
-    }
-}
-
-- (void)_doViewDidAppear
-{
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
-    {
-        [StreetHawk shNotifyPageEnter:[shAppendUniqueSuffix(self) refinePageName]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (![self checkReactNative]) {
-        [self _doViewWillDisappear];
-    }
-}
-
-- (void)_doViewWillDisappear
-{
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
-    {
-        [StreetHawk shNotifyPageExit:[shAppendUniqueSuffix(self) refinePageName]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-
-- (BOOL)checkReactNative {
-    Class rcClass = NSClassFromString(@"RCTRootView");
-    return (rcClass != nil);
-}
-
-- (void)hookReactNative {
-    Class rcClass = NSClassFromString(@"RCTRootView");
-    if (!rcClass) {
-        return;
-    }
-    
-    if (![self.view respondsToSelector:@selector(bridge)]) {
-        return;
-    }
-    id bridge = [self.view valueForKey:@"bridge"];
-    if (!bridge) {
-        return;
-    }
-    
-    if (![bridge respondsToSelector:@selector(uiManager)]) {
-        return;
-    }
-    id uiManager = [bridge performSelector:@selector(uiManager) withObject:nil];
-    if (!uiManager) {
-        return;
-    }
-    
-    if (![uiManager respondsToSelector:@selector(observerCoordinator)]) {
-        return;
-    }
-    id observerCoordinator = [uiManager valueForKey:@"observerCoordinator"];
-    if (!observerCoordinator) {
-        return;
-    }
-    if (![observerCoordinator respondsToSelector:@selector(addObserver:)]) {
-        return;
-    }
-    [observerCoordinator performSelector:@selector(addObserver:) withObject:self];
-}
-
-BOOL _uiMayChange = false;
-NSDate *_lastChangeDate = nil;
-
-- (void)uiManagerWillPerformMounting:(id)manager{
-    id blocks = nil;
-    @try {
-        blocks = [manager valueForKey:@"_pendingUIBlocks"];
-    }
-    @catch(NSException *e) {}
-    if (!blocks) {
-        return;
-    }
-    if (![blocks respondsToSelector:@selector(count)]) {
-        return;
-    }
-    int changePageCount = (int)[blocks performSelector:@selector(count)];
-    if (changePageCount > 1) {
-        if (!_uiMayChange) {
-            // equal to viewWillDisappear
-            [self _doViewWillDisappear];
-        }
-        _uiMayChange = true;
-        _lastChangeDate = [NSDate date];
-    }
-    else if (_uiMayChange) {
-        NSDate *now = [NSDate date];
-        NSTimeInterval changeTimeInterval = [now timeIntervalSinceDate:_lastChangeDate];
-        if (changeTimeInterval > 1.0f) {
-            _uiMayChange = false;
-            // equal to viewDidLoad + viewWillAppear + viewDidAppear
-            [self _doViewDidLoad];
-            [self _doViewWillAppear];
-            [self _doViewDidAppear];
-        }
-    }
-}
-
-#pragma clang diagnostic pop
 
 @end
 
@@ -281,53 +332,6 @@ NSDate *_lastChangeDate = nil;
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    if ([self respondsToSelector:@selector(displayDeepLinkingToUI)])
-    {
-        [self performSelector:@selector(displayDeepLinkingToUI)];
-    }
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self))
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
-    {
-        [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
-    {
-        [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
 @end
 
 @implementation StreetHawkBaseCollectionViewController
@@ -366,53 +370,6 @@ NSDate *_lastChangeDate = nil;
         self.excludeBehavior = NO;
     }
     return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    if ([self respondsToSelector:@selector(displayDeepLinkingToUI)])
-    {
-        [self performSelector:@selector(displayDeepLinkingToUI)];
-    }
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //Not show tip and super tag for SDK vc
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_CustomFeed_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_SuperTag_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self))
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:self.class.description forKey:@"ENTERBAK_PAGE_HISTORY"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
-    {
-        [StreetHawk shNotifyPageEnter:[self.class.description refinePageName]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_EnterVC_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (!self.excludeBehavior && !shIsSDKViewController(self)) //several internal used vc not need log, such as SHFeedbackViewController, SHSlideWebViewController (it calls appear even not show).
-    {
-        [StreetHawk shNotifyPageExit:[self.class.description refinePageName]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ForceDismissTip_Notification" object:nil userInfo:@{@"vc": self}];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ExitVC_Notification" object:nil userInfo:@{@"vc": self}];
-    }
 }
 
 @end

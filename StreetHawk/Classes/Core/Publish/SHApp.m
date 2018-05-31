@@ -26,6 +26,7 @@
 #import "SHFriendlyNameObject.h"
 #import "SHUtils.h"
 #import "SHHTTPSessionManager.h" //for set header "X-Installid"
+#import "SHBaseViewController.h" //for aspect
 //header from System
 #import <CoreSpotlight/CoreSpotlight.h> //for spotlight search
 #import <MobileCoreServices/MobileCoreServices.h> //for kUTTypeImage
@@ -360,6 +361,8 @@
     {
         action();
     }
+    //aspect view controller
+    [StreetHawkViewControllerSwizzle aspect];
 }
 
 - (void)registerInstallForApp:(nonnull NSString *)appKey segmentId:(NSString *)segmentId withDebugMode:(BOOL)isDebugMode

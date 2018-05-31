@@ -35,6 +35,7 @@ Pod::Spec.new do |s|
     sp.dependency            'Masonry'
     sp.dependency            'WebViewJavascriptBridge'
     sp.dependency            'SDWebImage/GIF'
+    sp.dependency            'Aspects'
   end
   
   s.subspec 'Growth' do |sp|

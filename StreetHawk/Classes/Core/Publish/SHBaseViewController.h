@@ -53,12 +53,21 @@
 @end
 
 /**
- Base class for all view controller inherit from UIViewController. It sends logs when enter/exit this VC.
+ Method to aspect StreetHawk related functions into normal view controller.
+ */
+@interface StreetHawkViewControllerSwizzle : NSObject
+
++ (void)aspect;
+
+@end
+
+/**
+ Keep StreetHawk base vc classes for compatibility.
  */
 @interface StreetHawkBaseViewController : UIViewController <ISHDeepLinking>
 
 /**
- Some customer view controller may be inherited not in purpose (such as base vc do inherit). 
+ Some customer view controller may be inherited not in purpose (such as base vc do inherit).
  Use this property to exclude them from being treated as StreetHawk behavior vc.
  */
 @property (nonatomic) BOOL excludeBehavior;
@@ -70,9 +79,6 @@
 
 @end
 
-/**
- Base class for all view controller inherit from UITableViewController. It sends logs when enter/exit this VC.
- */
 @interface StreetHawkBaseTableViewController : UITableViewController <ISHDeepLinking>
 
 /**
@@ -88,9 +94,6 @@
 
 @end
 
-/**
- Base class for all view controller inherit from UICollectionViewController. It sends logs when enter/exit this VC.
- */
 @interface StreetHawkBaseCollectionViewController : UICollectionViewController <ISHDeepLinking>
 
 /**
