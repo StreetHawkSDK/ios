@@ -2,41 +2,48 @@
 
 echo "==============================================================="
 echo "Sync Core phonegap module"
-# delete
+STREETHAWK_NATIVE_SDK=./StreetHawk/
+
 PHONEGAP_ANALYTICS=../PhonegapAnalytics/src/ios/SDK/
 PHONEGAP_LOCATIONS=../PhonegapLocations/src/ios/SDK/
+
+# delete
 rm -Rf $PHONEGAP_ANALYTICS/Core/*
 # core folder
-cp -Ra StreetHawk/Classes/Core/ $PHONEGAP_ANALYTICS/
+cp -Ra $STREETHAWK_NATIVE_SDK/Classes/Core/ $PHONEGAP_ANALYTICS/
 sed -i -e 's/\[SHLogger checkLogdbForFreshInstall\];/ /g' "$PHONEGAP_ANALYTICS/Core/Publish/SHApp.m"
 sed -i -e 's/\[SHLogger checkSentApnsModeForFreshInstall\];/ /g' "$PHONEGAP_ANALYTICS/Core/Publish/SHApp.m"
 sed -i -e 's/return SHDevelopmentPlatform_Native;/return SHDevelopmentPlatform_Phonegap;/g' "$PHONEGAP_ANALYTICS/Core/src/ios/SDK/Core/Publish/SHApp.m"
 sed -i -e 's/NSAssert(self.logger != nil, @"Lose logline due to logger is not ready.");/ /g' "$PHONEGAP_ANALYTICS/Core/src/ios/SDK/Core/Internal/SHLogger.m"
+
 ## location folder
 mkdir -p $PHONEGAP_LOCATION/Location
-cp -R StreetHawk/Classes/Location/Internal/ $PHONEGAP_LOCATIONS/Location/Internal/
-cp -R StreetHawk/Classes/Location/Publish/ $PHONEGAP_LOCATIONS/Location/Publish/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/Location/Internal/ $PHONEGAP_LOCATIONS/Location/Internal/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/Location/Publish/ $PHONEGAP_LOCATIONS/Location/Publish/
+
 ## resource folder
 mkdir -p $PHONEGAP_LOCATION/Core/src/ios/SDK/Resource
-cp -a build/outputs/Release/universal/StreetHawkCore.framework/StreetHawkCoreRes.bundle /Core/src/ios/SDK/Resource/StreetHawkCoreRes.bundle
+cp -a build/outputs/Release/universal/StreetHawkCore.framework/StreetHawkCoreRes.bundle $PHONEGAP_ANALYTICS/Core/src/ios/SDK/Resource/StreetHawkCoreRes.bundle
+
 ## third-party folder
 mkdir -p $PHONEGAP_ANALYTICS/Core/src/ios/SDK/ThirdParty
-cp -R StreetHawk/Classes/ThirdParty/AFNetworking/ $PHONEGAP_ANALYTICS/Core/src/ios/SDK/ThirdParty/AFNetworking/
-mkdir -p ../../StreetHawkWrapper/Phonegap_module/Core/src/ios/SDK/ThirdParty/MBProgressHUD
-#cp -a ../streethawk/StreetHawkCore/ThirdParty/MBProgressHUD/SHMBProgressHUD.h ../../StreetHawkWrapper/Phonegap_module/Core/src/ios/SDK/ThirdParty/MBProgressHUD/SHMBProgressHUD.h
-#cp -a ../streethawk/StreetHawkCore/ThirdParty/MBProgressHUD/SHMBProgressHUD.m ../../StreetHawkWrapper/Phonegap_module/Core/src/ios/SDK/ThirdParty/MBProgressHUD/SHMBProgressHUD.m
-#cp -R ../streethawk/StreetHawkCore/ThirdParty/Reachability/ ../../StreetHawkWrapper/Phonegap_module/Core/src/ios/SDK/ThirdParty/Reachability/
-#cp -R ../ios-module/StreetHawk/Classes/ThirdParty/UIDevice_Extension/ ../../StreetHawkWrapper/Phonegap_module/Core/src/ios/SDK/ThirdParty/UIDevice_Extension/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/AFNetworking/ $PHONEGAP_ANALYTICS/Core/src/ios/SDK/ThirdParty/AFNetworking/
+
+mkdir -p $PHONEGAP_ANALYTICS/ThirdParty/MBProgressHUD
+cp -a $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/MBProgressHUD/SHMBProgressHUD.h $PHONEGAP_ANALYTICS/ThirdParty/MBProgressHUD/SHMBProgressHUD.h
+cp -a $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/MBProgressHUD/SHMBProgressHUD.m $PHONEGAP_ANALYTICS/ThirdParty/MBProgressHUD/SHMBProgressHUD.m
+cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/Reachability/ $PHONEGAP_ANALYTICS/ThirdParty/Reachability/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/UIDevice_Extension/ $PHONEGAP_ANALYTICS/ThirdParty/UIDevice_Extension/
 #
-#echo "==============================================================="
-#echo "Sync Location phonegap module"
-## delete
-#rm -Rf ../../StreetHawkWrapper/Phonegap_module/Locations/src/ios/SDK/*
+echo "==============================================================="
+echo "Sync Location phonegap module"
+# delete
+rm -Rf $PHONEGAP_LOCATION/*
 ## location files
-#mkdir -p ../../StreetHawkWrapper/Phonegap_module/Locations/src/ios/SDK/Location
-#mkdir -p ../../StreetHawkWrapper/Phonegap_module/Locations/src/ios/SDK/Location/Private
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHLocationBridge.h ../../StreetHawkWrapper/Phonegap_module/Locations/src/ios/SDK/Location/Private/SHLocationBridge.h
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHLocationBridge.m ../../StreetHawkWrapper/Phonegap_module/Locations/src/ios/SDK/Location/Private/SHLocationBridge.m
+mkdir -p $PHONEGAP_LOCATIONS/Location
+mkdir -p $PHONEGAP_LOCATIONS/Location/Private
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHLocationBridge.h $PHONEGAP_LOCATIONS/Location/Private/SHLocationBridge.h
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHLocationBridge.m $PHONEGAP_LOCATIONS/Location/Private/SHLocationBridge.m
 #
 #echo "==============================================================="
 #echo "Sync Beacon phonegap module"
