@@ -7,6 +7,9 @@ STREETHAWK_NATIVE_SDK=./StreetHawk/
 PHONEGAP_ANALYTICS=../PhonegapAnalytics/src/ios/SDK/
 PHONEGAP_LOCATIONS=../PhonegapLocations/src/ios/SDK/
 PHONEGAP_BEACONS=../PhonegapBeacons/src/ios/SDK/
+PHONEGAP_GEOFENCE=../PhonegapGeofence/src/ios/SDK/
+PHONEGAP_PUSH=../PhonegapPush/src/ios/SDK/
+PHONEGAP_FEED=../PhonegapFeed/src/ios/SDK/
 
 # delete
 rm -Rf $PHONEGAP_ANALYTICS/Core/*
