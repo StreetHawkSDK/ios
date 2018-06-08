@@ -6,6 +6,7 @@ STREETHAWK_NATIVE_SDK=./StreetHawk/
 
 PHONEGAP_ANALYTICS=../PhonegapAnalytics/src/ios/SDK/
 PHONEGAP_LOCATIONS=../PhonegapLocations/src/ios/SDK/
+PHONEGAP_BEACONS=../PhonegapBeacons/src/ios/SDK/
 
 # delete
 rm -Rf $PHONEGAP_ANALYTICS/Core/*
@@ -45,17 +46,17 @@ mkdir -p $PHONEGAP_LOCATIONS/Location/Private
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHLocationBridge.h $PHONEGAP_LOCATIONS/Location/Private/SHLocationBridge.h
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHLocationBridge.m $PHONEGAP_LOCATIONS/Location/Private/SHLocationBridge.m
 #
-#echo "==============================================================="
-#echo "Sync Beacon phonegap module"
-## delete
-#rm -Rf ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/*
-## beacon files
-#mkdir -p ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/Beacon
-#mkdir -p ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/Beacon/Private
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHBeaconBridge.h ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/Beacon/Private/SHBeaconBridge.h
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHBeaconBridge.m ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/Beacon/Private/SHBeaconBridge.m
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHBeaconStatus.h ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/Beacon/Private/SHBeaconStatus.h
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHBeaconStatus.m ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/Beacon/Private/SHBeaconStatus.m
+echo "==============================================================="
+echo "Sync Beacon phonegap module"
+# delete
+rm -Rf ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/*
+# beacon files
+mkdir -p $PHONEGAP_BEACONS/Beacon
+mkdir -p $PHONEGAP_BEACONS/Beacon/Private
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconBridge.h $PHONEGAP_BEACONS/Beacon/Private/SHBeaconBridge.h
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconBridge.m $PHONEGAP_BEACONS/Beacon/Private/SHBeaconBridge.m
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconStatus.h $PHONEGAP_BEACONS/Beacon/Private/SHBeaconStatus.h
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconStatus.m $PHONEGAP_BEACONS/Beacon/Private/SHBeaconStatus.m
 #
 #echo "==============================================================="
 #echo "Sync Geofence phonegap module"
