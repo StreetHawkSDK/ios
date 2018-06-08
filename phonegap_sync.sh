@@ -57,45 +57,47 @@ cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconBridge.h $PHONEGAP
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconBridge.m $PHONEGAP_BEACONS/Beacon/Private/SHBeaconBridge.m
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconStatus.h $PHONEGAP_BEACONS/Beacon/Private/SHBeaconStatus.h
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconStatus.m $PHONEGAP_BEACONS/Beacon/Private/SHBeaconStatus.m
-#
-#echo "==============================================================="
-#echo "Sync Geofence phonegap module"
-## delete
-#rm -Rf ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/*
-## geofence files
-#mkdir -p ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/Geofence
-#mkdir -p ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/Geofence/Private
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHGeofenceBridge.h ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/Geofence/Private/SHGeofenceBridge.h
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHGeofenceBridge.m ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/Geofence/Private/SHGeofenceBridge.m
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHGeofenceStatus.h ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/Geofence/Private/SHGeofenceStatus.h
-#cp -a ../ios-module/StreetHawk/Classes/Location/Private/SHGeofenceStatus.m ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/Geofence/Private/SHGeofenceStatus.m
-#
-#echo "==============================================================="
-#echo "Sync Growth phonegap module"
-## delete
-#rm -Rf ../../StreetHawkWrapper/Phonegap_module/Growth/src/ios/SDK/*
-## growth folder
-#cp -R ../ios-module/StreetHawk/Classes/Growth/ ../../StreetHawkWrapper/Phonegap_module/Growth/src/ios/SDK/Growth/
-#cp -a ../streethawk/StreetHawkCore/Growth/Private/SHGrowth.m ../../StreetHawkWrapper/Phonegap_module/Growth/src/ios/SDK/Growth/Private/SHGrowth.m
-#
-#echo "==============================================================="
-#echo "Sync Push phonegap module"
-## delete
-#rm -Rf ../../StreetHawkWrapper/Phonegap_module/Push/src/ios/SDK/*
-## notification folder
-#cp -R ../ios-module/StreetHawk/Classes/Notification/ ../../StreetHawkWrapper/Phonegap_module/Push/src/ios/SDK/Notification/
-## third-party folder
-#mkdir -p ../../StreetHawkWrapper/Phonegap_module/Push/src/ios/SDK/ThirdParty
-#cp -R ../ios-module/StreetHawk/Classes/ThirdParty/CBAutoScrollLabel/ ../../StreetHawkWrapper/Phonegap_module/Push/src/ios/SDK/ThirdParty/CBAutoScrollLabel/
-#cp -R ../ios-module/StreetHawk/Classes/ThirdParty/Emojione/ ../../StreetHawkWrapper/Phonegap_module/Push/src/ios/SDK/ThirdParty/Emojione/
-#
-#echo "==============================================================="
-#echo "Sync Feed phonegap module"
-## delete
-#rm -Rf ../../StreetHawkWrapper/Phonegap_module/Feed/src/ios/SDK/*
-## feed folder
-#cp -R ../ios-module/StreetHawk/Classes/Feed/ ../../StreetHawkWrapper/Phonegap_module/Feed/src/ios/SDK/Feed/
-#
-#echo "==============================================================="
-#echo "Finish sync phonegap module"
-#echo "==============================================================="
+
+echo "==============================================================="
+echo "Sync Geofence phonegap module"
+# delete
+rm -Rf ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/*
+
+# geofence files
+mkdir -p $PHONEGAP_GEOFENCE/Geofence
+mkdir -p $PHONEGAP_GEOFENCE/Geofence/Private
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHGeofenceBridge.h $PHONEGAP_GEOFENCE/Geofence/Private/SHGeofenceBridge.h
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHGeofenceBridge.m $PHONEGAP_GEOFENCE/Geofence/Private/SHGeofenceBridge.m
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHGeofenceStatus.h $PHONEGAP_GEOFENCE/Geofence/Private/SHGeofenceStatus.h
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHGeofenceStatus.m $PHONEGAP_GEOFENCE/Geofence/Private/SHGeofenceStatus.m
+
+echo "==============================================================="
+echo "Sync Growth phonegap module"
+# delete
+rm -Rf $PHONEGAP_GROWTH/Growth/src/ios/SDK/*
+
+# growth folder
+cp -R /Classes/Growth/ $PHONEGAP_GROWTH/Growth/
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Growth/Private/SHGrowth.m $PHONEGAP_GROWTH/Growth/Private/SHGrowth.m
+
+echo "==============================================================="
+echo "Sync Push phonegap module"
+# delete
+rm -Rf $PHONEGAP_PUSH/Push/src/ios/SDK/*
+# notification folder
+cp -R $STREETHAWK_NATIVE_SDK/Classes/Notification/ $PHONEGAP_GEOFENCE/Push/src/ios/SDK/Notification/
+# third-party folder
+mkdir -p ../../StreetHawkWrapper/Phonegap_module/Push/src/ios/SDK/ThirdParty
+cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/CBAutoScrollLabel/ $PHONEGAP_PUSH/Push/src/ios/SDK/ThirdParty/CBAutoScrollLabel/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/Emojione/ $PHONEGAP_PUSH/Push/src/ios/SDK/ThirdParty/Emojione/
+
+echo "==============================================================="
+echo "Sync Feed phonegap module"
+# delete
+rm -Rf $PHONEGAP_FEED/Feed/src/ios/SDK/*
+# feed folder
+cp -R $PHONEGAP_FEED/Classes/Feed/ $PHONEGAP_FEED/Feed/src/ios/SDK/Feed/
+
+echo "==============================================================="
+echo "Finish sync phonegap module"
+echo "==============================================================="
