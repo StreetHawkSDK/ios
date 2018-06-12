@@ -4,34 +4,35 @@ echo "==============================================================="
 echo "Sync Core phonegap module"
 STREETHAWK_NATIVE_SDK=./StreetHawk/
 
-PHONEGAP_ANALYTICS=../PhonegapAnalytics/src/ios/SDK/
-PHONEGAP_LOCATIONS=../PhonegapLocations/src/ios/SDK/
-PHONEGAP_BEACONS=../PhonegapBeacons/src/ios/SDK/
-PHONEGAP_GEOFENCE=../PhonegapGeofence/src/ios/SDK/
-PHONEGAP_PUSH=../PhonegapPush/src/ios/SDK/
-PHONEGAP_FEED=../PhonegapFeed/src/ios/SDK/
+PHONEGAP_ANALYTICS=../PhonegapAnalytics/src/ios/SDK
+PHONEGAP_LOCATIONS=../PhonegapLocations/src/ios/SDK
+PHONEGAP_BEACONS=../PhonegapBeacon/src/ios/SDK
+PHONEGAP_GEOFENCE=../PhonegapGeofence/src/ios/SDK
+PHONEGAP_PUSH=../PhonegapPush/src/ios/SDK
+PHONEGAP_FEED=../PhonegapFeeds/src/ios/SDK
+PHONEGAP_GROWTH=../PhonegapGrowth/src/ios/SDK
 
 # delete
-rm -Rf $PHONEGAP_ANALYTICS/Core/*
+rm -R $PHONEGAP_ANALYTICS/Core/*
 # core folder
 cp -Ra $STREETHAWK_NATIVE_SDK/Classes/Core/ $PHONEGAP_ANALYTICS/
 sed -i -e 's/\[SHLogger checkLogdbForFreshInstall\];/ /g' "$PHONEGAP_ANALYTICS/Core/Publish/SHApp.m"
 sed -i -e 's/\[SHLogger checkSentApnsModeForFreshInstall\];/ /g' "$PHONEGAP_ANALYTICS/Core/Publish/SHApp.m"
-sed -i -e 's/return SHDevelopmentPlatform_Native;/return SHDevelopmentPlatform_Phonegap;/g' "$PHONEGAP_ANALYTICS/Core/src/ios/SDK/Core/Publish/SHApp.m"
-sed -i -e 's/NSAssert(self.logger != nil, @"Lose logline due to logger is not ready.");/ /g' "$PHONEGAP_ANALYTICS/Core/src/ios/SDK/Core/Internal/SHLogger.m"
+sed -i -e 's/return SHDevelopmentPlatform_Native;/return SHDevelopmentPlatform_Phonegap;/g' "$PHONEGAP_ANALYTICS/Core/Publish/SHApp.m"
+sed -i -e 's/NSAssert(self.logger != nil, @"Lose logline due to logger is not ready.");/ /g' "$PHONEGAP_ANALYTICS/Core/Internal/SHLogger.m"
 
 ## location folder
-mkdir -p $PHONEGAP_LOCATION/Location
+mkdir -p $PHONEGAP_LOCATIONS/Location
 cp -R $STREETHAWK_NATIVE_SDK/Classes/Location/Internal/ $PHONEGAP_LOCATIONS/Location/Internal/
 cp -R $STREETHAWK_NATIVE_SDK/Classes/Location/Publish/ $PHONEGAP_LOCATIONS/Location/Publish/
 
 ## resource folder
-mkdir -p $PHONEGAP_LOCATION/Core/src/ios/SDK/Resource
-cp -a build/outputs/Release/universal/StreetHawkCore.framework/StreetHawkCoreRes.bundle $PHONEGAP_ANALYTICS/Core/src/ios/SDK/Resource/StreetHawkCoreRes.bundle
+mkdir -p $PHONEGAP_LOCATIONS/Core/src/ios/SDK/Resource
+cp -a build/outputs/Release/universal/StreetHawkCore.framework/StreetHawkCoreRes.bundle $PHONEGAP_ANALYTICS/Resource/StreetHawkCoreRes.bundle
 
 ## third-party folder
-mkdir -p $PHONEGAP_ANALYTICS/Core/src/ios/SDK/ThirdParty
-cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/AFNetworking/ $PHONEGAP_ANALYTICS/Core/src/ios/SDK/ThirdParty/AFNetworking/
+mkdir -p $PHONEGAP_ANALYTICS/ThirdParty
+cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/AFNetworking/ $PHONEGAP_ANALYTICS/ThirdParty/AFNetworking/
 
 mkdir -p $PHONEGAP_ANALYTICS/ThirdParty/MBProgressHUD
 cp -a $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/MBProgressHUD/SHMBProgressHUD.h $PHONEGAP_ANALYTICS/ThirdParty/MBProgressHUD/SHMBProgressHUD.h
@@ -42,7 +43,7 @@ cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/UIDevice_Extension/ $PHONEGAP_AN
 echo "==============================================================="
 echo "Sync Location phonegap module"
 # delete
-rm -Rf $PHONEGAP_LOCATION/*
+rm -R $PHONEGAP_LOCATIONS/Location/*
 ## location files
 mkdir -p $PHONEGAP_LOCATIONS/Location
 mkdir -p $PHONEGAP_LOCATIONS/Location/Private
@@ -52,7 +53,7 @@ cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHLocationBridge.m $PHONEG
 echo "==============================================================="
 echo "Sync Beacon phonegap module"
 # delete
-rm -Rf ../../StreetHawkWrapper/Phonegap_module/Beacons/src/ios/SDK/*
+rm -R $PHONEGAP_BEACONS/Beacon/*
 # beacon files
 mkdir -p $PHONEGAP_BEACONS/Beacon
 mkdir -p $PHONEGAP_BEACONS/Beacon/Private
@@ -64,7 +65,7 @@ cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconStatus.m $PHONEGAP
 echo "==============================================================="
 echo "Sync Geofence phonegap module"
 # delete
-rm -Rf ../../StreetHawkWrapper/Phonegap_module/Geofence/src/ios/SDK/*
+rm -R $PHONEGAP_GEOFENCE/Geofence/*
 
 # geofence files
 mkdir -p $PHONEGAP_GEOFENCE/Geofence
@@ -77,29 +78,30 @@ cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHGeofenceStatus.m $PHONEG
 echo "==============================================================="
 echo "Sync Growth phonegap module"
 # delete
-rm -Rf $PHONEGAP_GROWTH/Growth/src/ios/SDK/*
+rm -R $PHONEGAP_GROWTH/Growth/*
 
 # growth folder
-cp -R /Classes/Growth/ $PHONEGAP_GROWTH/Growth/
-cp -a $STREETHAWK_NATIVE_SDK/Classes/Growth/Private/SHGrowth.m $PHONEGAP_GROWTH/Growth/Private/SHGrowth.m
+mkdir -p $PHONEGAP_GROWTH/Growth
+mkdir -p $PHONEGAP_GROWTH/Growth/Private
+cp -a $STREETHAWK_NATIVE_SDK/Classes/Growth/ $PHONEGAP_GROWTH/
 
 echo "==============================================================="
 echo "Sync Push phonegap module"
 # delete
-rm -Rf $PHONEGAP_PUSH/Push/src/ios/SDK/*
+rm -R $PHONEGAP_PUSH/Notification/*
 # notification folder
-cp -R $STREETHAWK_NATIVE_SDK/Classes/Notification/ $PHONEGAP_GEOFENCE/Push/src/ios/SDK/Notification/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/Notification/ $PHONEGAP_PUSH/
 # third-party folder
-mkdir -p ../../StreetHawkWrapper/Phonegap_module/Push/src/ios/SDK/ThirdParty
-cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/CBAutoScrollLabel/ $PHONEGAP_PUSH/Push/src/ios/SDK/ThirdParty/CBAutoScrollLabel/
-cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/Emojione/ $PHONEGAP_PUSH/Push/src/ios/SDK/ThirdParty/Emojione/
+mkdir -p $PHONEGAP_PUSH/ThirdParty
+cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/CBAutoScrollLabel/ $PHONEGAP_PUSH/ThirdParty/CBAutoScrollLabel/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/Emojione/ $PHONEGAP_PUSH/ThirdParty/Emojione/
 
 echo "==============================================================="
 echo "Sync Feed phonegap module"
 # delete
-rm -Rf $PHONEGAP_FEED/Feed/src/ios/SDK/*
+rm -R $PHONEGAP_FEED/Feed/*
 # feed folder
-cp -R $PHONEGAP_FEED/Classes/Feed/ $PHONEGAP_FEED/Feed/src/ios/SDK/Feed/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/Feed/ $PHONEGAP_FEED/
 
 echo "==============================================================="
 echo "Finish sync phonegap module"
