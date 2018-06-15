@@ -214,7 +214,7 @@
 
 - (void)processSuccessCallback:(NSURLSessionDataTask *)task withData:(id)responseObject success:(void (^)(NSURLSessionDataTask * _Nullable, id _Nullable))success failure:(void (^)(NSURLSessionDataTask * _Nullable, NSError * _Nullable))failure
 {
-    NSAssert(![NSThread isMainThread], @"Successfual callback wait in main thread for request %@.", task.currentRequest);
+    NSAssert(![NSThread isMainThread], @"Successful callback wait in main thread for request %@.", task.currentRequest);
     if ([task.response.URL.absoluteString.lowercaseString containsString:@".streethawk.com"] //since route host server is flexible to change
         && ![task.response.URL.absoluteString.lowercaseString hasPrefix:NONULL([SHAppStatus sharedInstance].growthHost)] //growth is an exception
         && ![task.response.URL.absoluteString.lowercaseString containsString:@"/v3"]) //v3 endpoint doesn't have code-value format
