@@ -315,7 +315,6 @@
 				CB59629E1B749B9A0086CC7D /* Sources */,
 				CB59629F1B749B9A0086CC7D /* Frameworks */,
 				CB5962A01B749B9A0086CC7D /* Resources */,
-				1D186C728F4CD3064700360A /* [CP] Embed Pods Frameworks */,
 				651D3E72C95996BFB0885CE2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -398,21 +397,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1D186C728F4CD3064700360A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		651D3E72C95996BFB0885CE2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -420,11 +404,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-StreetHawkDemo/Pods-StreetHawkDemo-resources.sh",
-				$PODS_CONFIGURATION_BUILD_DIR/streethawk/streethawk.bundle,
+				"${PODS_CONFIGURATION_BUILD_DIR}/streethawk/streethawk.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/streethawk.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -587,6 +571,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = StreetHawkDemo.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Dealsta Pty Ltd (AG748WC3N7)";
 				DEVELOPMENT_TEAM = AG748WC3N7;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -597,8 +582,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.streethawk.SHStatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "23642cbd-d1e6-48ba-a30c-fc6cab88a8cd";
-				PROVISIONING_PROFILE_SPECIFIER = "Dev - StreetHawk Pod Static Library Sample App";
+				PROVISIONING_PROFILE = "8468c1cf-8a04-4ed6-98f8-53db9e0c64d7";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc com.streethawk.SHStatic";
 				SWIFT_OBJC_BRIDGING_HEADER = "Demo/Swift/StreetHawkDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
