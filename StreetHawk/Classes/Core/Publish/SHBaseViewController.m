@@ -218,23 +218,21 @@ NSDate *_lastChangeDate = nil;
         return;
     }
     int changePageCount = (int)[blocks performSelector:@selector(count)];
-    if (changePageCount > 1) {
-        if (!_uiMayChange) {
-            // equal to viewWillDisappear
-            [self _doViewWillDisappear];
-        }
-        _uiMayChange = true;
-        _lastChangeDate = [NSDate date];
-    }
-    else if (_uiMayChange) {
+    if (changePageCount > 0) {
+        //Create the dateformatter object
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        //Set the required date format
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSDate *now = [NSDate date];
         NSTimeInterval changeTimeInterval = [now timeIntervalSinceDate:_lastChangeDate];
-        if (changeTimeInterval > 1.0f) {
+        SHLog(@"changeTimeInterval: %f, lastChangeDate: %@, now: %@", changeTimeInterval, [dateFormatter stringFromDate:_lastChangeDate], [dateFormatter stringFromDate:now]);
+        if (changeTimeInterval > 1.0f || !_lastChangeDate) {
             _uiMayChange = false;
             // equal to viewDidLoad + viewWillAppear + viewDidAppear
             [self _doViewDidLoad];
             [self _doViewWillAppear];
             [self _doViewDidAppear];
+            _lastChangeDate = [NSDate date];
         }
     }
 }
