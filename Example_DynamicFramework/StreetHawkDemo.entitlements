@@ -4,5 +4,11 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:hwk.io</string>
+		<string>applinks:pointzi.streethawk.com</string>
+		<string>applinks:growth-staging.streethawk.com</string>
+	</array>
 </dict>
 </plist>
