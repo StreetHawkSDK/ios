@@ -475,9 +475,9 @@
         {
             SHLog(@"Growth increase click try to open: %@.", responseObject);
             NSString *deeplinkingUrl = [self parseGrowthResult:responseObject withError:nil];
-            NSAssert(!shStrIsEmpty(deeplinkingUrl), @"Growth increase click request fail to get real deeplinking url from universal linking.");
             if (shStrIsEmpty(deeplinkingUrl)) //still fail to get real deeplinking url, give universal linking to customer
             {
+                SHLog(@"Growth increase click request fail to get real deeplinking url from universal linking. Sending back the shareUrl: %@", shareUrl);
                 if (StreetHawk.openUrlHandler != nil)
                 {
                     StreetHawk.openUrlHandler(shareUrl);
