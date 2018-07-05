@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name                = "streethawk"
   s.header_dir          = "StreetHawkCore"
-  s.version             = "1.10.1-beta+20180618150459"
+  s.version             = "1.10.1"
   s.summary             = "Mobile Engagement Automation: Geofences campaign, Engage in right time via push message, Segment app user, analyse campaign performance."
   s.description         = <<-DESC
                             Streethawkis mobile engagement automation for your smartphone and tablet app user.
