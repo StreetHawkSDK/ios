@@ -62,6 +62,31 @@
     return self;
 }
 
+/**
+ * Apple recommends using size classes as a coarse measure of how much screen space is available,
+ * For lanscape/portrait view change handler, there is an alternative way by registering
+ * UIDeviceOrientationDidChangeNotification in SHPointziBridge
+ */
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    // Code here will execute before the rotation begins.
+    // Equivalent to placing it in the deprecated method -[willRotateToInterfaceOrientation:duration:]
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+        // Place code here to perform animations during the rotation.
+        // You can pass nil or leave this block empty if not necessary.
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_TipManager_OrientationChanged_Notification" object:nil
+                                                          userInfo:nil];
+        // Code here will execute after the rotation has finished.
+        // Equivalent to placing it in the deprecated method -[didRotateFromInterfaceOrientation:]
+    }];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
@@ -252,6 +277,31 @@ NSDate *_lastChangeDate = nil;
     return self;
 }
 
+/**
+ * Apple recommends using size classes as a coarse measure of how much screen space is available,
+ * For lanscape/portrait view change handler, there is an alternative way by registering
+ * UIDeviceOrientationDidChangeNotification in SHPointziBridge
+ */
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    // Code here will execute before the rotation begins.
+    // Equivalent to placing it in the deprecated method -[willRotateToInterfaceOrientation:duration:]
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+        // Place code here to perform animations during the rotation.
+        // You can pass nil or leave this block empty if not necessary.
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_TipManager_OrientationChanged_Notification" object:nil
+                                                          userInfo:nil];
+        // Code here will execute after the rotation has finished.
+        // Equivalent to placing it in the deprecated method -[didRotateFromInterfaceOrientation:]
+    }];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
@@ -337,6 +387,31 @@ NSDate *_lastChangeDate = nil;
         self.excludeBehavior = NO;
     }
     return self;
+}
+
+/**
+ * Apple recommends using size classes as a coarse measure of how much screen space is available,
+ * For lanscape/portrait view change handler, there is an alternative way by registering
+ * UIDeviceOrientationDidChangeNotification in SHPointziBridge
+ */
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    // Code here will execute before the rotation begins.
+    // Equivalent to placing it in the deprecated method -[willRotateToInterfaceOrientation:duration:]
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+        // Place code here to perform animations during the rotation.
+        // You can pass nil or leave this block empty if not necessary.
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_TipManager_OrientationChanged_Notification" object:nil
+                                                          userInfo:nil];
+        // Code here will execute after the rotation has finished.
+        // Equivalent to placing it in the deprecated method -[didRotateFromInterfaceOrientation:]
+    }];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
