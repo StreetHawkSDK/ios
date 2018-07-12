@@ -254,10 +254,25 @@ NSDate *_lastChangeDate = nil;
         if (changeTimeInterval > 1.0f || !_lastChangeDate) {
             _uiMayChange = false;
             // equal to viewDidLoad + viewWillAppear + viewDidAppear
-            [self _doViewDidLoad];
-            [self _doViewWillAppear];
-            [self _doViewDidAppear];
-            _lastChangeDate = [NSDate date];
+            NSUserDefaults *appPrefers = [NSUserDefaults standardUserDefaults];
+            UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+            NSInteger previousInterfaceOrientation = [appPrefers integerForKey:@"DEVICE_ORIENTATION"];
+            
+            if(previousInterfaceOrientation != 0 && interfaceOrientation != UIInterfaceOrientationUnknown
+               && interfaceOrientation != previousInterfaceOrientation){
+                SHLog(@"React Native uiManagerWillPerformMounting but it is triggered by an app rotating, "
+                      "prevent to send the following pointzi notifications: "
+                      "SH_PointziBridge_ShowTip_Notification SH_PointziBridge_CustomFeed_Notification"
+                      "SH_PointziBridge_SuperTag_Notification SH_PointziBridge_EnterVC_Notification.");
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SH_PointziBridge_ShowAuthor_Notification" object:nil userInfo:@{@"vc": self}];
+            } else {
+                [self _doViewDidLoad];
+                [self _doViewWillAppear];
+                [self _doViewDidAppear];
+                _lastChangeDate = [NSDate date];
+            }
+            [appPrefers setObject:@(interfaceOrientation) forKey:@"DEVICE_ORIENTATION"];
+            [appPrefers synchronize];
         }
     }
 }
