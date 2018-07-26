@@ -28,13 +28,23 @@ platform :ios do
 
   desc "Submit a new Beta Build to Apple TestFlight"
   desc "This will also make sure the profile is up to date"
-  lane :beta do
-    # sync_code_signing(type: "appstore") # more information: https://codesigning.guide
-    build_app(scheme: "StreetHawkDemo") # more options available
-    upload_to_testflight
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here (run `fastlane actions`)
+  lane :beta do |options|
+      match(type:"adhoc", force_for_new_devices: true)
+      gym(
+        scheme:"PointziDemo",
+    	  export_method:"ad-hoc",
+        export_options: {
+          provisioningProfiles: {
+            "com.streethawk.PZStatic" => "match AdHoc com.streethawk.PZStatic"
+          }
+        }
+    	)
+      commit = last_git_commit
+      changelog = changelog_from_git_commits(commits_count: 10, pretty: '• %s', merge_commit_filtering: 'exclude_merges')
+      hockey(
+        api_token: options[:HOCKEYAPP_TOKEN],
+        notes: "Author: %s \n Commit Hash: %s \n Change Log: %s" % [commit[:author], commit[:commit_hash], changelog],
+      )
   end
 
   desc "Deploy a new version to the App Store"
