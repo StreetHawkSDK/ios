@@ -1,6 +1,5 @@
-#!/bin/bash -x
+#!/bin/bash
 
-echo "==============================================================="
 echo "Sync Core phonegap module"
 STREETHAWK_NATIVE_SDK=./StreetHawk/
 
@@ -23,8 +22,8 @@ sed -i -e 's/NSAssert(self.logger != nil, @"Lose logline due to logger is not re
 
 ## location folder
 mkdir -p $PHONEGAP_LOCATIONS/Location
-cp -R $STREETHAWK_NATIVE_SDK/Classes/Location/Internal/ $PHONEGAP_LOCATIONS/Location/Internal/
-cp -R $STREETHAWK_NATIVE_SDK/Classes/Location/Publish/ $PHONEGAP_LOCATIONS/Location/Publish/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/Location/Internal/ $PHONEGAP_ANALYTICS/Location/
+cp -R $STREETHAWK_NATIVE_SDK/Classes/Location/Publish/ $PHONEGAP_ANALYTICS/Location/
 
 ## resource folder
 mkdir -p $PHONEGAP_LOCATIONS/Core/src/ios/SDK/Resource
@@ -34,13 +33,7 @@ cp -a build/outputs/Release/universal/StreetHawkCore.framework/StreetHawkCoreRes
 mkdir -p $PHONEGAP_ANALYTICS/ThirdParty
 cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/AFNetworking/ $PHONEGAP_ANALYTICS/ThirdParty/AFNetworking/
 
-mkdir -p $PHONEGAP_ANALYTICS/ThirdParty/MBProgressHUD
-cp -a $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/MBProgressHUD/SHMBProgressHUD.h $PHONEGAP_ANALYTICS/ThirdParty/MBProgressHUD/SHMBProgressHUD.h
-cp -a $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/MBProgressHUD/SHMBProgressHUD.m $PHONEGAP_ANALYTICS/ThirdParty/MBProgressHUD/SHMBProgressHUD.m
-cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/Reachability/ $PHONEGAP_ANALYTICS/ThirdParty/Reachability/
-cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/UIDevice_Extension/ $PHONEGAP_ANALYTICS/ThirdParty/UIDevice_Extension/
 #
-echo "==============================================================="
 echo "Sync Location phonegap module"
 # delete
 rm -R $PHONEGAP_LOCATIONS/Location/*
@@ -50,7 +43,6 @@ mkdir -p $PHONEGAP_LOCATIONS/Location/Private
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHLocationBridge.h $PHONEGAP_LOCATIONS/Location/Private/SHLocationBridge.h
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHLocationBridge.m $PHONEGAP_LOCATIONS/Location/Private/SHLocationBridge.m
 #
-echo "==============================================================="
 echo "Sync Beacon phonegap module"
 # delete
 rm -R $PHONEGAP_BEACONS/Beacon/*
@@ -62,7 +54,6 @@ cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconBridge.m $PHONEGAP
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconStatus.h $PHONEGAP_BEACONS/Beacon/Private/SHBeaconStatus.h
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHBeaconStatus.m $PHONEGAP_BEACONS/Beacon/Private/SHBeaconStatus.m
 
-echo "==============================================================="
 echo "Sync Geofence phonegap module"
 # delete
 rm -R $PHONEGAP_GEOFENCE/Geofence/*
@@ -75,7 +66,6 @@ cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHGeofenceBridge.m $PHONEG
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHGeofenceStatus.h $PHONEGAP_GEOFENCE/Geofence/Private/SHGeofenceStatus.h
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Location/Private/SHGeofenceStatus.m $PHONEGAP_GEOFENCE/Geofence/Private/SHGeofenceStatus.m
 
-echo "==============================================================="
 echo "Sync Growth phonegap module"
 # delete
 rm -R $PHONEGAP_GROWTH/Growth/*
@@ -85,18 +75,12 @@ mkdir -p $PHONEGAP_GROWTH/Growth
 mkdir -p $PHONEGAP_GROWTH/Growth/Private
 cp -a $STREETHAWK_NATIVE_SDK/Classes/Growth/ $PHONEGAP_GROWTH/
 
-echo "==============================================================="
 echo "Sync Push phonegap module"
 # delete
 rm -R $PHONEGAP_PUSH/Notification/*
 # notification folder
 cp -R $STREETHAWK_NATIVE_SDK/Classes/Notification/ $PHONEGAP_PUSH/
-# third-party folder
-mkdir -p $PHONEGAP_PUSH/ThirdParty
-cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/CBAutoScrollLabel/ $PHONEGAP_PUSH/ThirdParty/CBAutoScrollLabel/
-cp -R $STREETHAWK_NATIVE_SDK/Classes/ThirdParty/Emojione/ $PHONEGAP_PUSH/ThirdParty/Emojione/
 
-echo "==============================================================="
 echo "Sync Feed phonegap module"
 # delete
 rm -R $PHONEGAP_FEED/Feed/*
